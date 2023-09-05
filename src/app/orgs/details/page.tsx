@@ -4,12 +4,19 @@ import { TextField } from "@/components/Fields"
 import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid'
 import { ContentLeft } from "@/components/contentLeft"
 import { Header } from "@/components/Header"
+import { News } from "@/components/News"
+import { Footer } from "@/components/Footer"
+import { Causes } from "@/components/Causes"
+import { ContentRight } from "@/components/ContentRight"
+import { GraphTemp } from "@/components/GraphTemp"
 
 export default function Organization() {
     return(
     <>
         <Header />
         <ContentLeft />
+        <ContentRight />
+        <GraphTemp />
         <div className="bg-white px-6 py-32 lg:px-8">
       <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
         <div className="mt-16 max-w-2xl">
@@ -57,9 +64,13 @@ export default function Organization() {
               </Button>
         </div>
           </form>
+          
         </div>
       </div>
         </div>
+        <Causes />
+        <News />
+        <Footer />
     </>
     )
 }
