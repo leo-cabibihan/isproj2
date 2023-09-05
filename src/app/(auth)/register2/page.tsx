@@ -1,16 +1,16 @@
 import Link from 'next/link'
 
 import { Button } from '@/components/Button'
-import { TextField } from '@/components/Fields'
+import { SelectField, TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Sign In',
+  title: 'Sign Up',
 }
 
-export default function Login() {
+export default function test() {
   return (
     <SlimLayout>
       <div className="flex">
@@ -19,20 +19,24 @@ export default function Login() {
         </Link>
       </div>
       <h2 className="mt-20 text-lg font-semibold text-gray-900">
-        Sign in to your account
+        Get started for free
       </h2>
       <p className="mt-2 text-sm text-gray-700">
-        Don’t have an account?{' '}
+        Already registered?{' '}
         <Link
-          href="/register"
+          href="/login"
           className="font-medium text-blue-600 hover:underline"
         >
-          Sign up
+          Sign in
         </Link>{' '}
-        to start donating.
+        to your account.
       </p>
-      <form action="#" className="mt-10 grid grid-cols-1 gap-y-8">
+      <form
+        action="#"
+        className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2"
+      >
         <TextField
+          className="col-span-full"
           label="Email address"
           name="email"
           type="email"
@@ -40,24 +44,25 @@ export default function Login() {
           required
         />
         <TextField
+          className="col-span-full"
           label="Password"
           name="password"
           type="password"
-          autoComplete="current-password"
+          autoComplete="new-password"
           required
         />
-        <p className="mt-2 text-sm text-gray-700">
-        <Link
-          href="/forgot"
-          className="font-medium text-blue-600 hover:underline"
+        <SelectField
+          className="col-span-full"
+          label="I am a"
+          name="referral_source"
         >
-          Forgot Password?
-        </Link>
-      </p>
-        <div>
+          <option>Charity Organization</option>
+          <option>Donor</option>
+        </SelectField>
+        <div className="col-span-full">
           <Button type="submit" variant="solid" color="blue" className="w-full">
             <span>
-              Sign in <span aria-hidden="true">&rarr;</span>
+              Sign up <span aria-hidden="true">&rarr;</span>
             </span>
           </Button>
         </div>
