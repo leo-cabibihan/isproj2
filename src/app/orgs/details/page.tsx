@@ -1,20 +1,17 @@
-import { BigHeader } from "@/components/BigHeader"
 import { Button } from "@/components/Button"
 import { TextField } from "@/components/Fields"
-import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid'
 import { ContentLeft } from "@/components/contentLeft"
-import { Header } from "@/components/Header"
 import { News } from "@/components/News"
-import { Footer } from "@/components/Footer"
 import { Causes } from "@/components/Causes"
 import { ContentRight } from "@/components/ContentRight"
 import { GraphTemp } from "@/components/GraphTemp"
+import { DefaultLayout } from "@/components/layouts/Default"
 
 export default function Organization() {
     return(
     <>
-        <Header />
-        <ContentLeft />
+      <DefaultLayout>
+      <ContentLeft />
         <ContentRight />
         <GraphTemp />
         <div className="bg-white px-6 py-32 lg:px-8">
@@ -70,7 +67,7 @@ export default function Organization() {
         </div>
         <Causes />
         <News />
-        <Footer />
+      </DefaultLayout>
     </>
     )
 }

@@ -11,11 +11,12 @@ import { Content } from '@/components/Content'
 import { Cards } from '@/components/Cards'
 import { News } from '@/components/News'
 import { ContentRight } from '@/components/ContentRight'
+import { DefaultLayout } from '@/components/layouts/Default'
 
 export default function Home() {
   return (
     <>
-      <Header />
+      <DefaultLayout>
       <main>
         <Hero />
         <Content />
@@ -23,7 +24,7 @@ export default function Home() {
         <Cards />
         <News />
       </main>
-      <Footer />
+      </DefaultLayout>
     </>
   )
 }
