@@ -54,11 +54,13 @@ export default function Organization() {
                 </div>
               </div>
               <div>
+              <div className="pt-6">
               <Button type="submit" variant="solid" color="green" className="w-1/5">
                 <span>
                   Donate <span aria-hidden="true">&rarr;</span>
                 </span>
               </Button>
+              </div>
         </div>
           </form>
           
