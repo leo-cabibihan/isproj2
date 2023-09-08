@@ -24,7 +24,7 @@ export default function ThankYou() {
               Thank you for donating!
             </p>
             <div className="mt-10">
-              <a href="####" className="text-sm font-semibold leading-7 text-indigo-600">
+              <a href="/" className="text-sm font-semibold leading-7 text-indigo-600">
                 <span aria-hidden="true">&larr;</span> Back to home
               </a>
             </div>

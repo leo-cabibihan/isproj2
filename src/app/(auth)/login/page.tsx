@@ -1,5 +1,6 @@
 import Link from 'next/link'
-
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
@@ -12,6 +13,8 @@ export const metadata: Metadata = {
 
 export default function Login() {
   return (
+    <>
+    <Header></Header>
     <SlimLayout>
       <div className="flex">
         <Link href="/" aria-label="Home">
@@ -63,5 +66,7 @@ export default function Login() {
         </div>
       </form>
     </SlimLayout>
+    <Footer></Footer>
+    </>
   )
 }

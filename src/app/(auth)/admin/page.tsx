@@ -1,5 +1,6 @@
 import Link from 'next/link'
-
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { Button } from '@/components/Button'
 import { SelectField, TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
@@ -7,11 +8,13 @@ import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Sign Up',
+  title: 'Admin',
 }
 
 export default function Admin() {
   return (
+    <>
+    <Header></Header>
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           
@@ -67,5 +70,7 @@ export default function Admin() {
           </div>
         </div>
       </div>
+      <Footer></Footer>
+      </>
   )
 }
