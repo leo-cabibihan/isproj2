@@ -1,23 +1,24 @@
 import Link from 'next/link'
-
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
-import { Footer } from '@/components/Footer'
 
 export default function OnboardingDetails() {
     return (
       <>
+      <Header></Header>
         <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           
-          <div className="flex">
+          {/* <div className="flex">
             <Link href="/" aria-label="Home">
               <Logo className="h-10 w-auto" />
             </Link>
-          </div>
+          </div> This is for the logo in the form*/}
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
@@ -78,26 +79,30 @@ export default function OnboardingDetails() {
               />
 
 
-        <div className="col-span-full">
-            <Button type="submit" variant="solid" color="white" className="w-full">
-                <span>
-                Back<span aria-hidden="true">&rarr;</span>
-                </span>
-            </Button>
-        </div>
-
-        
               <div className="col-span-full">
-          <Button type="submit" variant="solid" color="blue" className="w-full">
-            <span>
-              Submit <span aria-hidden="true">&rarr;</span>
-            </span>
-          </Button>
-        </div>
+                  <Button type="submit" variant="solid" color="white" className="w-full">
+                      <span>
+                      Back<span aria-hidden="true">&rarr;</span>
+                      </span>
+                  </Button>
+              </div>
+
+              
+                    <div className="col-span-full">
+                <Button type="submit" variant="solid" color="blue" className="w-full">
+                  <span>
+                    Submit <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </Button>
+              </div>
             </form>
           </div>
         </div>
       </div>
+      <br/>
+      <br/>
+      <br/>
+      <Footer></Footer>
       </>
     )
   }

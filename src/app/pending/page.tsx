@@ -1,16 +1,17 @@
 import Link from 'next/link'
-
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
-import { Footer } from '@/components/Footer'
 
 
 export default function Pending() {
     return (
       <>
+      <Header></Header>
         <div className="bg-white px-6 py-24 sm:py-32 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-base font-semibold leading-7 text-indigo-600">Verification Pending</p>

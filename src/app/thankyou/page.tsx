@@ -1,11 +1,14 @@
 import Link from 'next/link'
-
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { Button } from '@/components/Button'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 
 export default function ThankYou() {
   return (
+    <>
+    
     <div className="grid min-h-full grid-cols-1 grid-rows-[1fr,auto,1fr] bg-white lg:grid-cols-[max(50%,36rem),1fr]">
         <header className="mx-auto w-full max-w-7xl px-6 pt-6 sm:pt-10 lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:px-8">
           <a href="#">
@@ -38,5 +41,7 @@ export default function ThankYou() {
           />
         </div>
       </div>
+      <Footer></Footer>
+      </>
   )
 }
