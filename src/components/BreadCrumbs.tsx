@@ -6,9 +6,7 @@ import Link from 'next/link'
 
 export default function BreadCrumb({pathname}:{pathname:string}) {
   const [first, ...paths] = pathname.split("/")
-  console.log(paths)
   const pages = paths.map(path => ({href: path, name: path, current: paths[paths.length - 1] === path}))
-  console.log(pages)
   return (
     <nav aria-label="Breadcrumb">
       <ol role="list" className="flex items-center space-x-4">
