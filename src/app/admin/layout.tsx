@@ -20,10 +20,10 @@ import {
 
 
 const navigation = [
-  { name: 'Charity Organization/s', href: '/dashboard/organizations', icon: BuildingOfficeIcon},
-  { name: 'Application/s', href: '/dashboard/applications', icon: IdentificationIcon},
-  { name: 'Complaints', href: '/dashboard/complaints', icon: ChatBubbleLeftRightIcon},
-  { name: 'Audit Logs', href: '/dashboard/audit-log', icon: DocumentDuplicateIcon},
+  { name: 'Charity Organization/s', href: '/admin/organizations', icon: BuildingOfficeIcon},
+  { name: 'Application/s', href: '/admin/applications', icon: IdentificationIcon},
+  { name: 'Complaints', href: '/admin/complaints', icon: ChatBubbleLeftRightIcon},
+  { name: 'Audit Logs', href: '/admin/audit-log', icon: DocumentDuplicateIcon},
 ]
 
 const isCurrent = (pathname: string, href: string): boolean => pathname === href
