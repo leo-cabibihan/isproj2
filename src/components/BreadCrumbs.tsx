@@ -10,7 +10,7 @@ export default function BreadCrumb({pathname}:{pathname:string}) {
   const pages = paths.map(path => ({href: path, name: path, current: paths[paths.length - 1] === path}))
   console.log(pages)
   return (
-    <nav className="flex px-4 sm:px-6 lg:px-8" aria-label="Breadcrumb">
+    <nav aria-label="Breadcrumb">
       <ol role="list" className="flex items-center space-x-4">
         <li>
           <div>
