@@ -4,8 +4,8 @@ import React from 'react';
 
 const columns = ["Administrator Name", "Action/s", "Date"];
 const people = [
-  { AdministratorName: 'bruh Walton', Action: 'Front-end Developer', Date: 'lindsay.walton@example.com' },
-  { AdministratorName: 'bruh', Action:'ginormous godzilla', Date:'inormous godzilla'},
+  { AdministratorName: 'bruh Walton', Action: 'Freeze Charity', Date: 'June 20, 2023' },
+  { AdministratorName: 'bruh Walton', Action:'Freeze Charity', Date:'June 20, 2023'},
   // More people...
 ];
 
@@ -15,8 +15,11 @@ export default function Auditlog() {
         <div className="sm:flex sm:items-center py-9">
         <div className="sm:flex-auto">
             <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Audit Log
+            Action History
             </h1>
+            <p className="mt-2 text-sm text-gray-700">
+            A list of all the actions made in your account.
+            </p>
         </div>
         </div>
 

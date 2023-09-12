@@ -97,6 +97,9 @@ function TableHead({ columnNames }: { columnNames: string[] }) {
 
 export function TableHeader() {
   return (
+    /* this applies to all table so for now im commenting, duz each table to have their own instead -myko */
+
+    
     <div className="sm:flex sm:items-center">
       <div className="sm:flex-auto">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
@@ -116,5 +119,7 @@ export function TableHeader() {
         </button>
       </div>
     </div>
+    
+    
   )
 }
