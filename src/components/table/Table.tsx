@@ -3,13 +3,18 @@ import React from 'react'
 export function Table<T extends {}>({
   columnNames,
   tableRows,
+  header,
+  subHeader,
 }: {
   columnNames: string[]
   tableRows: T[]
+  header: String
+  subHeader: String
+
 }) {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
-      <TableHeader />
+      <TableHeader child1={header} child2={subHeader}/>
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -36,6 +41,7 @@ export function TableRow<T extends {}>({ obj }: { obj: T }) {
           {typeof value === 'string' ? value : String(value)}{' '}
         </td>
       ))}
+      
     </tr>
   )
 }
@@ -95,7 +101,7 @@ function TableHead({ columnNames }: { columnNames: string[] }) {
   )
 }
 
-export function TableHeader() {
+export function TableHeader({child1, child2}: {child1: String, child2: String}) {
   return (
     /* this applies to all table so for now im commenting, duz each table to have their own instead -myko */
 
@@ -103,11 +109,10 @@ export function TableHeader() {
     <div className="sm:flex sm:items-center">
       <div className="sm:flex-auto">
         <h1 className="text-base font-semibold leading-6 text-gray-900">
-          Users
+          {child1}
         </h1>
         <p className="mt-2 text-sm text-gray-700">
-          A list of all the users in your account including their name, title,
-          email and role.
+          {child2}
         </p>
       </div>
       <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
