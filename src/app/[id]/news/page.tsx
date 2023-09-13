@@ -1,5 +1,3 @@
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
 import { DefaultLayout } from '@/components/layouts/Default'
 import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid'
 

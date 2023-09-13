@@ -1,4 +1,4 @@
-import { Receipts } from '@/components/Receipts'
+import { Receipts } from '@/components/Single-use'
 import { DefaultLayout } from '@/components/layouts/Default'
 import { LightBulbIcon } from '@heroicons/react/20/solid'
 
