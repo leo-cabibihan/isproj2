@@ -630,4 +630,18 @@ const orgs = [
     )
   }
 
-  
+  export function MediaObject({heading, subheading}: {heading: String, subheading: String}) {
+    return (
+      <div className="flex">
+      <div className="pr-10">
+        <h4 className="text-lg font-bold">{heading}</h4>
+        <p className="mt-1 text-justify">
+          {subheading}
+        </p>
+      </div>
+      <div className="ml-4 flex-shrink-0">
+        <img src="https://www.nicepng.com/png/detail/640-6404773_umbrella-corp-png-umbrella-corporation-logo-vector.png" className="rounded-full h-20 w-20"></img>
+      </div>
+    </div>
+    )
+  }
