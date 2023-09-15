@@ -11,43 +11,51 @@ import { Disclosure } from '@headlessui/react'
 import {
   Bars3Icon,
 
-  DocumentDuplicateIcon,
   ChevronRightIcon,
   XMarkIcon,
-  HomeIcon,
   UsersIcon,
-  FolderIcon,
-  CalendarIcon,
-  ChartPieIcon
+  ChartBarIcon,
+  GiftIcon,
+  LightBulbIcon,
+  ClipboardDocumentCheckIcon
 } from '@heroicons/react/24/outline'
 
 
 const navigation = [
-  { name: 'Statistics', href: '/dashboard/statistics', icon: HomeIcon, current: true },
+  { name: 'Statistics', href: '/dashboard/statistics', icon: ChartBarIcon, current: true },
   {
     name: 'Donations',
+    icon: GiftIcon,
+    current: false,
+    children: [
+      { name: 'Cash', href: '/dashboard/donations/cash' },
+      { name: 'Inventory', href: '/dashboard/donations/inventory' },
+      { name: 'Verified In-Kind', href: '/dashboard/donations/verifiedInkind' },
+      { name: 'Pickups', href: '/dashboard/donations/pickups' },
+      { name: 'Donors', href: '/dashboard/donations/donors' },
+    ],
+  },
+  {
+    name: 'Beneficiaries',
     icon: UsersIcon,
     current: false,
     children: [
-      { name: 'Cash', href: '#' },
-      { name: 'Inventory', href: '#' },
-      { name: 'Customer Success', href: '#' },
+      { name: 'Contacts', href: '/dashboard/beneficiaries/contacts' },
+      { name: 'Events', href: '/dashboard/beneficiaries/events' },
+      { name: 'Expenses', href: '/dashboard/beneficiaries/expenses' },
+      { name: 'Given Items', href: '/dashboard/beneficiaries/given-items' },
     ],
   },
+  { name: 'Posts', href: '/dashboard/posts', icon: LightBulbIcon, current: false },
   {
-    name: 'Projects',
-    icon: FolderIcon,
+    name: 'Logs',
+    icon: ClipboardDocumentCheckIcon,
     current: false,
     children: [
-      { name: 'GraphQL API', href: '#' },
-      { name: 'iOS App', href: '#' },
-      { name: 'Android App', href: '#' },
-      { name: 'New Customer Portal', href: '#' },
+      { name: 'Admin Actions', href: '/dashboard/logs/admin-actions' },
+      { name: 'Complaints', href: '/dashboard/logs/complaints' },
     ],
   },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '#', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '#', icon: ChartPieIcon, current: false },
 ]
 
 const isCurrent = (pathname: string, href: string): boolean => pathname === href

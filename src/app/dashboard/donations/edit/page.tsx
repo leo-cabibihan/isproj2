@@ -37,7 +37,7 @@ export default function ExternalEdit() {
 
                     
 
-                    /** Here is the shit for the download button? check figma */
+                    {/* /** Here is the shit for the download button? check figma */ */}
                     
                     <TextField
                         label="Charity Organization's Name"
