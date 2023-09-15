@@ -66,8 +66,8 @@ export default function Report() {
                     </div>
                   </div>
                 </div>
-     
               <div className="col-span-full">
+                
           <Button type="submit" variant="solid" color="blue" className="w-full">
             <span>
               Submit <span aria-hidden="true">&rarr;</span>
