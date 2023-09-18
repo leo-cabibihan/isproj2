@@ -1,27 +1,51 @@
-import {Table, TableHeader} from '@/components/table/Table'
 import { SelectField, TextField } from '@/components/Fields'
+import { TableContainer, Tbody, Td, Th, Thead, Tr, Table } from '@/components/Table';
 
 
-const header = "Beneficiary Item";
-const subheader = "A table list of beneficiaries' item";
-const columns = ["Item", "Quantity", "Date"];
 const people = [
-  { Item: 'Canned Goods', Quantity: '69', Date: 'January 20,2030'},
-  { Item: 'T-shirt', Quantity: '50', Date: 'January 20,2030'},
-
-  // More people...
-];
+    { AdministratorName: 'bruh Walton', Action: 'Front-end Developer', Date: 'lindsay.walton@example.com' },
+    { AdministratorName: 'bruh', Action: 'ginormous godzilla', Date: 'inormous godzilla' },
+    { AdministratorName: 'bruh', Action: 'ginormous godzilla', Date: 'inormous godzilla' },
+    { AdministratorName: 'bruh', Action: 'ginormous godzilla', Date: 'inormous godzilla' },
+]
 
 
 export default function beneficiaryitem() {
     return (
-        <>    
-            <div className="sm:flex sm:items-center py-9">
-                <div className="sm:flex-auto">
-                </div>
-            </div>
+        <>
+            <TableContainer>
+                <Table>
+                    <Thead>
+                        <Tr>
+                            <Th>AdministratorName</Th>
+                            <Th>Action</Th>
+                            <Th>Date</Th>
+                            <Th> </Th>
+                        </Tr>
+                    </Thead>
+                    <Tbody>
+                        {people.map(person =>
 
-            <Table columnNames={columns} tableRows={people} header={header} subHeader={subheader}/>
+                            <Tr key={person.AdministratorName}>
+                                <Td>{person.AdministratorName}</Td>
+                                <Td>{person.Action}</Td>
+                                <Td>{person.Date}</Td>
+                                <Td>
+                                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                                        Edit<span className="sr-only">, kek</span>
+                                    </a>
+
+                                </Td>
+                            </Tr>
+
+                        )}
+
+                    </Tbody>
+                </Table>
+            </TableContainer>
+
+
+            
 
             {/**Edit Given Items form here */}
             <form className="py-9">
@@ -101,6 +125,9 @@ export default function beneficiaryitem() {
                 </div>
             </div>
         </form>
+
+
         </>
+
     )
 }
