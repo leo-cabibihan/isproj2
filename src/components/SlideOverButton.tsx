@@ -10,7 +10,7 @@ export default function SlideOver({ buttonText, children }: { buttonText: string
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>{buttonText}</Button>
+      <Button className="relative rounded-md bg-green text-gray-400 hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" onClick={() => setOpen(true)}>{buttonText}</Button>
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setOpen}>
           <div className="fixed inset-0" />

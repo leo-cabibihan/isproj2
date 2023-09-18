@@ -1,18 +1,18 @@
 import {Table, TableHeader} from '@/components/table/Table'
 
 
-const header = "List Of Donors";
-const subheader = "A table list of Donors";
-const columns = ["Donor Name", "Number of Donations", "Total Cash Donated"];
+const header = "Donor's History";
+const subheader = "A table list of Donor's donation history";
+const columns = ["Event Name", "Donation Type", "Date Donated"];
 const people = [
-  { DonorName: 'Jack Walton', NumberofDonations: '40', Total: '20,203'},
-  { DonorName: 'Mark Yang', NumberofDonations:'21', Total:'20,023'},
+  { EventName: 'Yolanda', DonationType: 'InKind Donation', Date: 'January 20,2030'},
+  { EventName: 'Yolanda', DonationType: 'Cash Donation', Date: 'January 20,2030'},
 
   // More people...
 ];
 
 
-export default function ListofDonors() {
+export default function DonorHistory() {
     return (
         <>    
             <div className="sm:flex sm:items-center py-9">

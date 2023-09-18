@@ -9,7 +9,6 @@ export function Table({ children }: { children: React.ReactNode }) {
         <table className="min-w-full divide-y divide-gray-300">
             {children}
         </table>
-
     )
 }
 
