@@ -26,11 +26,11 @@ const variantStyles = {
   },
 }
 
-type VariantKey = keyof typeof variantStyles
-type ColorKey<Variant extends VariantKey> =
+export type VariantKey = keyof typeof variantStyles
+export type ColorKey<Variant extends VariantKey> =
   keyof (typeof variantStyles)[Variant]
 
-type ButtonProps<
+export type ButtonProps<
   Variant extends VariantKey,
   Color extends ColorKey<Variant>,
 > = {

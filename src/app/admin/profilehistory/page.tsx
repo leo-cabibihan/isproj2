@@ -1,27 +1,46 @@
-import {Table, TableHeader} from '@/components/table/Table';
-import {Button} from '@/components/Button';
+import { Button } from '@/components/Button';
+import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeader, TableContent } from '@/components/Table';
 import React from 'react';
 
-const header = "History";
-const subheader = "I saw you watching furry porn in your downtime, Myko.";
-const columns = ["Administrator Name", "Action/s", "Date"];
-const people = [
-  { AdministratorName: 'bruh Walton', Action: 'Freeze Charity', Date: 'June 20, 2023' },
-  { AdministratorName: 'bruh Walton', Action:'Freeze Charity', Date:'June 20, 2023'},
-  // More people...
-];
+const actions = [
+    { Admin: "Myko Macawiwili", Action: "Wanked to my little pony", Date: "August 12, 2023" },
+    { Admin: "Myko Macawiwili", Action: "Bought new keyboard", Date: "August 12, 2023" },
+    { Admin: "Myko Macawiwili", Action: "Kidnapped a child", Date: "August 12, 2023" },
+    { Admin: "Myko Macawiwili", Action: "Un-virgin-ed the olive oil", Date: "August 12, 2023" },
+]
 
 export default function Auditlog() {
     return (
         <>
-        <div className="sm:flex sm:items-center py-9">
-        <div className="sm:flex-auto">
-        </div>
-        </div>
+            <div className="sm:flex sm:items-center py-9">
+                <div className="sm:flex-auto">
+                </div>
+            </div>
 
-            <Table columnNames={columns} tableRows={people} header={header} subHeader={subheader}/>
-            <p>button here at end of each</p>
+            <TableContainer>
+                <TableHeader header="Action History." />
+                <TableContent>
+                    <Table>
+                        <Thead>
+                            <Tr>
+                                <Th>Admin Name</Th>
+                                <Th>Action</Th>
+                                <Th>Date</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {actions.map(action =>
+                                <Tr key={action.Admin}>
+                                    <Td>{action.Admin}</Td>
+                                    <Td>{action.Action}</Td>
+                                    <Td>{action.Date}</Td>
+                                </Tr>
+                            )}
+                        </Tbody>
+                    </Table>
+                </TableContent>
+            </TableContainer>
         </>
-        
+
     )
 }
