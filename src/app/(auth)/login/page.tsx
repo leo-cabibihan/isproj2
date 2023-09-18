@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 }
 
 export default function Login() {
+  
   return (
     <>
-    <Header></Header>
     <SlimLayout>
       <div className="flex">
         <Link href="/" aria-label="Home">
