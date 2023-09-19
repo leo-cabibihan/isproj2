@@ -2,6 +2,8 @@ import { Button } from '@/components/Button';
 import React from 'react';
 import { MediaObject } from '@/components/Single-use';
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from '@/components/Table';
+import SlideOver from '@/components/SlideOverButton';
+import { TextField } from '@/components/Fields';
 
 const orgName = "Umbrella Corporation";
 const orgDesc = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
@@ -48,6 +50,7 @@ export default function Organization() {
                                 <Th>NAME</Th>
                                 <Th>Email Address</Th>
                                 <Th>Date Filed</Th>
+                                <Th> </Th>
 
                             </Tr>
                         </Thead>
@@ -58,6 +61,43 @@ export default function Organization() {
                                     <Td>{complaint.AdministratorName}</Td>
                                     <Td>{complaint.Action}</Td>
                                     <Td>{complaint.Date}</Td>
+                                    <Td>
+                                        <SlideOver buttontext="View Complaint" variant="solid" color="blue">
+                                            <form className="space-y-6" action="#" method="POST">
+                                                <TextField
+                                                    label="Charity Name"
+                                                    name="charity"
+                                                    type="text"
+                                                    readOnly
+                                                    placeholder={orgName}
+                                                />
+
+                                                <TextField
+                                                    label="Email Address"
+                                                    name="email"
+                                                    type="email"
+                                                    readOnly
+                                                    placeholder={complaint.Action}
+                                                />
+
+                                                <TextField
+                                                    label="Details"
+                                                    name="details"
+                                                    type="textarea"
+                                                    readOnly
+                                                    placeholder={orgDesc}
+                                                />
+
+                                                <div className="col-span-full">
+                                                    <Button type="submit" variant="solid" color="yellow" className="w-full">
+                                                        <span>
+                                                            Notify Charity <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        </SlideOver>
+                                    </Td>
                                 </Tr>
                             )}
                         </Tbody>
@@ -79,6 +119,7 @@ export default function Organization() {
                                 <Th>NAME</Th>
                                 <Th>Email Address</Th>
                                 <Th>Date Filed</Th>
+                                <Th> </Th>
 
                             </Tr>
                         </Thead>
@@ -89,6 +130,43 @@ export default function Organization() {
                                     <Td>{appeal.AdministratorName}</Td>
                                     <Td>{appeal.Action}</Td>
                                     <Td>{appeal.Date}</Td>
+                                    <Td>
+                                        <SlideOver buttontext="View Complaint" variant="solid" color="blue">
+                                            <form className="space-y-6" action="#" method="POST">
+                                                <TextField
+                                                    label="Charity Name"
+                                                    name="charity"
+                                                    type="text"
+                                                    readOnly
+                                                    placeholder={orgName}
+                                                />
+
+                                                <TextField
+                                                    label="Email Address"
+                                                    name="email"
+                                                    type="email"
+                                                    readOnly
+                                                    placeholder={appeal.Action}
+                                                />
+
+                                                <TextField
+                                                    label="Details"
+                                                    name="details"
+                                                    type="textarea"
+                                                    readOnly
+                                                    placeholder={orgDesc}
+                                                />
+
+                                                <div className="col-span-full">
+                                                    <Button type="submit" variant="solid" color="red" className="w-full">
+                                                        <span>
+                                                            Freeze Charity <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        </SlideOver>
+                                    </Td>
                                 </Tr>
                             )}
                         </Tbody>

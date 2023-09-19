@@ -1,5 +1,5 @@
 import { Button } from "@/components/Button";
-import { TextField } from "@/components/Fields";
+import { SelectField, TextField } from "@/components/Fields";
 import SlideOver from "@/components/SlideOverButton";
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeaderButton, TableContent } from "@/components/Table";
 import { TableHeader } from "@/components/table/Table";

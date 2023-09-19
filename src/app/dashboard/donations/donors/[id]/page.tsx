@@ -1,26 +1,48 @@
-import {Table, TableHeader} from '@/components/table/Table'
+import SlideOver from "@/components/SlideOverButton";
+import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Thead, Tr } from "@/components/Table";
 
 
-const header = "Donor's History";
-const subheader = "A table list of Donor's donation history";
-const columns = ["Event Name", "Donation Type", "Date Donated"];
+
+
 const people = [
-  { EventName: 'Yolanda', DonationType: 'InKind Donation', Date: 'January 20,2030'},
-  { EventName: 'Yolanda', DonationType: 'Cash Donation', Date: 'January 20,2030'},
+    { EventName: 'Yolanda', DonationType: 'InKind Donation', Date: 'January 20,2030' },
+    { EventName: 'Yolanda', DonationType: 'Cash Donation', Date: 'January 20,2030' },
 
-  // More people...
+    // More people...
 ];
 
 
 export default function DonorHistory() {
     return (
-        <>    
+        <>
             <div className="sm:flex sm:items-center py-9">
                 <div className="sm:flex-auto">
                 </div>
             </div>
 
-            <Table columnNames={columns} tableRows={people} header={header} subHeader={subheader}/>
+            <TableContainer>
+                <TableHeader header="Donor's History" />
+                <TableContent>
+                    <Table>
+                        <Thead>
+                            <Tr>
+                                <Td>Event Name</Td>
+                                <Td>Donation Type</Td>
+                                <Td>Date Donated</Td>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {people.map(person =>
+                                <Tr key={person.EventName}>
+                                    <Td>{person.EventName}</Td>
+                                    <Td>{person.DonationType}</Td>
+                                    <Td>{person.Date}</Td>
+                                </Tr>
+                                )}
+                        </Tbody>
+                    </Table>
+                </TableContent>
+            </TableContainer>
         </>
     )
 }
