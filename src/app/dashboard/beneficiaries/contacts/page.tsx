@@ -10,37 +10,47 @@ export default function Page() {
         <TableHeaderButton header="Contacts" buttontext="Add Contact">
           <form className="space-y-6" action="#" method="POST">
             <TextField
-              label="Email Address"
-              name="email"
-              type="email"
-              autoComplete="email"
+              label="Beneficiary Name"
+              name="beneficiary"
+              type="text"
               required
             />
 
             <TextField
-              label="Password"
-              name="password"
-              type="password"
-              autoComplete="current-password"
+              label="Contact Number"
+              name="contact_no"
+              type="number"
+              autoComplete="number"
+              maxLength={15}
+              max={99999999999}
               required
             />
 
-            <div className="flex items-center justify-between">
+            <TextField
+              label="Address"
+              name="address"
+              type="text"
+              required
+            />
+
+            {/* <div className="flex items-center justify-between">
               <div className="text-sm leading-6">
                 <a href="/forgot" className="font-semibold text-indigo-600 hover:text-indigo-500">
                   Forgot password?
                 </a>
               </div>
-            </div>
+            </div> */}
 
             <div className="col-span-full">
               <Button type="submit" variant="solid" color="blue" className="w-full">
                 <span>
-                  Sign up <span aria-hidden="true">&rarr;</span>
+                  Save Beneficiary <span aria-hidden="true">&rarr;</span>
                 </span>
               </Button>
             </div>
           </form>
+
+
         </TableHeaderButton>
         <TableContent>
           <Table>
