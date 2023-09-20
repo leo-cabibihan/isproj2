@@ -20,7 +20,7 @@ export default function Page() {
             </div>
 
             <TableContainer>
-                <TableHeaderButton header="Verified Item Donations" buttontext="Add Item">
+                <TableHeaderButton header="Verified Item Donations">
                     <SlideOver variant="solid" color="blue" buttontext="View Details">
                         <form className="space-y-6" action="#" method="POST">
                             <TextField

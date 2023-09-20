@@ -21,8 +21,8 @@ export default function Page() {
                         <Thead>
                             <Tr>
                                 <Th>Donor Name</Th>
-                                <Th>Charity Organization</Th>
-                                <Th>Date</Th>
+                                <Th>Complaint</Th>
+                                <Th>Date Filed</Th>
                                 <Th> </Th>
                             </Tr>
                         </Thead>

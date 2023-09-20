@@ -34,16 +34,14 @@ export function TableHeader({ header }: { header: String }) {
     )
 }
 
-export function TableHeaderButton({ header, buttontext, children }: { header: String, buttontext: String, children: React.ReactNode }) {
+export function TableHeaderButton({ header, children }: { header: String, children: React.ReactNode }) {
     return (
         <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
                 <h1 className="text-base font-semibold leading-6 text-gray-900">{header}</h1>
             </div>
             <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                <SlideOver variant="solid" color="blue" buttontext={buttontext}>
-                    {children}
-                </SlideOver>
+                {children}
             </div>
         </div>
     )

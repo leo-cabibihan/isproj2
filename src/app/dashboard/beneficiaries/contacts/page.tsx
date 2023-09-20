@@ -7,33 +7,34 @@ export default function Page() {
   return (
     <>
       <TableContainer>
-        <TableHeaderButton header="Contacts" buttontext="Add Contact">
-          <form className="space-y-6" action="#" method="POST">
-            <TextField
-              label="Beneficiary Name"
-              name="beneficiary"
-              type="text"
-              required
-            />
+        <TableHeaderButton header="Contacts">
+          <SlideOver buttontext="Add Contact" variant="solid" color="blue">
+            <form className="space-y-6" action="#" method="POST">
+              <TextField
+                label="Beneficiary Name"
+                name="beneficiary"
+                type="text"
+                required
+              />
 
-            <TextField
-              label="Contact Number"
-              name="contact_no"
-              type="number"
-              autoComplete="number"
-              maxLength={15}
-              max={99999999999}
-              required
-            />
+              <TextField
+                label="Contact Number"
+                name="contact_no"
+                type="number"
+                autoComplete="number"
+                maxLength={15}
+                max={99999999999}
+                required
+              />
 
-            <TextField
-              label="Address"
-              name="address"
-              type="text"
-              required
-            />
+              <TextField
+                label="Address"
+                name="address"
+                type="text"
+                required
+              />
 
-            {/* <div className="flex items-center justify-between">
+              {/* <div className="flex items-center justify-between">
               <div className="text-sm leading-6">
                 <a href="/forgot" className="font-semibold text-indigo-600 hover:text-indigo-500">
                   Forgot password?
@@ -41,14 +42,15 @@ export default function Page() {
               </div>
             </div> */}
 
-            <div className="col-span-full">
-              <Button type="submit" variant="solid" color="blue" className="w-full">
-                <span>
-                  Save Beneficiary <span aria-hidden="true">&rarr;</span>
-                </span>
-              </Button>
-            </div>
-          </form>
+              <div className="col-span-full">
+                <Button type="submit" variant="solid" color="blue" className="w-full">
+                  <span>
+                    Save Beneficiary <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </Button>
+              </div>
+            </form>
+          </SlideOver>
 
 
         </TableHeaderButton>

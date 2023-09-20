@@ -21,39 +21,41 @@ export default function Page() {
             </div>
 
             <TableContainer>
-                <TableHeaderButton header="Events" buttontext="Add Event">
-                    <form className="space-y-6" action="#" method="POST">
-                        <TextField
-                            label="Event Name"
-                            name="event_name"
-                            type="text"
-                            required
-                        />
+                <TableHeaderButton header="Events">
+                    <SlideOver buttontext="Add Event" variant="solid" color="blue">
+                        <form className="space-y-6" action="#" method="POST">
+                            <TextField
+                                label="Event Name"
+                                name="event_name"
+                                type="text"
+                                required
+                            />
 
-                        <div className="col-span-full">
-                            <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                                Details
-                            </label>
-                            <div className="mt-2">
-                                <textarea
-                                    id="details"
-                                    name="details"
-                                    rows={3}
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    defaultValue={''}
-                                    placeholder="Event Details go here..."
-                                />
+                            <div className="col-span-full">
+                                <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Details
+                                </label>
+                                <div className="mt-2">
+                                    <textarea
+                                        id="details"
+                                        name="details"
+                                        rows={3}
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        defaultValue={''}
+                                        placeholder="Event Details go here..."
+                                    />
+                                </div>
                             </div>
-                        </div>
 
-                        <div className="col-span-full">
-                            <Button type="submit" variant="solid" color="blue" className="w-full">
-                                <span>
-                                    Save Event <span aria-hidden="true">&rarr;</span>
-                                </span>
-                            </Button>
-                        </div>
-                    </form>
+                            <div className="col-span-full">
+                                <Button type="submit" variant="solid" color="blue" className="w-full">
+                                    <span>
+                                        Save Event <span aria-hidden="true">&rarr;</span>
+                                    </span>
+                                </Button>
+                            </div>
+                        </form>
+                    </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
                     <Table>
