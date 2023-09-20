@@ -2,20 +2,38 @@ import { Table, TableContainer, TableContent, TableHeaderButton, Tbody, Td, Th, 
 import SlideOver from "@/components/SlideOverButton"
 import { TextField } from "@/components/Fields"
 import { Button } from "@/components/Button"
+import supabase from "@/app/utils/supabase"
+import { revalidatePath } from "next/cache"
 
-export default function Page() {
+export const revalidate = 0;
+
+export default async function Page() {
+  const { data: contacts } = await supabase.from('contacts').select("*")
+  
+  const handleSubmit = async (formData: FormData) => {
+    'use server'
+    const beneficiary = {
+      name: formData.get("beneficiary"),
+      contact_no: formData.get("contact_no"),
+      address: formData.get("address")
+    };
+  
+    await supabase.from('contacts').insert([beneficiary]);
+    revalidatePath('/');
+  };
+
   return (
     <>
       <TableContainer>
-        <TableHeaderButton header="Contacts">
+      <TableHeaderButton header="Contacts">
           <SlideOver buttontext="Add Contact" variant="solid" color="blue">
-            <form className="space-y-6" action="#" method="POST">
-              <TextField
-                label="Beneficiary Name"
-                name="beneficiary"
-                type="text"
-                required
-              />
+            <form className="space-y-6" action={handleSubmit} method="POST">
+            <TextField
+              label="Beneficiary Name"
+              name="beneficiary"
+              type="text"
+              required
+            />
 
               <TextField
                 label="Contact Number"
@@ -58,39 +76,25 @@ export default function Page() {
           <Table>
             <Thead>
               <Tr>
-                <Th>To convert</Th>
-                <Th>into</Th>
-                <Th>multiply by</Th>
-                <Th> </Th>
+                 <Th>Name</Th>
+                 <Th>Contact Number</Th>
+                 <Th>Address</Th>
+                 <Th>Actions</Th>
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
-                <Td>inches</Td>
-                <Td>millimetres (mm)</Td>
-                <Td>25.4</Td>
-                <Td>
-                  <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                    Edit<span className="sr-only">, kek</span>
-                  </a>
-
-                </Td>
-              </Tr>
-              <Tr>
-                <Td>inches</Td>
-                <Td>millimetres (mm)</Td>
-                <Td>25.4</Td>
-              </Tr>
-              <Tr>
-                <Td>feet</Td>
-                <Td>centimetres (cm)</Td>
-                <Td>30.48</Td>
-              </Tr>
-              <Tr>
-                <Td>yards</Td>
-                <Td>metres (m)</Td>
-                <Td>0.91444</Td>
-              </Tr>
+              {contacts?.map(contact => (
+                <Tr key={contact.id}>
+                  <Td>{contact.name}</Td>
+                  <Td>{contact.contact_no}</Td>
+                  <Td>{contact.address}</Td>
+                  <Td>
+                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                      Edit<span className="sr-only">, kek</span>
+                    </a>
+                  </Td>
+                </Tr>
+              ))}
             </Tbody>
           </Table>
         </TableContent>
