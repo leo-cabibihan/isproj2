@@ -9,7 +9,7 @@ export const revalidate = 0;
 
 export default async function Page() {
   const { data: contacts } = await supabase.from('contacts').select("*")
-  
+
   const handleSubmit = async (formData: FormData) => {
     'use server'
     const beneficiary = {
@@ -17,7 +17,7 @@ export default async function Page() {
       contact_no: formData.get("contact_no"),
       address: formData.get("address")
     };
-  
+
     await supabase.from('contacts').insert([beneficiary]);
     revalidatePath('/');
   };
@@ -25,15 +25,15 @@ export default async function Page() {
   return (
     <>
       <TableContainer>
-      <TableHeaderButton header="Contacts">
+        <TableHeaderButton header="Contacts">
           <SlideOver buttontext="Add Contact" variant="solid" color="blue">
             <form className="space-y-6" action={handleSubmit} method="POST">
-            <TextField
-              label="Beneficiary Name"
-              name="beneficiary"
-              type="text"
-              required
-            />
+              <TextField
+                label="Beneficiary Name"
+                name="beneficiary"
+                type="text"
+                required
+              />
 
               <TextField
                 label="Contact Number"
@@ -76,10 +76,10 @@ export default async function Page() {
           <Table>
             <Thead>
               <Tr>
-                 <Th>Name</Th>
-                 <Th>Contact Number</Th>
-                 <Th>Address</Th>
-                 <Th>Actions</Th>
+                <Th>Name</Th>
+                <Th>Contact Number</Th>
+                <Th>Address</Th>
+                <Th>Actions</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -89,9 +89,47 @@ export default async function Page() {
                   <Td>{contact.contact_no}</Td>
                   <Td>{contact.address}</Td>
                   <Td>
-                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                      Edit<span className="sr-only">, kek</span>
-                    </a>
+                    {/* This is the EDIT CONTACT form */}
+                    <SlideOver buttontext="View" variant="solid" color="blue">
+                      <form className="space-y-6" action={handleSubmit} method="POST">
+                        <TextField
+                          label="Beneficiary Name"
+                          name="beneficiary"
+                          type="text"
+                          required
+                        />
+
+                        <TextField
+                          label="Contact Number"
+                          name="contact_no"
+                          type="number"
+                          autoComplete="number"
+                          maxLength={15}
+                          max={99999999999}
+                          required
+                        />
+
+                        <TextField
+                          label="Address"
+                          name="address"
+                          type="text"
+                          required
+                        />
+                        <div className="grid grid-cols-3 gap-4">
+                          <Button type="submit" variant="solid" color="blue" className="w-full">
+                            <span>
+                              Update <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                          {/* This is a DELETE Button */}
+                          <Button type="button" variant="solid" color="red" className="w-full">
+                            <span>
+                              Delete <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                        </div>
+                      </form>
+                    </SlideOver>
                   </Td>
                 </Tr>
               ))}
