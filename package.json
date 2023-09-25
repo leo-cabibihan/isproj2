@@ -10,6 +10,7 @@
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
+    "@clerk/nextjs": "^4.24.1",
     "@headlessui/react": "^1.7.17",
     "@headlessui/tailwindcss": "^0.2.0",
     "@heroicons/react": "^2.0.18",
@@ -34,5 +35,10 @@
     "prettier": "^3.0.1",
     "prettier-plugin-tailwindcss": "^0.5.2",
     "sharp": "^0.32.0"
+  },
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false
   }
 }
