@@ -18,37 +18,43 @@ export const metadata: Metadata = {
 }
 
 export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState('');
 
-  const { isLoaded, signIn, setActive } = useSignIn();
-  const [emailAddress, setEmailAddress] = useState("");
-  const [password, setPassword] = useState("");
-  // const router = useRouter();
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    console.log(value);
+    setEmail(value);
+    setEmailError('');
+  };
 
-  //start the login process
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isLoaded) {
-      return;
-    }
 
-    try {
-      const result = await signIn.create({
-        identifier: emailAddress,
-        password,
-      });
+    if (!email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)) {
+      setEmailError('Please enter a valid email address.');
+    } else {
+      fetch('/api/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
 
-      if (result.status === "complete") {
-        console.log(result);
-        await setActive({ session: result.createdSessionId });
-        // router.push("/")
-      }
-      else {
-        /*Investigate why the login hasn't completed */
-        console.log(result);
-      }
+          if (data.success) {
+            window.location.href = '/dashboard';
+          } else {
 
-    } catch (err: any) {
-      console.error("error", err.errors[0].longMessage)
+            alert('Login failed. Please check your credentials.');
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
     }
   };
 
@@ -73,22 +79,24 @@ export default function Login() {
           </Link>{' '}
           to start donating.
         </p>
-        <form action="#" className="mt-10 grid grid-cols-1 gap-y-8">
+        <form onSubmit={handleSubmit} className="mt-10 grid grid-cols-1 gap-y-8">
           <TextField
             label="Email address"
             name="email"
             type="email"
             autoComplete="email"
             required
-            onChange={(e) => setEmailAddress(e.target.value)}
+            value={email}
+            onChange={handleEmailChange}
           />
+          {emailError && <p className="text-red-500">{emailError}</p>}
           <TextField
             label="Password"
             name="password"
             type="password"
             autoComplete="current-password"
+            minLength={10}
             required
-            onChange={(e) => setPassword(e.target.value)}
           />
           <p className="mt-2 text-sm text-gray-700">
             <Link
@@ -99,7 +107,7 @@ export default function Login() {
             </Link>
           </p>
           <div>
-            <Button onClick={handleSubmit} type="submit" variant="solid" color="blue" className="w-full">
+            <Button type="submit" variant="solid" color="blue" className="w-full">
               <span>
                 Sign in <span aria-hidden="true">&rarr;</span>
               </span>
