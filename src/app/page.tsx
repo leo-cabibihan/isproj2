@@ -193,7 +193,7 @@ export default async function Home() {
                 </p>
               </div>
               <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                {charity.map((org) => (
+                {charity?.map((org) => (
                   <article key={org.id} className="flex flex-col items-start justify-between">
                     <div className="relative w-full">
                       <img
@@ -235,7 +235,7 @@ export default async function Home() {
                 </p>
               </div>
               <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-                {campaign_post.map((post) => (
+                {campaign_post?.map((post) => (
                   <article key={post.id} className="flex flex-col items-start justify-between">
                     <div className="relative w-full">
                       <img

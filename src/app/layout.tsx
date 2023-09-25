@@ -3,6 +3,7 @@ import clsx from 'clsx'
 
 import '@/styles/tailwind.css'
 import { type Metadata } from 'next'
+import { ClerkProvider } from '@clerk/nextjs'
 
 export const metadata: Metadata = {
   title: {

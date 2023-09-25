@@ -8,7 +8,7 @@ import { revalidatePath } from "next/cache"
 export const revalidate = 0;
 
 export default async function Page() {
-  const { data: contacts } = await supabase.from('contacts').select("*")
+  const { data: contacts } = await supabase.from('contacts').select("*").order("id", {ascending: true})
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
@@ -18,7 +18,33 @@ export default async function Page() {
       address: formData.get("address")
     };
 
-    await supabase.from('contacts').insert([beneficiary]);
+    await supabase.from('contacts').insert(beneficiary);
+    revalidatePath('/');
+  };
+
+  const saveChanges = async (formData: FormData) => {
+    'use server'
+    const contactId = formData.get("id")
+    const beneficiary = {
+      name: formData.get("beneficiary"),
+      contact_no: formData.get("contact_no"),
+      address: formData.get("address")
+    };
+
+    await supabase.from('contacts').update(beneficiary).eq("id", contactId)
+    revalidatePath('/');
+  };
+
+  const deleteContact = async (formData: FormData) => {
+    'use server'
+    const contactId = formData.get("id")
+    const beneficiary = {
+      name: formData.get("beneficiary"),
+      contact_no: formData.get("contact_no"),
+      address: formData.get("address")
+    };
+
+    await supabase.from('contacts').delete().eq("id", contactId)
     revalidatePath('/');
   };
 
@@ -91,11 +117,20 @@ export default async function Page() {
                   <Td>
                     {/* This is the EDIT CONTACT form */}
                     <SlideOver buttontext="View" variant="solid" color="blue">
-                      <form className="space-y-6" action={handleSubmit} method="POST">
+                      <form className="space-y-6" action={saveChanges} method="PUT">
+                        <TextField
+                          label=""
+                          name="id"
+                          type="hidden"
+                          defaultValue={contact.id}
+                          required
+                        />
+
                         <TextField
                           label="Beneficiary Name"
                           name="beneficiary"
                           type="text"
+                          defaultValue={contact.name}
                           required
                         />
 
@@ -106,6 +141,7 @@ export default async function Page() {
                           autoComplete="number"
                           maxLength={15}
                           max={99999999999}
+                          defaultValue={contact.contact_no}
                           required
                         />
 
@@ -113,6 +149,7 @@ export default async function Page() {
                           label="Address"
                           name="address"
                           type="text"
+                          defaultValue={contact.address}
                           required
                         />
                         <div className="grid grid-cols-3 gap-4">
@@ -121,8 +158,7 @@ export default async function Page() {
                               Update <span aria-hidden="true">&rarr;</span>
                             </span>
                           </Button>
-                          {/* This is a DELETE Button */}
-                          <Button type="button" variant="solid" color="red" className="w-full">
+                          <Button type="submit" variant="solid" color="red" className="w-full" formAction={deleteContact}>
                             <span>
                               Delete <span aria-hidden="true">&rarr;</span>
                             </span>
@@ -138,6 +174,5 @@ export default async function Page() {
         </TableContent>
       </TableContainer>
     </>
-
   )
 }

@@ -1,4 +1,5 @@
 "use client"
+
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
@@ -7,7 +8,7 @@ import { TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
-import React, { useState } from 'react';
+import { useState } from "react";
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -40,11 +41,11 @@ export default function Login() {
       })
         .then((response) => response.json())
         .then((data) => {
-          
+
           if (data.success) {
-            window.location.href = '/dashboard'; 
+            window.location.href = '/dashboard';
           } else {
-            
+
             alert('Login failed. Please check your credentials.');
           }
         })
@@ -53,65 +54,65 @@ export default function Login() {
         });
     }
   };
-  
+
   return (
     <>
-    <SlimLayout>
-      <div className="flex">
-        <Link href="/" aria-label="Home">
-          <Logo className="h-10 w-auto" />
-        </Link>
-      </div>
-      <h2 className="mt-20 text-lg font-semibold text-gray-900">
-        Sign in to your account
-      </h2>
-      <p className="mt-2 text-sm text-gray-700">
-        Don’t have an account?{' '}
-        <Link
-          href="/register"
-          className="font-medium text-blue-600 hover:underline"
-        >
-          Sign up
-        </Link>{' '}
-        to start donating.
-      </p>
-      <form onSubmit={handleSubmit} className="mt-10 grid grid-cols-1 gap-y-8">
-        <TextField
-          label="Email address"
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-          value={email}
-          onChange={handleEmailChange}
-        />
-        {emailError && <p className="text-red-500">{emailError}</p>}
-        <TextField
-          label="Password"
-          name="password"
-          type="password"
-          autoComplete="current-password"
-          minLength={10}
-          required
-        />
+      <SlimLayout>
+        <div className="flex">
+          <Link href="/" aria-label="Home">
+            <Logo className="h-10 w-auto" />
+          </Link>
+        </div>
+        <h2 className="mt-20 text-lg font-semibold text-gray-900">
+          Sign in to your account
+        </h2>
         <p className="mt-2 text-sm text-gray-700">
-        <Link
-          href="/forgot"
-          className="font-medium text-blue-600 hover:underline"
-        >
-          Forgot Password?
-        </Link>
-      </p>
-        <div>
-          <Button type="submit" variant="solid" color="blue" className="w-full">
+          Don’t have an account?{' '}
+          <Link
+            href="/register"
+            className="font-medium text-blue-600 hover:underline"
+          >
+            Sign up
+          </Link>{' '}
+          to start donating.
+        </p>
+        <form onSubmit={handleSubmit} className="mt-10 grid grid-cols-1 gap-y-8">
+          <TextField
+            label="Email address"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={handleEmailChange}
+          />
+          {emailError && <p className="text-red-500">{emailError}</p>}
+          <TextField
+            label="Password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            minLength={10}
+            required
+          />
+          <p className="mt-2 text-sm text-gray-700">
+            <Link
+              href="/forgot"
+              className="font-medium text-blue-600 hover:underline"
+            >
+              Forgot Password?
+            </Link>
+          </p>
+          <div>
+            <Button type="submit" variant="solid" color="blue" className="w-full">
               <span>
                 Sign in <span aria-hidden="true">&rarr;</span>
               </span>
             </Button>
-        </div>
-      </form>
-    </SlimLayout>
-    <Footer></Footer>
+          </div>
+        </form>
+      </SlimLayout>
+      <Footer></Footer>
     </>
   )
 }

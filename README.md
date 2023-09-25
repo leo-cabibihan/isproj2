@@ -78,8 +78,30 @@ This centralized webpage informs visitors about the charity's work, fosters trus
 All users are authorized to access this resource.
 
 
-## 
+## app/dashboard/donations/verified-in-kind/page.tsx
 
 
+### get
+- list of item donation transaction filtered by verified = true
+
+### post
+- item donation transaction
+- associated item donations
+- associated photos of proof
+
+
+### put
+- item donation transaction
+- associated item donations
+- associated photos of proof
+  
+### delete
+- item donation transaction
+- associated item donations
+- photos of proof
+
+### authorization
+
+charity member
 
 

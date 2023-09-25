@@ -3,6 +3,10 @@ import { SelectField, TextField } from '@/components/Fields'
 import { Table, TableContainer, TableContent, TableHeaderButton, Tbody, Td, Thead, Tr } from '@/components/Table';
 import { Button } from '@/components/Button';
 import SlideOver from '@/components/SlideOverButton';
+import supabase from '@/app/utils/supabase';
+import { revalidatePath } from 'next/cache';
+
+export const revalidate = 0;
 
 const items = [
   { DonorName: 'Jack Walton', DonatedItems: 'Canned Goods', Date: '2023-01-20' },
@@ -12,7 +16,8 @@ const items = [
 ];
 
 
-export default function VerifiedTable() {
+export default async function VerifiedTable() {
+
   return (
     <>
       <div className="sm:flex sm:items-center py-9">
