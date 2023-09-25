@@ -1,4 +1,4 @@
-import { Table, TableContainer, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
+import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
 
 const complaints = [
     { id: "1", DonorName: 'Myko Macawiwili', Charity: 'Red Cross', Date: 'June 16, 2023' },
@@ -15,32 +15,35 @@ export default function Page() {
                 </div>
             </div>
             <TableContainer>
-                <Table>
-                    <Thead>
-                        <Tr>
-                            <Th>Donor Name</Th>
-                            <Th>Charity Organization</Th>
-                            <Th>Date</Th>
-                            <Th> </Th>
-                        </Tr>
-                    </Thead>
-                    <Tbody>
-                        {complaints.map(complaint =>
-
-                            <Tr key={complaint.id}>
-                                <Td>{complaint.DonorName}</Td>
-                                <Td>{complaint.Charity}</Td>
-                                <Td>{complaint.Date}</Td>
-                                <Td>
-                                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                                        Edit<span className="sr-only">, kek</span>
-                                    </a>
-                                </Td>
+                <TableHeader header="Complaints" />
+                <TableContent>
+                    <Table>
+                        <Thead>
+                            <Tr>
+                                <Th>Donor Name</Th>
+                                <Th>Complaint</Th>
+                                <Th>Date Filed</Th>
+                                <Th> </Th>
                             </Tr>
+                        </Thead>
+                        <Tbody>
+                            {complaints.map(complaint =>
 
-                        )}
-                    </Tbody>
-                </Table>
+                                <Tr key={complaint.id}>
+                                    <Td>{complaint.DonorName}</Td>
+                                    <Td>{complaint.Charity}</Td>
+                                    <Td>{complaint.Date}</Td>
+                                    <Td>
+                                        <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                                            Edit<span className="sr-only">, kek</span>
+                                        </a>
+                                    </Td>
+                                </Tr>
+
+                            )}
+                        </Tbody>
+                    </Table>
+                </TableContent>
             </TableContainer>
         </>
 

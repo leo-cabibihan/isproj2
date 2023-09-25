@@ -17,6 +17,7 @@ const variantStyles = {
       'bg-white text-slate-900 hover:bg-blue-50 active:bg-blue-200 active:text-slate-600 focus-visible:outline-white',
     green: 'bg-emerald-600 text-white hover:text-slate-100 hover:bg-emerald-500 active:bg-emerald-800 active:text-emerald-100 focus-visible:outline-emerald-600',
     red: 'bg-red-600 text-white hover:text-slate-100 hover:bg-red-500 active:bg-red-800 active:text-red-100 focus-visible:outline-red-600',
+    yellow: 'bg-yellow-600 text-white hover:text-slate-100 hover:bg-yellow-500 active:bg-yellow-800 active:text-yellow-100 focus-visible:outline-yellow-600',
   },
   outline: {
     slate:
@@ -26,11 +27,11 @@ const variantStyles = {
   },
 }
 
-type VariantKey = keyof typeof variantStyles
-type ColorKey<Variant extends VariantKey> =
+export type VariantKey = keyof typeof variantStyles
+export type ColorKey<Variant extends VariantKey> =
   keyof (typeof variantStyles)[Variant]
 
-type ButtonProps<
+export type ButtonProps<
   Variant extends VariantKey,
   Color extends ColorKey<Variant>,
 > = {

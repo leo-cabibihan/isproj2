@@ -1,155 +1,296 @@
-import {Table, TableHeader} from '@/components/table/Table'
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { SelectField, TextField } from '@/components/Fields'
+import { Table, TableContainer, TableContent, TableHeaderButton, Tbody, Td, Thead, Tr } from '@/components/Table';
+import { Button } from '@/components/Button';
+import SlideOver from '@/components/SlideOverButton';
 
-const header = "Verified In-Kind Donations";
-const subheader = "";
-const columns = ["Donor Name", "Donated Items", "Date"];
-const people = [
-  { DonorName: 'Jack Walton', DonatedItems: 'Canned Goods', Date: 'January 20, 2023'},
-  { DonorName: 'Mark Yang', DonatedItems:'Canned Goods', Date:'January 20, 2023'},
+const items = [
+  { DonorName: 'Jack Walton', DonatedItems: 'Canned Goods', Date: '2023-01-20' },
+  { DonorName: 'Mark Yang', DonatedItems: 'Canned Goods', Date: '2023-01-20' },
 
   // More people...
 ];
 
 
 export default function VerifiedTable() {
-    return (
-        <>    
-            <div className="sm:flex sm:items-center py-9">
-                <div className="sm:flex-auto">
-                </div>
-            </div>
-
-            <Table columnNames={columns} tableRows={people} header={header} subHeader={subheader}/>
-
-            {/**Add InKind Verified Donations down here */}
-
-            <form>
-        <div className="space-y-12">
-          <div className="border-b border-gray-900/10 pb-12 py-5">
-            <h2 className="text-base font-semibold leading-7 text-gray-900">Add In-Kind Donations</h2>
-
-  
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-13">
-              <div className="sm:col-span-4">
-              
-                <TextField
-                    label="Donor Name"
-                    name="name"
-                    type="name"
-                    autoComplete="name"
-                    required
-                />
-
-                <TextField
-                  label="Pickup Address"
-                  name="Address"
-                  type="Address"
-                  autoComplete="Address"
-                  required
-                />
-
-                <div className="mt-6 flex items-center justify-start gap-x-6">
-                    <button
-                    type="submit"
-                    className="rounded-md bg-green-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                    Add Another Item
-                  </button>
-                </div>
-
-                <div className="border-b border-gray-900/10 pb-12"></div>
-
-                <SelectField
-                    className="col-span-full py-5"
-                    label="Item Name"
-                    name="Item Name"
-                    >
-                    <option>Canned Goods</option>
-                    <option>T-Shirt</option>
-                </SelectField>
-                
-                <TextField
-                  label="Quantity"
-                  name="Quantity"
-                  type="Quantity"
-                  autoComplete="Quantity"
-                  required
-                />
-
-                <SelectField
-                    className="col-span-full py-5"
-                    label="Perishable?"
-                    name="Perishable?"
-                    >
-                    <option>No</option>
-                    <option>Yes</option>
-                </SelectField>
-
-                <TextField
-                  label="Expiry Date (If perishable)"
-                  name="Date"
-                  type="Date"
-                  autoComplete="Date"
-                  required
-                />
-
-                <div className="mt-6 flex items-center justify-start gap-x-6">
-                    <button
-                    type="submit"
-                    className="rounded-md bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                    Remove Item
-                  </button>
-                </div>
-                    
-                <div className="border-b border-gray-900/10 pb-12"></div>
-    
-                <div className="col-span-full py-6">
-                    <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                    Proof of Delivery
-                    </label>
-                    <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                        <div className="text-center">
-                        <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                            <label
-                            htmlFor="file-upload"
-                            className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                            >
-                            <span>Upload a file</span>
-                            <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                            </label>
-                            <p className="pl-1">or drag and drop</p>
-                        </div>
-                        <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                        </div>
-                    </div>
-                </div>
-                
-
-                <div className="mt-6 flex items-center justify-start gap-x-6">
-                    <button
-                    type="submit"
-                    className="rounded-md bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                    Save
-                    </button>
-                    <button
-                    type="submit"
-                    className="rounded-md bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                    Cancel
-                    </button>
-                </div>
-                </div>
-            </div>
-            </div>
+  return (
+    <>
+      <div className="sm:flex sm:items-center py-9">
+        <div className="sm:flex-auto">
         </div>
-      </form>
+      </div>
+
+      <TableContainer>
+        <TableHeaderButton header="Verified Item Donations">
+          <SlideOver variant="solid" color="blue" buttontext="View Details">
+            <form className="space-y-6" action="#" method="POST">
+              <TextField
+                label="Donor Name"
+                name="name"
+                type="text"
+                placeholder="John Doe"
+                required
+              />
+
+              <TextField
+                label="Pickup Address"
+                name="address"
+                type="text"
+                placeholder="123 Sesame Sreet"
+                required
+              />
+
+              <div className="col-span-full">
+                <Button href={"#"} variant="solid" color="green" className="w-full">
+                  <span>
+                    Add Another Itemm <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </Button>
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">Item Details</span>
+                </div>
+              </div>
+
+              <TextField
+                label="Item Name"
+                name="item_name"
+                type="text"
+                placeholder="Demon Core"
+                required
+              />
+              <TextField
+                label="Quantity"
+                name="quantity"
+                type="number"
+                placeholder="12"
+                min={1}
+                max={10000}
+                required
+              />
+              <SelectField
+                label="Perishable?"
+                name="isPerishable"
+                placeholder="Yes"
+                required
+              >
+                <option>Yes</option>
+                <option>No</option>
+              </SelectField>
+
+              <TextField
+                label="Expiry Date (if perishable)"
+                name="expiry"
+                type="date"
+                placeholder="01/12/2023"
+              />
+
+              <div className="col-span-full">
+                <Button href={"#"} variant="solid" color="red" className="w-full">
+                  <span>
+                    Remove Item <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </Button>
+              </div>
+
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">Proof of Delivery</span>
+                </div>
+              </div>
+
+              <div className="col-span-full">
+                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                  <div className="text-center">
+                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                      <label
+                        htmlFor="file-upload"
+                        className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                      >
+                        <span>Upload a file</span>
+                        <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                      </label>
+                      <p className="pl-1">or drag and drop</p>
+                    </div>
+                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <Button href={"#"} variant="solid" color="green" className="w-full">
+                  <span>
+                    Save <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </Button>
+                <Button href={"#"} variant="solid" color="red" className="w-full">
+                  <span>
+                    Cancel <span aria-hidden="true">&rarr;</span>
+                  </span>
+                </Button>
+              </div>
+            </form>
+          </SlideOver>
+        </TableHeaderButton>
+        <TableContent>
+          <Table>
+            <Thead>
+              <Tr>
+                <Td>Donor Name</Td>
+                <Td>Donated Items</Td>
+                <Td>Date</Td>
+                <Td> </Td>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {items.map(item =>
+                <Tr key={item.DonorName}>
+                  <Td>{item.DonorName}</Td>
+                  <Td>{item.DonatedItems}</Td>
+                  <Td>{item.Date}</Td>
+                  <Td>
+                    <SlideOver variant="solid" color="blue" buttontext="View Details">
+                      <form className="space-y-6" action="#" method="POST">
+                        <TextField
+                          label="Donor Name"
+                          name="name"
+                          type="text"
+                          placeholder={item.DonorName}
+                          required
+                        />
+
+                        <TextField
+                          label="Pickup Address"
+                          name="address"
+                          type="text"
+                          placeholder="123 Sesame Sreet"
+                          required
+                        />
+
+                        <div className="col-span-full">
+                          <Button href={"#"} variant="solid" color="green" className="w-full">
+                            <span>
+                              Add Another Itemm <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                        </div>
+
+                        <div className="relative">
+                          <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                            <div className="w-full border-t border-gray-300" />
+                          </div>
+                          <div className="relative flex justify-center">
+                            <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">Item Details</span>
+                          </div>
+                        </div>
+
+                        <TextField
+                          label="Item Name"
+                          name="item_name"
+                          type="text"
+                          placeholder={item.DonatedItems}
+                          required
+                        />
+                        <TextField
+                          label="Quantity"
+                          name="quantity"
+                          type="number"
+                          placeholder="12"
+                          min={1}
+                          max={10000}
+                          required
+                        />
+                        <SelectField
+                          label="Perishable?"
+                          name="isPerishable"
+                          placeholder="Yes"
+                          required
+                        >
+                          <option>Yes</option>
+                          <option>No</option>
+                        </SelectField>
+
+                        <TextField
+                          label="Expiry Date (if perishable)"
+                          name="expiry"
+                          type="date"
+                          placeholder={item.Date}
+                        />
+
+                        <div className="col-span-full">
+                          <Button href={"#"} variant="solid" color="red" className="w-full">
+                            <span>
+                              Remove Item <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                        </div>
+
+                        <div className="relative">
+                          <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                            <div className="w-full border-t border-gray-300" />
+                          </div>
+                          <div className="relative flex justify-center">
+                            <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">Proof of Delivery</span>
+                          </div>
+                        </div>
+
+                        <div className="col-span-full">
+                          <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                            <div className="text-center">
+                              <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                <label
+                                  htmlFor="file-upload"
+                                  className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                >
+                                  <span>Upload a file</span>
+                                  <input id="file-upload" name="file-upload" type="file" className="sr-only" />
+                                </label>
+                                <p className="pl-1">or drag and drop</p>
+                              </div>
+                              <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-3 gap-4">
+                          <Button href={"#"} variant="solid" color="green" className="w-full">
+                            <span>
+                              Save <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                          <Button href={"#"} variant="solid" color="red" className="w-full">
+                            <span>
+                              Delete <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                          <Button href={"#"} variant="solid" color="red" className="w-full">
+                            <span>
+                              Cancel <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                        </div>
+                      </form>
+                    </SlideOver>
+                  </Td>
+                </Tr>
+              )}
+            </Tbody>
+          </Table>
+        </TableContent>
+      </TableContainer>
 
 
 
-        </>
-    )
+
+
+    </>
+  )
 }

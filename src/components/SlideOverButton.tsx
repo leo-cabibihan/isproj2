@@ -3,14 +3,14 @@
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { Button } from './Button'
+import { Button, VariantKey, ColorKey } from './Button'
 
-export default function SlideOver({ buttonText, children }: { buttonText: string, children: React.ReactNode }) {
+export default function SlideOver({ buttontext, children, variant, color }: { buttontext: String, children: React.ReactNode, variant: VariantKey, color: ColorKey }) {
   const [open, setOpen] = useState(false)
 
   return (
     <>
-      <Button className="relative rounded-md bg-green text-gray-400 hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" onClick={() => setOpen(true)}>{buttonText}</Button>
+      <Button variant={variant} color={color} onClick={() => setOpen(true)}>{buttontext}</Button>
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setOpen}>
           <div className="fixed inset-0" />
