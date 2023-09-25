@@ -35,7 +35,8 @@ export default function Forgot() {
                     label="Password"
                     name="password"
                     type="password"
-                    autoComplete="current-password"
+                    autoComplete="password"
+                    minLength={10}
                     required
                   />
                 
@@ -43,7 +44,8 @@ export default function Forgot() {
                     label="Confirm Password"
                     name="password"
                     type="password"
-                    autoComplete="current-password"
+                    autoComplete="password"
+                    minLength={10}
                     required
                   />
                   

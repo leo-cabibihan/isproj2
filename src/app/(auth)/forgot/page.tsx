@@ -7,9 +7,11 @@ import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 
+
 export const metadata: Metadata = {
   title: 'Forgot Password',
 }
+
 
 export default function Forgot() {
   return (

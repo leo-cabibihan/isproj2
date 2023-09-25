@@ -65,6 +65,7 @@ export default function Register() {
           name="password"
           type="password"
           autoComplete="new-password"
+          minLength={10}
           required
         />
         <SelectField
