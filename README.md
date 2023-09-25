@@ -1,6 +1,6 @@
-# Salient
+# GiveMore
 
-Salient is a [Tailwind UI](https://tailwindui.com) site template built using [Tailwind CSS](https://tailwindcss.com) and [Next.js](https://nextjs.org).
+format: file name, description, operations, authorization level
 
 ## Getting started
 
@@ -18,14 +18,6 @@ npm run dev
 
 Finally, open [http://localhost:3000](http://localhost:3000) in your browser to view the website.
 
-## Customizing
-
-You can start editing this template by modifying the files in the `/src` folder. The site will auto-update as you edit these files.
-
-## License
-
-This site template is a commercial product and is licensed under the [Tailwind UI license](https://tailwindui.com/license).
-
 ## Learn more
 
 To learn more about the technologies used in this site template, see the following resources:
@@ -33,3 +25,43 @@ To learn more about the technologies used in this site template, see the followi
 - [Tailwind CSS](https://tailwindcss.com/docs) - the official Tailwind CSS documentation
 - [Next.js](https://nextjs.org/docs) - the official Next.js documentation
 - [Headless UI](https://headlessui.dev) - the official Headless UI documentation
+
+## app/page.tsx
+
+homepage:
+
+### get
+
+- list of charities
+- list of posts
+
+
+### authorization
+
+everyone
+
+
+
+## app/[id]/details/page.tsx
+
+homepage of given charity (plz just make ut app/[id], remove details)
+
+### get
+
+- charity by id joined by events of charity, joined with charity events, joined with charity posts
+
+### post
+
+- in kind donation
+- cash donation
+
+### authorization
+
+everyone
+
+
+## 
+
+
+
+
