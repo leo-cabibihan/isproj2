@@ -9,9 +9,6 @@ import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 import { useState } from "react";
-import { useSignIn } from "@clerk/nextjs";
-import { useRouter } from "next/router";
-import { ClerkProvider } from '@clerk/nextjs/app-beta'
 
 export const metadata: Metadata = {
   title: 'Sign In',
