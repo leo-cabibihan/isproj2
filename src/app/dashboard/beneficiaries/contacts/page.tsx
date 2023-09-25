@@ -8,8 +8,8 @@ import { revalidatePath } from "next/cache"
 export const revalidate = 0;
 
 export default async function Page() {
-  const { data: contacts } = await supabase.from('contacts').select("*").order('id', {ascending: true});
-  
+  const { data: contacts } = await supabase.from('contacts').select("*").order("id", {ascending: true})
+
   const handleSubmit = async (formData: FormData) => {
     'use server'
     const beneficiary = {
@@ -17,12 +17,12 @@ export default async function Page() {
       contact_no: formData.get("contact_no"),
       address: formData.get("address")
     };
-  
+
     await supabase.from('contacts').insert(beneficiary);
     revalidatePath('/');
   };
 
-  const saveChanges= async (formData: FormData) => {
+  const saveChanges = async (formData: FormData) => {
     'use server'
     const contactId = formData.get("id")
     const beneficiary = {
@@ -30,13 +30,21 @@ export default async function Page() {
       contact_no: formData.get("contact_no"),
       address: formData.get("address")
     };
-   await supabase.from('contacts')
-    .update({
-      name: beneficiary.name,
-      contact_no: beneficiary.contact_no,
-      address: beneficiary.address
-      })
-      .eq("id", contactId)
+
+    await supabase.from('contacts').update(beneficiary).eq("id", contactId)
+    revalidatePath('/');
+  };
+
+  const deleteContact = async (formData: FormData) => {
+    'use server'
+    const contactId = formData.get("id")
+    const beneficiary = {
+      name: formData.get("beneficiary"),
+      contact_no: formData.get("contact_no"),
+      address: formData.get("address")
+    };
+
+    await supabase.from('contacts').delete().eq("id", contactId)
     revalidatePath('/');
   };
 
@@ -104,12 +112,12 @@ export default async function Page() {
               {contacts?.map(contact => (
                 <Tr key={contact.id}>
                   <Td>{contact.name}</Td>
-                  <Td>{contact.contact_no}</Td> 
+                  <Td>{contact.contact_no}</Td>
                   <Td>{contact.address}</Td>
                   <Td>
-                  <SlideOver buttontext="Edit Contact" variant="solid" color="blue">
-                    <form key={contact.id} className="space-y-6" action={saveChanges} method="PUT">
-                        <>
+                    {/* This is the EDIT CONTACT form */}
+                    <SlideOver buttontext="View" variant="solid" color="blue">
+                      <form className="space-y-6" action={saveChanges} method="PUT">
                         <TextField
                           label=""
                           name="id"
@@ -117,37 +125,47 @@ export default async function Page() {
                           defaultValue={contact.id}
                           required
                         />
-                          <TextField
+
+                        <TextField
                           label="Beneficiary Name"
                           name="beneficiary"
                           type="text"
                           defaultValue={contact.name}
                           required
-                        />    
-                          <TextField
+                        />
+
+                        <TextField
                           label="Contact Number"
                           name="contact_no"
                           type="number"
+                          autoComplete="number"
+                          maxLength={15}
+                          max={99999999999}
                           defaultValue={contact.contact_no}
                           required
-                        />                  
-                          <TextField
+                        />
+
+                        <TextField
                           label="Address"
                           name="address"
                           type="text"
                           defaultValue={contact.address}
                           required
-                        />   
-                        </>                                
-                      <div className="col-span-full">
-                        <Button type="submit" variant="solid" color="blue" className="w-full">
-                          <span>
-                            Save Changes <span aria-hidden="true">&rarr;</span>
-                          </span>
-                        </Button>
-                      </div>
-                    </form>
-                  </SlideOver>
+                        />
+                        <div className="grid grid-cols-3 gap-4">
+                          <Button type="submit" variant="solid" color="blue" className="w-full">
+                            <span>
+                              Update <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                          <Button type="submit" variant="solid" color="red" className="w-full" formAction={deleteContact}>
+                            <span>
+                              Delete <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                        </div>
+                      </form>
+                    </SlideOver>
                   </Td>
                 </Tr>
               ))}
