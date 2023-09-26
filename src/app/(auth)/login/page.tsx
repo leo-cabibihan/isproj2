@@ -9,6 +9,9 @@ import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 import { useState } from "react";
+import React from 'react'
+import supabase from "@/app/utils/supabase"
+import { NextResponse } from 'next/server'
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -55,6 +58,17 @@ export default function Login() {
     }
   };
 
+  const handleLogin = async (formData: FormData) => {
+		const { data, error } = await supabase.auth.signInWithPassword({
+			email: String(formData.get("email")),
+			password: String(formData.get("password")),
+		});
+
+    return NextResponse.redirect("/", {
+      status: 301,
+    })
+	};
+
   return (
     <>
       <SlimLayout>
@@ -76,7 +90,7 @@ export default function Login() {
           </Link>{' '}
           to start donating.
         </p>
-        <form onSubmit={handleSubmit} className="mt-10 grid grid-cols-1 gap-y-8">
+        <form onSubmit={handleSubmit} action={handleLogin} className="mt-10 grid grid-cols-1 gap-y-8">
           <TextField
             label="Email address"
             name="email"

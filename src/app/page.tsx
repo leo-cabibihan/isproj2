@@ -4,10 +4,27 @@ import { Hero, Cards, Content, ContentRight, News } from '@/components/Single-us
 import { DefaultLayout } from '@/components/layouts/Default'
 import supabase from "@/app/utils/supabase"
 import { revalidatePath } from "next/cache"
+import { cookies, headers } from 'next/headers'
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
+import { redirect } from 'next/navigation'
+
 
 export const revalidate = 0;
 
 export default async function Home() {
+
+  const supabase = createServerComponentClient({
+    cookies,
+  })
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  if (!session) {
+    // this is a protected route - only users who are signed in can view this route
+    redirect('/login')
+  }
 
   const { data: charity } = await supabase.from('charity').select("*")
 
