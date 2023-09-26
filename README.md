@@ -34,100 +34,85 @@ To learn more about the technologies used in GiveMore, consult the following res
 
 ## app/page.tsx
 The homepage represents the homepage of Givemore. This includes a simple page as to what exactly is GiveMore. 
-Where users would be able to view the different charity organizations and posts regarding each organization. 
+Users would be able to view the different charity organizations and posts regarding each organization. 
 
 ### Get
 - List of Charities
 - List of Posts
+- Associated with charity table
+- Associated with campaign posts table
 
 ### Authorization
 All users are authorized to access this resource.
+
 
 
 # Auth pages
 
 ## app/(auth)/admin/page.tsx
-A crucial component page within the GiveMore platform, offering a secure and streamlined way for administrators of specific charity organizations to create and manage their accounts. 
-
-### Get
-?? double check, should be no get on this page
+For charity members of specific charity organizations to create and manage their accounts. 
 
 ### Post
-- Sign Up Form with email and password
+- Sign Up
 
 ### Authorization
-Only Administrators are authorized to access this resource.
+Administrators
 
 
 
 ## app/(auth)/login/page.tsx
-A crucial component page within the GiveMore platform, offering a secure and streamlined way for all users to login into their account and the website. 
-
-### Get
-?? double check, should be no get on this page
+A component page within platform, for all users to login into their account and the website. 
 
 ### Post
-- Login Form with email and password
+- Login
 
 ### Authorization
-All users are authorized to access this resource.
+All users
 
 
 
 ## app/(auth)/newPassword/page.tsx
-A crucial component page within the GiveMore platform, offering a way for users to input a new password incase it is forgotten 
-
-### Get
-?? double check, should be no get on this page
+A component page within platform, to input a new password incase it is forgotten 
 
 ### Post
-- New Password Form with new password and confirm password
+- New Password with new password and confirm password details.
 
 ### Authorization
-All users are authorized to access this resource.
+All users
 
 
 
 ## app/(auth)/register/page.tsx
-A crucial component page within the GiveMore platform, offering a way for new users to create an account in the website. Primarily made for donors.
-
-### Get
-?? double check, should be no get on this page
+A component page within the GiveMore platform, for new users to create an account in the website. Primarily made for donors.
 
 ### Post
-- Sign Up Form with details such as name, email address, and password
+- Sign Up 
 
 ### Authorization
-All users are authorized to access this resource.  (?? technically other users can access it just not sign up with this)
+All users.
 
 
 
 
 ## app/(auth)/register2/page.tsx
-A crucial component page within the GiveMore platform, offering a way for new users to create an account in the website. Primarily made for charity organizations.
-
-### Get
-?? double check, should be no get on this page
+A component page within the GiveMore platform, for new users to create an account in the website. Primarily made for charity organizations.
 
 ### Post
-- Sign Up Form with details such as email address and password.
+- Sign Up
 
 ### Authorization
-All users are authorized to access this resource.  (?? technically other users can access it just not sign up with this)
+All users 
 
 
 
 ## app/(auth)/reset/page.tsx
-A crucial component page within the GiveMore platform, offering a way for users to reset their account password in the web application.
-
-### Get
-?? double check, should be no get on this page
+A component page within the GiveMore platform, for users to reset their account password in the web application.
 
 ### Post
-- Reset Password Form with details such as email address and old password, and new password.
+- Reset Password
 
 ### Authorization
-All users are authorized to access this resource.  (?? technically other users can access it just not sign up with this)
+All users 
 
 
 
@@ -141,13 +126,13 @@ All users are authorized to access this resource.  (?? technically other users c
 # Id Pages
 
 ## app/[id]/details/page.tsx
-The homepage of given charity serves as the organization's digital gateway, offering vital information and engagement opportunities. It typically includes donation statistics to showcase transparency, options for both cash and in-kind donations, listings of upcoming events and activities for supporters to participate in, and an overview of the charity's mission and values. 
-
-This centralized webpage informs visitors about the charity's work, fosters trust through transparency, and facilitates various ways to contribute, ensuring that individuals can easily understand, support, and stay involved with the charity's cause.    
+The homepage of given charity. It typically includes donation statistics to showcase transparency, options for both cash and in-kind donations, listings of upcoming events and activities for supporters to participate in, and an overview of the charity.  
 
 ### Get
-- List of Charities
-- List of Posts
+- List of charity
+- List of campaign post
+- Associated with charity table
+- Associated with campaign post table
 - Charity by id joined by events of charity, joined with charity events, joined with charity posts
 
 ### Post
@@ -155,52 +140,46 @@ This centralized webpage informs visitors about the charity's work, fosters trus
 - Cash donation
 
 ### Authorization
-All users are authorized to access this resource.
+All users
 
 
 
 ## app/[id]/events/page.tsx
-The event page of a charity focuses on a specific fundraising drive or campaign. It typically provides information about the campaign's goal, purpose, and impact, along with details on how individuals can donate and contribute. 
+The event page of a charity focuses on a campaign. Provides information about the its goal, purpose, and impact.
 
 ### Get
-- List of Event and its statistics, such as cash, representative, and others
-- Receipt Images
-
-### Post
-?? double check, should be no post on this page
+- List of events
+- List of beneficiaries item
+- Associated with Events table
+- Associated with Beneficiaries item table
+- Associated Images 
 
 ### Authorization
-All users are authorized to access this resource.
+All users
 
 
 
 ## app/[id]/news/page.tsx
-The news page of a charity organization is a dedicated section within the GiveMore platform that allows a specific charity organization to share timely updates and news with its donors and supporters. On this page, the charity can post articles, announcements, and stories related to their activities and its impact. 
+The news page of a charity organization allows a specific charity organization to share updates and news with donors. Able to post articles, announcements, and stories related to their activities. 
 
 ### Get
-- Posting of news article
-- Uploaded News Images
-
-### Post
-?? double check, should be no post on this page
+- List of Campaign post
+- Associated with Campaign Post table
+- Associated with Images
 
 ### Authorization
-All users are authorized to access this resource.
+All users
 
 
 
 ## app/[id]/report/page.tsx
 This is the report charity page, where donors are able to report charity organizations
 
-### Get
-?? double check, should be no get on this page
-
 ### Post
-- Completion of form with Charity Organization
-- Upload Evidence Images
+- Associated with donor complaints table
 
 ### Authorization
-Only Charity members and Admins are authorized to access this resource.
+Charity members and Admins
 
 
 
@@ -215,17 +194,15 @@ Only Charity members and Admins are authorized to access this resource.
 The application page, where all the request of charity organizations that would like to use the platform.
 
 ### Get
-- List of Sign Up or application request by charity organizations.
-- Charity Organization Application Details
+- List of applications
+- Associated with applications table
 
-### Post
-- Approve request = New Charity Organization within the platform
-
-### Delete
-- Deny request = The applying Charity Organization is then denied of creating an page in the platform.
+### Put
+- Associated with applications table = Approve request = New Charity Organization within the platform
+- Associated with applications table = Deny request = The applying Charity Organization is then denied in the platform.
 
 ### Authorization
-Only Admins are authorized to access this resource.
+Admins
 
 
 
@@ -233,10 +210,11 @@ Only Admins are authorized to access this resource.
 The audit log page, where all the actions made by Admins are logged.
 
 ### Get
-- List of Actions made by Admins within the system, such as approving a charity organization or freezing.
+- List of audit log
+- Associated with log table
 
 ### Authorization
-Only Admins are authorized to access this resource.
+Admins
 
 
 
@@ -244,27 +222,25 @@ Only Admins are authorized to access this resource.
 The complaints page, where all the donors complaint against a charity organization is located here. 
 
 ### Get
-- List of complaints by donors
-- Associated Images for evidence
-- Details of complaint
+- List of donor complaints table
+- Associated with donor complaints table
 
 ### Put 
 - Notify Charity = The complained charity organization is notified of a complaint made by a donor. 
 
 ### Authorization
-Only Admins are authorized to access this resource.
-
+Admins
 
 
 ## app/admin/organizations/page.tsx
 The organizations page, where all the approved and verified charity organizations are located. 
 
 ### Get
-- List of Charity Organizations
-- Details of Charity Organizations
+- List of charity 
+- Associated with charity table
 
 ### Authorization
-Only Admins are authorized to access this resource.
+Admins
 
 
 
@@ -272,10 +248,11 @@ Only Admins are authorized to access this resource.
 The profile history page, where all the approved and verified charity organizations are located. A comprehensive record of actions and activities performed by administrators. This page serves as an audit trail. 
 
 ### Get
-- List of actions made by a specific administrator
+- List of Audit log
+- Associated with Log table = Filtered by Admin user history
 
 ### Authorization
-Admins are authorized to access this resource.
+Admins
 
 
 
@@ -283,25 +260,26 @@ Admins are authorized to access this resource.
 The settings page, a hub for administrators to configure and customize various aspects of the system. One of its key functionalities is the ability to invite new developer admins into the platform. 
 
 ### Post
-- Invite new Admininstrators in the platform
+- Associate with Admins table = Invite new Admininstrators in the platform
 
 ### Authorization
-Admins are authorized to access this resource.
+Admins 
 
 
 
 ## app/admin/view-charity/page.tsx
-The view charity page, a comprehensive view of a specific charity organization. It provides an overview of the charity organization. Additionally, this page allows Admins to view submitted complaints against the organization. Furthermore, it enables them to view the appeals made by the charity organization against complaints previously submitted to them.
+The view charity page, provides an overview of the charity organization. Allows Admins to view submitted complaints against the organization and view the appeals made by the charity organization against the complaints.
 
 ### Get
-- List of complaints and its details to the charity organization
-- List of Appeals and its details made by the charity organization 
+- List of donor complaints 
+- Associated with donor complaints table
+- List of Appeals and its details made by the charity organization ???? NO APPEAL TABLE??
 
-### Put/Patch (Delete)
-- Freeze Charity - To freeze the charity to make it hidden from the public or to be removed from the web platform.  IDK IF THIS IS UPDATE OR DELETE
+### Put
+- Freeze Charity - To freeze the charity to make it hidden from the web platform.
 
 ### Authorization
-Only Admins are authorized to access this resource.
+Admins
 
 
 
@@ -317,21 +295,22 @@ The contact page has the capability to add new beneficiaries and edit their deta
 
 ### Get
 - List of beneficiaries
+- Associated with beneficiaries table
 
 ### Post
-- Form to add new beneficiaries
-- Upload Associated Images with beneficiaries
+- Associated with beneficiaries table = To add new beneficiaries
+- Associated Images with beneficiaries
 
 ### Put
-- Form to edit existing beneficiaries
+- Associated with beneficiaries table = To edit existing beneficiaries
 - Replace Uploaded Associated Images with beneficiaries
 
 ### Delete
-- Delete Existing Beneficiary
-- Associated Images
+- Associated with beneficiaries table = To Delete Existing Beneficiary
+- Associated Images with beneficiaries
 
 ### authorization
-Only Charity Members are authorized to access this resource.
+Charity Members
 
 
 
@@ -339,29 +318,31 @@ Only Charity Members are authorized to access this resource.
 The event page has the capability to add new events and edit their details to ensure accuracy or delete the event entirely. It has the name of the event and details regarding it.
 
 ### Get
-- List of Events
+- List of events
+- Associated with Events table 
 - Associated Item donations
 - Associated Cash Donations
-- Associated Beneficiaries
+- Associated Beneficiaries table
 
 ### Post
-- Form to add new events
+- To add new events
+- Associated with Events table
 - Associated Item donations
 - Associated Cash Donations
 - Associated Beneficiaries
 
 ### Put
-- Form to edit existing events
+- To edit existing events
+- Associated with Events table 
 - Associated Item donations
 - Associated Cash Donations
 - Associated Beneficiaries
 
 ### Delete
 - Delete Existing events
-- Delete Associated Details
 
 ### authorization
-Only Charity Members are authorized to access this resource.
+Charity Members
 
 
 
@@ -370,29 +351,56 @@ The expenses page has the capability to add external expenses and edit their det
 
 ### Get
 - List of Expenses
-- Associated Item donations
-- Associated Cash Donations
-- Associated Beneficiaries
+- Associated Images for evidence
+- Associated Amount
+- Associated Event
 
 ### Post
-- Form to add new events
-- Associated Item donations
-- Associated Cash Donations
-- Associated Beneficiaries
+- Add new expenses
 - Associated Images for evidence
+- Associated Beneficiaries
+- Associated Event
 
 ### Put
-- Form to edit existing events
-- Associated Item donations
-- Associated Cash Donations
+- Edit existing expenses
+- Associated Images for evidence
 - Associated Beneficiaries
+- Associated Event
 
 ### Delete
-- Delete Existing events
+- Delete Existing expenses
 - Delete Associated Details
 
 ### authorization
-Only Charity Members are authorized to access this resource.
+Charity Members 
+
+
+
+## app/dashboard/beneficiaries/given-items/page.tsx
+The given items page is the inkind donations, it lists the inkind donations and edit their details to ensure accuracy or delete it entirely. Details include amount, description, and Images for evidence of the said expense. 
+
+### Get
+- List of Expenses
+- Associated Images for evidence
+- Associated Beneficiary Item
+
+### Post
+- Add new beneficiary item
+- Associated Images for evidence
+- Associated Beneficiary Item
+
+### Put
+- Edit existing beneficiary item
+- Associated Images for evidence
+- Associated Beneficiary Item
+
+### Delete
+- Delete beneficiary item
+
+### Authorization
+Charity Members
+
+
 
 
 
@@ -425,7 +433,7 @@ Only Charity Members are authorized to access this resource.
 - associated item donations
 - photos of proof
 
-### authorization
+### Authorization
 charity member
 
 
