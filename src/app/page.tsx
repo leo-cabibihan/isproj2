@@ -17,11 +17,9 @@ export default async function Home() {
     cookies,
   })
 
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
+ const { data: activeSession } = await supabase.auth.getSession();
 
-  if (!session) {
+  if (!activeSession.session) {
     // this is a protected route - only users who are signed in can view this route
     redirect('/login')
   }
