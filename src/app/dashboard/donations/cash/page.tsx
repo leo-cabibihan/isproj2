@@ -1,3 +1,4 @@
+import supabase from '@/app/utils/supabase';
 import { Button } from '@/components/Button';
 import { SelectField, TextField } from '@/components/Fields'
 import SlideOver from '@/components/SlideOverButton';
@@ -10,7 +11,16 @@ const people = [
     // More people...
 ];
 
-export default function ExternalTable() {
+export default async function ExternalTable() {
+
+    //Temp. ID for testing purposes whilst auth is still WIP
+    const charityId = 12
+    const { data: posts } = await supabase
+        .from('campaign_post')
+        .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
+        .eq('charity_id', charityId)
+        .order("id", { ascending: true })
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -114,11 +124,11 @@ export default function ExternalTable() {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {people.map(person =>
-                                <Tr key={person.DonorName}>
-                                    <Td>{person.DonorName}</Td>
-                                    <Td>{person.Amount}</Td>
-                                    <Td>{person.Date}</Td>
+                            {posts?.map(post =>
+                                <Tr key={post.id}>
+                                    <Td>{post.title}</Td>
+                                    <Td>{post.date_posted}</Td>
+                                    <Td>{post.Date}</Td>
                                     <Td>
                                         <SlideOver variant="solid" color="blue" buttontext="View Details">
                                             <form className="py-9">
