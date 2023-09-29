@@ -437,3 +437,19 @@ Charity Members
 charity member
 
 
+
+## app/dashboard/posts/page.tsx
+The posts page is where the charity members may create and manage existing posts made to the GiveMore platform.
+
+### get
+- List of posts
+
+### post
+- Create new posts
+
+### put
+- Edit existing posts
+
+### delete
+- Delete existing posts
+
