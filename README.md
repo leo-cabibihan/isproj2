@@ -50,13 +50,13 @@ All users are authorized to access this resource.
 # Auth pages
 
 ## app/(auth)/admin/page.tsx
-For charity members of specific charity organizations to create and manage their accounts. 
+For charity members of specific charity organizations to create their accounts. 
 
 ### Post
 - Sign Up
 
 ### Authorization
-Administrators
+all users
 
 
 
@@ -126,14 +126,12 @@ All users
 # Id Pages
 
 ## app/[id]/details/page.tsx
-The homepage of given charity. It typically includes donation statistics to showcase transparency, options for both cash and in-kind donations, listings of upcoming events and activities for supporters to participate in, and an overview of the charity.  
+The homepage of given charity.
 
 ### Get
-- List of charity
-- List of campaign post
-- Associated with charity table
-- Associated with campaign post table
-- Charity by id joined by events of charity, joined with charity events, joined with charity posts
+- charity by id
+- joined by charity id
+- joined by campaign post table
 
 ### Post
 - In kind donation
@@ -145,14 +143,13 @@ All users
 
 
 ## app/[id]/events/page.tsx
-The event page of a charity focuses on a campaign. Provides information about the its goal, purpose, and impact.
+Oi fix this, it should be by event id
 
 ### Get
-- List of events
+- event by id
 - List of beneficiaries item
-- Associated with Events table
 - Associated with Beneficiaries item table
-- Associated Images 
+- Associated with expenses 
 
 ### Authorization
 All users
@@ -160,12 +157,10 @@ All users
 
 
 ## app/[id]/news/page.tsx
-The news page of a charity organization allows a specific charity organization to share updates and news with donors. Able to post articles, announcements, and stories related to their activities. 
+OI fix this, it should by news id
 
 ### Get
-- List of Campaign post
-- Associated with Campaign Post table
-- Associated with Images
+- campaign post by id
 
 ### Authorization
 All users
@@ -179,8 +174,7 @@ This is the report charity page, where donors are able to report charity organiz
 - Associated with donor complaints table
 
 ### Authorization
-Charity members and Admins
-
+all users
 
 
 
@@ -195,7 +189,6 @@ The application page, where all the request of charity organizations that would 
 
 ### Get
 - List of applications
-- Associated with applications table
 
 ### Put
 - Associated with applications table = Approve request = New Charity Organization within the platform
@@ -211,7 +204,7 @@ The audit log page, where all the actions made by Admins are logged.
 
 ### Get
 - List of audit log
-- Associated with log table
+- Associated with log table - Filtered by Admins only
 
 ### Authorization
 Admins
@@ -236,8 +229,7 @@ Admins
 The organizations page, where all the approved and verified charity organizations are located. 
 
 ### Get
-- List of charity 
-- Associated with charity table
+- List of charity filtewred by verified
 
 ### Authorization
 Admins
@@ -273,7 +265,6 @@ The view charity page, provides an overview of the charity organization. Allows 
 ### Get
 - List of donor complaints 
 - Associated with donor complaints table
-- List of Appeals and its details made by the charity organization ???? NO APPEAL TABLE??
 
 ### Put
 - Freeze Charity - To freeze the charity to make it hidden from the web platform.
@@ -283,7 +274,9 @@ Admins
 
 
 
+# Dashboard/dashboard/page.tsx
 
+STILL EMPTY NEED UPDATE TO UI
 
 
 
@@ -299,10 +292,12 @@ The contact page has the capability to add new beneficiaries and edit their deta
 
 ### Post
 - Associated with beneficiaries table = To add new beneficiaries
+- Assign with event
 - Associated Images with beneficiaries
 
 ### Put
 - Associated with beneficiaries table = To edit existing beneficiaries
+- Assign with event
 - Replace Uploaded Associated Images with beneficiaries
 
 ### Delete
@@ -319,24 +314,20 @@ The event page has the capability to add new events and edit their details to en
 
 ### Get
 - List of events
-- Associated with Events table 
-- Associated Item donations
-- Associated Cash Donations
-- Associated Beneficiaries table
 
 ### Post
 - To add new events
 - Associated with Events table
 - Associated Item donations
 - Associated Cash Donations
-- Associated Beneficiaries
+- Associated Beneficiaries table
 
 ### Put
 - To edit existing events
 - Associated with Events table 
 - Associated Item donations
 - Associated Cash Donations
-- Associated Beneficiaries
+- Associated Beneficiaries table
 
 ### Delete
 - Delete Existing events
@@ -347,29 +338,23 @@ Charity Members
 
 
 ## app/dashboard/beneficiaries/expenses/page.tsx
-The expenses page has the capability to add external expenses and edit their details to ensure accuracy or delete it entirely. Details include amount, description, and Images for evidence of the said expense. 
+The expenses page to add external expenses and edit their details to ensure accuracy or delete it entirely. Details include amount, description, and Images for evidence of the said expense. 
 
 ### Get
 - List of Expenses
-- Associated Images for evidence
-- Associated Amount
-- Associated Event
 
 ### Post
 - Add new expenses
 - Associated Images for evidence
-- Associated Beneficiaries
-- Associated Event
+- Associated Event table
 
 ### Put
 - Edit existing expenses
 - Associated Images for evidence
-- Associated Beneficiaries
-- Associated Event
+- Associated Event table
 
 ### Delete
 - Delete Existing expenses
-- Delete Associated Details
 
 ### authorization
 Charity Members 
@@ -380,19 +365,21 @@ Charity Members
 The given items page is the inkind donations, it lists the inkind donations and edit their details to ensure accuracy or delete it entirely. Details include amount, description, and Images for evidence of the said expense. 
 
 ### Get
-- List of Expenses
+- List of beneficiary item
 - Associated Images for evidence
 - Associated Beneficiary Item
 
 ### Post
 - Add new beneficiary item
 - Associated Images for evidence
-- Associated Beneficiary Item
+- Assign inventory item
+- assign event
 
 ### Put
 - Edit existing beneficiary item
 - Associated Images for evidence
-- Associated Beneficiary Item
+- Assign inventory item
+- assign event
 
 ### Delete
 - Delete beneficiary item
@@ -403,15 +390,280 @@ Charity Members
 
 
 
+# Dashboard - Donations
+
+
+## app/dashboard/donations/cash/page.tsx
+The cash page is the external income
+
+### Get
+- List of external income
+
+
+### Post
+- Add new external income 
+- Assign donor
+- photo proof
+
+### Put
+- edit if added by donor
+
+### Delete
+- Delete existing external income 
+
+### Authorization
+Charity Members
+
+
+
+## app/dashboard/donations/donors/[id]/page.tsx
+The donor profile history page, where all the history of donations of the donor is located. This page serves as an audit trail for the donors. 
+
+### Get
+- List of cash
+- List of inventory item
+- Associated with cash table = Filtered by Donor User
+- Associated with inventory item table = Filtered by Donor User
+
+### Authorization
+Charity Member
+
+
+## app/dashboard/donations/donors/[id]/page.tsx
+The donor profile history page, where all the history of donations of the donor is located. This page serves as an audit trail for the charity members. 
+
+### Get
+- List of cash
+- List of inventory item
+- Associated with cash table = Filtered by Donor User
+- Associated with inventory item table = Filtered by Donor User
+
+### Authorization
+Charity Member
+
+
+
+## app/dashboard/donations/donors/page.tsx
+The donor profile history page, where all the history of donations of the donor is located. This page serves as an audit trail for the charity members. 
+
+### Get
+- List of cash
+- List of inventory item
+- Associated with cash table 
+- Associated with inventory item table 
+
+### Authorization
+Charity Member
+
+
+## app/dashboard/donations/inventory/page.tsx
+The inventory page, where all the inventory of the charity donations are located.  
+
+### Get
+- List of inventory item
+- Associated with inventory item table 
+
+### Post
+- Add new inventory item
+- Associated with inventory item table 
+
+### Put
+- Edit existing inventory item
+- Associated with inventory item table 
+
+### Delete
+- Delete existing inventory item
+
+
+### Authorization
+Charity Member
+
+
+
+## app/dashboard/donations/pickup/page.tsx  NEED TO CHECK IF TABLE ASSOCIATION CORRECT
+The pickup page, where all the unverified inkind donations of the charity donations are located.  
+
+### Get
+- List of unverified inkind donations
+- Associated with item donation transaction table 
+- Associated with inventory table 
+- Associated with Images for evidence
+
+### Post
+- Add new unverified inkind donations
+- Associated with item donation transaction table 
+- Associated with inventory table
+
+### Put
+- Edit existing unverified inkind donations
+- Associated with item donation transaction table 
+- Associated with inventory table
+
+### Delete
+- Delete unverified inkind donations
+
+### Authorization
+Charity Member
+
+
+
+## app/dashboard/donations/verifiedInkind/page.tsx  NEED TO CHECK IF TABLE ASSOCIATION CORRECT
+The verified Inkind page, where all the verified inkind donations of the charity donations are located.  
+
+### Get
+- List of verified inkind donations
+- Associated with item donation transaction table = Filtered by verified = true
+- Associated with inventory table 
+- Associated with Images for evidence
+
+### Post
+- Add new verified inkind donations
+- Associated with item donation transaction table 
+- Associated with inventory table
+
+### Put
+- Edit existing verified inkind donations
+- Associated with item donation transaction table 
+- Associated with inventory table
+
+### Delete
+- Delete verified inkind donations
+
+### Authorization
+Charity Member
 
 
 
 
 
+# Dashboard - Logs
+
+## app/dashboard/donations/logs/member-actions/page.tsx  
+The member action page, where all the actions of each charity memeber are logged.  
+
+### Get
+- List of logs = Filtered by charity members
+- Associated with log table
+
+### Authorization
+Charity Member
 
 
 
-## app/dashboard/donations/verified-in-kind/page.tsx
+## app/dashboard/donations/logs/complaints/page.tsx  
+The complaints page, where all the complaints of the charity organization is located. The charity members may appeal each complaint made to them towards the admins.   
+
+### Get
+- List of complaints = Filtered by donors complaints against the specific charity organization
+- Details of complaint
+- Associated with donor omplaints table
+
+### Post
+- Add new appeal against complain
+- Associated with appeals ???? NO APPEAL TABLE??
+
+### Authorization
+Charity Member
+
+
+
+
+# Dashboard - Posts
+
+## app/dashboard/donations/logs/complaints/page.tsx  
+The posts page, where all the posts of the charity organization is located. The charity members may create a post and the donors would be able to view it.   
+
+### Get
+- List of campaign post = Filtered by charity organization's post
+- Associated with campaign post table
+
+### Post
+- Add new appeal against complain
+- Associated with campaign post table
+
+### Put
+- Edit existing campagn post table
+- Associated with campaign post table
+
+### Delete
+- Delete existing campaign post
+
+### Authorization
+Charity Member
+
+
+
+
+# Dashboard - statistics
+
+## app/dashboard/donations/logs/statistics/page.tsx  
+The statistics page, an overview data visualization of charity donations and expenses. 
+
+### Get
+- Data Visualization Chart of Charity Donations and expenses
+- Associated with expenses table
+- Associated with cash table
+
+### Authorization
+Charity Member
+
+
+
+# Onboarding Details
+## app/onboardingDetails/page.tsx 
+The onboarding details page, where charity organizations would request to sign up in the platform.
+
+### Post
+- Sign Up
+
+### Authorization
+Charity member and Admin
+
+
+
+# Pending
+## app/pending/page.tsx 
+The pending page, where charity organizations would be shown their status as pending after onboarding. 
+
+### Authorization
+Charity member and Admin
+
+
+
+# Report Process
+## app/pending/page.tsx 
+The report process page, where donors would be shown their complaint status after filling up the form. 
+
+### Authorization
+Charity member
+
+
+
+# 
+## app/settings/donationHistory/page.tsx 
+The donation history page, where donors would be shown their history of donation. 
+
+### Get
+- List of cash
+- List of inventory item
+- Associated with cash table
+- Associated with inventory item
+
+### Authorization
+Charity member
+
+
+# Thank you
+## app/thankyou/page.tsx 
+The thank you page, where donors would be shown their complaint status after filling up the form. 
+
+### Authorization
+Charity member
+
+
+
+
+## app/dashboard/donations/verified-in-kind/page.tsx REFERENCE, DELETE AFTER
 
 
 ### get
