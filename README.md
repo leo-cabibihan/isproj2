@@ -480,7 +480,7 @@ Charity Member
 
 
 
-## app/dashboard/donations/pickup/page.tsx  NEED TO CHECK IF TABLE ASSOCIATION CORRECT
+## app/dashboard/donations/pickup/page.tsx
 The pickup page, where all the unverified inkind donations of the charity donations are located.  
 
 ### Get
@@ -507,7 +507,7 @@ Charity Member
 
 
 
-## app/dashboard/donations/verifiedInkind/page.tsx  NEED TO CHECK IF TABLE ASSOCIATION CORRECT
+## app/dashboard/donations/verifiedInkind/page.tsx 
 The verified Inkind page, where all the verified inkind donations of the charity donations are located.  
 
 ### Get
@@ -560,7 +560,7 @@ The complaints page, where all the complaints of the charity organization is loc
 
 ### Post
 - Add new appeal against complain
-- Associated with appeals ???? NO APPEAL TABLE??
+- Associated with charity appeals
 
 ### Authorization
 Charity Member
@@ -570,7 +570,7 @@ Charity Member
 
 # Dashboard - Posts
 
-## app/dashboard/donations/logs/complaints/page.tsx  
+## app/dashboard/donations/posts/page.tsx  
 The posts page, where all the posts of the charity organization is located. The charity members may create a post and the donors would be able to view it.   
 
 ### Get
@@ -631,7 +631,7 @@ Charity member and Admin
 
 
 # Report Process
-## app/pending/page.tsx 
+## app/reportprocess/page.tsx 
 The report process page, where donors would be shown their complaint status after filling up the form. 
 
 ### Authorization
@@ -661,32 +661,6 @@ The thank you page, where donors would be shown their complaint status after fil
 Charity member
 
 
-
-
-## app/dashboard/donations/verified-in-kind/page.tsx REFERENCE, DELETE AFTER
-
-
-### get
-- list of item donation transaction filtered by verified = true
-
-### post
-- item donation transaction
-- associated item donations
-- associated photos of proof
-
-
-### put
-- item donation transaction
-- associated item donations
-- associated photos of proof
-  
-### delete
-- item donation transaction
-- associated item donations
-- photos of proof
-
-### Authorization
-charity member
 
 
 
