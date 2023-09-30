@@ -10,6 +10,17 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 
 export const revalidate = 0;
 
+async function uploadFile(file) {
+
+    const { data, error } = await supabase.storage.from('uploads').upload(String(randomUUID), file)
+    if (error) {
+
+    } else {
+        // Handle success
+    }
+}
+
+
 export default async function Page() {
 
     //Temp. ID for testing purposes whilst auth is still WIP
@@ -19,7 +30,52 @@ export default async function Page() {
         .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
         .eq('charity_id', charityId)
 
-    console.log(posts?.map(post => {post.member_name}))
+    const handleSubmit = async (formData: FormData) => {
+        'use server'
+        const post = {
+            title: formData.get("title"),
+            text: formData.get("details"),
+            charity_id: 12,
+            charity_member_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313"
+
+        };
+
+        await supabase.from('campaign_post').insert(post);
+        revalidatePath('/');
+
+        uploadFile(formData.get("post-images"))
+    };
+
+    const saveChanges = async (formData: FormData) => {
+        'use server'
+        const postId = formData.get("id")
+        const post = {
+            title: formData.get("title"),
+            text: formData.get("details"),
+            charity_id: 12,
+            charity_member_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313"
+        };
+
+        await supabase.from('campaign_post').update(post).eq("id", postId)
+        revalidatePath('/');
+
+        uploadFile(formData.get("post-images"))
+    };
+
+    const deletePost = async (formData: FormData) => {
+        'use server'
+        const postId = formData.get("id")
+        const post = {
+            title: formData.get("title"),
+            text: formData.get("details"),
+            subheading: formData.get("subtitle"),
+            charity_id: 12,
+            charity_member_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313"
+        };
+
+        await supabase.from('contacts').delete().eq("id", postId)
+        revalidatePath('/');
+    };
 
     return (
         <>
@@ -31,7 +87,68 @@ export default async function Page() {
 
             <TableContainer>
                 <TableHeaderButton header="Posts of Red Cross Philippines">
-                    <Button variant="solid" color="blue" href={"/dashboard/posts/createPost"}>Create Post</Button>
+                    <SlideOver buttontext={"Create Post"} variant="solid" color="blue">
+                        <form className="space-y-6" action={handleSubmit} method="POST">
+                            <TextField
+                                label="Post Title"
+                                name="title"
+                                type="text"
+                                required
+                            />
+
+                            <TextField
+                                label="Subtitle"
+                                name="subtitle"
+                                type="text"
+                            />
+
+                            <div className="col-span-full">
+                                <label htmlFor="details" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Details
+                                </label>
+                                <div className="mt-2">
+                                    <textarea
+                                        id="details"
+                                        name="details"
+                                        rows={6}
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        defaultValue={''}
+                                        placeholder="A long time ago, in a Galaxy far far away..."
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="col-span-full">
+                                <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Images
+                                </label>
+                                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                    <div className="text-center">
+                                        <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                                        <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                            <label
+                                                htmlFor="post-images"
+                                                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                            >
+                                                <span>Upload a file</span>
+                                                <input id="post-images" name="post-images" type="file" className="sr-only" />
+                                            </label>
+                                            <p className="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-span-full">
+                                <Button type="submit" variant="solid" color="blue" className="w-full">
+                                    <span>
+                                        Save Post <span aria-hidden="true">&rarr;</span>
+                                    </span>
+                                </Button>
+                            </div>
+                        </form>
+                    </SlideOver>
                 </TableHeaderButton>
                 <div className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -70,15 +187,85 @@ export default async function Page() {
                                             <div className="mt-6 flex border-t border-gray-900/5 pt-6">
                                                 <div className="relative flex items-center gap-x-4">
                                                     <img src="#" alt="" className="h-10 w-10 rounded-full bg-gray-50" />
-                                                    <div className="text-sm leading-6">
-                                                        <p className="font-semibold text-gray-900">
-                                                            <a href="#">
-                                                                <span className="absolute inset-0" />
+                                                    <div className="text-sm leading-6 grid grid-cols-4 gap-4">
+                                                        <div className="col-span-3">
+                                                            <p className="font-semibold text-gray-900">
+
                                                                 {post.charity_member.member_name}
-                                                                
-                                                            </a>
-                                                        </p>
-                                                        <p className="text-gray-600">{post.name}</p>
+                                                            </p>
+                                                            <p className="text-gray-600">{post.charity.name}</p>
+                                                        </div>
+                                                        <SlideOver buttontext="View Details" variant="solid" color="blue">
+                                                            <form className="space-y-6" action={saveChanges} method="PUT">
+
+                                                                <TextField
+                                                                    label=""
+                                                                    name="id"
+                                                                    type="hidden"
+                                                                    defaultValue={post.id}
+                                                                    required
+                                                                />
+
+                                                                <TextField
+                                                                    label="Post Title"
+                                                                    name="title"
+                                                                    type="text"
+                                                                    defaultValue={post.title}
+                                                                    required
+                                                                />
+
+                                                                <div className="col-span-full">
+                                                                    <label htmlFor="details" className="block text-sm font-medium leading-6 text-gray-900">
+                                                                        Details
+                                                                    </label>
+                                                                    <div className="mt-2">
+                                                                        <textarea
+                                                                            id="details"
+                                                                            name="details"
+                                                                            rows={6}
+                                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                                            defaultValue={post.text}
+                                                                            placeholder="A long time ago, in a Galaxy far far away..."
+                                                                        />
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="col-span-full">
+                                                                    <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
+                                                                        Images
+                                                                    </label>
+                                                                    <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                                                        <div className="text-center">
+                                                                            <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
+                                                                            <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                                                                                <label
+                                                                                    htmlFor="post-images"
+                                                                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                                                                                >
+                                                                                    <span>Upload a file</span>
+                                                                                    <input id="post-images" name="post-images" type="file" className="sr-only" />
+                                                                                </label>
+                                                                                <p className="pl-1">or drag and drop</p>
+                                                                            </div>
+                                                                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="col-span-full">
+                                                                    <Button type="submit" variant="solid" color="blue" className="w-full">
+                                                                        <span>
+                                                                            Update <span aria-hidden="true">&rarr;</span>
+                                                                        </span>
+                                                                    </Button>
+                                                                    <Button type="submit" variant="solid" color="red" className="w-full" formAction={deletePost}>
+                                                                        <span>
+                                                                            Delete <span aria-hidden="true">&rarr;</span>
+                                                                        </span>
+                                                                    </Button>
+                                                                </div>
+                                                            </form>
+                                                        </SlideOver>
                                                     </div>
                                                 </div>
                                             </div>

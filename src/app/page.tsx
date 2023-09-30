@@ -206,19 +206,14 @@ export default async function Home() {
                     <div className="max-w-xl">
                       <div className="group relative">
                         <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                          <span className="absolute inset-0" />
-                          {org.name}
+                          <a href={'/' + org.id + '/details'}>
+                            <span className="absolute inset-0" />
+                            {org.name}
+                          </a>
                         </h3>
                         <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{org.about}</p>
                       </div>
-                      <div className="relative mt-8 flex items-center gap-x-4">
-                        <Button type="submit" variant="solid" color="green" className="w-full" href={"/orgs/details"}>
-                          <span>
-                            Donate Now <span aria-hidden="true">&rarr;</span>
-                          </span>
-                        </Button>
-                      </div>
-                    </div>
+                    </div>  
                   </article>
                 ))}
               </div>
@@ -253,7 +248,7 @@ export default async function Home() {
                       </div> */}
                       <div className="group relative">
                         <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
-                          <a href={"#"}>
+                          <a href={'/' + post.id + '/news'}>
                             <span className="absolute inset-0" />
                             {post.title}
                           </a>

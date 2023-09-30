@@ -19,16 +19,19 @@ const cities = [
 const provinces = [
   { id: 1, name: "NCR" },
   { id: 2, name: "Bulacan" },
-  { id: 3, name: "N/A" },
+  { id: 3, name: "N/A" }, 
 ]
 
-export default function Organization() {
+export default function Organization({params}) {
+
+  //THIS JUST GETS THE ORG ID FROM THE ROUTE. US  E THIS TO FILTER TO THE SPECIFIC ORG.
+  const orgID = params.id
   const [cash, showCash] = useState(true);
 
   return (
     <>
       <DefaultLayout>
-        <ContentLeft />
+        <ContentLeft id={orgID}/>
         <ContentRight />
         <GraphTemp />
         <div className="bg-white px-6 py-32 lg:px-8">
@@ -129,8 +132,8 @@ export default function Organization() {
             </div>
           </div>
         </div>
-        <Causes />
-        <News />
+        <Causes id={orgID}/>
+        <News id={orgID}/>
       </DefaultLayout>
     </>
   )
