@@ -8,6 +8,7 @@ import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 import supabase from '@/app/utils/supabase'
 import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
 export default function Details() {
   const saveChanges = async (formData: FormData) => {
@@ -20,7 +21,7 @@ export default function Details() {
     }
     const { error } = await supabase.from('charity').insert(details)
     console.log(error)
-    revalidatePath('/')
+    redirect('/onboarding/address')
   }
 
   return (
