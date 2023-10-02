@@ -1,3 +1,5 @@
+
+
 import { Button } from "@/components/Button";
 import { TableContainer, TableHeaderButton } from "@/components/Table";
 import supabase from "@/app/utils/supabase"
@@ -7,24 +9,23 @@ import SlideOver from "@/components/SlideOverButton";
 import { useState } from "react";
 import { randomUUID } from "crypto";
 import { PhotoIcon } from "@heroicons/react/24/solid";
+import { ImageUpload } from "@/components/ImgUpload";
 
 export const revalidate = 0;
-
-async function uploadFile(file) {
-
-    const { data, error } = await supabase.storage.from('uploads').upload(String(randomUUID), file)
-    if (error) {
-
-    } else {
-        // Handle success
-    }
-}
 
 
 export default async function Page() {
 
+    //HOWTO GET CHARITY ID:
+    //=> Get UUID of currently logged in user
+    //==> const user = useUser()
+    //=> Get Charity ID from charity_member table equal to current UUID
+    //=> store Charity ID somewhere
+    
     //Temp. ID for testing purposes whilst auth is still WIP
+
     const charityId = 12
+
     const { data: posts, error } = await supabase
         .from('campaign_post')
         .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
@@ -32,18 +33,20 @@ export default async function Page() {
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
+
+        const {data: imageID} = await supabase.rpc('image_id')
+
         const post = {
             title: formData.get("title"),
             text: formData.get("details"),
+            subheading: formData.get("subtitle"),
             charity_id: 12,
-            charity_member_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313"
-
+            charity_member_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313",
+            image_id: imageID
         };
 
         await supabase.from('campaign_post').insert(post);
         revalidatePath('/');
-
-        uploadFile(formData.get("post-images"))
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -52,14 +55,13 @@ export default async function Page() {
         const post = {
             title: formData.get("title"),
             text: formData.get("details"),
+            subheading: formData.get("subtitle"),
             charity_id: 12,
             charity_member_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313"
         };
 
         await supabase.from('campaign_post').update(post).eq("id", postId)
         revalidatePath('/');
-
-        uploadFile(formData.get("post-images"))
     };
 
     const deletePost = async (formData: FormData) => {
@@ -77,7 +79,26 @@ export default async function Page() {
         revalidatePath('/');
     };
 
+    // async function uploadImage(e) {
+    //     let file = e.target.files[0]
+
+    //     const{ data, error } = await supabase
+    //         .storage
+    //         .from('uploads')
+    //         .upload("images/" + randomUUID(), file)
+
+    //     if(data) {
+    //         getImages()
+    //     } else {
+    //         console.log(error)
+    //     }
+
+    // }
+
+    
+
     return (
+        
         <>
             <div className="sm:flex sm:items-center py-9">
                 <div className="sm:flex-auto">
@@ -118,27 +139,7 @@ export default async function Page() {
                                 </div>
                             </div>
 
-                            <div className="col-span-full">
-                                <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Images
-                                </label>
-                                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                    <div className="text-center">
-                                        <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                                        <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                            <label
-                                                htmlFor="post-images"
-                                                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                            >
-                                                <span>Upload a file</span>
-                                                <input id="post-images" name="post-images" type="file" className="sr-only" />
-                                            </label>
-                                            <p className="pl-1">or drag and drop</p>
-                                        </div>
-                                        <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                                    </div>
-                                </div>
-                            </div>
+                            <ImageUpload charityID={charityId}/>
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">
