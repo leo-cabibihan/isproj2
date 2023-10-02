@@ -23,16 +23,6 @@ const features = [
     name: 'Beneficiary Item Quantity',
     description: '50 Boxes',
     icon: LightBulbIcon,
-  },  
-  {
-    name: 'Beneficiary Representative',
-    description: 'Mike Wazowski',
-    icon: LightBulbIcon,
-  },
-  {
-    name: 'Contact No.:',
-    description: '09123456887',
-    icon: LightBulbIcon,
   },
 ]
 
