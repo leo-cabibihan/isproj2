@@ -102,7 +102,6 @@ export default function OnboardingDetails() {
       <br/>
       <br/>
       <br/>
-      <Footer></Footer>
       </>
     )
   }
