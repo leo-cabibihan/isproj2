@@ -2,7 +2,6 @@
 
 import supabase from "@/app/utils/supabase"
 import { Button } from "@/components/Button"
-// import { CashForm, GoodsForm } from "@/components/DonorForms"
 import { SelectField, TextField } from "@/components/Fields"
 import { DefaultLayout } from "@/components/layouts/Default"
 import { ContentRight, ContentLeft, Causes, GraphTemp, News } from "@/components/Single-use"
