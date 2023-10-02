@@ -6,11 +6,11 @@ import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 
-export function ImageUpload({charityID}) {
+export function ImageUpload({ charityID }) {
 
     const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + charityID + "/"
 
-    const [ images, setImages ] : any[] = useState([])
+    const [images, setImages]: any[] = useState([])
 
     async function getImages() {
         const { data, error } = await supabase
@@ -22,18 +22,18 @@ export function ImageUpload({charityID}) {
                 sortBy: { column: "name", order: "asc" }
             })
 
-            if(data !== null) {
-                setImages(data);
-            } else {
-                alert("Error Loading Images");
-                console.log(error);
-            }
+        if (data !== null) {
+            setImages(data);
+        } else {
+            alert("Error Loading Images");
+            console.log(error);
+        }
 
 
     }
 
     useEffect(() => {
-        if(charityID) {
+        if (charityID) {
             getImages()
         }
     }, [charityID])
@@ -68,7 +68,7 @@ export function ImageUpload({charityID}) {
                                 className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                             >
                                 <span>Upload a file</span>
-                                <input id="post-images" name="post-images" type="file" className="sr-only" onChange={(e) => uploadImage(e)} />
+                                <input id="post-images" name="post-images" type="file" className="sr-only" onChange={(e) => uploadImage(e)} required/>
                             </label>
                             <p className="pl-1">or drag and drop</p>
                         </div>

@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 
 export default async function News({ params }) {
 
+  const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/"
+
   const postID = params.id
   const { data: posts, error } = await supabase
     .from('campaign_post')
@@ -25,7 +27,7 @@ export default async function News({ params }) {
               </p>
               <div className="mt-6 flex border-t border-gray-900/5 pt-6">
                 <div className="relative flex items-center gap-x-4">
-                  <img src="#" alt="" className="h-10 w-10 rounded-full bg-gray-50" />
+                  <img src={CDNURL+ post.image_id} alt="" className="h-10 w-10 rounded-full bg-gray-50" />
                   <div className="text-sm leading-6 grid grid-cols-4 gap-4">
                     <div className="col-span-3">
                       <p className="font-semibold text-gray-900">
