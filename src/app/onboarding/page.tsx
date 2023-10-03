@@ -13,44 +13,36 @@ import { redirect } from 'next/navigation'
 
 
 export default function Example() {
-  const addressChanges = async (formData: FormData) => {
+  const Changes = async (formData: FormData) => {
     'use server'
     const contactId = formData.get('id')
     const details = {
-      house_humber: formData.get('House Number'),
+      house_number: formData.get('House Number'),
       street_name: formData.get('Street Name'),
       village_name: formData.get('village name'),
       barangay: formData.get('Barangay'),
       city: formData.get('City'),
       province: formData.get('province'),
       zipcode: formData.get('zipcode'),
-      house_name: formData.get('house name'),
+      house_name: formData.get('house name')
     }
 
     const details2 = {
       name: formData.get('Organization Name'),
       about: formData.get('description'),
       charity_phone: formData.get('Contact Number'),
-      charity_verified: false,
+      charity_verified: false
     }
 
     const {  } = await supabase.from('charity').insert(details2)
     const { error } = await supabase.from('address').insert(details)
-    console.log(error)
     redirect('/onboarding/pending')
   }
-
-  // const detailChanges = async (formData: FormData) => {
-  //   'use server'
-    
-  //   addressChanges
-    
-  // }
   
   return (
     <>
     <Header></Header>
-    <form className="space-y-6" action={addressChanges} method="POST">
+    <form className="space-y-6" action={Changes} method="POST">
       <div className="container mx-auto px-20 mt-16 mb-16 space-y-24">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
           <div>
@@ -158,7 +150,7 @@ export default function Example() {
               <TextField
                 label="Zipcode"
                 name="zipcode"
-                type="address"
+                type="number"
                 autoComplete="address"
                 required
               />
@@ -193,7 +185,7 @@ export default function Example() {
           type="submit"
           className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >
-          Save
+          Submit
         </button>
       </div>
     </form>
