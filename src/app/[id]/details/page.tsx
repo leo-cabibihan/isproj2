@@ -44,19 +44,24 @@ export default async function Organization({ params }) {
       province: formData.get("province")
     }
 
-    const address_id = await supabase.from('address').insert(address).select('id');
+    const {data: new_address, error} = await supabase.from('address').insert(address).select();
+    // const address_id = new_address![0].id
+    // console.log("ADDRESS ID IS: " + address_id)
 
     const item = {
       charity_id: orgID,
       verify: false,
-      donor_id: "4f48e3e4-a5d8-4e65-91a0-0b89086d8570",
-      donor_address_id: address_id
+      
+      donor_address_id: 2
     };
 
-    const item_id = await supabase.from('items_donation_transaction').insert(item).select('id');
+     await supabase.from('items_donation_transaction').insert(item);
+    // const item_id = new_item![0].id
+    // console.log("ITEM ID IS: " + item_id)
+    // console.log("IT WORKS???")
 
     const item_details = {
-      donation_id: item_id,
+      donation_id: 2,
       name: formData.get("item"),
       quantity: formData.get("qty"),
       expiry: formData.get("expiry"),
