@@ -7,6 +7,8 @@ import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 import supabase from '@/app/utils/supabase'
+import { NextResponse } from 'next/server'
+import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -15,12 +17,37 @@ export const metadata: Metadata = {
 export default async function Login() {
   const handleSubmit = async (formData: FormData) => {
     'use server'
-    const user = {
+    const current_user = {
       email: formData.get('email') as string,
       password: formData.get('password') as string,
     }
 
-    const { data, error } = await supabase.auth.signInWithPassword(user)
+    
+    const { data: {user} } = await supabase.auth.signInWithPassword(current_user)
+    console.log(user)
+    const user_id = user?.id
+    console.log("UUID IS: " + user_id)
+
+    // //Checks if current user is a charity member or donor (It works)
+    const { data: donor, error: error_1 } = await supabase.from('donor').select('*').eq('id', user_id)
+    const { data: charity_member, error: error_2} = await supabase.from('charity_member').select('*').eq('user_uuid', user_id)
+    const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', user_id)
+
+    console.log(donor)
+    console.log(charity_member)
+    console.log(admin)
+
+    if (donor?.length === 1) { redirect("/settings") }
+    else if (charity_member?.length === 1) { redirect("/dashboard/statistics") }
+    else if (admin?.length === 1) { redirect("/admin/applications") }
+
+    // //REDIRECT USER DEPENDING ON ROLE
+    // if(donor) {
+    //   return NextResponse.redirect("https://youtu.be/dQw4w9WgXcQ?si=rt-q9WXdvry1Qkpu")
+    // }
+    // else if(charity_member) {
+    //   return NextResponse.redirect("/dashboard/posts")
+    // }
   }
   return (
     <>
