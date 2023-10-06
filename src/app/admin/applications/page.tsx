@@ -21,7 +21,7 @@ export default async function Applications() {
 
   //This gets the currently signed-in user
   const { data: { user } } = await supabase.auth.getUser();
-  // console.log(user?.id)
+  console.log(user?.id)
   const uid = user?.id
   console.log("UID IS " + uid)
 
