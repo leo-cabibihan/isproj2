@@ -21,12 +21,7 @@ export default async function Register() {
     const newUser = {
       email: formData.get('email') as string,
       password: formData.get('password') as string,
-      options: {
-        emailRedirectTo:
-          userType === 'Charity Organization'
-            ? 'localhost:3000/onboarding/details'
-            : '/',
-      },
+      
     }
 
     const {
