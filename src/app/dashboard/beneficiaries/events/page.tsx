@@ -42,6 +42,20 @@ export default async function Page() {
         revalidatePath('/');
     };
 
+    const deleteContact = async (formData: FormData) => {
+        'use server'
+        const eventId = formData.get("id")
+        const event = {
+            name: formData.get("event_name"),
+            description: formData.get("details"),
+            start_date: formData.get("start_date"),
+            end_date: formData.get("end_date")
+        };
+    
+        await supabase.from('contacts').delete().eq("id", eventId)
+        revalidatePath('/');
+      };
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
