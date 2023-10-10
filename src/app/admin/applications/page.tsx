@@ -5,6 +5,9 @@ import SlideOver from "@/components/SlideOverButton";
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
 import { AdminAuth } from "../auth";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+export const revalidate = 0;
 
 const requests = [
   { Name: "EduGuru", Email: "eduguru@gmail.com", Date: "05/05/2023" },
@@ -36,6 +39,23 @@ export default async function Applications() {
     redirect('/login')
   }
 
+  const { data: requests, error } = await supabase
+    .from('charity')
+    .select('*')
+    .eq('charity_verified', false)
+
+  const verifyOrg = async (formData: FormData) => {
+    'use server'
+    const charityId = formData.get("id")
+    const charity = {
+      charity_verified: true
+    };
+
+    await supabase.from('charity').update(charity).eq("id", charityId)
+    revalidatePath('/');
+  };
+
+
   return (
     <>
       <div className="sm:flex sm:items-center py-9">
@@ -55,20 +75,36 @@ export default async function Applications() {
               </Tr>
             </Thead>
             <Tbody>
-              {requests.map(request =>
+              {requests?.map(request =>
 
-                <Tr key={request.Name}>
-                  <Td>{request.Name}</Td>
-                  <Td>{request.Email}</Td>
-                  <Td>{request.Date}</Td>
+                <Tr key={request.id}>
+                  <Td>{request.name}</Td>
+                  <Td>{request.email_address}</Td>
+                  <Td>{request.created_at}</Td>
                   <Td>
                     <SlideOver buttontext="Review" variant="solid" color="blue">
-                      <form className="space-y-6" action="#" method="POST">
+                      <form className="space-y-6" action={verifyOrg} method="POST">
+                        <TextField
+                          label=""
+                          name="id"
+                          type="hidden"
+                          defaultValue={request.id}
+                          required
+                        />
+
                         <TextField
                           label="Charity Name"
                           name="name"
                           type="text"
-                          placeholder={request.Name}
+                          placeholder={request.name}
+                          readOnly
+                        />
+
+                        <TextField
+                          label="Phone Number"
+                          name="name"
+                          type="tel"
+                          placeholder={request.charity_phone}
                           readOnly
                         />
 
@@ -76,14 +112,35 @@ export default async function Applications() {
                           label="Email"
                           name="email"
                           type="email"
-                          placeholder={request.Email}
+                          placeholder={request.email_address}
                           readOnly
                         />
 
                         <div className="col-span-full">
+                          <label htmlFor="details" className="block text-sm font-medium leading-6 text-gray-900">
+                            Details
+                          </label>
+                          <div className="mt-2">
+                            <textarea
+                              id="details"
+                              name="details"
+                              rows={3}
+                              readOnly
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder={request.about}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-full">
                           <Button type="submit" variant="solid" color="blue" className="w-full">
                             <span>
-                              Sign up <span aria-hidden="true">&rarr;</span>
+                              Accept Request <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                          <Button type="submit" variant="solid" color="red" className="w-full" formAction='#'>
+                            <span>
+                              Delete <span aria-hidden="true">&rarr;</span>
                             </span>
                           </Button>
                         </div>

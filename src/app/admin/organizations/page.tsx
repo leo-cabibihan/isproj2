@@ -6,15 +6,6 @@ import { Table, TableContainer, TableHeader, Tbody, Td, Th, Thead, Tr } from '@/
 import { redirect } from 'next/navigation';
 import React from 'react';
 
-const organizations = [
-    { Org: "Philippine Red Cross", Email: "redcross@gmail.com", Date: "May 5, 2023" },
-    { Org: "Philippine Red Cross", Email: "redcross@gmail.com", Date: "May 5, 2023" },
-    { Org: "Philippine Red Cross", Email: "redcross@gmail.com", Date: "May 5, 2023" },
-    { Org: "Philippine Red Cross", Email: "redcross@gmail.com", Date: "May 5, 2023" },
-    { Org: "Philippine Red Cross", Email: "redcross@gmail.com", Date: "May 5, 2023" },
-    { Org: "Philippine Red Cross", Email: "redcross@gmail.com", Date: "May 5, 2023" },
-]
-
 export default async function ViewCharity() {
 
     // console.log("THIS IS A USER: " + await supabase.auth.getUser())
@@ -37,6 +28,8 @@ export default async function ViewCharity() {
         redirect('/login')
     }
 
+    const { data: organizations } = await supabase.from('charity').select('*').eq('charity_verified', true)
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -49,21 +42,23 @@ export default async function ViewCharity() {
                 <Table>
                     <Thead>
                         <Tr>
-                            <Th>NAME</Th>
+                            <Th>Org Name</Th>
+                            <Th>Phone Number</Th>
                             <Th>Email Address</Th>
-                            <Th>Date Approved</Th>
+                            <Th>Verified?</Th>
                             <Th> </Th>
 
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {organizations.map(org =>
-                            <Tr key={org.Org}>
-                                <Td>{org.Org}</Td>
-                                <Td>{org.Email}</Td>
-                                <Td>{org.Date}</Td>
+                        {organizations?.map(org =>
+                            <Tr key={org.id}>
+                                <Td>{org.name}</Td>
+                                <Td>{org.charity_phone}</Td>
+                                <Td>{org.email_address}</Td>
+                                <Td>{org.harity_verified}</Td>
                                 <Td>
-                                    <Button href={"/orgs/details"} variant="solid" color="blue" className="w-full">
+                                    <Button href={"/view-charity/" + org.id + "/"} variant="solid" color="blue" className="w-full">
                                         <span>
                                             View Profile <span aria-hidden="true">&rarr;</span>
                                         </span>
