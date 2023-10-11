@@ -19,7 +19,7 @@ export default async function Auditlog() {
     const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
 
     console.log("ADMIN IS " + admin)
-
+ 
     //This redirects anyone that's not signed in and not admin
     if (!user && !admin) {
         console.log("NOT SIGNED IN")

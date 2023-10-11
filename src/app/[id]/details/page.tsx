@@ -45,8 +45,8 @@ export default async function Organization({ params }) {
     }
 
     const {data: new_address, error} = await supabase.from('address').insert(address).select();
-    // const address_id = new_address![0].id
-    // console.log("ADDRESS ID IS: " + address_id)
+    const address_id = new_address![0].id
+    console.log("ADDRESS ID IS: " + address_id)
 
     const item = {
       charity_id: orgID,
@@ -55,10 +55,10 @@ export default async function Organization({ params }) {
       donor_address_id: 2
     };
 
-     await supabase.from('items_donation_transaction').insert(item);
-    // const item_id = new_item![0].id
-    // console.log("ITEM ID IS: " + item_id)
-    // console.log("IT WORKS???")
+    const {data: new_item, error: item_error} = await supabase.from('items_donation_transaction').insert(item).select();
+    const item_id = new_item![0].id
+    console.log("ITEM ID IS: " + item_id)
+    console.log("IT WORKS???")
 
     const item_details = {
       donation_id: 2,
@@ -152,4 +152,4 @@ export default async function Organization({ params }) {
       </DefaultLayout>
     </>
   )
-}
+}  
