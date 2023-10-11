@@ -13,7 +13,7 @@ export default async function Page() {
     const { data: events, error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity.id', 12)
+        .eq('charity_id', 12)
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
@@ -41,6 +41,20 @@ export default async function Page() {
         await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
     };
+
+    const deleteContact = async (formData: FormData) => {
+        'use server'
+        const eventId = formData.get("id")
+        const event = {
+            name: formData.get("event_name"),
+            description: formData.get("details"),
+            start_date: formData.get("start_date"),
+            end_date: formData.get("end_date")
+        };
+    
+        await supabase.from('contacts').delete().eq("id", eventId)
+        revalidatePath('/');
+      };
 
     return (
         <>
