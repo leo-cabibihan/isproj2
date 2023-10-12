@@ -34,7 +34,7 @@ export default async function Page() {
 
                                 <Tr key={complaint.id}>
                                     <Td>{complaint.donor.name}</Td>
-                                    <Td>{complaint.chariy.name}</Td>
+                                    <Td>{complaint.charity.name}</Td>
                                     <Td>{complaint.created_at}</Td>
                                     <Td>
                                         <SlideOver variant="solid" color="blue" buttontext="View Details">
