@@ -8,47 +8,56 @@ import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 import supabase from '@/app/utils/supabase'
 import { redirect } from 'next/navigation'
+import Form from './form'
+import { cookies } from 'next/headers'
+import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
 
 export const metadata: Metadata = {
   title: 'Register',
 }
 
 export default async function Register() {
-  const handleSubmit = async (formData: FormData) => {
-    'use server'
-    const name = formData.get('name') as string
-    const userType = formData.get('referral_source') as string
-    const newUser = {
-      email: formData.get('email') as string,
-      password: formData.get('password') as string,
-      
-    }
+  // const cookieStore = cookies()
 
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.signUp(newUser)
-    console.log(user)
-    if (userType === 'Charity Organization') {
-      const charityMember = {
-        user_uuid: user?.id,
-        member_name: name,
-      }
-      const { data: ass, error } = await supabase
-        .from('charity_member')
-        .insert(charityMember)
-      console.log(ass, error)
-    }
-    if (userType === 'Donor') {
-      const donor = {
-        id: user?.id,
-        name,
-      }
+  // const supabase = createServerActionClient({ cookies: () => cookieStore })
 
-      const { data: ass, error } = await supabase.from('donor').insert(donor)
-      console.log(ass, error)
-    }
-  }
+  // const handleSubmit = async (formData: FormData) => {
+  //   'use server'
+  //   const name = formData.get('name') as string
+  //   const userType = formData.get('referral_source') as string
+  //   const newUser = {
+  //     email: formData.get('email') as string,
+  //     password: formData.get('password') as string,
+  //     options: {
+  //       emailRedirectTo: `http://localhost:3000/callback`,
+  //     },
+  //   }
+
+  //   const {
+  //     data: { user },
+  //     error,
+  //   } = await supabase.auth.signUp(newUser)
+  //   console.log(user)
+  //   if (userType === 'Charity Organization') {
+  //     const charityMember = {
+  //       user_uuid: user?.id,
+  //       member_name: name,
+  //     }
+  //     const { data: ass, error } = await supabase
+  //       .from('charity_member')
+  //       .insert(charityMember)
+  //     console.log(ass, error)
+  //   }
+  //   if (userType === 'Donor') {
+  //     const donor = {
+  //       id: user?.id,
+  //       name,
+  //     }
+
+  //     const { data: ass, error } = await supabase.from('donor').insert(donor)
+  //     console.log(ass, error)
+  //   }
+  // }
   return (
     <>
       <SlimLayout>
@@ -61,7 +70,7 @@ export default async function Register() {
           Get started for free
         </h2>
         <p className="mt-2 text-sm text-gray-700">
-          Already registered?{' '}
+          Already registered?
           <Link
             href="/login"
             className="font-medium text-blue-600 hover:underline"
@@ -71,8 +80,9 @@ export default async function Register() {
           to your account.
         </p>
         <form
-          action={handleSubmit}
+          action={'/register-post'}
           className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2"
+          method="post"
         >
           <TextField
             className="col-span-full"
