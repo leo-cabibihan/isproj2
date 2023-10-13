@@ -6,8 +6,33 @@ import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 import { Footer } from '@/components/Footer'
+import supabase from '@/app/utils/supabase'
+import { revalidatePath } from 'next/cache'
 
-export default function Report() {
+export const revalidate = 0;
+
+export default async function Report({ params }) {
+
+  const orgID = params.id
+
+  const { data: orgs } = await supabase
+    .from('charity')
+    .select('*')
+    .eq('id', orgID)
+
+  const handleSubmit = async (formData: FormData) => {
+    'use server'
+    const complaint = {
+      complaint: formData.get("reason"),
+      image: 1233,
+      donor_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313",
+      charity_id: orgID
+    };
+
+    await supabase.from('donor_complaints').insert(complaint);
+    revalidatePath('/');
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -26,23 +51,34 @@ export default function Report() {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" action={handleSubmit} method="POST">
+              {orgs?.map(org => (
+                <div key={org.id}>
+                  <TextField
+                    label="Charity Organization's Name"
+                    name="name"
+                    type="name"
+                    readOnly
+                    placeholder={org.name}
+                  />
+                </div>
+              ))}
 
-              <TextField
-                label="Charity Organization's Name"
-                name="name"
-                type="name"
-                autoComplete="name"
-                required
-              />
-
-              <TextField
-                label="Description"
-                name="description"
-                type="description"
-                autoComplete="description"
-                required
-              />
+              <div className="col-span-full">
+                <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
+                  Details
+                </label>
+                <div className="mt-2">
+                  <textarea
+                    id="reason"
+                    name="reason"
+                    rows={6}
+                    required
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    placeholder="Lorem Ipsum oh there aren't enough black trans women starring in hollywood type of bullshit"
+                  />
+                </div>
+              </div>
 
 
 
