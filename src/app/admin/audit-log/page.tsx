@@ -5,14 +5,9 @@ import { TextField } from '@/components/Fields';
 import SlideOver from '@/components/SlideOverButton';
 import supabase from '@/app/utils/supabase';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from "next/cache";
 
-const logs = [
-    { AdminName: "Myko Macawiwili", Actions: "Freeze Charity 'Tulong Lasalyano'.", Date: "June 16, 2023" },
-    { AdminName: "Myko Macawiwili", Actions: "Freeze Charity 'Tulong Lasalyano'.", Date: "June 16, 2023" },
-    { AdminName: "Myko Macawiwili", Actions: "Freeze Charity 'Tulong Lasalyano'.", Date: "June 16, 2023" },
-    { AdminName: "Myko Macawiwili", Actions: "Freeze Charity 'Tulong Lasalyano'.", Date: "June 16, 2023" },
-    { AdminName: "Myko Macawiwili", Actions: "Freeze Charity 'Tulong Lasalyano'.", Date: "June 16, 2023" },
-]
+export const revalidate = 0;
 
 export default async function Auditlog() {
 
@@ -36,6 +31,8 @@ export default async function Auditlog() {
         redirect('/login')
     }
 
+    const { data: logs } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )')
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -48,19 +45,19 @@ export default async function Auditlog() {
                     <Table>
                         <Thead>
                             <Tr>
-                                <Th>NAME</Th>
-                                <Th>Email Address</Th>
-                                <Th>Date Filed</Th>
+                                <Th>Admin Name</Th>
+                                <Th>Action</Th>
+                                <Th>Date</Th>
 
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {logs.map(log =>
+                            {logs?.map(log =>
 
-                                <Tr key={log.AdminName}>
-                                    <Td>{log.AdminName}</Td>
-                                    <Td>{log.Actions}</Td>
-                                    <Td>{log.Date}</Td>
+                                <Tr key={log.id}>
+                                    <Td>{log.system_owner.name}</Td>
+                                    <Td>{log.action}</Td>
+                                    <Td>{log.date}</Td>
                                 </Tr>
                             )}
                         </Tbody>

@@ -5,6 +5,7 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
+export var imgPath = ""
 
 export function ImageUpload({ charityID }) {
 
@@ -51,13 +52,15 @@ export function ImageUpload({ charityID }) {
         } else {
             console.log(error)
         }
+
+        imgPath = String(data?.path)
     }
 
     return (
         <>
             <div className="col-span-full">
                 <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                    Images
+                    Upload File/s
                 </label>
                 <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                     <div className="text-center">
@@ -68,7 +71,7 @@ export function ImageUpload({ charityID }) {
                                 className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                             >
                                 <span>Upload a file</span>
-                                <input id="post-images" name="post-images" type="file" className="sr-only" onChange={(e) => uploadImage(e)} required/>
+                                <input id="post-images" name="post-images" type="file" className="sr-only" onChange={(e) => uploadImage(e)} required />
                             </label>
                             <p className="pl-1">or drag and drop</p>
                         </div>
@@ -77,5 +80,6 @@ export function ImageUpload({ charityID }) {
                 </div>
             </div>
         </>
+
     )
 }

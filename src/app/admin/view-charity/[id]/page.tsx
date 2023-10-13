@@ -6,34 +6,13 @@ import SlideOver from '@/components/SlideOverButton';
 import { TextField } from '@/components/Fields';
 import supabase from '@/app/utils/supabase';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from "next/cache";
 
-const orgName = "Umbrella Corporation";
-const orgDesc = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.";
-const complaints = [
-    { AdministratorName: 'John Doe', Action: 'lorem.ipsum@dolor.com', Date: 'May 05, 2023' },
-    { AdministratorName: 'John Doe', Action: 'lorem.ipsum@dolor.com', Date: 'May 05, 2023' },
-    { AdministratorName: 'John Doe', Action: 'lorem.ipsum@dolor.com', Date: 'May 05, 2023' },
-    { AdministratorName: 'John Doe', Action: 'lorem.ipsum@dolor.com', Date: 'May 05, 2023' },
-    { AdministratorName: 'John Doe', Action: 'lorem.ipsum@dolor.com', Date: 'May 05, 2023' },
-    { AdministratorName: 'John Doe', Action: 'lorem.ipsum@dolor.com', Date: 'May 05, 2023' },
-    // More people...
-];
+export const revalidate = 0;
 
-const appeals = [
-    { AdministratorName: 'Joe Biden', Action: 'lorem.ipsum@dolor.com', Date: 'June 05, 2023' },
-    { AdministratorName: 'Joe Biden', Action: 'lorem.ipsum@dolor.com', Date: 'June 05, 2023' },
-    { AdministratorName: 'Joe Biden', Action: 'lorem.ipsum@dolor.com', Date: 'June 05, 2023' },
-    { AdministratorName: 'Joe Biden', Action: 'lorem.ipsum@dolor.com', Date: 'June 05, 2023' },
-    { AdministratorName: 'Joe Biden', Action: 'lorem.ipsum@dolor.com', Date: 'June 05, 2023' },
-    { AdministratorName: 'Joe Biden', Action: 'lorem.ipsum@dolor.com', Date: 'June 05, 2023' },
-    { AdministratorName: 'Joe Biden', Action: 'lorem.ipsum@dolor.com', Date: 'June 05, 2023' },
-    // More people...
-];
+export default async function Organization({ params }) {
 
-export default async function Organization() {
-
-    // console.log("THIS IS A USER: " + await supabase.auth.getUser())
-    // console.log("THIS IS A SESSION: " + await supabase.auth.getSession())
+    const orgID = params.id
 
     //This gets the currently signed-in user
     const { data: { user } } = await supabase.auth.getUser();
@@ -52,13 +31,30 @@ export default async function Organization() {
         redirect('/login')
     }
 
+    const { data: orgs } = await supabase.from('charity').select('*').eq('id', orgID)
+
+    const { data: complaints, error } = await supabase
+        .from('donor_complaints' ) 
+        .select('*, charity ( id, name ), donor ( id, na me )')
+        .eq('charity_id', orgID)
+    console.log(complaints ? "IT WORK" : "DONT WORK")
+
+    const { data: appeals, error: appeals_error } = await supabase
+        .from('charity_appeals')
+        .select('*, charity ( id, name ), charity_member ( user_uuid, member_name ), donor_complaints ( id, donor ( id, name ) )')
+        .eq('charity_id', orgID)
+
     return (
         <>
-            <div className="sm:flex sm:items-center py-9 px-10">
-                <div className="sm:flex-auto">
-                    <MediaObject heading={orgName} subheading={orgDesc} />
+            {orgs?.map(org => (
+
+                <div className="sm:flex sm:items-center py-9 px-10" key={org.id}>
+                    <div className="sm:flex-auto">
+                        <MediaObject heading={org.name} subheading={org.about} />
+                    </div>
                 </div>
-            </div>
+
+            ))}
             <div className="sm:flex sm:items-center py-9">
                 <div className="sm:flex-auto">
                 </div>
@@ -70,20 +66,20 @@ export default async function Organization() {
                     <Table>
                         <Thead>
                             <Tr>
-                                <Th>NAME</Th>
-                                <Th>Email Address</Th>
+                                <Th>Filed by</Th>
+                                <Th>Filed Against</Th>
                                 <Th>Date Filed</Th>
                                 <Th> </Th>
 
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {complaints.map(complaint =>
+                            {complaints?.map(complaint =>
 
-                                <Tr key={complaint.AdministratorName}>
-                                    <Td>{complaint.AdministratorName}</Td>
-                                    <Td>{complaint.Action}</Td>
-                                    <Td>{complaint.Date}</Td>
+                                <Tr key={complaint.id}>
+                                    <Td>{complaint.donor.name}</Td>
+                                    <Td>{complaint.charity.name}</Td>
+                                    <Td>{complaint.created_at}</Td>
                                     <Td>
                                         <SlideOver buttontext="View Complaint" variant="solid" color="blue">
                                             <form className="space-y-6" action="#" method="POST">
@@ -92,24 +88,40 @@ export default async function Organization() {
                                                     name="charity"
                                                     type="text"
                                                     readOnly
-                                                    placeholder={orgName}
+                                                    placeholder={complaint.charity.name}
                                                 />
 
                                                 <TextField
-                                                    label="Email Address"
-                                                    name="email"
-                                                    type="email"
+                                                    label="Filed by"
+                                                    name="donor"
+                                                    type="text"
                                                     readOnly
-                                                    placeholder={complaint.Action}
+                                                    placeholder={complaint.donor.name}
                                                 />
 
                                                 <TextField
-                                                    label="Details"
-                                                    name="details"
-                                                    type="textarea"
+                                                    label="Filed at"
+                                                    name="date"
+                                                    type="date"
                                                     readOnly
-                                                    placeholder={orgDesc}
+                                                    placeholder={complaint.created_at}
                                                 />
+
+                                                <div className="col-span-full">
+                                                    <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Details
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <textarea
+                                                            id="reason"
+                                                            name="reason"
+                                                            rows={3}
+                                                            readOnly
+                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            placeholder={complaint.complaint}
+                                                        />
+                                                    </div>
+                                                </div>
 
                                                 <div className="col-span-full">
                                                     <Button type="submit" variant="solid" color="yellow" className="w-full">
@@ -139,20 +151,20 @@ export default async function Organization() {
                     <Table>
                         <Thead>
                             <Tr>
-                                <Th>NAME</Th>
-                                <Th>Email Address</Th>
+                                <Th>Filed By</Th>
+                                <Th>Charity</Th>
                                 <Th>Date Filed</Th>
                                 <Th> </Th>
 
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {appeals.map(appeal =>
+                            {appeals?.map(appeal => 
 
-                                <Tr key={appeal.AdministratorName}>
-                                    <Td>{appeal.AdministratorName}</Td>
-                                    <Td>{appeal.Action}</Td>
-                                    <Td>{appeal.Date}</Td>
+                                <Tr key={appeal.id}>
+                                    <Td>{appeal.charity_member.member_name}</Td>
+                                    <Td>{appeal.charity.name}</Td>
+                                    <Td>{appeal.created_at}</Td>
                                     <Td>
                                         <SlideOver buttontext="View Complaint" variant="solid" color="blue">
                                             <form className="space-y-6" action="#" method="POST">
@@ -161,24 +173,40 @@ export default async function Organization() {
                                                     name="charity"
                                                     type="text"
                                                     readOnly
-                                                    placeholder={orgName}
+                                                    placeholder={appeal.charity.name}
                                                 />
 
                                                 <TextField
-                                                    label="Email Address"
-                                                    name="email"
-                                                    type="email"
+                                                    label="Filed by"
+                                                    name="charity_worker"
+                                                    type="text"
                                                     readOnly
-                                                    placeholder={appeal.Action}
+                                                    placeholder={appeal.charity_member.member_name}
                                                 />
 
                                                 <TextField
-                                                    label="Details"
-                                                    name="details"
-                                                    type="textarea"
+                                                    label="Complaint Filed by"
+                                                    name="complainant"
+                                                    type="text"
                                                     readOnly
-                                                    placeholder={orgDesc}
+                                                    placeholder={appeal.donor_complaints.donor.name}
                                                 />
+
+                                                <div className="col-span-full">
+                                                    <label htmlFor="details" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Details
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <textarea
+                                                            id="details"
+                                                            name="details"
+                                                            rows={3}
+                                                            readOnly
+                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            placeholder={appeal.explanation}
+                                                        />
+                                                    </div>
+                                                </div>
 
                                                 <div className="col-span-full">
                                                     <Button type="submit" variant="solid" color="red" className="w-full">

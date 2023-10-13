@@ -36,6 +36,8 @@ export default async function Complaints() {
         redirect('/login')
     }
 
+    const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name ), donor ( id, name )')
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -49,19 +51,19 @@ export default async function Complaints() {
                     <Table>
                         <Thead>
                             <Tr>
-                                <Th>NAME</Th>
-                                <Th>Email Address</Th>
+                                <Th>Donor Name</Th>
+                                <Th>Charity</Th>
                                 <Th>Date Filed</Th>
                                 <Th> </Th>
 
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {complaints.map(complaint =>
-                                <Tr key={complaint.Donor} >
-                                    <Td>{complaint.Donor}</Td>
-                                    <Td>{complaint.Charity}</Td>
-                                    <Td>{complaint.Date}</Td>
+                            {complaints?.map(complaint =>
+                                <Tr key={complaint.id} >
+                                    <Td>{complaint.donor.name}</Td>
+                                    <Td>{complaint.charity.name}</Td>
+                                    <Td>{complaint.created_at}</Td>
                                     <Td>
                                         <SlideOver variant="solid" color="blue" buttontext="View Details">
                                             <form className="space-y-6" action="#" method="POST">
@@ -69,7 +71,7 @@ export default async function Complaints() {
                                                     label="Charity Name"
                                                     name="name"
                                                     type="text"
-                                                    placeholder={complaint.Charity}
+                                                    placeholder={complaint.charity.name}
                                                     readOnly
                                                 />
 
@@ -77,9 +79,25 @@ export default async function Complaints() {
                                                     label="Complainant"
                                                     name="donor"
                                                     type="text"
-                                                    placeholder={complaint.Donor}
+                                                    placeholder={complaint.donor.name}
                                                     readOnly
                                                 />
+
+                                                <div className="col-span-full">
+                                                    <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Details
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <textarea
+                                                            id="reason"
+                                                            name="reason"
+                                                            rows={3}
+                                                            readOnly
+                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            placeholder={complaint.complaint}
+                                                        />
+                                                    </div>
+                                                </div>
 
                                                 <div className="col-span-full">
                                                     <Button type="submit" variant="solid" color="yellow" className="w-full">
