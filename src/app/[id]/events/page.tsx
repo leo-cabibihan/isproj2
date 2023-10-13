@@ -30,10 +30,21 @@ import { LightBulbIcon } from '@heroicons/react/20/solid'
 export default async function Example({ params }) {
 
   const eventID = params.id
-
   const { data: events, error: events_error } = await supabase.from('event').select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name, contact )').eq('id', eventID)
   const { data: expenses, error: expenses_error } = await supabase.from('expenses').select('*').eq('event_id', eventID)
   const { data: items, error: item_error } = await supabase.from('beneficiary_items').select('*, inventory_item ( id, name, unit_of_measurement )').eq('event_id', eventID)
+
+  const charityID = events?.map(event => event.charity.id);
+  const { data: images, error } = await supabase
+    .storage
+    .from('uploads')
+    .list(charityID?.toString(), {
+      limit: 100,
+      offset: 0,
+      sortBy: { column: "name", order: "asc" },
+    })
+  console.log('Charity ID:', charityID);
+  const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + charityID + "/"
 
   return (
     <DefaultLayout>
@@ -101,15 +112,23 @@ export default async function Example({ params }) {
                   </dl>
                 </div>
               </div>
-              <img
-                src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
-                alt="Product screenshot"
-                className="w-[48rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem] md:-ml-4 lg:-ml-0"
-                width={2432}
-                height={1442}
-              />
+              
             </div>
-            <Receipts />
+            <div className="bg-white">
+              <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+                <h2 className="text-2xl font-bold tracking-tight text-gray-900">Uploaded Receipts</h2>
+
+                <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                  {images?.map((image) => {
+                    return (
+                      <div key={CDNURL + "/" + image.name}>
+                        <img src={CDNURL + "/" + image.name} />
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
