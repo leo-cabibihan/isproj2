@@ -207,7 +207,9 @@ export async function Causes({ id }) {
   const { data: events } = await supabase
     .from('event')
     .select('*, charity ( id, name )')
-    .eq('charity.id', id)
+    .eq('charity_id', id)
+  console.log(id + "!!!!!")
+  console.log(events)
 
   return (
     <div className="bg-white py-24 sm:py-32">
@@ -462,7 +464,7 @@ export async function News({ id }) {
   const { data: posts } = await supabase
     .from('campaign_post')
     .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
-    .eq('charity.id', id)
+    .eq('charity_id', id)
 
   return (
     <div className="bg-white py-24 sm:py-32">

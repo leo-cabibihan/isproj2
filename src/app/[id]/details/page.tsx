@@ -8,6 +8,8 @@ import { ContentRight, ContentLeft, Causes, GraphTemp, News } from "@/components
 import { revalidatePath } from "next/cache"
 import { useState } from "react"
 
+export const revalidate = 0;
+
 const cities = [
   { id: 1, name: "Manila" },
   { id: 2, name: "Quezon City" },
@@ -28,6 +30,7 @@ export default async function Organization({ params }) {
 
   //THIS JUST GETS THE ORG ID FROM THE ROUTE. US  E THIS TO FILTER TO THE SPECIFIC ORG.
   const orgID = params.id
+  console.log(orgID + "!!!!!!")
   // const [cash, showCash] = useState(false)
 
   const handleSubmit = async (formData: FormData) => {

@@ -75,7 +75,7 @@ export default async function Page() {
             charity_member_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313"
         };
 
-        await supabase.from('contacts').delete().eq("id", postId)
+        await supabase.from('campaign_post').delete().eq("id", postId)
         revalidatePath('/');
     };
 
@@ -139,7 +139,7 @@ export default async function Page() {
                                 </div>
                             </div>
 
-                            <ImageUpload charityID={charityId}/>
+                            <ImageUpload folderName={charityId}/>
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">
