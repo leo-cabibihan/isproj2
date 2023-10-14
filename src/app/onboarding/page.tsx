@@ -199,7 +199,7 @@ export default function Example() {
             </div>
           </div>
 
-          <ImageUpload charityID={charityID} />
+          <ImageUpload folderName={"charity"} charityID={charityID} />
         </div>
         <div className="mt-6 flex items-center justify-end gap-x-6 mb-4">
           <Button type="submit" variant="solid" color="blue" className="w-1/5">
