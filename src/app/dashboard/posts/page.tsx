@@ -139,7 +139,7 @@ export default async function Page() {
                                 </div>
                             </div>
 
-                            <ImageUpload folderName={charityId}/>
+                            <ImageUpload folderName={'campaign_post'} charityID={charityId}/>
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">

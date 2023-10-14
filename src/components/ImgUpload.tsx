@@ -7,9 +7,9 @@ import { v4 as uuidv4 } from "uuid";
 
 export var imgPath = ""
 
-export function ImageUpload({ charityID }) {
+export function ImageUpload({ folderName, charityID }) {
 
-    const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + charityID + "/"
+    const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + folderName + "/" + charityID + "/"
 
     const [images, setImages]: any[] = useState([])
 
@@ -17,7 +17,7 @@ export function ImageUpload({ charityID }) {
         const { data, error } = await supabase
             .storage
             .from('uploads')
-            .list("images", {
+            .list(folderName + "/" + charityID, {
                 limit: 100,
                 offset: 0,
                 sortBy: { column: "name", order: "asc" }
@@ -34,10 +34,10 @@ export function ImageUpload({ charityID }) {
     }
 
     useEffect(() => {
-        if (charityID) {
+        if (folderName && charityID) {
             getImages()
         }
-    }, [charityID])
+    }, [folderName && charityID])
 
     async function uploadImage(e) {
         let file = e.target.files[0]
@@ -45,7 +45,7 @@ export function ImageUpload({ charityID }) {
         const { data, error } = await supabase
             .storage
             .from('uploads')
-            .upload(charityID + "/" + uuidv4(), file)
+            .upload(folderName + "/" + charityID + "/" + uuidv4(), file)
 
         if (data) {
             getImages()
