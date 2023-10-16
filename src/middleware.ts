@@ -47,25 +47,26 @@ export async function middleware(req: NextRequest) {
 
   if (originalUrl.includes('/admin')) {
     console.log('ADMIIIIIIIIIN')
-    if (!user || !admin) {
+    if (!admin) {
         console.log("NOT SIGNED IN")
         return Response.json(
           { success: false, message: 'authentication failed' },
           { status: 401 }
         )
+        
       }
   }
-  else if (originalUrl.includes('/dashboard')) {
+  if (originalUrl.includes('/dashboard')) {
     console.log('CHARITY')
-    if (!user || !charity_member) {
+    if (!charity_member) {
       return Response.json(
         { success: false, message: 'authentication failed' },
         { status: 401 }
       )
       }
   }
-  else {
-    if (!user || !donor) {
+  if (originalUrl.includes('/settings')) {
+    if (!donor) {
       return Response.json(
         { success: false, message: 'authentication failed' },
         { status: 401 }

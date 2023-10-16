@@ -4,7 +4,7 @@ export default function TestPage () {
 
 
     return(
-        <ImageUpload bucketName="balls" folderName="tester"/>
+        <ImageUpload folderName="balls" charityID="tester" recordID="fuck"/>
     )
 
 }
