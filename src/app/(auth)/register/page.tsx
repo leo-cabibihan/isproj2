@@ -8,7 +8,7 @@ import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
 import supabase from '@/app/utils/supabase'
 import { redirect } from 'next/navigation'
-import Form from './form'
+// import Form from './form'
 import { cookies } from 'next/headers'
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
 

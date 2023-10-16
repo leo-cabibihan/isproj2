@@ -5,11 +5,19 @@ import { ImageUpload } from "@/components/ImgUpload";
 import SlideOver from "@/components/SlideOverButton";
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeader, TableContent, TableHeaderButton } from "@/components/Table";
 import { revalidatePath } from "next/cache";
+import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from "next/headers";
 
 export const revalidate = 0;
 
 export default async function Page() {
 
+    const cookieStore = cookies()
+
+    const supabase = createServerActionClient({ cookies: () => cookieStore })
+
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    console.log("SESSION ID IS: " + session?.user.id)
 
     const { data: events, error } = await supabase
         .from('event')
@@ -19,7 +27,7 @@ export default async function Page() {
     const { data: last_event, error: event_error } = await supabase
         .from('event')
         .select('*')
-        .order('id', { ascending: false }).limit(1) 
+        .order('id', { ascending: false }).limit(1)
 
     const event_id = last_event?.map(event => event.id)
     console.log("LAST EVENT'S ID IS: " + event_id!)
@@ -114,7 +122,7 @@ export default async function Page() {
 
                             />
 
-                            <ImageUpload folderName="event" charityID={12} recordID={event_id + 1}
+                            {/* <ImageUpload folderName="event" charityID={12} recordID={event_id + 1} */}
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">

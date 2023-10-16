@@ -47,30 +47,24 @@ export async function middleware(req: NextRequest) {
 
   if (originalUrl.includes('/admin')) {
     console.log('ADMIIIIIIIIIN')
-    if (!admin) {
+    if (admin?.length !== 1) {
         console.log("NOT SIGNED IN")
-        return Response.json(
-          { success: false, message: 'authentication failed' },
-          { status: 401 }
-        )
+        return Response.redirect('http://localhost:3000')
+    
         
       }
   }
-  if (originalUrl.includes('/dashboard')) {
+  else if (originalUrl.includes('/dashboard')) {
     console.log('CHARITY')
-    if (!charity_member) {
-      return Response.json(
-        { success: false, message: 'authentication failed' },
-        { status: 401 }
-      )
+    if (charity_member?.length !== 1) {
+      console.log("NOT A CHARITY FUCK OFF")
+      return Response.redirect('http://localhost:3000')
       }
   }
-  if (originalUrl.includes('/settings')) {
-    if (!donor) {
-      return Response.json(
-        { success: false, message: 'authentication failed' },
-        { status: 401 }
-      )
+  else if (originalUrl.includes('/settings')) {
+    if (donor?.length !== 1) {
+      console.log("NOT A DONOR FUCK OFF")
+      return Response.redirect('http://localhost:3000')
     }
   }
 
