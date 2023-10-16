@@ -14,6 +14,7 @@ export async function POST(request: Request) {
     email,
     password,
   })
+
   console.log(requestUrl.origin)
 
   return NextResponse.redirect(requestUrl.origin, {

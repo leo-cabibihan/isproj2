@@ -33,31 +33,31 @@ export default async function Login() {
   //   const user_id = user?.id
   //   console.log('UUID IS: ', user_id)
 
-  //   // //Checks if current user is a charity member or donor (It works)
-  //   const { data: donor, error: error_1 } = await supabase
-  //     .from('donor')
-  //     .select('*')
-  //     .eq('id', user_id)
-  //   const { data: charity_member, error: error_2 } = await supabase
-  //     .from('charity_member')
-  //     .select('*')
-  //     .eq('user_uuid', user_id)
-  //   const { data: admin, error: error_3 } = await supabase
-  //     .from('system_owner')
-  //     .select('*')
-  //     .eq('id', user_id)
+    // // //Checks if current user is a charity member or donor (It works)
+    // const { data: donor, error: error_1 } = await supabase
+    //   .from('donor')
+    //   .select('*')
+    //   .eq('id', user_id)
+    // const { data: charity_member, error: error_2 } = await supabase
+    //   .from('charity_member')
+    //   .select('*')
+    //   .eq('user_uuid', user_id)
+    // const { data: admin, error: error_3 } = await supabase
+    //   .from('system_owner')
+    //   .select('*')
+    //   .eq('id', user_id)
 
   //   console.log(donor)
   //   console.log(charity_member)
   //   console.log(admin)
 
-  //   if (donor?.length === 1) {
-  //     redirect('/settings')
-  //   } else if (charity_member?.length === 1) {
-  //     redirect('/dashboard/statistics')
-  //   } else if (admin?.length === 1) {
-  //     redirect('/admin/applications')
-  //   }
+    // if (donor?.length === 1) {
+    //   redirect('/settings')
+    // } else if (charity_member?.length === 1) {
+    //   redirect('/dashboard/statistics')
+    // } else if (admin?.length === 1) {
+    //   redirect('/admin/applications')
+    // }
 
   //   // //REDIRECT USER DEPENDING ON ROLE
   //   // if(donor) {
