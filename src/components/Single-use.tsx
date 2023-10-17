@@ -207,7 +207,9 @@ export async function Causes({ id }) {
   const { data: events } = await supabase
     .from('event')
     .select('*, charity ( id, name )')
-    .eq('charity.id', id)
+    .eq('charity_id', id)
+  console.log(id + "!!!!!")
+  console.log(events)
 
   return (
     <div className="bg-white py-24 sm:py-32">
@@ -291,34 +293,34 @@ export async function ContentLeft({ id }) {
   )
 }
 
-export function Receipts() {
+export async function Receipts({ id }) {
+  const eventID = id
+  const { data: events, error: events_error } = await supabase.from('event').select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name, contact )').eq('id', eventID)
+  
+  const charityID = events?.map(event => event.charity.id);
+  const { data: images, error } = await supabase
+            .storage
+            .from('uploads')
+            .list(charityID?.toString(), {
+                limit: 100,
+                offset: 0,  
+                sortBy: { column: "name", order: "asc" },
+            })
+  console.log('Charity ID:', charityID);
+  const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + charityID + "/"
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">Uploaded Receipts</h2>
 
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {products.map((product) => (
-            <div key={product.id} className="group relative">
-              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
-                <img
-                  src={product.imageSrc}
-                  alt={product.imageAlt}
-                  className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                />
-              </div>
-              <div className="mt-4 flex justify-between">
-                <div>
-                  <h3 className="text-sm text-gray-700">
-                    <a href={product.href}>
-                      <span aria-hidden="true" className="absolute inset-0" />
-                      {product.date}
-                    </a>
-                  </h3>
+        {images?.map((image) =>{
+              return (
+                <div key={CDNURL +  "/" + image.name}>
+                  <img src={CDNURL + "/" + image.name}/>
                 </div>
-              </div>
-            </div>
-          ))}
+              )
+        })}
         </div>
       </div>
     </div>
@@ -462,7 +464,7 @@ export async function News({ id }) {
   const { data: posts } = await supabase
     .from('campaign_post')
     .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
-    .eq('charity.id', id)
+    .eq('charity_id', id)
 
   return (
     <div className="bg-white py-24 sm:py-32">

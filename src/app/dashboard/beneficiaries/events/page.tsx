@@ -1,19 +1,36 @@
 import supabase from "@/app/utils/supabase";
 import { Button } from "@/components/Button";
 import { SelectField, TextField } from "@/components/Fields";
+import { ImageUpload } from "@/components/ImgUpload";
 import SlideOver from "@/components/SlideOverButton";
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeader, TableContent, TableHeaderButton } from "@/components/Table";
 import { revalidatePath } from "next/cache";
+import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
+import { cookies } from "next/headers";
 
 export const revalidate = 0;
 
 export default async function Page() {
 
+    const cookieStore = cookies()
+
+    const supabase = createServerActionClient({ cookies: () => cookieStore })
+
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    console.log("SESSION ID IS: " + session?.user.id)
 
     const { data: events, error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', 12)
+
+    const { data: last_event, error: event_error } = await supabase
+        .from('event')
+        .select('*')
+        .order('id', { ascending: false }).limit(1)
+
+    const event_id = last_event?.map(event => event.id)
+    console.log("LAST EVENT'S ID IS: " + event_id!)
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
@@ -21,7 +38,8 @@ export default async function Page() {
             name: formData.get("event_name"),
             description: formData.get("details"),
             start_date: formData.get("start_date"),
-            end_date: formData.get("end_date")
+            end_date: formData.get("end_date"),
+            charity_id: 12
         };
 
         await supabase.from('event').insert(event);
@@ -42,7 +60,7 @@ export default async function Page() {
         revalidatePath('/');
     };
 
-    const deleteContact = async (formData: FormData) => {
+    const deleteEvent = async (formData: FormData) => {
         'use server'
         const eventId = formData.get("id")
         const event = {
@@ -51,10 +69,10 @@ export default async function Page() {
             start_date: formData.get("start_date"),
             end_date: formData.get("end_date")
         };
-    
-        await supabase.from('contacts').delete().eq("id", eventId)
+
+        await supabase.from('event').delete().eq("id", eventId)
         revalidatePath('/');
-      };
+    };
 
     return (
         <>
@@ -103,6 +121,8 @@ export default async function Page() {
                                 type="date"
 
                             />
+
+                            {/* <ImageUpload folderName="event" charityID={12} recordID={event_id + 1} */}
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">

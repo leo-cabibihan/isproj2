@@ -1,7 +1,7 @@
 import supabase from '@/app/utils/supabase';
 import { Button } from '@/components/Button';
 import { SelectField, TextField } from '@/components/Fields'
-import { ImageUpload, imgPath } from '@/components/ImgUpload';
+import { , imgPath } from '@/components/ImgUpload';
 import SlideOver from "@/components/SlideOverButton"
 import { TableContainer, Table, TableContent, TableHeaderButton, Tbody, Td, Thead, Tr } from '@/components/Table';
 import { revalidatePath } from 'next/cache';

@@ -8,6 +8,8 @@ import { ContentRight, ContentLeft, Causes, GraphTemp, News } from "@/components
 import { revalidatePath } from "next/cache"
 import { useState } from "react"
 
+export const revalidate = 0;
+
 const cities = [
   { id: 1, name: "Manila" },
   { id: 2, name: "Quezon City" },
@@ -28,6 +30,7 @@ export default async function Organization({ params }) {
 
   //THIS JUST GETS THE ORG ID FROM THE ROUTE. US  E THIS TO FILTER TO THE SPECIFIC ORG.
   const orgID = params.id
+  console.log(orgID + "!!!!!!")
   // const [cash, showCash] = useState(false)
 
   const handleSubmit = async (formData: FormData) => {
@@ -52,7 +55,7 @@ export default async function Organization({ params }) {
       charity_id: orgID,
       verify: false,
 
-      donor_address_id: 2
+      donor_address_id: address_id
     };
 
     const { data: new_item, error: item_error } = await supabase.from('items_donation_transaction').insert(item).select();
@@ -61,7 +64,7 @@ export default async function Organization({ params }) {
     console.log("IT WORKS???")
 
     const item_details = {
-      donation_id: 2,
+      donation_id: item_id,
       name: formData.get("item"),
       quantity: formData.get("qty"),
       expiry: formData.get("expiry"),
