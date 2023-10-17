@@ -16,25 +16,25 @@ const complaints = [
 
 export default async function Complaints() {
 
-    // console.log("THIS IS A USER: " + await supabase.auth.getUser())
-    // console.log("THIS IS A SESSION: " + await supabase.auth.getSession())
+    // // console.log("THIS IS A USER: " + await supabase.auth.getUser())
+    // // console.log("THIS IS A SESSION: " + await supabase.auth.getSession())
 
-    //This gets the currently signed-in user
-    const { data: { user } } = await supabase.auth.getUser();
-    // console.log(user?.id)
-    const uid = user?.id
-    console.log("UID IS " + uid)
+    // //This gets the currently signed-in user
+    // const { data: { user } } = await supabase.auth.getUser();
+    // // console.log(user?.id)
+    // const uid = user?.id
+    // console.log("UID IS " + uid)
 
-    //This checks for the admin role
-    const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
+    // //This checks for the admin role
+    // const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
 
-    console.log("ADMIN IS " + admin)
+    // console.log("ADMIN IS " + admin)
 
-    //This redirects anyone that's not signed in and not admin
-    if (!user && !admin) {
-        console.log("NOT SIGNED IN")
-        redirect('/login')
-    }
+    // //This redirects anyone that's not signed in and not admin
+    // if (!user && !admin) {
+    //     console.log("NOT SIGNED IN")
+    //     redirect('/login')
+    // }
 
     const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name ), donor ( id, name )')
 

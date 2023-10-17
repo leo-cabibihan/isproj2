@@ -15,16 +15,16 @@ export default async function Auditlog() {
     const uid = user?.id
     console.log("UID IS " + uid)
 
-    //This checks for the admin role
-    const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
+    // //This checks for the admin role
+    // const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
 
-    console.log("ADMIN IS " + admin)
+    // console.log("ADMIN IS " + admin)
  
-    //This redirects anyone that's not signed in and not admin
-    if (!user && !admin) {
-        console.log("NOT SIGNED IN")
-        redirect('/login')
-    }
+    // //This redirects anyone that's not signed in and not admin
+    // if (!user && !admin) {
+    //     console.log("NOT SIGNED IN")
+    //     redirect('/login')
+    // }
 
     const { data: actions } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )').eq('id', uid)
 

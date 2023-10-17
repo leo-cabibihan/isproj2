@@ -10,6 +10,7 @@ import {
     Preview,
     Tailwind,
     Text,
+    Button
 } from '@react-email/components';
 import * as React from 'react';
 
@@ -27,11 +28,12 @@ const MessageUsEmail = () => {
                         <Heading className='text-black text-[20px] font-normal text-left'>
                             <strong>Hello Gabe,</strong>
                         </Heading>
-                        <Text className='text-black text-[14px] leading-[24px]'>
-                            <a>
-                                https://youtu.be/KG_fqkyJ-wo?si=SYbiTzuWf_jMZarR
-                            </a>
-                        </Text>
+                        <Button
+                            href="http://localhost:3000/owner-invite"
+                            style={{ color: "#61dafb", padding: "10px 20px" }}
+                        >
+                            <h1>Click Me</h1>
+                        </Button>
 
                         <Hr className='my-[16px] mx-0 w-full' />
                         <Text className='text-[#666666] text-[12px]'>

@@ -67,6 +67,12 @@ export async function middleware(req: NextRequest) {
       return Response.redirect('http://localhost:3000')
     }
   }
+  else if (originalUrl.includes('/owner-invite')) {
+    if (user) {
+      console.log("ALREADY AN ADMIN, SO FUCK OFF")
+      return Response.redirect('http://localhost:3000')
+    }
+  }
 
   return res
 }
