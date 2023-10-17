@@ -121,7 +121,7 @@ export default async function Register() {
           </div>
         </form>
       </SlimLayout>
-      <Footer></Footer>
+      
     </>
   )
 }
