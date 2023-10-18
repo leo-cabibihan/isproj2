@@ -10,9 +10,22 @@ import { useState } from "react";
 import { randomUUID } from "crypto";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 import { ImageUpload } from "@/components/ImgUpload";
+import { cookies } from "next/headers";
+import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 
 export const revalidate = 0;
 
+async function GetUID() {
+    const cookieStore = cookies()
+
+    const supabase = createServerActionClient({ cookies: () => cookieStore })
+
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    console.log("SESSION ID IS: " + session?.user.id)
+    const uid = session?.user.id
+
+    return (uid)
+}
 
 export default async function Page() {
 
@@ -21,28 +34,40 @@ export default async function Page() {
     //==> const user = useUser()
     //=> Get Charity ID from charity_member table equal to current UUID
     //=> store Charity ID somewhere
-    
+
     //Temp. ID for testing purposes whilst auth is still WIP
 
-    const charityId = 12
+    console.log("DOES IT WORK???? MAYBE: " + await GetUID())
+
+    const uid = await GetUID()
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const charity_id = charity_member?.map(member => member.charity.id)
+
+    const charityId = charity_id![0]
+    
 
     const { data: posts, error } = await supabase
         .from('campaign_post')
         .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
         .eq('charity_id', charityId)
 
+    const { data: last_post, error: post_error } = await supabase
+        .from('campaign_post')
+        .select('*')
+        .order('id', { ascending: false }).limit(1)
+
+    const post_id = last_post?.map(post => post.id)
+    console.log("LAST EVENT'S ID IS: " + (post_id![0] + 1))
+
     const handleSubmit = async (formData: FormData) => {
         'use server'
-
-        const {data: imageID} = await supabase.rpc('image_id')
 
         const post = {
             title: formData.get("title"),
             text: formData.get("details"),
             subheading: formData.get("subtitle"),
-            charity_id: 12,
-            charity_member_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313",
-            image_id: imageID
+            charity_id: charityId,
+            charity_member_id: uid
         };
 
         await supabase.from('campaign_post').insert(post);
@@ -56,8 +81,8 @@ export default async function Page() {
             title: formData.get("title"),
             text: formData.get("details"),
             subheading: formData.get("subtitle"),
-            charity_id: 12,
-            charity_member_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313"
+            charity_id: charityId,
+            charity_member_id: uid
         };
 
         await supabase.from('campaign_post').update(post).eq("id", postId)
@@ -71,8 +96,8 @@ export default async function Page() {
             title: formData.get("title"),
             text: formData.get("details"),
             subheading: formData.get("subtitle"),
-            charity_id: 12,
-            charity_member_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313"
+            charity_id: charityId,
+            charity_member_id: uid
         };
 
         await supabase.from('campaign_post').delete().eq("id", postId)
@@ -95,10 +120,10 @@ export default async function Page() {
 
     // }
 
-    
+
 
     return (
-        
+
         <>
             <div className="sm:flex sm:items-center py-9">
                 <div className="sm:flex-auto">
@@ -139,7 +164,7 @@ export default async function Page() {
                                 </div>
                             </div>
 
-                            <ImageUpload folderName={'campaign_post'} charityID={charityId}/>
+                            <ImageUpload folderName="campaign_post" charityID={charityId} recordID={post_id![0] + 1} />
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">

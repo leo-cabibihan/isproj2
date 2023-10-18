@@ -10,12 +10,36 @@ import supabase from '@/app/utils/supabase'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { ImageUpload } from '@/components/ImgUpload'
+import { cookies } from "next/headers";
+import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
 
 export const revalidate = 0;
 
-export default function Example() {
 
-  var charityID = 0
+
+async function GetUID() {
+  const cookieStore = cookies()
+
+  const supabase = createServerActionClient({ cookies: () => cookieStore })
+
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+  console.log("SESSION ID IS: " + session?.user.id)
+  const uid = session?.user.id
+
+  return (uid)
+}
+
+export default async function Example() {
+
+  var ID = 0
+
+  const { data: last_charity, error: post_error } = await supabase
+    .from('charity')
+    .select('*')
+    .order('id', { ascending: false }).limit(1)
+
+  const charity_id = last_charity?.map(charity => charity.id)
+  console.log("LAST CHARITY'S ID IS: " + (charity_id![0] + 1))
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
@@ -31,6 +55,7 @@ export default function Example() {
     }
 
     const { data: new_address, error: address_error } = await supabase.from('address').insert(address).select();
+    console.log("ADDRESS ERROR" + address_error)
     const address_id = new_address![0].id
     console.log("ADDRESS ID IS: " + address_id + ". IT WORKS!!!!!!!!!")
 
@@ -46,20 +71,21 @@ export default function Example() {
     const { data: charity, error: charity_error } = await supabase.from('charity').insert(charity_details).select()
     const charity_id = charity![0].id
 
-    const { data: images, error } = await supabase
-      .storage
-      .from('uploads')
-      .list(charityID?.toString(), {
-        limit: 100,
-        offset: 0,
-        sortBy: { column: "name", order: "asc" },
-      })
-    console.log('Charity ID:', charityID);
-    const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + charityID + "/"
-
     console.log("CHARITY ID IS: " + charity_id + ". IT WORKS!!!!!")
     console.log("CHARITY IS: " + charity)
-    charityID = charity_id
+    const charityID = charity_id
+    ID = charityID
+    console.log("HEY BRO " + charityID)
+
+    const uid = await GetUID()
+
+    const charity_member = {
+      charity_id: charityID
+    }
+
+    await supabase.from('charity_member').update(charity_member).eq("user_uuid", uid)
+
+
     revalidatePath('/');
     redirect('/onboarding/pending')
   }
@@ -199,7 +225,7 @@ export default function Example() {
             </div>
           </div>
 
-          {/* <ImageUpload folderName={"charity"} charityID={charityID} /> */}
+          <ImageUpload folderName="onboarding" charityID={ID} recordID={charity_id![0] + 1} />
         </div>
         <div className="mt-6 flex items-center justify-end gap-x-6 mb-4">
           <Button type="submit" variant="solid" color="blue" className="w-1/5">

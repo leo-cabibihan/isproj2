@@ -10,19 +10,30 @@ import { cookies } from "next/headers";
 
 export const revalidate = 0;
 
-export default async function Page() {
-
+async function GetUID() {
     const cookieStore = cookies()
 
     const supabase = createServerActionClient({ cookies: () => cookieStore })
 
     const { data: { session }, error: sessionError } = await supabase.auth.getSession()
     console.log("SESSION ID IS: " + session?.user.id)
+    const uid = session?.user.id
+
+    return (uid)
+}
+
+export default async function Page() {
+
+    console.log("DOES IT WORK???? MAYBE: " + await GetUID())
+
+    const uid = await GetUID()
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const charity_id = charity_member?.map(member => member.charity.id)
 
     const { data: events, error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', 12)
+        .eq('charity_id', charity_id![0])
 
     const { data: last_event, error: event_error } = await supabase
         .from('event')
@@ -30,7 +41,7 @@ export default async function Page() {
         .order('id', { ascending: false }).limit(1)
 
     const event_id = last_event?.map(event => event.id)
-    console.log("LAST EVENT'S ID IS: " + event_id!)
+    console.log("LAST EVENT'S ID IS: " + (event_id![0] + 1))
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
@@ -39,7 +50,8 @@ export default async function Page() {
             description: formData.get("details"),
             start_date: formData.get("start_date"),
             end_date: formData.get("end_date"),
-            charity_id: 12
+            charity_id: charity_id![0],
+            beneficiary_id: 2
         };
 
         await supabase.from('event').insert(event);
@@ -122,7 +134,7 @@ export default async function Page() {
 
                             />
 
-                            {/* <ImageUpload folderName="event" charityID={12} recordID={event_id + 1} */}
+                            <ImageUpload folderName="event" charityID={charity_id![0]} recordID={event_id![0] + 1}/>
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">

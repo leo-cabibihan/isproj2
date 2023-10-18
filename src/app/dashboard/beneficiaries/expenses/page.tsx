@@ -1,35 +1,71 @@
 import supabase from '@/app/utils/supabase';
 import { Button } from '@/components/Button';
 import { SelectField, TextField } from '@/components/Fields'
-import { , imgPath } from '@/components/ImgUpload';
+import { ImageUpload } from '@/components/ImgUpload';
+
 import SlideOver from "@/components/SlideOverButton"
 import { TableContainer, Table, TableContent, TableHeaderButton, Tbody, Td, Thead, Tr } from '@/components/Table';
+import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { revalidatePath } from 'next/cache';
+import { cookies } from 'next/headers';
+
+export const revalidate = 0;
 
 const header = "Expenses";
 const subheader = "A table list of expenses";
 const columns = ["Description", "Amount", "Date"];
 
+async function GetUID() {
+    const cookieStore = cookies()
+
+    const supabase = createServerActionClient({ cookies: () => cookieStore })
+
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    console.log("SESSION ID IS: " + session?.user.id)
+    const uid = session?.user.id
+
+    return (uid)
+}
+
 
 export default async function Expenses() {
+
+    console.log("DOES IT WORK???? MAYBE: " + await GetUID())
+
+    const uid = await GetUID()
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const charity_id = charity_member?.map(member => member.charity.id)
 
     const { data: expenses, error } = await supabase
         .from('expenses')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
-        .eq('charity_id', 12)
+        .eq('charity_id', charity_id![0])
+
+    const { data: beneficiaries, error: beneficiaries_error } = await supabase
+        .from('beneficiaries')
+        .select('*')
+
+    const { data: last_expense, error: event_error } = await supabase
+        .from('expenses')
+        .select('*')
+        .order('id', { ascending: false }).limit(1)
+
+    const expense_id = last_expense?.map(expense => expense.id)
+    console.log("LAST EXPENSE'S ID IS: " + (expense_id![0] + 1))
 
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', 12)
+        .eq('charity_id', charity_id![0])
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
         const expense = {
             amount: formData.get("amount"),
             reason: formData.get("reason"),
-            event_id: formData.get("event"),
-            receipt: imgPath,
+            event_id: formData.get("event_id"),
+            beneficiary_id: formData.get("beneficiary_id"),
+            charity_id: charity_id![0]
         };
 
         await supabase.from('expenses').insert(expense);
@@ -43,7 +79,8 @@ export default async function Expenses() {
             amount: formData.get("amount"),
             reason: formData.get("reason"),
             event_id: formData.get("event"),
-            receipt: imgPath,
+            beneficiary_id: formData.get("beneficiary_id"),
+            charity_id: charity_id![0]
         };
 
         await supabase.from('expenses').update(expense).eq("id", expenseId)
@@ -57,7 +94,8 @@ export default async function Expenses() {
             amount: formData.get("amount"),
             reason: formData.get("reason"),
             event_id: formData.get("event"),
-            receipt: imgPath,
+            beneficiary_id: formData.get("beneficiary_id"),
+            charity_id: charity_id![0]
         };
 
         await supabase.from('expenses').delete().eq("id", expenseId)
@@ -110,21 +148,30 @@ export default async function Expenses() {
                                                 </div>
 
                                                 {/* NEED TO FIGURE OUT HOW TO DISPLAY NAMES OF EVENTS AS OPTIONS */}
-                                                {events?.map(event => (
-
-                                                    <SelectField
-                                                        className="col-span-full py-5"
-                                                        label="Assign Event"
-                                                        name="event_id"
-                                                        key={event.id}
-                                                    >
-                                                        <option value={event.id}>{event.name}</option>
-                                                    </SelectField>
 
 
-                                                ))}
+                                                <SelectField
+                                                    className="col-span-full py-5"
+                                                    label="Assign Event"
+                                                    name="event_id"
+                                                >
+                                                    {events?.map(event => (
+                                                        <option key={event.id} value={event.id}>{event.name}</option>
+                                                    ))}
+                                                </SelectField>
 
-                                                <ImageUpload charityID={12} />
+                                                <SelectField
+                                                    className="col-span-full py-5"
+                                                    label="Assign Beneficiary"
+                                                    name="beneficiary_id"
+                                                >
+                                                    {beneficiaries?.map(beneficiary => (
+                                                        <option key={beneficiary.id} value={beneficiary.id}>{beneficiary.beneficiary_name}</option>
+                                                    ))}
+                                                </SelectField>
+
+
+                                                <ImageUpload folderName="expenses" charityID={charity_id![0]} recordID={expense_id![0] + 1} />
 
                                                 <div className="mt-6 flex items-center justify-start gap-x-6">
                                                     <button
@@ -223,7 +270,7 @@ export default async function Expenses() {
 
                                                                     ))}
 
-                                                                    <ImageUpload charityID={12} />
+                                                                    <ImageUpload folderName="expenses" charityID={charity_id![0]} recordID={expense.id} />
 
 
                                                                     <div className="mt-6 flex items-center justify-start gap-x-6">

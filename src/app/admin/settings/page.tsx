@@ -9,6 +9,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 import supabase from '@/app/utils/supabase';
+import { Button } from '@/components/Button';
 import { TextField } from '@/components/Fields'
 import { redirect } from 'next/navigation';
 
@@ -66,6 +67,14 @@ export default async function Settings() {
           </div>
         </div>
       </form>
+
+      <form
+                action={'/logout-post'}
+                method="post"
+                className="mt-10 grid grid-cols-1 gap-y-8"
+            >
+                <Button type='submit' variant="solid" color="red" >Log Out</Button>
+            </form>
 
       <ul role="list" className="-mx-2 space-y-1">
         {navigation.map((item) => (
