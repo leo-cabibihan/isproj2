@@ -12,7 +12,6 @@ import supabase from '@/app/utils/supabase';
 import { TextField } from '@/components/Fields'
 import { redirect } from 'next/navigation';
 
-
 export default async function Settings() {
 
   // // console.log("THIS IS A USER: " + await supabase.auth.getUser())
@@ -83,6 +82,7 @@ export default async function Settings() {
           </li>
         ))}
       </ul>
+      
     </>
   )
 }

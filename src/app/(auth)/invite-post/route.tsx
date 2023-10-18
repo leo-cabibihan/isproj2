@@ -3,8 +3,9 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import MessageUsEmail from '@/components/email-template';
 import { Resend } from 'resend';
+import emailjs from '@emailjs/browser';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+
 
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url)
@@ -13,12 +14,31 @@ export async function POST(request: Request) {
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
   const link = 'https://youtu.be/KG_fqkyJ-wo?si=-mGQJMg4xWzNdUwI'
+  const service_id = 'service_29bsf8o'
+  const template_id = 'template_aleqtnp'
+  const user_id = '5D4a6TNuyDrbCMppe'
 
+  var templateParams = {
+    from_name: 'The GiveMore Team',
+    my_html: MessageUsEmail(),
+    recepient: email,
+    reply_to: email
+  };
 
+  emailjs.init(user_id)
 
-  const { data, error } = await supabase.auth.admin.inviteUserByEmail(email)
-  
-  console.log("ERROR IS: " + error)
+  emailjs.send(service_id, template_id, templateParams, user_id)
+    .then(function (response) {
+      console.log('SUCCESS!', response.status, response.text);
+    }, function (error) {
+      console.log('FAILED...', error);
+    });
+
+  // if (response.ok) {
+  //   console.log("EMAIL SENT YEY")
+  // } else {
+  //   console.log("FUCK")
+  // }
 
   return NextResponse.redirect('http://localhost:3000/email-pending', {
     status: 301,

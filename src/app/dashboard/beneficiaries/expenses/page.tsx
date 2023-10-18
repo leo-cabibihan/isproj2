@@ -16,12 +16,12 @@ export default async function Expenses() {
     const { data: expenses, error } = await supabase
         .from('expenses')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
-        .eq('charity.id', 12)
+        .eq('charity_id', 12)
 
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity.id', 12)
+        .eq('charity_id', 12)
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
