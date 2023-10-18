@@ -26,7 +26,7 @@ const provinces = [
   { id: 3, name: "N/A" },
 ]
 
-export default async function Organization({ params }) {
+export default async function Organization({ params } : any) {
 
   //THIS JUST GETS THE ORG ID FROM THE ROUTE. US  E THIS TO FILTER TO THE SPECIFIC ORG.
   const orgID = params.id

@@ -1,4 +1,5 @@
 import supabase from '@/app/utils/supabase';
+import { GetUID } from '@/app/utils/user_id';
 import { Button } from '@/components/Button';
 import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
@@ -15,17 +16,17 @@ const header = "Expenses";
 const subheader = "A table list of expenses";
 const columns = ["Description", "Amount", "Date"];
 
-async function GetUID() {
-    const cookieStore = cookies()
+// async function GetUID() {
+//     const cookieStore = cookies()
 
-    const supabase = createServerActionClient({ cookies: () => cookieStore })
+//     const supabase = createServerActionClient({ cookies: () => cookieStore })
 
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-    console.log("SESSION ID IS: " + session?.user.id)
-    const uid = session?.user.id
+//     const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+//     console.log("SESSION ID IS: " + session?.user.id)
+//     const uid = session?.user.id
 
-    return (uid)
-}
+//     return (uid)
+// }
 
 
 export default async function Expenses() {

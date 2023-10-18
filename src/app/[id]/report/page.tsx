@@ -11,7 +11,7 @@ import { revalidatePath } from 'next/cache'
 
 export const revalidate = 0;
 
-export default async function Report({ params }) {
+export default async function Report({ params } : any) {
 
   const orgID = params.id
 

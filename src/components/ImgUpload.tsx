@@ -8,7 +8,7 @@ import { Button } from "./Button";
 
 export var imgPath = ""
 
-export function ImageUpload({ folderName, charityID, recordID }) {
+export function ImageUpload({ folderName, charityID, recordID } : any) {
 
     const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + folderName + "/" + charityID + "/" + recordID + "/"
 
@@ -41,7 +41,7 @@ export function ImageUpload({ folderName, charityID, recordID }) {
     }, [folderName && charityID && recordID])
 
 
-    async function uploadImage(e) {
+    async function uploadImage(e : any) {
         let file = e.target.files[0]
 
         const { data, error } = await supabase

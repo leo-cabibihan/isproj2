@@ -27,7 +27,7 @@ import { LightBulbIcon } from '@heroicons/react/20/solid'
 //   },
 // ]
 
-export default async function Example({ params }) {
+export default async function Example({ params } : any) {
 
   const eventID = params.id
   const { data: events, error: events_error } = await supabase.from('event').select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name, contact )').eq('id', eventID)

@@ -3,7 +3,7 @@ import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/20/soli
 import supabase from "@/app/utils/supabase"
 import { useRouter } from 'next/navigation'
 
-export default async function News({ params }) {
+export default async function News({ params } : any) {
 
   const postID = params.id
   const { data: posts, error } = await supabase.from('campaign_post').select('*, charity ( id, name ), charity_member( user_uuid, member_name )').eq('id', postID)
