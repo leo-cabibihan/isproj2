@@ -130,7 +130,7 @@ export default async function Login() {
           </div>
         </form>
       </SlimLayout>
-      <Footer></Footer>
+      
     </>
   )
 }

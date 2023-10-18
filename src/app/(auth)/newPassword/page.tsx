@@ -71,7 +71,7 @@ export default function Forgot() {
           />
         </div>
       </div>
-      <Footer></Footer>
+      
       </>
   )
 }

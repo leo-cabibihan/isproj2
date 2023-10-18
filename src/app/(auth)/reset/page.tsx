@@ -44,6 +44,7 @@ export default function Forgot() {
                     name="password"
                     type="password"
                     autoComplete="current-password"
+                    minLength={10}
                     required
                   />
                 
@@ -52,6 +53,7 @@ export default function Forgot() {
                     name="password"
                     type="password"
                     autoComplete="current-password"
+                    minLength={10}
                     required
                   />
                     
@@ -78,7 +80,7 @@ export default function Forgot() {
           />
         </div>
       </div>
-      <Footer></Footer>
+      
     </>
   )
 }
