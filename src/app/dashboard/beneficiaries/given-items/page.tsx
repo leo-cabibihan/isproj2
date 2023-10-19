@@ -5,10 +5,10 @@ import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeaderButton, Tab
 import { TableHeader } from "@/components/table/Table";
 
 const people = [
-    { AdministratorName: 'bruh Walton', Action: 'Front-end Developer', Date: 'lindsay.walton@example.com' },
-    { AdministratorName: 'bruh', Action: 'ginormous godzilla', Date: 'inormous godzilla' },
-    { AdministratorName: 'bruh', Action: 'ginormous godzilla', Date: 'inormous godzilla' },
-    { AdministratorName: 'bruh', Action: 'ginormous godzilla', Date: 'inormous godzilla' },
+    { AdministratorName: 'Myko Macawiwili', Action: 'Delete', Date: 'January 20, 2023' },
+    { AdministratorName: 'Myko Macawiwili', Action: 'Delete', Date: 'January 20, 2023' },
+    { AdministratorName: 'Myko Macawiwili', Action: 'Delete', Date: 'January 20, 2023' },
+    { AdministratorName: 'Myko Macawiwili', Action: 'Delete', Date: 'January 20, 2023' },
 ]
 
 
@@ -75,7 +75,7 @@ export default function beneficiaryitem() {
                                     <Td>{person.Action}</Td>
                                     <Td>{person.Date}</Td>
                                     <Td>
-                                        <SlideOver buttontext="bruh" variant="solid" color="blue">
+                                        <SlideOver buttontext="Details" variant="solid" color="blue">
                                             <form className="space-y-6" action="#" method="POST">
                                                 <TextField
                                                     label="Email Address"

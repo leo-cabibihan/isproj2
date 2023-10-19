@@ -48,14 +48,16 @@ export default function Settings() {
                     </div>
                 </div>
             </form>
-
-            <form
-                action={'/logout-post'}
-                method="post"
-                className="mt-10 grid grid-cols-1 gap-y-8"
-            >
-                <Button type='submit' variant="solid" color="red" >Log Out</Button>
-            </form>
+            <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+                <form
+                    action={'/logout-post'}
+                    method="post"
+                    className="mt-10 grid grid-cols-1 gap-y-8"
+                >
+                    <Button type='submit' variant="solid" color="red" >Log Out</Button>
+                </form>
+            </div>
+            
 
             <ul role="list" className="-mx-2 space-y-1">
                 {navigation.map((item) => (
