@@ -69,29 +69,13 @@ export default async function Settings() {
       </form>
 
       <form
-                action={'/logout-post'}
-                method="post"
-                className="mt-10 grid grid-cols-1 gap-y-8"
-            >
-                <Button type='submit' variant="solid" color="red" >Log Out</Button>
-            </form>
+        action={'/logout-post'}
+        method="post"
+        className="mt-10 grid grid-cols-1 gap-y-8"
+      >
+        <Button type='submit' variant="solid" color="red" >Log Out</Button>
+      </form>
 
-      <ul role="list" className="-mx-2 space-y-1">
-        {navigation.map((item) => (
-          <li key={item.name}>
-            <a
-              href={item.href}
-              className={classNames(
-                item.current ? 'bg-gray-50 text-indigo-600' : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
-                'group flex gap-x-3 rounded-md p-2 pl-3 text-sm leading-6 font-semibold'
-              )}
-            >
-              {item.name}
-            </a>
-          </li>
-        ))}
-      </ul>
-      
     </>
   )
 }

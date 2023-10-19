@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server'
 
 
 export async function middleware(req: NextRequest) {
+  var charity_status : any
   const res = NextResponse.next()
   console.log(req)
 
@@ -25,7 +26,7 @@ export async function middleware(req: NextRequest) {
     .eq('id', uid)
   const { data: charity_member, error: error_2 } = await supabase
     .from('charity_member')
-    .select('*')
+    .select('*, charity ( id, charity_verified )')
     .eq('user_uuid', uid)
   const { data: admin, error: error_3 } = await supabase
     .from('system_owner')
@@ -35,6 +36,12 @@ export async function middleware(req: NextRequest) {
   console.log(donor)
   console.log(charity_member)
   console.log(admin)
+
+  charity_member?.map(member => (
+    charity_status = member.charity.charity_verified
+  ))
+
+  console.log("THE CHARITY STATUS IS: " + charity_status)
 
   // if (donor?.length === 1) {
   //   NextResponse.redirect('/settings' )
@@ -56,7 +63,7 @@ export async function middleware(req: NextRequest) {
   }
   else if (originalUrl.includes('/dashboard')) {
     console.log('CHARITY')
-    if (charity_member?.length !== 1) {
+    if (charity_member?.length !== 1 && charity_status == false) {
       console.log("NOT A CHARITY FUCK OFF")
       return Response.redirect('http://localhost:3000')
       }

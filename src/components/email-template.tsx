@@ -14,9 +14,9 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
-
-const MessageUsEmail = () => {
-    const previewText = `Weekly Updates 🚀Gabe sent you a message.`;
+export function Email(props : any) {
+    const { url } = props;
+    const previewText = "You've been Invited!"
 
     return (
         <Html>
@@ -26,10 +26,10 @@ const MessageUsEmail = () => {
                 <Body className='bg-white my-auto mx-auto font-sans'>
                     <Container className='my-[20px] mx-auto p-[20px] max-w-4xl'>
                         <Heading className='text-black text-[20px] font-normal text-left'>
-                            <strong>Hello Gabe,</strong>
+                            <strong>Hello there!</strong>
                         </Heading>
                         <Button
-                            href="http://localhost:3000/owner-invite"
+                            href={url}
                             style={{ color: "#61dafb", padding: "10px 20px" }}
                         >
                             <h1>Click Me</h1>
@@ -49,6 +49,4 @@ const MessageUsEmail = () => {
             </Tailwind>
         </Html>
     );
-};
-
-export default MessageUsEmail;
+}
