@@ -16,18 +16,8 @@ export default function AdminRegister () {
           </Link>
         </div>
         <h2 className="mt-20 text-lg font-semibold text-gray-900">
-          Create an Admin Account
+          Finish your Admin Account
         </h2>
-        <p className="mt-2 text-sm text-gray-700">
-          Already registered?
-          <Link
-            href="/login"
-            className="font-medium text-blue-600 hover:underline"
-          >
-            Sign in
-          </Link>{' '}
-          to your account.
-        </p>
         <form
           action={'/owner-invite-post'}
           className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2"
@@ -39,14 +29,6 @@ export default function AdminRegister () {
             name="name"
             type="name"
             autoComplete="name"
-            required
-          />
-          <TextField
-            className="col-span-full"
-            label="Verify your Email"
-            name="email"
-            type="email"
-            autoComplete="email"
             required
           />
           <TextField
@@ -67,7 +49,7 @@ export default function AdminRegister () {
               className="w-full"
             >
               <span>
-                Sign up <span aria-hidden="true">&rarr;</span>
+                Submit <span aria-hidden="true">&rarr;</span>
               </span>
             </Button>
           </div>

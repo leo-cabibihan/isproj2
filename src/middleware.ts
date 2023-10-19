@@ -37,12 +37,6 @@ export async function middleware(req: NextRequest) {
   console.log(charity_member)
   console.log(admin)
 
-  charity_member?.map(member => (
-    charity_status = member.charity.charity_verified
-  ))
-
-  console.log("THE CHARITY STATUS IS: " + charity_status)
-
   // if (donor?.length === 1) {
   //   NextResponse.redirect('/settings' )
   // } else if (charity_member?.length === 1) {
@@ -63,6 +57,12 @@ export async function middleware(req: NextRequest) {
   }
   else if (originalUrl.includes('/dashboard')) {
     console.log('CHARITY')
+
+    charity_member?.map(member => (
+      charity_status = member.charity.charity_verified
+    ))
+    console.log("THE CHARITY STATUS IS: " + charity_status)
+    
     if (charity_member?.length !== 1 && charity_status == false) {
       console.log("NOT A CHARITY FUCK OFF")
       return Response.redirect('http://localhost:3000')

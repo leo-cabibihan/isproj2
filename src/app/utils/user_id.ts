@@ -12,3 +12,16 @@ export async function GetUID() {
 
     return (uid)
 }
+
+export async function GetEmail() {
+    const cookieStore = cookies()
+
+    const supabase = createServerActionClient({ cookies: () => cookieStore })
+
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    console.log("SESSION EMAIL IS: " + session?.user.email)
+    const email = session?.user.email
+
+    return (email)
+}
+
