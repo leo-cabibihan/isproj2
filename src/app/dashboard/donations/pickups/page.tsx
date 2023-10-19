@@ -27,8 +27,8 @@ export default function Page() {
                         <Thead>
                             <Tr>
                                 <Td>Donor Name</Td>
-                                <Td>Number of Donations Made</Td>
-                                <Td>Total Cash Donated</Td>
+                                <Td>Donated Items</Td>
+                                <Td>Date</Td>
                                 <Td> </Td>
                             </Tr>
                         </Thead>
