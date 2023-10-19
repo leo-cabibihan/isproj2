@@ -7,8 +7,6 @@ import { NextResponse } from 'next/server'
 export async function POST(request: Request) {
     const requestUrl = new URL(request.url)
     const formData = await request.formData()
-    const email = String(await GetEmail())
-    const user_id = await GetUID()
     const password = String(formData.get('password'))
     const name = formData.get('name') as string
     const cookieStore = cookies()
@@ -28,7 +26,7 @@ export async function POST(request: Request) {
     const { data, error } = await supabase.auth.updateUser({password: password})
 
     const system_owner = {
-        id: user_id,
+        id: data.user?.id,
         name: name,
     }
     const { data: admin, error: adminError } = await supabase
