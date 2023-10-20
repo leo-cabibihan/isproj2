@@ -1,4 +1,5 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
+import { redirect } from 'next/dist/server/api-utils'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
@@ -15,6 +16,13 @@ export async function POST(request: Request) {
     password,
   })
 
+  console.log("I am error", error)
+  if (error) {
+    console.log("I should redirect")
+
+    return NextResponse.redirect(`http://localhost:3000/login?err=${error.message}`, {status:301})
+  }
+  console.log("y am I here")
   const user_id = user?.id
   console.log('UUID IS: ', user_id)
 
