@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: 'Reset Password',
 }
 
-export default function Forgot() {
+export default function ForgotPassword() {
   return (
     <>
     <div className="flex min-h-full flex-1">
@@ -30,14 +30,16 @@ export default function Forgot() {
 
             <div className="mt-10">
               <div>
-                <form action={"/reset-post"} method="post" className="space-y-6">
+                <form action={"forgot-password-post"} method="post" className="space-y-6">
+              
                   <TextField
-                    label="Email Address"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
+                    label="Password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    minLength={10}
                     required
-                  />
+                  />                    
                 
                   <div className="col-span-full">
                     <Button type="submit" variant="solid" color="blue" className="w-full">
