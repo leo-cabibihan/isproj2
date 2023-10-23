@@ -1,14 +1,22 @@
+"use client"
+
 import { Button } from "@/components/Button";
 import { TextField, SelectField } from "@/components/Fields";
 import { Footer } from "@/components/Footer";
 import { Logo } from "@/components/Logo";
 import { SlimLayout } from "@/components/SlimLayout";
+import { useParams } from "next/navigation";
 
 import Link from "next/link";
+import { decode, unescape } from "querystring";
 
-export default function AdminRegister () {
-    return (
-        <>
+export default function AdminRegister({ params }: any) {
+
+  const email = decodeURIComponent(params.slug)
+  console.log("PARAMS ARE :" + email)
+
+  return (
+    <>
       <SlimLayout>
         <div className="flex">
           <Link href="/" aria-label="Home">
@@ -23,6 +31,13 @@ export default function AdminRegister () {
           className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2"
           method="post"
         >
+          <TextField
+            label=""
+            name="email"
+            type="hidden"
+            defaultValue={email}
+            required
+          />
           <TextField
             className="col-span-full"
             label="Name"
@@ -40,7 +55,7 @@ export default function AdminRegister () {
             minLength={10}
             required
           />
-  
+
           <div className="col-span-full">
             <Button
               type="submit"
@@ -57,5 +72,5 @@ export default function AdminRegister () {
       </SlimLayout>
       <Footer></Footer>
     </>
-    )
+  )
 }
