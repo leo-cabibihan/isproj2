@@ -7,10 +7,10 @@ import { v4 as uuidv4 } from "uuid";
 import { Button } from "./Button";
 
 export var imgPath = ""
+export var CDNURL = ""
 
 export function ImageUpload({ folderName, charityID, recordID } : any) {
 
-    const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + folderName + "/" + charityID + "/" + recordID + "/"
 
     const [images, setImages]: any[] = useState([])
 
@@ -49,13 +49,17 @@ export function ImageUpload({ folderName, charityID, recordID } : any) {
             .from('uploads')
             .upload(folderName + "/" + charityID + "/" + recordID + "/" + uuidv4(), file)
 
+        console.log("DATA RETURNED: " + {data})
+
         if (data) {
             getImages()
         } else {
             console.log(error)
         }
-
+        const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + folderName + "/" + charityID + "/" 
+        + recordID + "/" + data?.path
         imgPath = String(data?.path)
+        return imgPath && CDNURL
     }
 
     return (

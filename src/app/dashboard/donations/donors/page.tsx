@@ -1,5 +1,7 @@
+import supabase from "@/app/utils/supabase";
+import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
-import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Thead, Tr } from "@/components/Table";
+import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
 
 const people = [
     { DonorName: 'Jack Walton', NumberofDonations: '40', Total: '20,203' },
@@ -9,7 +11,20 @@ const people = [
 ];
 
 
-export default function ListofDonors() {
+export default async function ListofDonors() {
+    const uid = await GetUID()
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const charity_id = charity_member?.map(member => member.charity.id)
+
+    const {data: donors, error} = await supabase
+    .from("donor_summary")
+    .select("*")
+    .eq("charity_id", charity_id)
+
+    console.log("CHARITY ID IS: " + charity_id)
+   //const {data: donationCount, error} = await supabase
+   //.from("")
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -23,23 +38,23 @@ export default function ListofDonors() {
                     <Table>
                         <Thead>
                             <Tr>
-                                <Td>Donor Name</Td>
-                                <Td>Number of Donations Made</Td>
-                                <Td>Total Cash Donated</Td>
-                                <Td> </Td>
+                                <Th>Donor Name</Th>
+                                <Th>Number of Donations Made</Th>
+                                <Th>Total Cash Donated</Th>
+                                <Th> </Th>
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {people.map(person =>
-                                <Tr key={person.DonorName}>
-                                    <Td>{person.DonorName}</Td>
-                                    <Td>{person.NumberofDonations}</Td>
-                                    <Td>{person.Total}</Td>
-                                    <Td>
-                                        <Button href={"/dashboard/donations/donors/1"} variant="solid" color="blue">View Details</Button>
+                            {donors?.map(donor =>
+                                <Tr key={donor.donor_id}>
+                                    <Td>{donor.donor_name}</Td>
+                                    <Td>{donor.total_number_of_donations}</Td>
+                                    <Td>{donor.total_cash_donated}</Td>
+                                    <Td>    
+                                        <Button href={"/dashboard/donations/donors/" + donor.donor_id} variant="solid" color="blue">View Details</Button>
                                     </Td>
                                 </Tr>
-                                )}
+                            )}
                         </Tbody>
                     </Table>
                 </TableContent>

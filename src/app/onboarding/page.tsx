@@ -31,8 +31,6 @@ async function GetUID() {
 
 export default async function Example() {
 
-  var ID = 0
-
   const { data: last_charity, error: post_error } = await supabase
     .from('charity')
     .select('*')
@@ -74,7 +72,6 @@ export default async function Example() {
     console.log("CHARITY ID IS: " + charity_id + ". IT WORKS!!!!!")
     console.log("CHARITY IS: " + charity)
     const charityID = charity_id
-    ID = charityID
     console.log("HEY BRO " + charityID)
 
     const uid = await GetUID()
@@ -225,7 +222,7 @@ export default async function Example() {
             </div>
           </div>
 
-          <ImageUpload folderName="onboarding" charityID={ID} recordID={charity_id![0] + 1} />
+          <ImageUpload folderName="onboarding" charityID={charity_id} recordID={charity_id![0] + 1} />
         </div>
         <div className="mt-6 flex items-center justify-end gap-x-6 mb-4">
           <Button type="submit" variant="solid" color="blue" className="w-1/5">

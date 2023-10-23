@@ -49,7 +49,7 @@ export default async function Page() {
     const { data: posts, error } = await supabase
         .from('campaign_post')
         .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
-        .eq('charity_id', charityId)
+        .eq('charity_id', charity_id)
 
     const { data: last_post, error: post_error } = await supabase
         .from('campaign_post')
@@ -212,6 +212,7 @@ export default async function Page() {
                                             </div>
                                             <div className="mt-6 flex border-t border-gray-900/5 pt-6">
                                                 <div className="relative flex items-center gap-x-4">
+                                                    {/*WHERE THE IMAGE WOULD GO BASED ON THE POSTID*/}
                                                     <img src="#" alt="" className="h-10 w-10 rounded-full bg-gray-50" />
                                                     <div className="text-sm leading-6 grid grid-cols-4 gap-4">
                                                         <div className="col-span-3">
