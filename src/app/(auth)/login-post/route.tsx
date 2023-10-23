@@ -16,11 +16,16 @@ export async function POST(request: Request) {
     password,
   })
 
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (event == 'SIGNED_IN') console.log('SIGNED_IN', session)
+  })
+
   console.log("I am error", error)
   if (error) {
     console.log("I should redirect")
 
-    return NextResponse.redirect(`http://localhost:3000/login?err=${error.message}`, {status:301})
+    return NextResponse.redirect(`http://localhost:3000/login?err=${error.message}`, { status: 301 })
   }
   console.log("y am I here")
   const user_id = user?.id

@@ -16,12 +16,14 @@ export async function POST(request: Request) {
   const requestUrl = new URL(request.url)
   const formData = await request.formData()
   const email = String(formData.get('email'))
+  const id = String(formData.get('id'))
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
   const encryptedEmail = cryptr.encrypt(email)
+  const encryptedID = cryptr.encrypt(id)
 
-  const body = render(<Email url={"http://localhost:3000/owner-invite/" + encryptedEmail}/>);
+  const body = render(<Email url={"http://localhost:3000/org-invite/" + encryptedEmail + "/" + encryptedID}/>);
 
   const success = await plunk.emails.send({
     to: email,
@@ -32,6 +34,4 @@ export async function POST(request: Request) {
   return NextResponse.redirect('http://localhost:3000/email-pending', {
     status: 301,
   })
-
-
 }

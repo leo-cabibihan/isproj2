@@ -10,10 +10,11 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import { decode, unescape } from "querystring";
 
-export default function AdminRegister({ params }: any) {
+export default function CharityRegister({ params }: any) {
 
-  const email = decodeURIComponent(params.slug)
-  console.log("PARAMS ARE :" + email)
+  const email = decodeURIComponent(params.slug[0])
+  const id = params.slug[1]
+  console.log("PARAMS ARE :" + params.slug[0] + "&" + params.slug[1])
 
   return (
     <>
@@ -27,7 +28,7 @@ export default function AdminRegister({ params }: any) {
           Finish setting up your Account
         </h2>
         <form
-          action={'/owner-invite-post'}
+          action={'/org-invite-post'}
           className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2"
           method="post"
         >
@@ -38,6 +39,15 @@ export default function AdminRegister({ params }: any) {
             defaultValue={email}
             required
           />
+
+          <TextField
+            label=""
+            name="id"
+            type="hidden"
+            defaultValue={id}
+            required
+          />
+
           <TextField
             className="col-span-full"
             label="Name"

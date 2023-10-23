@@ -28,12 +28,14 @@ export async function POST(request: Request) {
     const requestUrl = new URL(request.url)
     const formData = await request.formData()
     const email = String(formData.get('email'))
+    const id = String(formData.get('id'))
     const password = String(formData.get('password'))
     const name = formData.get('name') as string
     const cookieStore = cookies()
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
     const decryptedEmail = cryptr.decrypt(email)
+    const decryptedID = cryptr.decrypt(id)
 
     console.log("EMAIL IS: " + decryptedEmail)
 
@@ -41,20 +43,22 @@ export async function POST(request: Request) {
       email: decryptedEmail,
       password,
       options: {
-        emailRedirectTo: `${requestUrl.origin}/owner-invite-post`,
+        emailRedirectTo: `${requestUrl.origin}/org-invite-post`,
       },
     })
 
     console.log("SIGNUP ERROR IS: " + error)
 
-    const system_owner = {
-        id: user?.id,
-        name: name,
+    const charity_member = {
+        user_uuid: user?.id,
+        charity_id: decryptedID,
+        member_name: name,
     }
-    const { data: admin, error: adminError } = await supabase
-        .from('system_owner')
-        .insert(system_owner)
-    console.log(admin, adminError)
+
+    const { data: charity, error: charityError } = await supabase
+        .from('charity_member')
+        .insert(charity_member)
+    console.log(charity, charityError)
 
     return NextResponse.redirect('http://localhost:3000/email-pending', {
         status: 301,

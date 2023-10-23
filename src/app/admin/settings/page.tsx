@@ -36,7 +36,7 @@ export default async function Settings() {
   // }
   return (
     <>
-      <form className="py-9">
+      <div className="py-9">
         <div className="space-y-12">
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
             <div>
@@ -66,7 +66,7 @@ export default async function Settings() {
             </div>
           </div>
         </div>
-      </form>
+      </div>
 
       <form
         action={'/logout-post'}
