@@ -1,60 +1,61 @@
-import supabase from "@/app/utils/supabase";
 import { Button } from "@/components/Button";
 import { SelectField, TextField } from "@/components/Fields";
-import { ImageUpload } from "@/components/ImgUpload";
+import { CDNURL, ImageUpload, imgPath } from "@/components/ImgUpload";
 import SlideOver from "@/components/SlideOverButton";
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeader, TableContent, TableHeaderButton } from "@/components/Table";
 import { revalidatePath } from "next/cache";
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from "next/headers";
+import { GetUID } from "@/app/utils/user_id";
+import supabase from "@/app/utils/supabase"
 
 export const revalidate = 0;
 
-async function GetUID() {
-    const cookieStore = cookies()
-
-    const supabase = createServerActionClient({ cookies: () => cookieStore })
-
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-    console.log("SESSION ID IS: " + session?.user.id)
-    const uid = session?.user.id
-
-    return (uid)
-}
-
-export default async function Page() {
+export default async function Page() {    
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
-
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity.id)
 
+    const { data: beneficiaries, error: beneficiaries_error } = await supabase
+        .from('beneficiaries')
+        .select('*')
     const { data: events, error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', charity_id![0])
-
+        .eq('charity_id', charity_id)
     const { data: last_event, error: event_error } = await supabase
         .from('event')
         .select('*')
         .order('id', { ascending: false }).limit(1)
 
     const event_id = last_event?.map(event => event.id)
-    console.log("LAST EVENT'S ID IS: " + (event_id![0] + 1))
+    console.log("LAST EVENT'S ID IS: " + (event_id))
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
-        const event = {
+       //const { data: images, error } = await supabase
+       //.storage
+       //.from('uploads')
+       //.list("event" + "/" + charity_id + "/" + (event_id![0] + 1), {
+       //    limit: 100,
+       //    offset: 0,
+       //    sortBy: { column: "name", order: "asc" },
+       //})
+       //const imageName = String(images?.map(image => image.name))
+       //const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + "event" + "/" + charity_id + "/" 
+       //+ (event_id![0] + 1) + "/" + imageName
+        const event = {    
             name: formData.get("event_name"),
             description: formData.get("details"),
             start_date: formData.get("start_date"),
             end_date: formData.get("end_date"),
-            charity_id: charity_id![0],
-            beneficiary_id: 2
+            //photo: CDNURL,
+            charity_id: formData.get("charity_id"),
+            beneficiary_id: formData.get("beneficiary_id")
         };
 
         await supabase.from('event').insert(event);
+        //console.log("CDNURL is: " + CDNURL)
         revalidatePath('/');
     };
 
@@ -63,7 +64,7 @@ export default async function Page() {
         const eventId = formData.get("id")
         const event = {
             name: formData.get("event_name"),
-            description: formData.get("details"),
+            description: formData.get("description"),
             start_date: formData.get("start_date"),
             end_date: formData.get("end_date")
         };
@@ -77,9 +78,9 @@ export default async function Page() {
         const eventId = formData.get("id")
         const event = {
             name: formData.get("event_name"),
-            description: formData.get("details"),
+            description: formData.get("description"),
             start_date: formData.get("start_date"),
-            end_date: formData.get("end_date")
+            end_date: formData.get("end_date"),
         };
 
         await supabase.from('event').delete().eq("id", eventId)
@@ -97,6 +98,14 @@ export default async function Page() {
                 <TableHeaderButton header="Events">
                     <SlideOver buttontext="Add Event" variant="solid" color="blue">
                         <form className="space-y-6" action={handleSubmit} method="POST">
+                            <TextField
+                                label=""
+                                name="charity_id"
+                                type="hidden"
+                                defaultValue={charity_id}
+                                required
+                            />
+
                             <TextField
                                 label="Event Name"
                                 name="event_name"
@@ -120,6 +129,16 @@ export default async function Page() {
                                 </div>
                             </div>
 
+                            <SelectField
+                            className="col-span-full py-5"
+                            label="Assign Beneficiary"
+                            name="beneficiary_id"
+                            >
+                           {beneficiaries?.map(beneficiary => (
+                            <option key={beneficiary.id} value={beneficiary.id}>{beneficiary.beneficiary_name}</option>
+                            ))}
+                            </SelectField>
+
                             <TextField
                                 label="Start Date"
                                 name="start_date"
@@ -133,7 +152,6 @@ export default async function Page() {
                                 type="date"
 
                             />
-
                             <ImageUpload folderName="event" charityID={charity_id![0]} recordID={event_id![0] + 1}/>
 
                             <div className="col-span-full">
@@ -193,11 +211,10 @@ export default async function Page() {
                                                     </label>
                                                     <div className="mt-2">
                                                         <textarea
-                                                            id="details"
-                                                            name="details"
+                                                            name="description"
                                                             rows={4}
                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                            defaultValue={event.details}
+                                                            defaultValue={event.description}
                                                             placeholder="Event Details go here..."
                                                         />
                                                     </div>
@@ -207,6 +224,7 @@ export default async function Page() {
                                                     label="Start Date"
                                                     name="start_date"
                                                     type="date"
+                                                    readOnly
                                                     defaultValue={event.start_date}
                                                     required
                                                 />
@@ -215,7 +233,9 @@ export default async function Page() {
                                                     label="End Date"
                                                     name="end_date"
                                                     type="date"
+                                                    readOnly
                                                     defaultValue={event.end_date}
+                                                    required
 
                                                 />
                                                 {/* {events?.map(event => (
@@ -232,9 +252,16 @@ export default async function Page() {
                                                 <div className="col-span-full">
                                                     <Button type="submit" variant="solid" color="blue" className="w-full">
                                                         <span>
-                                                            Sign up <span aria-hidden="true">&rarr;</span>
+                                                            Save Changes <span aria-hidden="true">&rarr;</span>
                                                         </span>
                                                     </Button>
+                                                </div>
+                                                <div className="col-span-full">
+                                                <Button formAction={deleteEvent} type="submit" variant="solid" color="red" className="w-full">
+                                                        <span>
+                                                            Delete Event <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                </Button>
                                                 </div>
                                             </form>
                                         </SlideOver>

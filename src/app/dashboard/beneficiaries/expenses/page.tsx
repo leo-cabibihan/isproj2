@@ -5,7 +5,7 @@ import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
 
 import SlideOver from "@/components/SlideOverButton"
-import { TableContainer, Table, TableContent, TableHeaderButton, Tbody, Td, Thead, Tr } from '@/components/Table';
+import { TableContainer, Table, TableContent, TableHeaderButton, Tbody, Td, Thead, Tr, Th } from '@/components/Table';
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
@@ -40,7 +40,7 @@ export default async function Expenses() {
     const { data: expenses, error } = await supabase
         .from('expenses')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
-        .eq('charity_id', charity_id![0])
+        .eq('charity_id', charity_id)
 
     const { data: beneficiaries, error: beneficiaries_error } = await supabase
         .from('beneficiaries')
@@ -52,12 +52,12 @@ export default async function Expenses() {
         .order('id', { ascending: false }).limit(1)
 
     const expense_id = last_expense?.map(expense => expense.id)
-    console.log("LAST EXPENSE'S ID IS: " + (expense_id![0] + 1))
+    console.log("LAST EXPENSE'S ID IS: " + (expense_id))
 
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', charity_id![0])
+        .eq('charity_id', charity_id)
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
@@ -66,7 +66,7 @@ export default async function Expenses() {
             reason: formData.get("reason"),
             event_id: formData.get("event_id"),
             beneficiary_id: formData.get("beneficiary_id"),
-            charity_id: charity_id![0]
+            charity_id: formData.get("charity_id")
         };
 
         await supabase.from('expenses').insert(expense);
@@ -81,7 +81,6 @@ export default async function Expenses() {
             reason: formData.get("reason"),
             event_id: formData.get("event"),
             beneficiary_id: formData.get("beneficiary_id"),
-            charity_id: charity_id![0]
         };
 
         await supabase.from('expenses').update(expense).eq("id", expenseId)
@@ -96,7 +95,6 @@ export default async function Expenses() {
             reason: formData.get("reason"),
             event_id: formData.get("event"),
             beneficiary_id: formData.get("beneficiary_id"),
-            charity_id: charity_id![0]
         };
 
         await supabase.from('expenses').delete().eq("id", expenseId)
@@ -114,7 +112,6 @@ export default async function Expenses() {
             <TableContainer>
                 <TableHeaderButton header="Expenses">
                     <SlideOver buttontext="Add Expense" variant="solid" color="blue">
-                        {/**This is Add expense form, put slideover on this later*/}
                         <form className="py-9" action={handleSubmit} method="POST">
                             <div className="space-y-12">
                                 <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
@@ -124,6 +121,13 @@ export default async function Expenses() {
 
                                     <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
                                         <div className="sm:col-span-4">
+                                            <TextField
+                                                label=""
+                                                name="charity_id"
+                                                type="hidden"
+                                                defaultValue={charity_id}
+                                            />
+
                                             <TextField
                                                 label="Amount"
                                                 name="amount"
@@ -148,7 +152,7 @@ export default async function Expenses() {
                                                     </div>
                                                 </div>
 
-                                                {/* NEED TO FIGURE OUT HOW TO DISPLAY NAMES OF EVENTS AS OPTIONS */}
+                                                {/* This will display the list of events linked to charity_id, and all beneficiaries available */}
 
 
                                                 <SelectField
@@ -174,13 +178,14 @@ export default async function Expenses() {
 
                                                 <ImageUpload folderName="expenses" charityID={charity_id![0]} recordID={expense_id![0] + 1} />
 
-                                                <div className="mt-6 flex items-center justify-start gap-x-6">
-                                                    <button
-                                                        type="submit"
-                                                        className="rounded-md bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                    >
-                                                        Save
-                                                    </button>
+                                                <div className="mt-6 col-span-full">
+                                                    <div className="col-span-full">
+                                                    <Button type="submit" variant="solid" color="blue" className="w-full">
+                                                        <span>
+                                                            Save Expense <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                    </div>
                                                 </div>
 
                                             </div>
@@ -195,10 +200,10 @@ export default async function Expenses() {
                     <Table>
                         <Thead>
                             <Tr>
-                                <Td>Description</Td>
-                                <Td>Amount</Td>
-                                <Td>Beneficiary</Td>
-                                <Td>Date Added</Td>
+                                <Th>Description</Th>
+                                <Th>Amount</Th>
+                                <Th>Beneficiary</Th>
+                                <Th>Date Added</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -255,21 +260,27 @@ export default async function Expenses() {
                                                                     </div>
 
 
-                                                                    {/* NEED TO FIGURE OUT HOW TO DISPLAY NAMES OF EVENTS AS OPTIONS */}
+                                                                    {/* This will display the list of events linked to charity_id, and all beneficiaries available */}
+                                                                    
+                                                                    <SelectField
+                                                                    className="col-span-full py-5"
+                                                                    label="Assign Event"
+                                                                    name="event_id"
+                                                                >
                                                                     {events?.map(event => (
-
-                                                                        <SelectField
-                                                                            className="col-span-full py-5"
-                                                                            label="Assign Event"
-                                                                            name="event_id"
-                                                                            key={event.id}
-                                                                            defaultValue={expense.event.name}
-                                                                        >
-                                                                            <option value={event.id}>{event.name}</option>
-                                                                        </SelectField>
-
-
+                                                                        <option key={event.id} value={event.id}>{event.name}</option>
                                                                     ))}
+                                                                </SelectField>
+
+                                                                <SelectField
+                                                                    className="col-span-full py-5"
+                                                                    label="Assign Beneficiary"
+                                                                    name="beneficiary_id"
+                                                                >
+                                                                    {beneficiaries?.map(beneficiary => (
+                                                                        <option key={beneficiary.id} value={beneficiary.id}>{beneficiary.beneficiary_name}</option>
+                                                                    ))}
+                                                                </SelectField>
 
                                                                     <ImageUpload folderName="expenses" charityID={charity_id![0]} recordID={expense.id} />
 
@@ -301,17 +312,6 @@ export default async function Expenses() {
                     </Table>
                 </TableContent>
             </TableContainer>
-
-
-
-
-
-
-
-
-
-
-
         </>
     )
 }
