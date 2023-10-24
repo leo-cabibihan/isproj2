@@ -21,10 +21,12 @@ export async function POST(request: Request) {
     if (event == 'SIGNED_IN') console.log('SIGNED_IN', session)
   })
 
+  //CHECKS FOR LOGIN ERRORS
   console.log("I am error", error)
   if (error) {
     console.log("I should redirect")
 
+    //DISPLAYS ERROR MESSAGE IN PAGE
     return NextResponse.redirect(`http://localhost:3000/login?err=${error.message}`, { status: 301 })
   }
   console.log("y am I here")

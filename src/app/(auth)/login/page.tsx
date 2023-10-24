@@ -18,8 +18,7 @@ export const metadata: Metadata = {
 
 export default async function Login({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
 
-  console.log("i am search", searchParams)
-
+  // console.log("i am search", searchParams)
   
   return (
     <>
@@ -47,6 +46,7 @@ export default async function Login({searchParams}: {searchParams: { [key: strin
           method="post"
           className="mt-10 grid grid-cols-1 gap-y-8"
         >
+          {/* CHECKS IF NULL */}
           {searchParams.err && <Alert message={searchParams.err as string}/>}
           <TextField
             label="Email address"

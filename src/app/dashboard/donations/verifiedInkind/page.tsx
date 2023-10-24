@@ -5,8 +5,11 @@ import { Button } from '@/components/Button';
 import SlideOver from '@/components/SlideOverButton';
 import supabase from '@/app/utils/supabase';
 import { revalidatePath } from 'next/cache';
+import { MultilayeredForm } from './form';
 
 export const revalidate = 0;
+
+
 
 const items = [
   { DonorName: 'Jack Walton', DonatedItems: 'Canned Goods', Date: '2023-01-20' },
@@ -28,7 +31,7 @@ export default async function VerifiedTable() {
       <TableContainer>
         <TableHeaderButton header="Verified Item Donations">
           <SlideOver variant="solid" color="blue" buttontext="View Details">
-            <form className="space-y-6" action="#" method="POST">
+            {/* <form className="space-y-6" action="#" method="POST">
               <TextField
                 label="Donor Name"
                 name="name"
@@ -142,7 +145,8 @@ export default async function VerifiedTable() {
                   </span>
                 </Button>
               </div>
-            </form>
+            </form> */}
+            <MultilayeredForm/>
           </SlideOver>
         </TableHeaderButton>
         <TableContent>
@@ -179,14 +183,6 @@ export default async function VerifiedTable() {
                           placeholder="123 Sesame Sreet"
                           required
                         />
-
-                        <div className="col-span-full">
-                          <Button href={"#"} variant="solid" color="green" className="w-full">
-                            <span>
-                              Add Another Itemm <span aria-hidden="true">&rarr;</span>
-                            </span>
-                          </Button>
-                        </div>
 
                         <div className="relative">
                           <div className="absolute inset-0 flex items-center" aria-hidden="true">
@@ -229,14 +225,6 @@ export default async function VerifiedTable() {
                           type="date"
                           placeholder={item.Date}
                         />
-
-                        <div className="col-span-full">
-                          <Button href={"#"} variant="solid" color="red" className="w-full">
-                            <span>
-                              Remove Item <span aria-hidden="true">&rarr;</span>
-                            </span>
-                          </Button>
-                        </div>
 
                         <div className="relative">
                           <div className="absolute inset-0 flex items-center" aria-hidden="true">
@@ -291,11 +279,6 @@ export default async function VerifiedTable() {
           </Table>
         </TableContent>
       </TableContainer>
-
-
-
-
-
     </>
   )
 }

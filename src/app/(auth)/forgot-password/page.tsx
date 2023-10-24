@@ -6,15 +6,16 @@ import { SelectField, TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
+import Alert from '@/components/Alert'
 
 export const metadata: Metadata = {
   title: 'Reset Password',
 }
 
-export default function ForgotPassword() {
+export default function ForgotPassword({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
   return (
     <>
-    <div className="flex min-h-full flex-1">
+      <div className="flex min-h-full flex-1">
         <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <div>
@@ -31,7 +32,7 @@ export default function ForgotPassword() {
             <div className="mt-10">
               <div>
                 <form action={"forgot-password-post"} method="post" className="space-y-6">
-              
+                  {searchParams.err && <Alert message={searchParams.err as string} />}
                   <TextField
                     label="Password"
                     name="password"
@@ -39,19 +40,19 @@ export default function ForgotPassword() {
                     autoComplete="current-password"
                     minLength={10}
                     required
-                  />                    
-                
+                  />
+
                   <div className="col-span-full">
                     <Button type="submit" variant="solid" color="blue" className="w-full">
                       <span>
-                      Reset Password <span aria-hidden="true">&rarr;</span>
+                        Reset Password <span aria-hidden="true">&rarr;</span>
                       </span>
                     </Button>
                   </div>
                 </form>
               </div>
 
-              
+
             </div>
           </div>
         </div>
@@ -63,7 +64,7 @@ export default function ForgotPassword() {
           />
         </div>
       </div>
-      
+
     </>
   )
 }

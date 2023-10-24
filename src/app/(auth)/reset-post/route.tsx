@@ -9,11 +9,15 @@ export async function POST(request: Request) {
     const cookieStore = cookies()
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
-    console.log("EMAIL IS: " + email)
-
     const { data, error } = await supabase.auth.resetPasswordForEmail(email)
 
     console.log("ERROR IS: " + error)
+
+    //CHECKS FOR LOGIN ERRORS
+    if (error) {
+        //DISPLAYS ERROR MESSAGE IN PAGE
+        return NextResponse.redirect(`http://localhost:3000/reset?err=${error.message}`, { status: 301 })
+    }
 
     return NextResponse.redirect('http://localhost:3000/email-pending', {
         status: 301,

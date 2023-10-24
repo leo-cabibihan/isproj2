@@ -33,10 +33,19 @@ export async function POST(request: Request) {
       .insert(charityMember)
     console.log(ass, error)
 
-    return NextResponse.redirect('http://localhost:3000/email-pending', {
-      status: 301,
-    })
+    //CHECKS FOR SIGNUP ERRORS
+    console.log("I am error", error)
+    if (error) {
+      console.log("I should redirect")
 
+      //DISPLAYS ERROR MESSAGE IN PAGE
+      return NextResponse.redirect(`http://localhost:3000/register?err=${error.message}`, { status: 301 })
+    }
+
+    return NextResponse.redirect('http://localhost:3000/email-pending', {
+        status: 301,
+      })
+      
   }
   if (userType === 'Donor') {
     const donor = {
@@ -46,6 +55,15 @@ export async function POST(request: Request) {
 
     const { data: ass, error } = await supabase.from('donor').insert(donor)
     console.log(ass, error)
+
+    //CHECKS FOR SIGNUP ERRORS
+    console.log("I am error", error)
+    if (error) {
+      console.log("I should redirect")
+
+      //DISPLAYS ERROR MESSAGE IN PAGE
+      return NextResponse.redirect(`http://localhost:3000/register?err=${error.message}`, { status: 301 })
+    }
 
     return NextResponse.redirect('http://localhost:3000/email-pending', {
       status: 301,

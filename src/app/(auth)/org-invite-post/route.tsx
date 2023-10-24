@@ -37,8 +37,6 @@ export async function POST(request: Request) {
     const decryptedEmail = cryptr.decrypt(email)
     const decryptedID = cryptr.decrypt(id)
 
-    console.log("EMAIL IS: " + decryptedEmail)
-
     const { data: { user }, error } = await supabase.auth.signUp({
       email: decryptedEmail,
       password,
@@ -46,8 +44,6 @@ export async function POST(request: Request) {
         emailRedirectTo: `${requestUrl.origin}/org-invite-post`,
       },
     })
-
-    console.log("SIGNUP ERROR IS: " + error)
 
     const charity_member = {
         user_uuid: user?.id,

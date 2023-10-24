@@ -11,53 +11,14 @@ import { redirect } from 'next/navigation'
 // import Form from './form'
 import { cookies } from 'next/headers'
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
+import Alert from '@/components/Alert'
 
 export const metadata: Metadata = {
   title: 'Register',
 }
 
-export default async function Register() {
-  // const cookieStore = cookies()
-
-  // const supabase = createServerActionClient({ cookies: () => cookieStore })
-
-  // const handleSubmit = async (formData: FormData) => {
-  //   'use server'
-  //   const name = formData.get('name') as string
-  //   const userType = formData.get('referral_source') as string
-  //   const newUser = {
-  //     email: formData.get('email') as string,
-  //     password: formData.get('password') as string,
-  //     options: {
-  //       emailRedirectTo: `http://localhost:3000/callback`,
-  //     },
-  //   }
-
-  //   const {
-  //     data: { user },
-  //     error,
-  //   } = await supabase.auth.signUp(newUser)
-  //   console.log(user)
-  //   if (userType === 'Charity Organization') {
-  //     const charityMember = {
-  //       user_uuid: user?.id,
-  //       member_name: name,
-  //     }
-  //     const { data: ass, error } = await supabase
-  //       .from('charity_member')
-  //       .insert(charityMember)
-  //     console.log(ass, error)
-  //   }
-  //   if (userType === 'Donor') {
-  //     const donor = {
-  //       id: user?.id,
-  //       name,
-  //     }
-
-  //     const { data: ass, error } = await supabase.from('donor').insert(donor)
-  //     console.log(ass, error)
-  //   }
-  // }
+export default async function Register({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
+  
   return (
     <>
       <SlimLayout>
@@ -84,6 +45,8 @@ export default async function Register() {
           className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2"
           method="post"
         >
+          {/* CHECKS IF NULL */}
+          {searchParams.err && <Alert message={searchParams.err as string}/>}
           <TextField
             className="col-span-full"
             label="Name"
