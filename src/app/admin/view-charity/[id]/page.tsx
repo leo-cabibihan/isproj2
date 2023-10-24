@@ -10,32 +10,15 @@ import { revalidatePath } from "next/cache";
 
 export const revalidate = 0;
 
-export default async function Organization({ params }) {
+export default async function Organization({ params }: any) {
 
     const orgID = params.id
-
-    // //This gets the currently signed-in user
-    // const { data: { user } } = await supabase.auth.getUser();
-    // // console.log(user?.id)
-    // const uid = user?.id
-    // console.log("UID IS " + uid)
-
-    // //This checks for the admin role
-    // const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
-
-    // console.log("ADMIN IS " + admin)
-
-    // //This redirects anyone that's not signed in and not admin
-    // if (!user && !admin) {
-    //     console.log("NOT SIGNED IN")
-    //     redirect('/login')
-    // }
 
     const { data: orgs } = await supabase.from('charity').select('*').eq('id', orgID)
 
     const { data: complaints, error } = await supabase
-        .from('donor_complaints' ) 
-        .select('*, charity ( id, name ), donor ( id, na me )')
+        .from('donor_complaints')
+        .select('*, charity ( id, name ), donor ( id, name )')
         .eq('charity_id', orgID)
     console.log(complaints ? "IT WORK" : "DONT WORK")
 
@@ -74,67 +57,66 @@ export default async function Organization({ params }) {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {complaints?.map(complaint =>
-
+                            {complaints?.map(complaint => (
                                 <Tr key={complaint.id}>
-                                    <Td>{complaint.donor.name}</Td>
-                                    <Td>{complaint.charity.name}</Td>
-                                    <Td>{complaint.created_at}</Td>
-                                    <Td>
-                                        <SlideOver buttontext="View Complaint" variant="solid" color="blue">
-                                            <form className="space-y-6" action="#" method="POST">
-                                                <TextField
-                                                    label="Charity Name"
-                                                    name="charity"
-                                                    type="text"
-                                                    readOnly
-                                                    placeholder={complaint.charity.name}
-                                                />
+                                <Td>{complaint.donor?.name}</Td>
+                                <Td>{complaint.charity?.name}</Td>
+                                <Td>{complaint.created_at}</Td>
+                                <Td>
+                                    <SlideOver buttontext="View Complaint" variant="solid" color="blue">
+                                        <form className="space-y-6" action="#" method="POST">
+                                            <TextField
+                                                label="Charity Name"
+                                                name="charity"
+                                                type="text"
+                                                readOnly
+                                                placeholder={complaint.charity?.name}
+                                            />
 
-                                                <TextField
-                                                    label="Filed by"
-                                                    name="donor"
-                                                    type="text"
-                                                    readOnly
-                                                    placeholder={complaint.donor.name}
-                                                />
+                                            <TextField
+                                                label="Filed by"
+                                                name="donor"
+                                                type="text"
+                                                readOnly
+                                                placeholder={complaint.donor?.name as string}
+                                            />
 
-                                                <TextField
-                                                    label="Filed at"
-                                                    name="date"
-                                                    type="date"
-                                                    readOnly
-                                                    placeholder={complaint.created_at}
-                                                />
+                                            <TextField
+                                                label="Filed at"
+                                                name="date"
+                                                type="date"
+                                                readOnly
+                                                placeholder={complaint.created_at as string}
+                                            />
 
-                                                <div className="col-span-full">
-                                                    <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
-                                                        Details
-                                                    </label>
-                                                    <div className="mt-2">
-                                                        <textarea
-                                                            id="reason"
-                                                            name="reason"
-                                                            rows={3}
-                                                            readOnly
-                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                            placeholder={complaint.complaint}
-                                                        />
-                                                    </div>
+                                            <div className="col-span-full">
+                                                <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
+                                                    Details
+                                                </label>
+                                                <div className="mt-2">
+                                                    <textarea
+                                                        id="reason"
+                                                        name="reason"
+                                                        rows={3}
+                                                        readOnly
+                                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                        placeholder={complaint.complaint}
+                                                    />
                                                 </div>
+                                            </div>
 
-                                                <div className="col-span-full">
-                                                    <Button type="submit" variant="solid" color="yellow" className="w-full">
-                                                        <span>
-                                                            Notify Charity <span aria-hidden="true">&rarr;</span>
-                                                        </span>
-                                                    </Button>
-                                                </div>
-                                            </form>
-                                        </SlideOver>
-                                    </Td>
-                                </Tr>
-                            )}
+                                            <div className="col-span-full">
+                                                <Button type="submit" variant="solid" color="yellow" className="w-full">
+                                                    <span>
+                                                        Notify Charity <span aria-hidden="true">&rarr;</span>
+                                                    </span>
+                                                </Button>
+                                            </div>
+                                        </form>
+                                    </SlideOver>
+                                </Td>
+                            </Tr>
+                            ))}
                         </Tbody>
                     </Table>
                 </TableContent>
@@ -159,11 +141,11 @@ export default async function Organization({ params }) {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {appeals?.map(appeal => 
+                            {appeals?.map(appeal =>
 
                                 <Tr key={appeal.id}>
-                                    <Td>{appeal.charity_member.member_name}</Td>
-                                    <Td>{appeal.charity.name}</Td>
+                                    <Td>{appeal.charity_member?.member_name}</Td>
+                                    <Td>{appeal.charity?.name}</Td>
                                     <Td>{appeal.created_at}</Td>
                                     <Td>
                                         <SlideOver buttontext="View Complaint" variant="solid" color="blue">
@@ -173,7 +155,7 @@ export default async function Organization({ params }) {
                                                     name="charity"
                                                     type="text"
                                                     readOnly
-                                                    placeholder={appeal.charity.name}
+                                                    placeholder={appeal.charity?.name}
                                                 />
 
                                                 <TextField
@@ -181,7 +163,7 @@ export default async function Organization({ params }) {
                                                     name="charity_worker"
                                                     type="text"
                                                     readOnly
-                                                    placeholder={appeal.charity_member.member_name}
+                                                    placeholder={String(appeal.charity_member?.member_name)}
                                                 />
 
                                                 <TextField
@@ -189,7 +171,7 @@ export default async function Organization({ params }) {
                                                     name="complainant"
                                                     type="text"
                                                     readOnly
-                                                    placeholder={appeal.donor_complaints.donor.name}
+                                                    placeholder={appeal.donor_complaints?.donor?.name as string}
                                                 />
 
                                                 <div className="col-span-full">

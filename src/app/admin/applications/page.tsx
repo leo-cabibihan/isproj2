@@ -19,26 +19,6 @@ const requests = [
 
 export default async function Applications() {
 
-  // // console.log("THIS IS A USER: " + await supabase.auth.getUser())
-  // // console.log("THIS IS A SESSION: " + await supabase.auth.getSession())
-
-  // //This gets the currently signed-in user
-  // const { data: { user } } = await supabase.auth.getUser();
-  // console.log(user?.id)
-  // const uid = user?.id
-  // console.log("UID IS " + uid)
-
-  // //This checks for the admin role
-  // const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
-
-  // console.log("ADMIN IS " + admin)
-
-  // //This redirects anyone that's not signed in and not admin
-  // if (!user && !admin) {
-  //   console.log("NOT SIGNED IN")
-  //   redirect('/login')
-  // }
-
   const { data: requests, error } = await supabase
     .from('charity')
     .select('*')
@@ -46,7 +26,7 @@ export default async function Applications() {
 
   const verifyOrg = async (formData: FormData) => {
     'use server'
-    const charityId = formData.get("id")
+    const charityId = parseInt(formData.get("id") as string)
     const charity = {
       charity_verified: true
     };
@@ -112,7 +92,7 @@ export default async function Applications() {
                           label="Email"
                           name="email"
                           type="email"
-                          placeholder={request.email_address}
+                          placeholder={request.email_address as string}
                           readOnly
                         />
 
@@ -136,11 +116,6 @@ export default async function Applications() {
                           <Button type="submit" variant="solid" color="blue" className="w-full">
                             <span>
                               Accept Request <span aria-hidden="true">&rarr;</span>
-                            </span>
-                          </Button>
-                          <Button type="submit" variant="solid" color="red" className="w-full" formAction='#'>
-                            <span>
-                              Delete <span aria-hidden="true">&rarr;</span>
                             </span>
                           </Button>
                         </div>

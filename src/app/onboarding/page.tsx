@@ -61,7 +61,7 @@ export default async function Example() {
       name: formData.get('org_name'),
       about: formData.get('description'),
       charity_phone: formData.get('phone'),
-      charity_verified: true,
+      charity_verified: false,
       address_id: address_id,
       email_address: formData.get('email')
     }

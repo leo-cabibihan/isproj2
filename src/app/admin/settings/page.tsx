@@ -9,31 +9,13 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 import supabase from '@/app/utils/supabase';
+import Alert from '@/components/Alert';
 import { Button } from '@/components/Button';
 import { TextField } from '@/components/Fields'
 import { redirect } from 'next/navigation';
 
-export default async function Settings() {
+export default async function Settings({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
-  // // console.log("THIS IS A USER: " + await supabase.auth.getUser())
-  // // console.log("THIS IS A SESSION: " + await supabase.auth.getSession())
-
-  // //This gets the currently signed-in user
-  // const { data: { user } } = await supabase.auth.getUser();
-  // // console.log(user?.id)
-  // const uid = user?.id
-  // console.log("UID IS " + uid)
-
-  // //This checks for the admin role
-  // const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
-
-  // console.log("ADMIN IS " + admin)
-
-  // //This redirects anyone that's not signed in and not admin
-  // if (!user && !admin) {
-  //   console.log("NOT SIGNED IN")
-  //   redirect('/login')
-  // }
   return (
     <>
       <div className="py-9">
@@ -46,6 +28,7 @@ export default async function Settings() {
             <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
               <div className="sm:col-span-4">
                 <form action={'/invite-post'} method='post'>
+                  {searchParams.err && <Alert message={searchParams.err as string} />}
                   <TextField
                     label='Invite Administrator'
                     type="email"
@@ -58,7 +41,7 @@ export default async function Settings() {
                       type="submit"
                       className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                      +Add Administrator
+                      + Add Administrator
                     </button>
                   </div>
                 </form>

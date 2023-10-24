@@ -1,42 +1,39 @@
 import supabase from "@/app/utils/supabase";
+import Alert from "@/components/Alert";
 import { Button } from "@/components/Button";
 import { TextField } from "@/components/Fields";
 import SlideOver from "@/components/SlideOverButton";
 import { Table, TableContainer, TableContent, TableHeader, TableHeaderButton, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
+import { AlertEmail, Email } from "@/components/email-template";
+import Plunk from "@plunk/node";
+import { render } from "@react-email/render";
 import { request } from "http";
 import { redirect } from "next/navigation";
 
-const complaints = [
-    { Donor: "Myko Macawiwili", Charity: "Philippine Red Cross", Date: "June 16, 2023" },
-    { Donor: "Myko Macawiwili", Charity: "Philippine Red Cross", Date: "June 16, 2023" },
-    { Donor: "Myko Macawiwili", Charity: "Philippine Red Cross", Date: "June 16, 2023" },
-    { Donor: "Myko Macawiwili", Charity: "Philippine Red Cross", Date: "June 16, 2023" },
-    { Donor: "Myko Macawiwili", Charity: "Philippine Red Cross", Date: "June 16, 2023" },
-]
+const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
-export default async function Complaints() {
-
-    // // console.log("THIS IS A USER: " + await supabase.auth.getUser())
-    // // console.log("THIS IS A SESSION: " + await supabase.auth.getSession())
-
-    // //This gets the currently signed-in user
-    // const { data: { user } } = await supabase.auth.getUser();
-    // // console.log(user?.id)
-    // const uid = user?.id
-    // console.log("UID IS " + uid)
-
-    // //This checks for the admin role
-    // const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
-
-    // console.log("ADMIN IS " + admin)
-
-    // //This redirects anyone that's not signed in and not admin
-    // if (!user && !admin) {
-    //     console.log("NOT SIGNED IN")
-    //     redirect('/login')
-    // }
+export default async function Complaints({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
 
     const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name ), donor ( id, name )')
+
+    const sendEmail = async (formData: FormData) => {
+        'use server'
+        console.log('ID: ' + formData.get("id"))
+        const body = render(<AlertEmail URL={"http://localhost:3000/dashboard/logs/complaints"} heading={"You have an Alert!"} content={formData.get("donor") + " has reported your organization. Click the link below to view all complaints filed against " + formData.get("name") + "."} />);
+        const {data: charity_members } = await supabase.from('charity_member').select('*, auth.users ( id, email)').eq('charity_id', formData.get("id"))
+
+        console.log('MEMBERS: ', charity_members )
+
+        // for (let i = 0; i < charity_members!.length; i++) {
+        //     let email = charity_members![i].users.email
+
+        //     const success = await plunk.emails.send({
+        //         to: email,
+        //         subject: "You've been REPORTED!",
+        //         body,
+        //     })
+        // }
+    }
 
     return (
         <>
@@ -61,17 +58,26 @@ export default async function Complaints() {
                         <Tbody>
                             {complaints?.map(complaint =>
                                 <Tr key={complaint.id} >
-                                    <Td>{complaint.donor.name}</Td>
-                                    <Td>{complaint.charity.name}</Td>
+                                    <Td>{complaint.donor?.name}</Td>
+                                    <Td>{complaint.charity?.name}</Td>
                                     <Td>{complaint.created_at}</Td>
                                     <Td>
                                         <SlideOver variant="solid" color="blue" buttontext="View Details">
-                                            <form className="space-y-6" action="#" method="POST">
+                                            <form className="space-y-6" action={sendEmail} method="POST">
+                                            {searchParams.err && <Alert message={searchParams.err as string}/>}
+                                                <TextField
+                                                    label=""
+                                                    name="id"
+                                                    type="hidden"
+                                                    readOnly
+                                                    defaultValue={complaint.charity?.id}
+                                                />
+
                                                 <TextField
                                                     label="Charity Name"
                                                     name="name"
                                                     type="text"
-                                                    placeholder={complaint.charity.name}
+                                                    defaultValue={complaint.charity?.name}
                                                     readOnly
                                                 />
 
@@ -79,7 +85,7 @@ export default async function Complaints() {
                                                     label="Complainant"
                                                     name="donor"
                                                     type="text"
-                                                    placeholder={complaint.donor.name}
+                                                    defaultValue={complaint.donor?.name as string}
                                                     readOnly
                                                 />
 
@@ -94,7 +100,7 @@ export default async function Complaints() {
                                                             rows={3}
                                                             readOnly
                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                            placeholder={complaint.complaint}
+                                                            defaultValue={complaint.complaint}
                                                         />
                                                     </div>
                                                 </div>
