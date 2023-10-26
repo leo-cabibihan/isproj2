@@ -97,7 +97,7 @@ function MobileNavigation() {
   )
 }
 
-export function Header() {
+export function Header({}) {
   return (
     <header className="py-10">
       <Container>
@@ -107,8 +107,9 @@ export function Header() {
               <Logo className="h-10 w-auto" />
             </Link>
             <div className="hidden md:flex md:gap-x-6">
-              <NavLink href="#features">Home</NavLink>
-              <NavLink href="#testimonials">Causes</NavLink>
+              <NavLink href="http://localhost:3000/">Home</NavLink>
+              <NavLink href="#causes">Causes</NavLink>
+              <NavLink href="http://localhost:3000/settings">Settings</NavLink>
               
             </div>
           </div>

@@ -13,6 +13,16 @@ export async function GET(request: Request) {
     const token = await supabase.auth.exchangeCodeForSession(code)
     console.log('wtf wtf')
     console.log(token)
+
+    const uid = token.data.session?.user.id
+
+    const { data: donor, error: error_1 } = await supabase.from('donor').select('*').eq('id', uid)
+    console.log(donor)
+    
+    if (donor?.length == 1) {
+      return Response.redirect(`${requestUrl.origin}/settings`)
+    }
+
   }
 
   return NextResponse.redirect(`${requestUrl.origin}/onboarding`)

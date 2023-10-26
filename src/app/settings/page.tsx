@@ -8,6 +8,7 @@ import clsx from 'clsx'
 import { TextField } from '@/components/Fields'
 import Link from 'next/link'
 import { Logo } from '@/components/Logo'
+import { Button } from '@/components/Button'
 
 const user = {
   name: 'Tom Cook',
@@ -28,13 +29,13 @@ const userNavigation = [
 ]
 
 function classNames(...classes: String[]) {
-    return classes.filter(Boolean).join(' ')
-  }
+  return classes.filter(Boolean).join(' ')
+}
 
 export default function settings() {
-    return (
-      <>
-    <div className="min-h-full">
+  return (
+    <>
+      <div className="min-h-full">
         <Disclosure as="nav" className="border-b border-gray-200 bg-white">
           {({ open }) => (
             <>
@@ -42,9 +43,9 @@ export default function settings() {
                 <div className="flex h-16 justify-between">
                   <div className="flex">
                     <div className="flex flex-shrink-0 items-center">
-                    <Link href="/" aria-label="Home">
-                      <Logo className="h-10 w-auto" />
-                    </Link>
+                      <Link href="/" aria-label="Home">
+                        <Logo className="h-10 w-auto" />
+                      </Link>
                     </div>
                     <div className="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
                       {navigation.map((item) => (
@@ -190,105 +191,116 @@ export default function settings() {
           </header>
           <main>
             <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">{
-                
-                
-                
-        <form>
-            <div className="space-y-12">
-                <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
-                <div>
-                    <h2 className="text-base font-semibold leading-7 text-gray-900">Reset Password</h2>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">
-                    This is the action of invalidating the current password and then creating a new one.
-                    </p>
-                </div>
 
-                <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-                    <div className="sm:col-span-4">
-                
+
+
+              <form>
+                <div className="space-y-12">
+                  <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+                    <div>
+                      <h2 className="text-base font-semibold leading-7 text-gray-900">Reset Password</h2>
+                      <p className="mt-1 text-sm leading-6 text-gray-600">
+                        This is the action of invalidating the current password and then creating a new one.
+                      </p>
+                    </div>
+
+                    <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+                      <div className="sm:col-span-4">
+
                         <TextField
-                            label='Email Address'
-                            type="email"
-                            name="email"
-                            autoComplete="email"
-                            required
+                          label='Email Address'
+                          type="email"
+                          name="email"
+                          autoComplete="email"
+                          required
                         />
 
-                    <TextField
-                    label="Old Password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                  />
-                
-                  <TextField
-                    label="New Password"
-                    name="password"
-                    type="password"
-                    required
-                  />
+                        <TextField
+                          label="Old Password"
+                          name="password"
+                          type="password"
+                          autoComplete="current-password"
+                          required
+                        />
 
-                <div className="mt-6 flex items-center justify-start gap-x-6">
-                    <button
+                        <TextField
+                          label="New Password"
+                          name="password"
+                          type="password"
+                          required
+                        />
+
+                        <div className="mt-6 flex items-center justify-start gap-x-6">
+                          <button
+                            type="submit"
+                            className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                          >
+                            Update Password
+                          </button>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+                    <div>
+                      <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
+                      <p className="mt-1 text-sm leading-6 text-gray-600">Change account name.</p>
+                    </div>
+
+                    <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+                      <div className="sm:col-span-3">
+                        <TextField
+                          label="First Name"
+                          placeholder='John'
+                          type="name"
+                          name="name"
+                        />
+
+                        <TextField
+                          label="Last Name"
+                          placeholder='Doe'
+                          type="name"
+                          name="name"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+                <div className="mt-6 flex items-center justify-end gap-x-6">
+                  <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                    Cancel
+                  </button>
+                  <button
                     type="submit"
                     className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Save
+                  </button>
+                  <form
+                    action={'/logout-post'}
+                    method="post"
+                  >
+                    <button
+                      type="submit"
+                      className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
-                    Update Password
+                      Log out
                     </button>
+                  </form>
                 </div>
+              </form>
 
-                    </div>
 
-                </div>
-                </div>
-
-                <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
-                <div>
-                    <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-                    <p className="mt-1 text-sm leading-6 text-gray-600">Change account name.</p>
-                </div>
-
-                <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-                    <div className="sm:col-span-3">
-                        <TextField
-                        label="First Name"
-                        placeholder='John'
-                        type="name"
-                        name="name"
-                        />
-
-                        <TextField
-                        label="Last Name"
-                        placeholder='Doe'
-                        type="name"
-                        name="name"
-                        />
-                    </div>
-                </div>
-                </div>
-            </div>
-
-                   
-
-            <div className="mt-6 flex items-center justify-end gap-x-6">
-                <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
-                Cancel
-                </button>
-                <button
-                type="submit"
-                className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                Save
-                </button>
-            </div>
-        </form>
-    
-    
-    }</div>
+            }</div>
           </main>
         </div>
       </div>
-      </>
-    )
+    </>
+  )
 }

@@ -194,8 +194,7 @@ export function MultilayeredForm(object: any) {
 }
 
 export function EditForm({id}: {id:number}) {
-    const [formFields, setFormFields] = useState({})
-    formFields.
+    const [formFields, setFormFields] = useState<any>({})
 
     const [toDelete, setToDelete] = useState<number[]>([])
 
@@ -212,13 +211,13 @@ export function EditForm({id}: {id:number}) {
     }, [])
 
 
-    const handleFormChange = (event, index) => {
-        let data = [...formFields];
+    const handleFormChange = (event: any, index: number) => {
+        let data = [...formFields.inventory_item];
         data[index][event.target.name] = event.target.value;
-        setFormFields(data);
+        setFormFields({...formFields, inventory_item: data});
     }
 
-    const submit = async (e) => {
+    const submit = async (e: any) => {
         e.preventDefault();
         console.log(formFields)
         const rawResponse = await fetch('http://localhost:3000/dashboard/donations/verifiedInkind/post', {
@@ -228,20 +227,19 @@ export function EditForm({id}: {id:number}) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: name,
-                address: address,
-                items: formFields
+                toDelete: toDelete,
+                transaction: formFields
             })
         });
     }
 
     const addFields = () => {
         let object = { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' }
-
-        setFormFields([...formFields, object])
+        setFormFields({...formFields, inventory_item: formFields.inventory_item.concat(object)})
     }
 
     const removeFields = (id: number) => {
+        setFormFields({...formFields, inventory_item: formFields.inventory_item.filter((item: any) => item.id === id)})
         setToDelete(toDelete.concat(id))
     }
 
@@ -253,7 +251,7 @@ export function EditForm({id}: {id:number}) {
                     name="donor"
                     type="text"
                     placeholder="John Doe"
-                    onChange={e => setName(e.target.value)}
+                    onChange={e => setFormFields({...formFields, donor: e.target.value})}
                     required
                 />
 
@@ -262,7 +260,7 @@ export function EditForm({id}: {id:number}) {
                     name="address"
                     type="text"
                     placeholder="123 Sesame Sreet"
-                    onChange={e => setAddress(e.target.value)}
+                    onChange={e => setFormFields({...formFields, address: e.target.value})}
                     required
                 />
 
@@ -283,7 +281,7 @@ export function EditForm({id}: {id:number}) {
                     </div>
                 </div>
 
-                {formFields.inventory_item.map((form) => {
+                {formFields.inventory_item.map((form: any) => {
                     return (
                         <div key={form.id}>
                             <TextField
