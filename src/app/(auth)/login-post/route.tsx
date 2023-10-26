@@ -1,3 +1,4 @@
+import { AdminLog, CharityLog } from '@/app/admin/audit-log/function'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { redirect } from 'next/dist/server/api-utils'
 import { cookies } from 'next/headers'
@@ -58,10 +59,12 @@ export async function POST(request: Request) {
       status: 301,
     })
   } else if (charity_member?.length === 1) {
+    CharityLog(charity_member![0].member_name + " has logged in.")
     return NextResponse.redirect('http://localhost:3000/dashboard/settings', {
       status: 301,
     })
   } else if (admin?.length === 1) {
+    AdminLog(admin![0].name + " has logged in.")
     return NextResponse.redirect('http://localhost:3000/admin/applications', {
       status: 301,
     })

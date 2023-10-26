@@ -46,14 +46,13 @@ export default async function Example() {
       street_name: formData.get("street_name"),
       village_name: formData.get("village_name"),
       barangay: formData.get("barangay"),
-      house_name: formData.get("house_name"),
       zipcode: formData.get("zipcode"),
       city: formData.get("city"),
       province: formData.get("province")
     }
 
     const { data: new_address, error: address_error } = await supabase.from('address').insert(address).select();
-    console.log("ADDRESS ERROR" + address_error)
+    console.log("ADDRESS ERROR", address_error)
     const address_id = new_address![0].id
     console.log("ADDRESS ID IS: " + address_id + ". IT WORKS!!!!!!!!!")
 
@@ -67,6 +66,7 @@ export default async function Example() {
     }
 
     const { data: charity, error: charity_error } = await supabase.from('charity').insert(charity_details).select()
+    console.log("CHARITY ERROR IS ", charity_error)
     const charity_id = charity![0].id
 
     console.log("CHARITY ID IS: " + charity_id + ". IT WORKS!!!!!")
@@ -80,8 +80,9 @@ export default async function Example() {
       charity_id: charityID
     }
 
-    await supabase.from('charity_member').update(charity_member).eq("user_uuid", uid)
+    const {data: member, error: member_error} = await supabase.from('charity_member').update(charity_member).eq("user_uuid", uid)
 
+    console.log("MEMBER ERROR IS ", member_error)
 
     revalidatePath('/');
     redirect('/onboarding/pending')

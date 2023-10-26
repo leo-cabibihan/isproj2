@@ -6,6 +6,7 @@ import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeader, TableCont
 import { revalidatePath } from "next/cache";
 import { GetUID } from "@/app/utils/user_id";
 import supabase from "@/app/utils/supabase"
+import { DisplayError } from "@/app/(auth)/error-handling/function";
 
 export const revalidate = 0;
 
@@ -14,7 +15,7 @@ export default async function Page() {
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
-    const charity_id = charity_member?.map(member => member.charity.id)
+    const charity_id = charity_member?.map(member => member.charity?.id)
 
     const { data: beneficiaries, error: beneficiaries_error } = await supabase
         .from('beneficiaries')
@@ -54,9 +55,10 @@ export default async function Page() {
             beneficiary_id: formData.get("beneficiary_id")
         };
 
-        await supabase.from('event').insert(event);
+        const {data: insert_event, error: insert_error} = await supabase.from('event').insert(event);
         //console.log("CDNURL is: " + CDNURL)
         revalidatePath('/');
+        DisplayError(`http://localhost:3000/dashboard/beneficiaries/events?err=${insert_error?.message}`, insert_error)
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -69,8 +71,9 @@ export default async function Page() {
             end_date: formData.get("end_date")
         };
 
-        await supabase.from('event').update(event).eq("id", eventId)
+        const {data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
+        DisplayError(`http://localhost:3000/dashboard/beneficiaries/events?err=${update_error?.message}`, update_error)
     };
 
     const deleteEvent = async (formData: FormData) => {
@@ -83,8 +86,9 @@ export default async function Page() {
             end_date: formData.get("end_date"),
         };
 
-        await supabase.from('event').delete().eq("id", eventId)
+        const {data: delete_event, error: delete_error} = await supabase.from('event').delete().eq("id", eventId)
         revalidatePath('/');
+        DisplayError(`http://localhost:3000/dashboard/beneficiaries/events?err=${delete_error?.message}`, delete_error)
     };
 
     return (
@@ -183,8 +187,8 @@ export default async function Page() {
                                     <Td>{event.name}</Td>
                                     <Td>{event.start_date}</Td>
                                     <Td>{event.end_date}</Td>
-                                    <Td>{event.charity.name}</Td>
-                                    <Td>{event.beneficiaries.beneficiary_name}</Td>
+                                    <Td>{event.charity?.name}</Td>
+                                    <Td>{event.beneficiaries?.beneficiary_name}</Td>
                                     <Td>
                                         <SlideOver buttontext="View Details" variant="solid" color="blue">
                                             <form className="space-y-6" action={saveChanges} method="PUT">

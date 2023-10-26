@@ -20,23 +20,15 @@ export async function POST(request: Request) {
         verify: true
     }
 
-    //STORES THE DONATED ITEMS INTO ARRAY FOR CLEANLINESS
-    var item = formData.items
-
     //INSERTS TRANSACTION DETAILS INTO TRANSACTION TABLE AND GETS THE ID OF NEW RECORD
     const { data: transactions, error } = await supabase.from('items_donation_transaction').insert(transaction).select()
     console.log("TRANSACTIONS ERROR IS: ", error)
     const transaction_id = transactions![0].id
 
-    //ITERATES THROUGH THE ITEM ARRAY (Line 32), CONVERTS THE VALUE OF ISPERISHABLE SELECTFIELD INTO BOOL (Line 33) 
-    for (i = 0; i < item.length; i++) {
-        item[i].perishable = Boolean(item[i].perishable)
-        //ASSIGNS NEW TRANSACTION ID TO ALL THE ITEMS SPECIFIED INTO FORM
-        Object.assign(item[i], { donation_id: transaction_id })
-    }
+    const items = formData.items.map((item: any) => ({...item, perishable: Boolean(item.perishable), donation_id: transaction_id}))
 
     //INSERTS DATA OF ITEMS ARRAY INTO RESPECTIVE TABLE
-    const { data: item_data, error: item_error } = await supabase.from('inventory_item').insert(item).select()
+    const { data: item_data, error: item_error } = await supabase.from('inventory_item').insert(items).select()
     console.log("INSERT ERROR IS: ", item_error)
 
     return Response.json({ status: 200 })

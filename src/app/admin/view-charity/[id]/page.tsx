@@ -86,7 +86,7 @@ export default async function Organization({ params }: any) {
                                                 name="date"
                                                 type="date"
                                                 readOnly
-                                                placeholder={complaint.created_at as string}
+                                                placeholder={complaint.created_at}
                                             />
 
                                             <div className="col-span-full">
@@ -171,7 +171,7 @@ export default async function Organization({ params }: any) {
                                                     name="complainant"
                                                     type="text"
                                                     readOnly
-                                                    placeholder={appeal.donor_complaints?.donor?.name as string}
+                                                    placeholder={appeal.donor_complaints?.donor?.name as st}
                                                 />
 
                                                 <div className="col-span-full">

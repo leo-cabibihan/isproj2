@@ -38,7 +38,7 @@ export default async function ViewCharity() {
                                 <Td>{org.email_address}</Td>
                                 <Td>{org.charity_verified}</Td>
                                 <Td>
-                                    <Button href={"/view-charity/" + org.id + "/"} variant="solid" color="blue" className="w-full">
+                                    <Button href={"/admin/view-charity/" + org.id + "/"} variant="solid" color="blue" className="w-full">
                                         <span>
                                             View Profile <span aria-hidden="true">&rarr;</span>
                                         </span>

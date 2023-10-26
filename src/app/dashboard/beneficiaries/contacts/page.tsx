@@ -4,11 +4,14 @@ import { TextField } from "@/components/Fields"
 import { Button } from "@/components/Button"
 import supabase from "@/app/utils/supabase"
 import { revalidatePath } from "next/cache"
+import Alert from "@/components/Alert"
+import { NextResponse } from "next/server"
+import { DisplayError } from "@/app/(auth)/error-handling/function"
 
 export const revalidate = 0;
 
-export default async function Page() {
-  const { data: contacts } = await supabase.from('contacts').select("*").order("id", {ascending: true})
+export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+  const { data: contacts } = await supabase.from('contacts').select("*").order("id", { ascending: true })
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
@@ -18,8 +21,11 @@ export default async function Page() {
       address: formData.get("address")
     };
 
-    await supabase.from('contacts').insert(beneficiary);
+    const { data: beneficiary_insert, error: insert_error } = await supabase.from('contacts').insert(beneficiary);
     revalidatePath('/');
+
+    DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${insert_error?.message}`, insert_error)
+
   };
 
   const saveChanges = async (formData: FormData) => {
@@ -31,8 +37,10 @@ export default async function Page() {
       address: formData.get("address")
     };
 
-    await supabase.from('contacts').update(beneficiary).eq("id", contactId)
+    const {data: beneficiaries_update, error: update_error} = await supabase.from('contacts').update(beneficiary).eq("id", contactId)
     revalidatePath('/');
+
+    DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${update_error?.message}`, update_error)
   };
 
   const deleteContact = async (formData: FormData) => {
@@ -44,8 +52,10 @@ export default async function Page() {
       address: formData.get("address")
     };
 
-    await supabase.from('contacts').delete().eq("id", contactId)
+    const {data: beneficiary_delete, error: delete_error} = await supabase.from('contacts').delete().eq("id", contactId)
     revalidatePath('/');
+
+    DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${delete_error?.message}`, delete_error)
   };
 
   return (
@@ -54,6 +64,7 @@ export default async function Page() {
         <TableHeaderButton header="Contacts">
           <SlideOver buttontext="Add Contact" variant="solid" color="blue">
             <form className="space-y-6" action={handleSubmit} method="POST">
+              {searchParams.err && <Alert message={searchParams.err as string} />}
               <TextField
                 label="Beneficiary Name"
                 name="beneficiary"
@@ -130,7 +141,7 @@ export default async function Page() {
                           label="Beneficiary Name"
                           name="beneficiary"
                           type="text"
-                          defaultValue={contact.name}
+                          defaultValue={contact.name as string}
                           required
                         />
 
@@ -149,7 +160,7 @@ export default async function Page() {
                           label="Address"
                           name="address"
                           type="text"
-                          defaultValue={contact.address}
+                          defaultValue={contact.address as string}
                           required
                         />
                         <div className="grid grid-cols-3 gap-4">

@@ -8,12 +8,15 @@ import { type Metadata } from 'next'
 import { Footer } from '@/components/Footer'
 import supabase from '@/app/utils/supabase'
 import { revalidatePath } from 'next/cache'
+import { GetUID } from '@/app/utils/user_id'
 
 export const revalidate = 0;
 
 export default async function Report({ params } : any) {
 
   const orgID = params.id
+
+  const donorID = await GetUID()
 
   const { data: orgs } = await supabase
     .from('charity')
@@ -29,8 +32,9 @@ export default async function Report({ params } : any) {
       charity_id: orgID
     };
 
-    await supabase.from('donor_complaints').insert(complaint);
+    const {data, error} = await supabase.from('donor_complaints').insert(complaint);
     revalidatePath('/');
+    console.log('ERROR: ', error)
   };
 
   return (

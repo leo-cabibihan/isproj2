@@ -1,3 +1,4 @@
+import { DisplayError } from '@/app/(auth)/error-handling/function';
 import supabase from '@/app/utils/supabase';
 import { GetUID } from '@/app/utils/user_id';
 import { Button } from '@/components/Button';
@@ -16,26 +17,13 @@ const header = "Expenses";
 const subheader = "A table list of expenses";
 const columns = ["Description", "Amount", "Date"];
 
-// async function GetUID() {
-//     const cookieStore = cookies()
-
-//     const supabase = createServerActionClient({ cookies: () => cookieStore })
-
-//     const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-//     console.log("SESSION ID IS: " + session?.user.id)
-//     const uid = session?.user.id
-
-//     return (uid)
-// }
-
-
 export default async function Expenses() {
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
 
-    const uid = await GetUID()
+    const uid = parseInt(await GetUID() as string)
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
-    const charity_id = charity_member?.map(member => member.charity.id)
+    const charity_id = charity_member?.map(member => member.charity?.id)
 
     const { data: expenses, error } = await supabase
         .from('expenses')
@@ -69,8 +57,9 @@ export default async function Expenses() {
             charity_id: formData.get("charity_id")
         };
 
-        await supabase.from('expenses').insert(expense);
+        const {data, error} = await supabase.from('expenses').insert(expense);
         revalidatePath('/');
+        DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error?.message}`, error)
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -83,8 +72,9 @@ export default async function Expenses() {
             beneficiary_id: formData.get("beneficiary_id"),
         };
 
-        await supabase.from('expenses').update(expense).eq("id", expenseId)
+        const {data, error} = await supabase.from('expenses').update(expense).eq("id", expenseId)
         revalidatePath('/');
+        DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error?.message}`, error)
     };
 
     const deleteExpense = async (formData: FormData) => {
@@ -97,8 +87,9 @@ export default async function Expenses() {
             beneficiary_id: formData.get("beneficiary_id"),
         };
 
-        await supabase.from('expenses').delete().eq("id", expenseId)
+        const {data, error} = await supabase.from('expenses').delete().eq("id", expenseId)
         revalidatePath('/');
+        DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error}`, error)
     };
 
 

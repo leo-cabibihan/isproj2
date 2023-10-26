@@ -3,6 +3,9 @@ import { SelectField, TextField } from "@/components/Fields";
 import SlideOver from "@/components/SlideOverButton";
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeaderButton, TableContent } from "@/components/Table";
 import { TableHeader } from "@/components/table/Table";
+import { DisplayError } from '@/app/(auth)/error-handling/function';
+import supabase from '@/app/utils/supabase';
+import { GetUID } from '@/app/utils/user_id';
 
 const people = [
     { AdministratorName: 'Myko Macawiwili', Action: 'Delete', Date: 'January 20, 2023' },
@@ -12,7 +15,17 @@ const people = [
 ]
 
 
-export default function beneficiaryitem() {
+export default async function beneficiaryitem() {
+
+    const uid = parseInt(await GetUID() as string)
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const charity_id = charity_member?.map(member => member.charity?.id)
+
+    const {data: beneficiary_items} = await supabase
+    .from('beneficiary_items')
+    .select('*, inventory_item ( id, name ), charity ( id, name )')
+    .eq('charity_id', charity_id)
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
