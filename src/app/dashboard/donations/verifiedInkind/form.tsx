@@ -201,8 +201,8 @@ export function EditForm({id}: {id:number}) {
     useEffect(() => {
 
         const fetchData = async () => {
-            const {data, error} = await supabase.from("items_donation_transaction").select(`*, inventory_item ( * )`).eq("id", id).single()
-            const items = data?.inventory_item
+            const {data, error} = await supabase.from("items_donation_transaction").select(`*, inventory_item ( * ), donor ( id, name ), address ( * )`).eq("id", id).single()
+            
             if (data) setFormFields(data!)
         }
 
@@ -213,7 +213,8 @@ export function EditForm({id}: {id:number}) {
 
     const handleFormChange = (event: any, index: number) => {
         let data = [...formFields.inventory_item];
-        data[index][event.target.name] = event.target.value;
+        console.log(event.target.name)
+        data.find(item => item.id === index)[event.target.name] = event.target.value;
         setFormFields({...formFields, inventory_item: data});
     }
 
@@ -221,7 +222,7 @@ export function EditForm({id}: {id:number}) {
         e.preventDefault();
         console.log(formFields)
         const rawResponse = await fetch('http://localhost:3000/dashboard/donations/verifiedInkind/post', {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
@@ -235,11 +236,14 @@ export function EditForm({id}: {id:number}) {
 
     const addFields = () => {
         let object = { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' }
+        console.log("ass ass", formFields.inventory_item.concat(object))
+        console.log("ass", {...formFields, inventory_item: formFields.inventory_item.concat(object)})
         setFormFields({...formFields, inventory_item: formFields.inventory_item.concat(object)})
+        console.log('FORMFIELDS ARE ', formFields)
     }
 
     const removeFields = (id: number) => {
-        setFormFields({...formFields, inventory_item: formFields.inventory_item.filter((item: any) => item.id === id)})
+        setFormFields({...formFields, inventory_item: formFields.inventory_item.filter((item: any) => item.id !== id)})
         setToDelete(toDelete.concat(id))
     }
 
@@ -250,18 +254,15 @@ export function EditForm({id}: {id:number}) {
                     label="Donor Name"
                     name="donor"
                     type="text"
-                    placeholder="John Doe"
-                    onChange={e => setFormFields({...formFields, donor: e.target.value})}
-                    required
+                    
+                    readOnly
                 />
 
                 <TextField
                     label="Pickup Address"
                     name="address"
                     type="text"
-                    placeholder="123 Sesame Sreet"
-                    onChange={e => setFormFields({...formFields, address: e.target.value})}
-                    required
+                    readOnly
                 />
 
                 <div className="col-span-full">
@@ -281,14 +282,14 @@ export function EditForm({id}: {id:number}) {
                     </div>
                 </div>
 
-                {formFields.inventory_item.map((form: any) => {
+                {formFields?.inventory_item?.map((form: any) => {
                     return (
                         <div key={form.id}>
                             <TextField
                                 label="Item Name"
                                 name="name"
                                 type="text"
-                                placeholder="Demon Core"
+                                placeholder={form.name}
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.name}
                                 required />
@@ -297,7 +298,7 @@ export function EditForm({id}: {id:number}) {
                                 label="Quantity"
                                 name="quantity"
                                 type="number"
-                                placeholder="12"
+                                placeholder={form.quantity}
                                 min={1}
                                 max={10000}
                                 onChange={event => handleFormChange(event, form.id)}
@@ -308,7 +309,7 @@ export function EditForm({id}: {id:number}) {
                                 label="Unit of Measurement"
                                 name="unit_of_measurement"
                                 type="text"
-                                placeholder="Balls"
+                                placeholder={form.unit_of_measurement}
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.unit_of_measurement}
                                 required />
@@ -328,7 +329,7 @@ export function EditForm({id}: {id:number}) {
                                 label="Expiry Date (if perishable)"
                                 name="expiry"
                                 type="date"
-                                placeholder="01/12/2023"
+                                placeholder={form.date}
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.expiry}
                             />

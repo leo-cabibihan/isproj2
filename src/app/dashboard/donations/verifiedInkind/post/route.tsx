@@ -38,6 +38,7 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
     const requestUrl = new URL(request.url)
     const formData = await request.json()
+    console.log("FoRMDATA: ", formData.transaction.inventory_item)
     const transaction = formData?.transaction
     const cookieStore = cookies()
     const supabaseAuth = createRouteHandlerClient({ cookies: () => cookieStore })
@@ -46,7 +47,7 @@ export async function PUT(request: Request) {
     const newTransaction = {
         donor_name: transaction.name,
         address: transaction.address,
-        verify: true
+        verify: false
     }
 
     //INSERTS TRANSACTION DETAILS INTO TRANSACTION TABLE AND GETS THE ID OF NEW RECORD
@@ -54,13 +55,13 @@ export async function PUT(request: Request) {
     console.log("TRANSACTIONS ERROR IS: ", error)
     const transaction_id = transactions![0].id
 
-    const items = transaction.inventory_items.map((item: any) => ({...item, perishable: Boolean(item.perishable), donation_id: transaction_id}))
+    const items = transaction.inventory_item.map((item: any) => ({...item, perishable: Boolean(item.perishable), donation_id: transaction_id}))
 
     //INSERTS DATA OF ITEMS ARRAY INTO RESPECTIVE TABLE
     const { data: item_data, error: item_error } = await supabase.from('inventory_item').upsert(items).select()
     console.log("INSERT ERROR IS: ", item_error)
 
-    Promise.all(formData.toDelete.map((id: number) => supabase.from('').delete().eq("id", id))).then(res => console.log("bruh idk wtf wtf", res))
+    Promise.all(formData.toDelete.map((id: number) => supabase.from('').delete().eq("id", id))).then(res => console.log("bruh idk wtf wtf",res))
     
     return Response.json({ status: 200 })
 

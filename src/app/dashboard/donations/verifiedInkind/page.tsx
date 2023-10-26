@@ -13,7 +13,7 @@ export const revalidate = 0;
 export default async function VerifiedTable() {
 
   const { data: items, error } = await supabase.from('items_donation_transaction').select('*, charity ( id, name ), address ( * ), donor ( id, name )')
-  const { data: inventory, error: error_2 } =  await supabase.from('inventory_item').select('*, items_donation_transaction ( *, charity ( id, name ), address ( * ), donor ( id, name ) )')
+  const { data: inventory, error: error_2 } = await supabase.from('inventory_item').select('*, items_donation_transaction ( *, charity ( id, name ), address ( * ), donor ( id, name ) )')
 
   console.log("ITEMS ARE: ", items)
 
@@ -41,22 +41,22 @@ export default async function VerifiedTable() {
               </Tr>
             </Thead>
             <Tbody>
-              {inventory?.map(item =>
-                <Tr key={item.id}> 
+              {items?.map(item =>
+                <Tr key={item.id}>
                   <>
-                    {item.items_donation_transaction?.donor_id ? 
-                    (<Td>{item.items_donation_transaction?.donor?.name}</Td>) :
-                    (<Td>{item.items_donation_transaction?.donor_name}</Td>)}
+                    {item.donor_id ?
+                      (<Td>{item.donor?.name}</Td>) :
+                      (<Td>{item.donor_name}</Td>)}
                   </>
                   <>
-                    {item.items_donation_transaction?.verify ? 
-                    (<Td>VERIFIED</Td>):
-                    (<Td>NOT VERIFIED</Td>)}
+                    {item.verify ?
+                      (<Td>VERIFIED</Td>) :
+                      (<Td>NOT VERIFIED</Td>)}
                   </>
-                  <Td>{item.items_donation_transaction?.date}</Td>
+                  <Td>{item.date}</Td>
                   <Td>
                     <SlideOver variant="solid" color="blue" buttontext="View Details">
-                      
+                      <EditForm id={item.id} />
                     </SlideOver>
                   </Td>
                 </Tr>
