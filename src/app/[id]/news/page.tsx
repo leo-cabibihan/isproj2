@@ -26,8 +26,8 @@ export default async function News({ params } : any) {
         {posts?.map((post) => (
           <div key={post.id} className="bg-white px-6 py-32 lg:px-8">
             <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
-              <p className="text-base font-semibold leading-7 text-indigo-600">{post.charity.name}</p>
-              <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Balls</h1>
+              <p className="text-base font-semibold leading-7 text-indigo-600">{post.charity.name}&apos;s posts</p>
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{post.charity.name}</h1>
               <p className="mt-6 text-xl leading-8">
                 {post.subheading}
               </p>

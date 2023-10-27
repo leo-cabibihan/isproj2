@@ -44,7 +44,7 @@ export default async function Page() {
     const charity_id = charity_member?.map(member => member.charity.id)
 
     const charityId = charity_id![0]
-    
+
 
     const { data: posts, error } = await supabase
         .from('campaign_post')
@@ -103,24 +103,6 @@ export default async function Page() {
         await supabase.from('campaign_post').delete().eq("id", postId)
         revalidatePath('/');
     };
-
-    // async function uploadImage(e) {
-    //     let file = e.target.files[0]
-
-    //     const{ data, error } = await supabase
-    //         .storage
-    //         .from('uploads')
-    //         .upload("images/" + randomUUID(), file)
-
-    //     if(data) {
-    //         getImages()
-    //     } else {
-    //         console.log(error)
-    //     }
-
-    // }
-
-
 
     return (
 
@@ -185,7 +167,8 @@ export default async function Page() {
                             </p>
                             <div className="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
                                 {posts?.map((post) => (
-                                    <article key={post.id} className="relative isolate flex flex-col gap-8 lg:flex-row">
+
+                                    < article key={post.id} className="relative isolate flex flex-col gap-8 lg:flex-row" >
                                         <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
                                             <img
                                                 src="#"
@@ -303,7 +286,7 @@ export default async function Page() {
                         </div>
                     </div>
                 </div>
-            </TableContainer>
+            </TableContainer >
         </>
 
     )

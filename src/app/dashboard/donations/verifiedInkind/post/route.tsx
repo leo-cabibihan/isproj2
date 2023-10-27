@@ -60,9 +60,12 @@ export async function PUT(request: Request) {
     //INSERTS DATA OF ITEMS ARRAY INTO RESPECTIVE TABLE
     const { data: item_data, error: item_error } = await supabase.from('inventory_item').upsert(items).select()
     console.log("INSERT ERROR IS: ", item_error)
-
-    Promise.all(formData.toDelete.map((id: number) => supabase.from('').delete().eq("id", id))).then(res => console.log("bruh idk wtf wtf",res))
-    
+    console.log("imma delete ur ass", formData.toDelete)
+    Promise.allSettled(formData.toDelete.map((id: number) => supabase.from('inventory_item').delete().eq("id", id))).then(res => console.log("bruh idk wtf wtf",res))
+    // for (const id of formData.toDelete) {
+    //     const {error} = await supabase.from
+    //     console.log()
+    // }
     return Response.json({ status: 200 })
 
 }

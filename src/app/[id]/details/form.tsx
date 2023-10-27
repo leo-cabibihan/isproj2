@@ -4,9 +4,11 @@ import { Button } from "@/components/Button";
 import { TextField, SelectField } from "@/components/Fields";
 import { useState } from "react";
 
-export function FormComponent({ ID }: any) {
+export function FormComponent({ ID, DonorID }: any) {
 
     const [cash, showCash] = useState(false)
+
+    console.log("DONOR ID IS " + DonorID)
 
     return (
         <>
@@ -37,7 +39,7 @@ export function FormComponent({ ID }: any) {
                     {cash ? (
                         <CashForm />
                     ) : (
-                        <GoodsForm ID={ID} />
+                        <GoodsForm ID={ID} UserID={DonorID}/>
                     )}
                 </>
 
@@ -46,10 +48,14 @@ export function FormComponent({ ID }: any) {
     )
 }
 
-export function GoodsForm(object: any, { ID }: any) {
+export function GoodsForm(object: any, { ID, UserID }: any) {
     const [formFields, setFormFields] = useState([
         { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' },
     ])
+
+    console.log("THE ACTUAL DONOR ID IS: " + ID)
+
+
 
     const [house_no, setHouse_no] = useState("")
     const [street, setStreet] = useState("")
@@ -77,6 +83,7 @@ export function GoodsForm(object: any, { ID }: any) {
             },
             body: JSON.stringify({
                 orgID: ID,
+                donorID: UserID,
                 house_no: house_no,
                 street: street,
                 village: village,

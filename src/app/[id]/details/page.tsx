@@ -8,6 +8,7 @@ import { ContentRight, ContentLeft, Causes, GraphTemp, News } from "@/components
 import { revalidatePath } from "next/cache"
 import { useState } from "react"
 import { FormComponent, GoodsForm } from "./form"
+import { GetUID } from "@/app/utils/user_id"
 
 export const revalidate = 0;
 
@@ -27,11 +28,18 @@ const provinces = [
   { id: 3, name: "N/A" },
 ]
 
-export default async function Organization({ params } : any) {
+export default async function Organization({ params }: any) {
 
   //THIS JUST GETS THE ORG ID FROM THE ROUTE. US  E THIS TO FILTER TO THE SPECIFIC ORG.
   const orgID = params.id
   console.log(orgID + "!!!!!!")
+
+  const donorID = await GetUID()
+
+  const { data: donor, error: error_1 } = await supabase
+    .from('donor')
+    .select('*')
+    .eq('id', donorID as string)
 
   return (
     <>
@@ -50,8 +58,14 @@ export default async function Organization({ params } : any) {
                 </p>
               </div>
 
-              <FormComponent ID={orgID}/>
-              
+              {
+                donor?.length === 1 ? (
+                  <FormComponent ID={orgID} DonorID={donorID} />
+                ) : (
+                  <h1 className="text-2xl font-bold tracking-tight text-gray-900">Please log in in order to donate.</h1>
+                )
+              }
+
             </div>
           </div>
         </div>

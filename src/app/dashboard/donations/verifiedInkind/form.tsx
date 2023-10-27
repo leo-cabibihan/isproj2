@@ -198,6 +198,9 @@ export function EditForm({id}: {id:number}) {
 
     const [toDelete, setToDelete] = useState<number[]>([])
 
+
+
+
     useEffect(() => {
 
         const fetchData = async () => {
@@ -234,12 +237,18 @@ export function EditForm({id}: {id:number}) {
         });
     }
 
-    const addFields = () => {
-        let object = { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' }
-        console.log("ass ass", formFields.inventory_item.concat(object))
-        console.log("ass", {...formFields, inventory_item: formFields.inventory_item.concat(object)})
-        setFormFields({...formFields, inventory_item: formFields.inventory_item.concat(object)})
-        console.log('FORMFIELDS ARE ', formFields)
+    const addFields = async () => {
+        let object = { name: null, quantity: null, perishable: true, unit_of_measurement: null , donation_id: id}
+    
+        const { data: field, error } = await supabase
+        .from('inventory_item')
+        .insert(object)
+        .select()
+        .single()
+        console.log("ERRORS: ", error)
+        console.log("I added a field, what's here?", field)
+        if (field)       setFormFields({...formFields, inventory_item: formFields.inventory_item.concat(field)})
+        
     }
 
     const removeFields = (id: number) => {

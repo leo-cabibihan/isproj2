@@ -9,10 +9,11 @@ import { Footer } from '@/components/Footer'
 import supabase from '@/app/utils/supabase'
 import { revalidatePath } from 'next/cache'
 import { GetUID } from '@/app/utils/user_id'
+import { ImageUpload } from '@/components/ImgUpload'
 
 export const revalidate = 0;
 
-export default async function Report({ params } : any) {
+export default async function Report({ params }: any) {
 
   const orgID = params.id
 
@@ -23,16 +24,24 @@ export default async function Report({ params } : any) {
     .select('*')
     .eq('id', orgID)
 
+  const { data: last_complaint, error: complaint_error } = await supabase
+    .from('donor_complaints')
+    .select('*')
+    .order('id', { ascending: false }).limit(1)
+
+  const complaint_id = last_complaint?.map(post => post.id)
+  console.log("LAST EVENT'S ID IS: " + (complaint_id![0] + 1))
+
   const handleSubmit = async (formData: FormData) => {
     'use server'
     const complaint = {
       complaint: formData.get("reason"),
       image: 1233,
-      donor_id: "06c8ed37-d903-4ebf-b5b9-01a2106ab313",
+      donor_id: donorID,
       charity_id: orgID
     };
 
-    const {data, error} = await supabase.from('donor_complaints').insert(complaint);
+    const { data, error } = await supabase.from('donor_complaints').insert(complaint);
     revalidatePath('/');
     console.log('ERROR: ', error)
   };
@@ -84,28 +93,9 @@ export default async function Report({ params } : any) {
                 </div>
               </div>
 
+              <ImageUpload folderName="campaign_post" charityID={orgID} recordID={complaint_id![0] + 1} />
 
 
-              <div className="col-span-full">
-                <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                  Cover photo
-                </label>
-                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                  <div className="text-center">
-                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                      >
-                        <span>Upload a file</span>
-                        <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                      </label>
-                      <p className="pl-1">or drag and drop</p>
-                    </div>
-                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                  </div>
-                </div>
-              </div>
               <div className="col-span-full">
 
                 <Button type="submit" variant="solid" color="blue" className="w-full">
