@@ -47,8 +47,7 @@ export default async function DonorHistory({params} : any) {
             <TableContainer>
                 {donors?.map(donor =>
                 <>
-                <div key={donor.donor_id}>
-                <TableHeader header={donor.name + "'s History"} />
+                <TableHeader key={donor.donor_id} header={donor.name + "'s History"} />
                     <TableContent>
                         <Table>
                             <Thead>
@@ -69,7 +68,6 @@ export default async function DonorHistory({params} : any) {
                             </Tbody>
                         </Table>
                     </TableContent>
-                    </div>
                 </>
                 )}
             </TableContainer>
