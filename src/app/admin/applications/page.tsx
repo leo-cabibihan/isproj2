@@ -6,6 +6,7 @@ import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead,
 import { AdminAuth } from "../auth";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { AdminLog } from "../audit-log/function";
 
 export const revalidate = 0;
 
@@ -27,11 +28,14 @@ export default async function Applications() {
   const verifyOrg = async (formData: FormData) => {
     'use server'
     const charityId = parseInt(formData.get("id") as string)
+    const charityName = String(formData.get("name"))
+    console.log("APPROVED CHARITY IS: " + charityName)
     const charity = {
       charity_verified: true
     };
 
     await supabase.from('charity').update(charity).eq("id", charityId)
+    await AdminLog("Approved the application of charity " + charityName + ".")
     revalidatePath('/');
   };
 
@@ -82,7 +86,7 @@ export default async function Applications() {
 
                         <TextField
                           label="Phone Number"
-                          name="name"
+                          name="phone"
                           type="tel"
                           placeholder={request.charity_phone}
                           readOnly

@@ -1,12 +1,14 @@
 import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
 
-export async function AdminLog({action}: any) {
+export async function AdminLog(action: any) {
 
-    const userID = await GetUID
+    const userID = await GetUID()
+
+    console.log("AUDITOR ID IS " + userID)
 
     const log = {
-        id: userID,
+        admin_id: userID,
         action: action
     }
 

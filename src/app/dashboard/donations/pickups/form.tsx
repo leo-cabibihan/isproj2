@@ -1,52 +1,71 @@
 "use client"
 
+import supabase from "@/app/utils/supabase";
 import { Button } from "@/components/Button";
 import { TextField, SelectField } from "@/components/Fields";
-import { useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
+
+export function PickupForm({id}: {id:number}) {
+    const [formFields, setFormFields] = useState<any>({})
+
+    const [toDelete, setToDelete] = useState<number[]>([])
 
 
-export function MultilayeredForm(object: any) {
-    const [formFields, setFormFields] = useState([
-        { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' },
-    ])
-
-    const [name, setName] = useState("")
-    const [address, setAddress] = useState("")
 
 
-    const handleFormChange = (event, index) => {
-        let data = [...formFields];
-        data[index][event.target.name] = event.target.value;
-        setFormFields(data);
+    useEffect(() => {
+
+        const fetchData = async () => {
+            const {data, error} = await supabase.from("items_donation_transaction").select(`*, inventory_item ( * ), donor ( id, name ), address ( * )`).eq("id", id).single()
+            
+            if (data) setFormFields(data!)
+        }
+
+        fetchData()
+
+    }, [])
+
+
+    const handleFormChange = (event: any, index: number) => {
+        let data = [...formFields.inventory_item];
+        console.log(event.target.name)
+        data.find(item => item.id === index)[event.target.name] = event.target.value;
+        setFormFields({...formFields, inventory_item: data});
     }
 
-    const submit = async (e) => {
+    const submit = async (e: any) => {
         e.preventDefault();
         console.log(formFields)
-        const rawResponse = await fetch('http://localhost:3000/dashboard/donations/verifiedInkind/post', {
-            method: 'POST',
+        const rawResponse = await fetch('http://localhost:3000/dashboard/donations/pickups/post', {
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: name,
-                address: address,
-                items: formFields
+                toDelete: toDelete,
+                transaction: formFields
             })
         });
     }
 
-    const addFields = () => {
-        let object = { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' }
-
-        setFormFields([...formFields, object])
+    const addFields = async () => {
+        let object = { name: null, quantity: null, perishable: true, unit_of_measurement: null , donation_id: id}
+    
+        const { data: field, error } = await supabase
+        .from('inventory_item')
+        .insert(object)
+        .select()
+        .single()
+        console.log("ERRORS: ", error)
+        console.log("I added a field, what's here?", field)
+        if (field)       setFormFields({...formFields, inventory_item: formFields.inventory_item.concat(field)})
+        
     }
 
-    const removeFields = (index) => {
-        let data = [...formFields];
-        data.splice(index, 1)
-        setFormFields(data)
+    const removeFields = (id: number) => {
+        setFormFields({...formFields, inventory_item: formFields.inventory_item.filter((item: any) => item.id !== id)})
+        setToDelete(toDelete.concat(id))
     }
 
     return (
@@ -56,18 +75,15 @@ export function MultilayeredForm(object: any) {
                     label="Donor Name"
                     name="donor"
                     type="text"
-                    placeholder="John Doe"
-                    onChange={e => setName(e.target.value)}
-                    required
+                    
+                    readOnly
                 />
 
                 <TextField
                     label="Pickup Address"
                     name="address"
                     type="text"
-                    placeholder="123 Sesame Sreet"
-                    onChange={e => setAddress(e.target.value)}
-                    required
+                    readOnly
                 />
 
                 <div className="col-span-full">
@@ -87,15 +103,15 @@ export function MultilayeredForm(object: any) {
                     </div>
                 </div>
 
-                {formFields.map((form, index) => {
+                {formFields?.inventory_item?.map((form: any) => {
                     return (
-                        <div key={index}>
+                        <div key={form.id}>
                             <TextField
                                 label="Item Name"
                                 name="name"
                                 type="text"
-                                placeholder="Demon Core"
-                                onChange={event => handleFormChange(event, index)}
+                                placeholder={form.name}
+                                onChange={event => handleFormChange(event, form.id)}
                                 value={form.name}
                                 required />
 
@@ -103,10 +119,10 @@ export function MultilayeredForm(object: any) {
                                 label="Quantity"
                                 name="quantity"
                                 type="number"
-                                placeholder="12"
+                                placeholder={form.quantity}
                                 min={1}
                                 max={10000}
-                                onChange={event => handleFormChange(event, index)}
+                                onChange={event => handleFormChange(event, form.id)}
                                 value={form.quantity}
                                 required />
 
@@ -114,8 +130,8 @@ export function MultilayeredForm(object: any) {
                                 label="Unit of Measurement"
                                 name="unit_of_measurement"
                                 type="text"
-                                placeholder="Balls"
-                                onChange={event => handleFormChange(event, index)}
+                                placeholder={form.unit_of_measurement}
+                                onChange={event => handleFormChange(event, form.id)}
                                 value={form.unit_of_measurement}
                                 required />
 
@@ -123,7 +139,7 @@ export function MultilayeredForm(object: any) {
                                 label="Perishable?"
                                 name="perishable"
                                 placeholder="Yes"
-                                onChange={event => handleFormChange(event, index)}
+                                onChange={event => handleFormChange(event, form.id)}
                                 required
                             >
                                 <option value={"true"}>Yes</option>
@@ -134,13 +150,13 @@ export function MultilayeredForm(object: any) {
                                 label="Expiry Date (if perishable)"
                                 name="expiry"
                                 type="date"
-                                placeholder="01/12/2023"
-                                onChange={event => handleFormChange(event, index)}
+                                placeholder={form.date}
+                                onChange={event => handleFormChange(event, form.id)}
                                 value={form.expiry}
                             />
 
                             <div className="col-span-full">
-                                <Button onClick={() => removeFields(index)} variant="solid" color="red" className="w-full">
+                                <Button onClick={() => removeFields(form.id)} variant="solid" color="red" className="w-full">
                                     <span>
                                         Remove Item <span aria-hidden="true">&rarr;</span>
                                     </span>
@@ -180,7 +196,7 @@ export function MultilayeredForm(object: any) {
             <div className="grid grid-cols-2 gap-4">
                 <Button onClick={submit} variant="solid" color="green" className="w-full">
                     <span>
-                        Save <span aria-hidden="true">&rarr;</span>
+                        Verify & Save <span aria-hidden="true">&rarr;</span>
                     </span>
                 </Button>
                 <Button href={"#"} variant="solid" color="red" className="w-full">

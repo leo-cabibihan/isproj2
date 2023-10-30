@@ -12,6 +12,8 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import { ImageUpload } from "@/components/ImgUpload";
 import { cookies } from "next/headers";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
+import { DisplayImage } from "@/app/utils/display_image";
+import { ShowImg } from "@/components/DisplayImg";
 
 export const revalidate = 0;
 
@@ -29,14 +31,6 @@ async function GetUID() {
 
 export default async function Page() {
 
-    //HOWTO GET CHARITY ID:
-    //=> Get UUID of currently logged in user
-    //==> const user = useUser()
-    //=> Get Charity ID from charity_member table equal to current UUID
-    //=> store Charity ID somewhere
-
-    //Temp. ID for testing purposes whilst auth is still WIP
-
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
 
     const uid = await GetUID()
@@ -44,7 +38,6 @@ export default async function Page() {
     const charity_id = charity_member?.map(member => member.charity.id)
 
     const charityId = charity_id![0]
-
 
     const { data: posts, error } = await supabase
         .from('campaign_post')
@@ -169,14 +162,7 @@ export default async function Page() {
                                 {posts?.map((post) => (
 
                                     < article key={post.id} className="relative isolate flex flex-col gap-8 lg:flex-row" >
-                                        <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
-                                            <img
-                                                src="#"
-                                                alt=""
-                                                className="absolute inset-0 h-full w-full rounded-2xl bg-gray-50 object-cover"
-                                            />
-                                            <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
-                                        </div>
+                                        <ShowImg folder1={"campaign_post"} charityID={charityId} recordID={post.id}/>
                                         <div>
                                             <div className="flex items-center gap-x-4 text-xs">
                                                 <time dateTime={post.date_posted} className="text-gray-500">

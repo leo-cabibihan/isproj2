@@ -18,14 +18,13 @@ export default async function ViewCharity() {
             </div>
 
             <TableContainer>
-                <TableHeader header="All Charities." />
+                <TableHeader header="All Verified Charities." />
                 <Table>
                     <Thead>
                         <Tr>
                             <Th>Org Name</Th>
                             <Th>Phone Number</Th>
                             <Th>Email Address</Th>
-                            <Th>Verified?</Th>
                             <Th> </Th>
 
                         </Tr>
@@ -36,7 +35,6 @@ export default async function ViewCharity() {
                                 <Td>{org.name}</Td>
                                 <Td>{org.charity_phone}</Td>
                                 <Td>{org.email_address}</Td>
-                                <Td>{org.charity_verified}</Td>
                                 <Td>
                                     <Button href={"/admin/view-charity/" + org.id + "/"} variant="solid" color="blue" className="w-full">
                                         <span>

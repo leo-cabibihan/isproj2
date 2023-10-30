@@ -41,6 +41,11 @@ export default async function Organization({ params }: any) {
     .select('*')
     .eq('id', donorID as string)
 
+  const { data: orgs } = await supabase
+    .from('charity')
+    .select('*')
+    .eq('id', orgID)
+
   return (
     <>
       <DefaultLayout>
@@ -51,7 +56,9 @@ export default async function Organization({ params }: any) {
           <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
             <div className="mt-16 max-w-2xl space-y-20">
               <div>
-                <h2 className="text-2xl font-bold tracking-tight text-gray-900">Donate to Tulong Lasalyano</h2>
+                {orgs?.map(org => (
+                  <h2 key={org.id} className="text-2xl font-bold tracking-tight text-gray-900">Donate to {org.name}</h2>
+                ))}
                 <p className="mt-8">
                   Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris semper sed amet vitae
                   sed turpis id. Id dolor praesent donec est. Odio penatibus risus viverra tellus varius sit neque erat velit.
@@ -62,7 +69,7 @@ export default async function Organization({ params }: any) {
                 donor?.length === 1 ? (
                   <FormComponent ID={orgID} DonorID={donorID} />
                 ) : (
-                  <h1 className="text-2xl font-bold tracking-tight text-gray-900">Please log in in order to donate.</h1>
+                  <h1 className="text-2xl font-bold tracking-tight text-gray-900">Please <a className="text-blue-600" href={"/login"}>log in</a> in order to donate.</h1>
                 )
               }
 

@@ -66,6 +66,6 @@ export async function POST(request: Request) {
 
     console.log("DONATION SUCCESS!")
 
-    return Response.json({ status: 200 })
+    return Response.redirect(`${requestUrl.origin}/thankyou`)
 
 }

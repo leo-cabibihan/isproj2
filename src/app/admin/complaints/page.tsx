@@ -14,26 +14,7 @@ const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export default async function Complaints({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
 
-    const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name ), donor ( id, name )')
-
-    const sendEmail = async (formData: FormData) => {
-        'use server'
-        console.log('ID: ' + formData.get("id"))
-        const body = render(<AlertEmail URL={"http://localhost:3000/dashboard/logs/complaints"} heading={"You have an Alert!"} content={formData.get("donor") + " has reported your organization. Click the link below to view all complaints filed against " + formData.get("name") + "."} />);
-        const {data: charity_members } = await supabase.from('charity_member').select('*, auth.users ( id, email)').eq('charity_id', formData.get("id"))
-
-        console.log('MEMBERS: ', charity_members )
-
-        // for (let i = 0; i < charity_members!.length; i++) {
-        //     let email = charity_members![i].users.email
-
-        //     const success = await plunk.emails.send({
-        //         to: email,
-        //         subject: "You've been REPORTED!",
-        //         body,
-        //     })
-        // }
-    }
+    const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name, email_address ), donor ( id, name )')
 
     return (
         <>
@@ -63,30 +44,38 @@ export default async function Complaints({searchParams}: {searchParams: { [key: 
                                     <Td>{complaint.created_at}</Td>
                                     <Td>
                                         <SlideOver variant="solid" color="blue" buttontext="View Details">
-                                            <form className="space-y-6" action={sendEmail} method="POST">
+                                            <form className="space-y-6" action={'/view-charity/post'} method="POST">
                                             {searchParams.err && <Alert message={searchParams.err as string}/>}
-                                                <TextField
-                                                    label=""
-                                                    name="id"
-                                                    type="hidden"
-                                                    readOnly
-                                                    defaultValue={complaint.charity?.id}
-                                                />
-
-                                                <TextField
+                                            <TextField
                                                     label="Charity Name"
-                                                    name="name"
+                                                    name="charity"
                                                     type="text"
-                                                    defaultValue={complaint.charity?.name}
                                                     readOnly
+                                                    defaultValue={complaint.charity?.name}
                                                 />
 
                                                 <TextField
-                                                    label="Complainant"
+                                                    label="Charity Email"
+                                                    name="email"
+                                                    type="email"
+                                                    readOnly
+                                                    defaultValue={complaint.charity?.email_address as string}
+                                                />
+
+                                                <TextField
+                                                    label="Filed by"
                                                     name="donor"
                                                     type="text"
-                                                    defaultValue={complaint.donor?.name as string}
                                                     readOnly
+                                                    defaultValue={complaint.donor?.name as string}
+                                                />
+
+                                                <TextField
+                                                    label="Filed at"
+                                                    name="date"
+                                                    type="date"
+                                                    readOnly
+                                                    defaultValue={complaint.created_at}
                                                 />
 
                                                 <div className="col-span-full">
