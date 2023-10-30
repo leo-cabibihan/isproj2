@@ -2,6 +2,7 @@ import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
 import { TextField } from "@/components/Fields";
+import { ImageUpload } from "@/components/ImgUpload";
 import SlideOver from "@/components/SlideOverButton";
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
 import { revalidatePath } from "next/cache";
@@ -17,17 +18,25 @@ export default async function Page() {
 
     const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name ), donor ( id, name )').eq('charity_id', charity_id)
 
+    const { data: last_appeal, error: event_error } = await supabase
+        .from('charity_appeals')
+        .select('*')
+        .order('id', { ascending: false }).limit(1)
+
+    const appeal_id = last_appeal?.map(appeal => appeal.id)
+    console.log("LAST EXPENSE'S ID IS: " + (appeal_id))
+
     const handleSubmit = async (formData: FormData) => {
         'use server'
-        const expense = {
-            amount: formData.get("amount"),
-            reason: formData.get("reason"),
-            event_id: formData.get("event_id"),
-            beneficiary_id: formData.get("beneficiary_id"),
-            charity_id: formData.get("charity_id")
+        const appeals = {
+            charity_id: formData.get("charity_id"),
+            charity_worker_id: formData.get("worker_id"),
+            complaint_id: formData.get("complaint_id"),
+            explanation: formData.get("explanation")
         };
 
-        const { data, error } = await supabase.from('expenses').insert(expense);
+        const { data, error } = await supabase.from('charity_appeals').insert(appeals);
+        console.log("APPEALS ERROR IS: ", error)
         revalidatePath('/');
     };
 
@@ -58,12 +67,29 @@ export default async function Page() {
                                     <Td>{complaint.created_at}</Td>
                                     <Td>
                                         <SlideOver variant="solid" color="blue" buttontext="View Details">
-                                            <form className="space-y-6" action="#" method="POST">
+                                            <form className="space-y-6" action={handleSubmit} method="POST">
+
                                                 <TextField
-                                                    label="Charity Name"
-                                                    name="name"
-                                                    type="text"
-                                                    placeholder={complaint.charity.name}
+                                                    label=""
+                                                    name="worker_id"
+                                                    type="hidden"
+                                                    defaultValue={uid}
+                                                    readOnly
+                                                />
+
+                                                <TextField
+                                                    label=""
+                                                    name="charity_id"
+                                                    type="hidden"
+                                                    defaultValue={charity_id}
+                                                    readOnly
+                                                />
+
+                                                <TextField
+                                                    label=""
+                                                    name="complaint_id"
+                                                    type="hidden"
+                                                    defaultValue={complaint.id}
                                                     readOnly
                                                 />
 
@@ -76,25 +102,26 @@ export default async function Page() {
                                                 />
 
                                                 <div className="col-span-full">
-                                                    <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
+                                                    <label htmlFor="explanation" className="block text-sm font-medium leading-6 text-gray-900">
                                                         Details
                                                     </label>
                                                     <div className="mt-2">
                                                         <textarea
-                                                            id="reason"
-                                                            name="reason"
+                                                            id="explanation"
+                                                            name="explanation"
                                                             rows={3}
-                                                            readOnly
                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                            placeholder={complaint.complaint}
+                                                            placeholder="Lorem Ipsum Dolor Sit Amet..."
                                                         />
                                                     </div>
                                                 </div>
 
+                                                <ImageUpload folderName='charity_appeals' charityID={charity_id} recordID={appeal_id![0] + 1} />
+
                                                 <div className="col-span-full">
                                                     <Button type="submit" variant="solid" color="yellow" className="w-full">
                                                         <span>
-                                                            Notify Charity <span aria-hidden="true">&rarr;</span>
+                                                            File Appeal <span aria-hidden="true">&rarr;</span>
                                                         </span>
                                                     </Button>
                                                 </div>

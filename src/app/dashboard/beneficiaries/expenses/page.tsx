@@ -23,6 +23,8 @@ export default async function Expenses() {
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
+
+    console.log("CHARITY ID IN EXPENSES IS" + charity_id)
     
     const { data: expenses, error } = await supabase
         .from('expenses')

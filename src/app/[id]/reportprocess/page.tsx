@@ -10,7 +10,7 @@ import { type Metadata } from 'next'
 export default function reportProcess() {
     return (
       <>
-      <Header></Header>
+      <Header/>
         <div className="bg-white px-6 py-24 sm:py-32 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-base font-semibold leading-7 text-indigo-600">Report Pending</p>
@@ -25,7 +25,7 @@ export default function reportProcess() {
             </div>
         </div>
       </div>
-      <Footer></Footer>
+      <Footer/>
       </>
     )
   }
