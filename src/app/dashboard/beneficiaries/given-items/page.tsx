@@ -8,6 +8,7 @@ import supabase from '@/app/utils/supabase';
 import { GetUID } from '@/app/utils/user_id';
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { CharityLog } from "@/app/admin/audit-log/function";
 
 
 
@@ -59,7 +60,7 @@ export default async function beneficiaryitem() {
 
         const { data, error } = await supabase.from('beneficiary_items').insert(item);
         revalidatePath('/');
-
+        CharityLog("ADDED GIVEN-ITEM " + item_to_add?.name + ".")
         console.log("I am tired and I want to perish. ", error_3, idk, error)
 
     };

@@ -5,13 +5,17 @@ import { Button } from "@/components/Button";
 import { TextField, SelectField } from "@/components/Fields";
 import { SetStateAction, useEffect, useState } from "react";
 
-export function MultilayeredForm(object: any) {
+export function MultilayeredForm(ID: any) {
     const [formFields, setFormFields] = useState([
         { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' },
     ])
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
     const [name, setName] = useState("")
     const [address, setAddress] = useState("")
+    const org_id = ID.ID
+
+    console.log('ORG ID IS', org_id[0])
 
 
     const handleFormChange = (event, index) => {
@@ -32,6 +36,7 @@ export function MultilayeredForm(object: any) {
             body: JSON.stringify({
                 name: name,
                 address: address,
+                charity_id: org_id[0],
                 items: formFields
             })
         });

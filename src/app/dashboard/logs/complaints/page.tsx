@@ -1,3 +1,4 @@
+import { CharityLog } from "@/app/admin/audit-log/function";
 import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
@@ -35,7 +36,8 @@ export default async function Page() {
             explanation: formData.get("explanation")
         };
 
-        const { data, error } = await supabase.from('charity_appeals').insert(appeals);
+        const { data, error } = await supabase.from('charity_appeals').insert(appeals).select()
+        CharityLog("FILED APPEAL")
         console.log("APPEALS ERROR IS: ", error)
         revalidatePath('/');
     };
@@ -62,8 +64,8 @@ export default async function Page() {
                             {complaints?.map(complaint =>
 
                                 <Tr key={complaint.id}>
-                                    <Td>{complaint.donor.name}</Td>
-                                    <Td>{complaint.charity.name}</Td>
+                                    <Td>{complaint.donor?.name}</Td>
+                                    <Td>{complaint.charity?.name}</Td>
                                     <Td>{complaint.created_at}</Td>
                                     <Td>
                                         <SlideOver variant="solid" color="blue" buttontext="View Details">
@@ -97,7 +99,7 @@ export default async function Page() {
                                                     label="Complainant"
                                                     name="donor"
                                                     type="text"
-                                                    placeholder={complaint.donor.name}
+                                                    placeholder={complaint.donor?.name}
                                                     readOnly
                                                 />
 

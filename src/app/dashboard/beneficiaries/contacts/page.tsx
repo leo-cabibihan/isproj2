@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache"
 import Alert from "@/components/Alert"
 import { NextResponse } from "next/server"
 import { DisplayError } from "@/app/(auth)/error-handling/function"
+import { CharityLog } from "@/app/admin/audit-log/function"
 
 export const revalidate = 0;
 
@@ -23,7 +24,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
     const { data: beneficiary_insert, error: insert_error } = await supabase.from('contacts').insert(beneficiary);
     revalidatePath('/');
-
+    CharityLog("ADDED CONTACT " + formData.get("beneficiary") + ".")
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${insert_error?.message}`, insert_error)
 
   };
@@ -39,7 +40,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
     const {data: beneficiaries_update, error: update_error} = await supabase.from('contacts').update(beneficiary).eq("id", contactId)
     revalidatePath('/');
-
+    CharityLog("UPDATED CONTACT " + formData.get("beneficiary") + ".")
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${update_error?.message}`, update_error)
   };
 
@@ -54,7 +55,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
     const {data: beneficiary_delete, error: delete_error} = await supabase.from('contacts').delete().eq("id", contactId)
     revalidatePath('/');
-
+    CharityLog("DELETED CONTACT.")
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${delete_error?.message}`, delete_error)
   };
 

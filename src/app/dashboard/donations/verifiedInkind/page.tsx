@@ -33,7 +33,7 @@ export default async function VerifiedTable() {
       <TableContainer>
         <TableHeaderButton header="Verified Item Donations">
           <SlideOver variant="solid" color="blue" buttontext="View Details">
-            <MultilayeredForm />
+            <MultilayeredForm ID={charity_id}/>
           </SlideOver>
         </TableHeaderButton>
         <TableContent>

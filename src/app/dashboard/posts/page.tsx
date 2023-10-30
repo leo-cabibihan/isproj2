@@ -14,6 +14,7 @@ import { cookies } from "next/headers";
 import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { DisplayImage } from "@/app/utils/display_image";
 import { ShowImg } from "@/components/DisplayImg";
+import { CharityLog } from "@/app/admin/audit-log/function";
 
 export const revalidate = 0;
 
@@ -63,7 +64,8 @@ export default async function Page() {
             charity_member_id: uid
         };
 
-        await supabase.from('campaign_post').insert(post);
+        const {data, error} = await supabase.from('campaign_post').insert(post).select()
+        CharityLog("CREATED POST " + data![0].title)
         revalidatePath('/');
     };
 
@@ -78,7 +80,8 @@ export default async function Page() {
             charity_member_id: uid
         };
 
-        await supabase.from('campaign_post').update(post).eq("id", postId)
+        const {data, error} = await supabase.from('campaign_post').update(post).eq("id", postId).select()
+        CharityLog("UPDATED POST " + data![0].title)
         revalidatePath('/');
     };
 
@@ -93,7 +96,8 @@ export default async function Page() {
             charity_member_id: uid
         };
 
-        await supabase.from('campaign_post').delete().eq("id", postId)
+        const {data, error} = await supabase.from('campaign_post').delete().eq("id", postId).select()
+        CharityLog("DELETED POST " + data![0].title)
         revalidatePath('/');
     };
 

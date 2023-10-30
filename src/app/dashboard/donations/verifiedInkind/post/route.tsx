@@ -1,3 +1,4 @@
+import { CharityLog } from "@/app/admin/audit-log/function";
 import supabase from "@/app/utils/supabase";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 import { revalidatePath } from "next/cache"
@@ -17,7 +18,8 @@ export async function POST(request: Request) {
     const transaction = {
         donor_name: formData.name,
         address: formData.address,
-        verify: true
+        verify: true,
+        charity_id: formData.charity_id
     }
 
     //INSERTS TRANSACTION DETAILS INTO TRANSACTION TABLE AND GETS THE ID OF NEW RECORD
@@ -25,10 +27,11 @@ export async function POST(request: Request) {
     console.log("TRANSACTIONS ERROR IS: ", error)
     const transaction_id = transactions![0].id
 
-    const items = formData.items.map((item: any) => ({...item, perishable: Boolean(item.perishable), donation_id: transaction_id}))
+    const items = formData.items.map((item: any) => ({ ...item, perishable: Boolean(item.perishable), donation_id: transaction_id }))
 
     //INSERTS DATA OF ITEMS ARRAY INTO RESPECTIVE TABLE
     const { data: item_data, error: item_error } = await supabase.from('inventory_item').insert(items).select()
+    { item_data?.map(item => CharityLog("ADDED ITEMS " + item.name)) }
     console.log("INSERT ERROR IS: ", item_error)
 
     return Response.json({ status: 200 })
@@ -55,13 +58,14 @@ export async function PUT(request: Request) {
     console.log("TRANSACTIONS ERROR IS: ", error)
     const transaction_id = transactions![0].id
 
-    const items = transaction.inventory_item.map((item: any) => ({...item, perishable: Boolean(item.perishable), donation_id: transaction_id}))
+    const items = transaction.inventory_item.map((item: any) => ({ ...item, perishable: Boolean(item.perishable), donation_id: transaction_id }))
 
     //INSERTS DATA OF ITEMS ARRAY INTO RESPECTIVE TABLE
     const { data: item_data, error: item_error } = await supabase.from('inventory_item').upsert(items).select()
+    { item_data?.map(item => CharityLog("UPDATED ITEMS " + item.name)) }
     console.log("INSERT ERROR IS: ", item_error)
     console.log("imma delete ur ass", formData.toDelete)
-    Promise.allSettled(formData.toDelete.map((id: number) => supabase.from('inventory_item').delete().eq("id", id))).then(res => console.log("bruh idk wtf wtf",res))
+    Promise.allSettled(formData.toDelete.map((id: number) => supabase.from('inventory_item').delete().eq("id", id))).then(res => console.log("bruh idk wtf wtf", res))
     // for (const id of formData.toDelete) {
     //     const {error} = await supabase.from
     //     console.log()

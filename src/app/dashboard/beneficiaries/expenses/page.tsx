@@ -1,4 +1,5 @@
 import { DisplayError } from '@/app/(auth)/error-handling/function';
+import { CharityLog } from '@/app/admin/audit-log/function';
 import supabase from '@/app/utils/supabase';
 import { GetUID } from '@/app/utils/user_id';
 import { Button } from '@/components/Button';
@@ -60,6 +61,7 @@ export default async function Expenses() {
 
         const {data, error} = await supabase.from('expenses').insert(expense);
         revalidatePath('/');
+        CharityLog("ADDED EXPENSE")
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error?.message}`, error)
     };
 
@@ -75,6 +77,7 @@ export default async function Expenses() {
 
         const {data, error} = await supabase.from('expenses').update(expense).eq("id", expenseId)
         revalidatePath('/');
+        CharityLog("UPDATED EXPENSE")
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error?.message}`, error)
     };
 
@@ -90,6 +93,7 @@ export default async function Expenses() {
 
         const {data, error} = await supabase.from('expenses').delete().eq("id", expenseId)
         revalidatePath('/');
+        CharityLog("DELETE EXPENSE")
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error}`, error)
     };
 

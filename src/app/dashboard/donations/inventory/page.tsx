@@ -1,4 +1,5 @@
 import { DisplayError } from "@/app/(auth)/error-handling/function";
+import { CharityLog } from "@/app/admin/audit-log/function";
 import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
@@ -29,7 +30,8 @@ export default async function Page() {
             expiry: formData.get("expiry")
         };
 
-        const { data: update_item, error: update_error } = await supabase.from('inventory_item').update(item).eq("id", itemId)
+        const { data: update_item, error: update_error } = await supabase.from('inventory_item').update(item).eq("id", itemId).select()
+        CharityLog("UPDATED INVENTORY ITEM " + update_item![0].name)
         revalidatePath('/');
     };
 
@@ -37,7 +39,8 @@ export default async function Page() {
         'use server'
         const itemId = formData.get("id")
 
-        const { data: delete_item, error: delete_error } = await supabase.from('inventory_item').delete().eq("id", itemId)
+        const { data: delete_item, error: delete_error } = await supabase.from('inventory_item').delete().eq("id", itemId).select()
+        CharityLog("DELETED INVENTORY ITEM " + delete_item![0].name)
         revalidatePath('/');
     };
 

@@ -1,3 +1,4 @@
+import { CharityLog } from "@/app/admin/audit-log/function";
 import supabase from "@/app/utils/supabase";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 import { revalidatePath } from "next/cache"
@@ -31,6 +32,7 @@ export async function PUT(request: Request) {
 
     //INSERTS DATA OF ITEMS ARRAY INTO RESPECTIVE TABLE
     const { data: item_data, error: item_error } = await supabase.from('inventory_item').upsert(items).select()
+    {item_data?.map(item => CharityLog("UPDATED PICKUP ITEM " + item.name))}
     console.log("INSERT ERROR IS: ", item_error)
     console.log("imma delete ur ass", formData.toDelete)
     Promise.allSettled(formData.toDelete.map((id: number) => supabase.from('inventory_item').delete().eq("id", id))).then(res => console.log("bruh idk wtf wtf",res))
