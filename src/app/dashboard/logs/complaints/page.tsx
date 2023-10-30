@@ -1,4 +1,5 @@
 import supabase from "@/app/utils/supabase";
+import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
 import { TextField } from "@/components/Fields";
 import SlideOver from "@/components/SlideOverButton";
@@ -9,7 +10,26 @@ export const revalidate = 0;
 
 export default async function Page() {
 
-    const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name ), donor ( id, name )').eq('charity_id', 12)
+    console.log("DOES IT WORK???? MAYBE: " + await GetUID())
+    const uid = await GetUID()
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const charity_id = charity_member?.map(member => member.charity?.id)
+
+    const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name ), donor ( id, name )').eq('charity_id', charity_id)
+
+    const handleSubmit = async (formData: FormData) => {
+        'use server'
+        const expense = {
+            amount: formData.get("amount"),
+            reason: formData.get("reason"),
+            event_id: formData.get("event_id"),
+            beneficiary_id: formData.get("beneficiary_id"),
+            charity_id: formData.get("charity_id")
+        };
+
+        const { data, error } = await supabase.from('expenses').insert(expense);
+        revalidatePath('/');
+    };
 
     return (
         <>
