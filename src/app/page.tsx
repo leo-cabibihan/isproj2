@@ -4,6 +4,7 @@ import { Hero, Cards, Content, ContentRight, News } from '@/components/Single-us
 import { DefaultLayout } from '@/components/layouts/Default'
 import supabase from "@/app/utils/supabase"
 import { revalidatePath } from "next/cache"
+import { BannerImg } from '@/components/DisplayImg'
 
 export const revalidate = 0;
 
@@ -11,7 +12,7 @@ export default async function Home() {
 
   const { data: charity } = await supabase.from('charity').select("*")
 
-  const { data: campaign_post } = await supabase.from('campaign_post').select("*")
+  const { data: campaign_post } = await supabase.from('campaign_post').select("*, charity ( id )")
 
   return (
     <>
@@ -81,7 +82,7 @@ export default async function Home() {
               <div className="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden">
                 <img
                   className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
-                  src="https://tailwindui.com/img/component-images/dark-project-app-screenshot.png"
+                  src="https://media.istockphoto.com/id/1145183123/photo/young-happy-volunteers-outdoor-meeting-at-park.jpg?s=612x612&w=0&k=20&c=2jyEEioGzgvaC59D6E3NSqW0hIDVE9BuTfvYu54EJDA="
                   alt=""
                 />
               </div>
@@ -195,14 +196,7 @@ export default async function Home() {
               <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                 {charity?.map((org) => (
                   <article key={org.id} className="flex flex-col items-start justify-between">
-                    <div className="relative w-full">
-                      <img
-                        src={"https://i.imgflip.com/4lst2s.jpg?a470736"}
-                        alt=""
-                        className="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]"
-                      />
-                      <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
-                    </div>
+                    <BannerImg folder1={"charity"} charityID={org.id} recordID={org.id} />
                     <div className="max-w-xl">
                       <div className="group relative">
                         <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
@@ -213,7 +207,7 @@ export default async function Home() {
                         </h3>
                         <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{org.about}</p>
                       </div>
-                    </div>  
+                    </div>
                   </article>
                 ))}
               </div>
@@ -232,14 +226,7 @@ export default async function Home() {
               <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
                 {campaign_post?.map((post) => (
                   <article key={post.id} className="flex flex-col items-start justify-between">
-                    <div className="relative w-full">
-                      <img
-                        src={"https://i.imgflip.com/4lst2s.jpg?a470736"}
-                        alt=""
-                        className="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]"
-                      />
-                      <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
-                    </div>
+                    <BannerImg folder1={"campaign_post"} charityID={post.charity?.id} recordID={post.id} />
                     <div className="max-w-xl">
                       {/* <div className="mt-8 flex items-center gap-x-4 text-xs">
                         <time dateTime={post.datetime} className="text-gray-500">

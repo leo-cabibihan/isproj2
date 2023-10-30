@@ -36,8 +36,8 @@ export default async function Example() {
     .select('*')
     .order('id', { ascending: false }).limit(1)
 
-  const charity_id = last_charity?.map(charity => charity.id)
-  console.log("LAST CHARITY'S ID IS: " + (charity_id![0] + 1))
+  const last_id = last_charity?.map(charity => charity.id)
+  console.log("LAST CHARITY'S ID IS: " + (last_id![0] + 1))
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
@@ -223,7 +223,7 @@ export default async function Example() {
             </div>
           </div>
 
-          <ImageUpload folderName="onboarding" charityID={charity_id![0] + 1} recordID={charity_id![0] + 1} />
+          <ImageUpload folderName="onboarding" charityID={last_id![0] + 1} recordID={last_id![0] + 1} />
         </div>
         <div className="mt-6 flex items-center justify-end gap-x-6 mb-4">
           <Button type="submit" variant="solid" color="blue" className="w-1/5">

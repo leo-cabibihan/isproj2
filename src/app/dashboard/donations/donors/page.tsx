@@ -47,7 +47,7 @@ export default async function ListofDonors() {
                         <Tbody>
                             {donors?.map(donor =>
                                 <Tr key={donor.donor_id}>
-                                    <Td>{donor.donor_name}</Td>
+                                    <Td>{donor.name}</Td>
                                     <Td>{donor.total_number_of_donations}</Td>
                                     <Td>{donor.total_cash_donated}</Td>
                                     <Td>    

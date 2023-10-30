@@ -43,7 +43,6 @@ export default async function Example({ params } : any) {
       offset: 0,
       sortBy: { column: "name", order: "asc" },
     })
-  console.log('Charity ID:', charityID);
   const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/event/" + charityID + "/" + eventID + "/"
 
   return (

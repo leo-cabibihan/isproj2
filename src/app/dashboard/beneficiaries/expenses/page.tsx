@@ -20,11 +20,10 @@ const columns = ["Description", "Amount", "Date"];
 export default async function Expenses() {
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
-
-    const uid = parseInt(await GetUID() as string)
+    const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
-
+    
     const { data: expenses, error } = await supabase
         .from('expenses')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
@@ -167,7 +166,7 @@ export default async function Expenses() {
                                                 </SelectField>
 
 
-                                                <ImageUpload folderName="expenses" charityID={charity_id![0]} recordID={expense_id![0] + 1} />
+                                                <ImageUpload folderName="expenses" charityID={charity_id} recordID={expense_id![0] + 1} />
 
                                                 <div className="mt-6 col-span-full">
                                                     <div className="col-span-full">

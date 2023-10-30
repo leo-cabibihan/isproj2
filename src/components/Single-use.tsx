@@ -1,6 +1,7 @@
 import supabase from "@/app/utils/supabase"
 import { Button } from "./Button"
 import { Container } from "./Container"
+import { BannerImg } from "./DisplayImg"
 
 
 const orgs = [
@@ -278,12 +279,7 @@ export async function ContentLeft({ id }) {
                   </div>
                 </div>
               </div><div className="lg:pr-4">
-                <div className="relative overflow-hidden rounded-3xl bg-gray-900 px-6 pb-9 pt-64 shadow-2xl sm:px-12 lg:max-w-lg lg:px-8 lg:pb-8 xl:px-10 xl:pb-10">
-                  <img
-                    className="absolute inset-0 h-full w-full object-cover "
-                    src="https://scontent.fmnl5-2.fna.fbcdn.net/v/t39.30808-6/276317381_109278458396550_7620802680570009451_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=a2f6c7&_nc_eui2=AeHYg9oTV2bb151aqFN2Z_G9o5dcbJrOtq-jl1xsms62rygjMbRfqlT4eai5f_75Gf16IIwatZeGxfAXly-nKJH_&_nc_ohc=A6x_B2T4sBwAX8zDC2F&_nc_ht=scontent.fmnl5-2.fna&oh=00_AfAqNoIVHc51KqoHvkTJuYOK02T94U04IpKano8Ham1pnA&oe=64FB7B6D"
-                    alt="" />
-                </div>
+                <BannerImg folder1={"charity"} charityID={org.id} recordID={org.id} />
               </div>
             </>
           ))}
@@ -296,17 +292,16 @@ export async function ContentLeft({ id }) {
 export async function Receipts({ id }) {
   const eventID = id
   const { data: events, error: events_error } = await supabase.from('event').select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name, contact )').eq('id', eventID)
-  
+
   const charityID = events?.map(event => event.charity.id);
   const { data: images, error } = await supabase
-            .storage
-            .from('uploads')
-            .list(charityID?.toString(), {
-                limit: 100,
-                offset: 0,  
-                sortBy: { column: "name", order: "asc" },
-            })
-  console.log('Charity ID:', charityID);
+    .storage
+    .from('uploads')
+    .list(charityID?.toString(), {
+      limit: 100,
+      offset: 0,
+      sortBy: { column: "name", order: "asc" },
+    })
   const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + charityID + "/"
   return (
     <div className="bg-white">
@@ -314,13 +309,13 @@ export async function Receipts({ id }) {
         <h2 className="text-2xl font-bold tracking-tight text-gray-900">Uploaded Receipts</h2>
 
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-        {images?.map((image) =>{
-              return (
-                <div key={CDNURL +  "/" + image.name}>
-                  <img src={CDNURL + "/" + image.name}/>
-                </div>
-              )
-        })}
+          {images?.map((image) => {
+            return (
+              <div key={CDNURL + "/" + image.name}>
+                <img src={CDNURL + "/" + image.name} />
+              </div>
+            )
+          })}
         </div>
       </div>
     </div>

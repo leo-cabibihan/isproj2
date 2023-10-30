@@ -6,13 +6,19 @@ import SlideOver from '@/components/SlideOverButton';
 import supabase from '@/app/utils/supabase';
 import { revalidatePath } from 'next/cache';
 import { EditForm, MultilayeredForm } from './form';
+import { GetUID } from '@/app/utils/user_id';
 
 export const revalidate = 0;
 
 
 export default async function VerifiedTable() {
 
-  const { data: items, error } = await supabase.from('items_donation_transaction').select('*, charity ( id, name ), address ( * ), donor ( id, name )')
+  console.log("DOES IT WORK???? MAYBE: " + await GetUID())
+  const uid = await GetUID()
+  const { data: charity_member, error: idk } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+  const charity_id = charity_member?.map(member => member.charity?.id)
+
+  const { data: items, error } = await supabase.from('items_donation_transaction').select('*, charity ( id, name ), address ( * ), donor ( id, name )').eq('verify', true).eq('charity_id', charity_id)
   const { data: inventory, error: error_2 } = await supabase.from('inventory_item').select('*, items_donation_transaction ( *, charity ( id, name ), address ( * ), donor ( id, name ) )')
 
   console.log("ITEMS ARE: ", items)
