@@ -14,7 +14,7 @@ const people = [
 export default async function ListofDonors() {
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
-    const charity_id = charity_member?.map(member => member.charity.id)
+    const charity_id = charity_member?.map(member => member.charity_id)
 
     const {data: donors, error} = await supabase
     .from("donor_summary")
@@ -47,7 +47,7 @@ export default async function ListofDonors() {
                         <Tbody>
                             {donors?.map(donor =>
                                 <Tr key={donor.donor_id}>
-                                    <Td>{donor.donor_name}</Td>
+                                    <Td>{donor.name}</Td>
                                     <Td>{donor.total_number_of_donations}</Td>
                                     <Td>{donor.total_cash_donated}</Td>
                                     <Td>    

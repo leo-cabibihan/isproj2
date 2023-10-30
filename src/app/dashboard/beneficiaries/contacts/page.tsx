@@ -60,6 +60,10 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
   return (
     <>
+      <div className="sm:flex sm:items-center py-9">
+         <div className="sm:flex-auto">
+         </div>
+      </div>
       <TableContainer>
         <TableHeaderButton header="Contacts">
           <SlideOver buttontext="Add Contact" variant="solid" color="blue">
@@ -127,7 +131,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                   <Td>{contact.address}</Td>
                   <Td>
                     {/* This is the EDIT CONTACT form */}
-                    <SlideOver buttontext="View" variant="solid" color="blue">
+                    <SlideOver buttontext="View Details" variant="solid" color="blue">
                       <form className="space-y-6" action={saveChanges} method="PUT">
                         <TextField
                           label=""

@@ -1,5 +1,8 @@
+import supabase from "@/app/utils/supabase";
+import { GetUID } from "@/app/utils/user_id";
 import SlideOver from "@/components/SlideOverButton";
-import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Thead, Tr } from "@/components/Table";
+import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
+import { useParams, useRouter } from "next/navigation";
 
 
 
@@ -12,36 +15,63 @@ const people = [
 ];
 
 
-export default function DonorHistory() {
+export default async function DonorHistory({params} : any) {
+    const donorID = params.id
+    const uid = await GetUID()
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const charity_id = charity_member?.map(member => member.charity_id)
+    //const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+
+    const {data: donors, error} = await supabase
+    .from("donor_summary")
+    .select("*")
+    .eq("donor_id", donorID)
+    .limit(1)
+
+    const {data: donor_history, error: donor_historyError} = await supabase
+    .from("donor_transaction_history")
+    .select("*")
+    .eq("donor_id", donorID)
+    .eq("charity_id", charity_id)
+    
+
+    console.log("donor_id is: " + donorID)
+    
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
                 <div className="sm:flex-auto">
-                </div>
+            </div>
             </div>
 
             <TableContainer>
-                <TableHeader header="Donor's History" />
-                <TableContent>
-                    <Table>
-                        <Thead>
-                            <Tr>
-                                <Td>Event Name</Td>
-                                <Td>Donation Type</Td>
-                                <Td>Date Donated</Td>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {people.map(person =>
-                                <Tr key={person.EventName}>
-                                    <Td>{person.EventName}</Td>
-                                    <Td>{person.DonationType}</Td>
-                                    <Td>{person.Date}</Td>
+                {donors?.map(donor =>
+                <>
+                <div key={donor.donor_id}>
+                <TableHeader header={donor.name + "'s History"} />
+                    <TableContent>
+                        <Table>
+                            <Thead>
+                                <Tr>
+                                    <Th>Event Name</Th>
+                                    <Th>Donation Type</Th>
+                                    <Th>Date Donated</Th>
+                                </Tr>
+                            </Thead>
+                            <Tbody>
+                                {donor_history?.map(donor_history =>
+                                <Tr key={donor_history.donor_id}>
+                                    <Td>{donor_history.event_name}</Td>
+                                    <Td>{donor_history.donation_type}</Td>
+                                    <Td>{donor_history.donation_date}</Td>
                                 </Tr>
                                 )}
-                        </Tbody>
-                    </Table>
-                </TableContent>
+                            </Tbody>
+                        </Table>
+                    </TableContent>
+                    </div>
+                </>
+                )}
             </TableContainer>
         </>
     )
