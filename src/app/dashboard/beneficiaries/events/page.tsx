@@ -150,15 +150,15 @@ export default async function Page() {
                             <TextField
                                 label="Start Date"
                                 name="start_date"
-                                type="date"
+                                type="datetime-local"
                                 required
                             />
 
                             <TextField
                                 label="End Date"
                                 name="end_date"
-                                type="date"
-
+                                type="datetime-local"
+                                required
                             />
                             <ImageUpload folderName="event" charityID={charity_id![0]} recordID={event_id![0] + 1}/>
 
@@ -229,22 +229,32 @@ export default async function Page() {
                                                 </div>
 
                                                 <TextField
-                                                    label="Start Date"
-                                                    name="start_date"
-                                                    type="date"
-                                                    readOnly
+                                                    label="Current Start Date"
+                                                    name="current_start_date"
+                                                    type="text"                                        
                                                     defaultValue={event.start_date}
-                                                    required
+                                                    readOnly
+                                                />
+                                                 <TextField
+                                                    label="New Start Date"
+                                                    name="start_date"
+                                                    type="datetime-local"                                        
+                                                    required       
                                                 />
 
                                                 <TextField
-                                                    label="End Date"
+                                                    label="Current End Date"
                                                     name="end_date"
-                                                    type="date"
-                                                    readOnly
+                                                    type="text"
                                                     defaultValue={event.end_date}
-                                                    required
+                                                    readOnly
+                                                />
 
+                                                <TextField
+                                                    label="New End Date"
+                                                    name="end_date"
+                                                    type="datetime-local"
+                                                    required
                                                 />
                                                 {/* {events?.map(event => (
                                                     <SelectField
