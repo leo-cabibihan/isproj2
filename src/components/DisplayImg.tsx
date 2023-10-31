@@ -1,4 +1,4 @@
-import { DisplayImage } from "@/app/utils/display_image"
+import { DisplayImage, DownloadImage } from "@/app/utils/display_image"
 
 export async function ShowImg({ folder1, charityID, recordID }: any) {
 
@@ -30,5 +30,22 @@ export async function BannerImg({ folder1, charityID, recordID }: any) {
             />
             <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
         </div>
+    )
+}
+
+export async function DownloadableImg({ path, children }: { path: any, children: React.ReactNode }) {
+
+    'use server'
+
+    const downloadImg = async () => {
+        await DownloadImage(path)
+    }
+
+    return (
+        <>
+            <a onClick={downloadImg}>
+                {children}
+            </a>
+        </>
     )
 }

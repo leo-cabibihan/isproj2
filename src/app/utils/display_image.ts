@@ -14,3 +14,13 @@ export async function DisplayImage(folder1: any, charityID: any, recordID: any) 
     const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + folder1 + "/" + charityID + "/" + recordID + "/" + img_name
     return CDNURL as string
 }
+
+export function DownloadImage(path: any) {
+
+    const { data } = supabase
+        .storage
+        .from('uploads')
+        .getPublicUrl(path?.toString(), {
+            download: true,
+        })
+}

@@ -50,7 +50,7 @@ export async function PUT(request: Request) {
     const newTransaction = {
         donor_name: transaction.name,
         address: transaction.address,
-        verify: false
+        verify: true
     }
 
     //INSERTS TRANSACTION DETAILS INTO TRANSACTION TABLE AND GETS THE ID OF NEW RECORD
