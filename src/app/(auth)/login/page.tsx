@@ -65,7 +65,7 @@ export default async function Login({searchParams}: {searchParams: { [key: strin
           />
           <p className="mt-2 text-sm text-gray-700">
             <Link
-              href="/forgot"
+              href="/reset"
               className="font-medium text-blue-600 hover:underline"
             >
               Forgot Password?

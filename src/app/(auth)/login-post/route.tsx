@@ -11,7 +11,7 @@ export async function POST(request: Request) {
   const password = String(formData.get('password'))
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
-  console.log('wtf wtf')
+  // console.log('wtf wtf')
   const { data: { user }, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -23,16 +23,16 @@ export async function POST(request: Request) {
   })
 
   //CHECKS FOR LOGIN ERRORS
-  console.log("I am error", error)
+  // console.log("I am error", error)
   if (error) {
-    console.log("I should redirect")
+    // console.log("I should redirect")
 
     //DISPLAYS ERROR MESSAGE IN PAGE
     return NextResponse.redirect(`http://localhost:3000/login?err=${error.message}`, { status: 301 })
   }
-  console.log("y am I here")
+  // console.log("y am I here")
   const user_id = user?.id
-  console.log('UUID IS: ', user_id)
+  // console.log('UUID IS: ', user_id)
 
   // //Checks if current user is a charity member or donor (It works)
   const { data: donor, error: error_1 } = await supabase
@@ -48,11 +48,11 @@ export async function POST(request: Request) {
     .select('*')
     .eq('id', user_id)
 
-  console.log(donor)
-  console.log(charity_member)
-  console.log(admin)
+  // console.log(donor)
+  // console.log(charity_member)
+  // console.log(admin)
 
-  console.log(requestUrl.origin)
+  // console.log(requestUrl.origin)
 
   if (donor?.length === 1) {
     return NextResponse.redirect('http://localhost:3000/settings', {

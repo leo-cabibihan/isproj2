@@ -4,8 +4,6 @@ export async function ShowImg({ folder1, charityID, recordID }: any) {
 
     const CDNURL = await DisplayImage(folder1, charityID, recordID)
 
-    console.log("THE COMPONENT WORKS: " + CDNURL)
-
     return (
         <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
 
@@ -22,8 +20,6 @@ export async function ShowImg({ folder1, charityID, recordID }: any) {
 export async function BannerImg({ folder1, charityID, recordID }: any) {
 
     const CDNURL = await DisplayImage(folder1, charityID, recordID)
-
-    console.log("THE COMPONENT WORKS: " + CDNURL)
 
     return (
         <div className="relative w-full">

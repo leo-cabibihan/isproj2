@@ -14,7 +14,7 @@ export default function CharityRegister({ params }: any) {
 
   const email = decodeURIComponent(params.slug[0])
   const id = params.slug[1]
-  console.log("PARAMS ARE :" + params.slug[0] + "&" + params.slug[1])
+  // console.log("PARAMS ARE :" + params.slug[0] + "&" + params.slug[1])
 
   return (
     <>

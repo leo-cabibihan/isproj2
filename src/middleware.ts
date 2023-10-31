@@ -14,38 +14,38 @@ export async function middleware(req: NextRequest) {
   const uid = user?.id
 
   if (originalUrl.includes('/admin')) {
-    console.log('ADMIIIIIIIIIN')
+    // console.log('ADMIIIIIIIIIN')
 
     //CHECK FOR ADMIN ROLE
     const { data: admin, error: error_3 } = await supabase
       .from('system_owner')
       .select('*')
       .eq('id', uid)
-    console.log(admin)
+    // console.log(admin)
 
     if (admin?.length !== 1) {
-      console.log("NOT SIGNED IN")
+      // console.log("NOT SIGNED IN")
       return Response.redirect('http://localhost:3000')
     }
   }
   else if (originalUrl.includes('/dashboard')) {
-    console.log('CHARITY')
+    // console.log('CHARITY')
 
     //CHECK FOR CHARITY ROLE
     const { data: charity_member, error: error_2 } = await supabase
       .from('charity_member')
       .select('*, charity ( id, charity_verified )')
       .eq('user_uuid', uid)
-    console.log(charity_member)
+    // console.log(charity_member)
 
     //CHECK IF CHARITY IS VERIFIED
     charity_member?.map(member => (
       charity_status = member.charity.charity_verified
     ))
-    console.log("THE CHARITY STATUS IS: " + charity_status)
+    // console.log("THE CHARITY STATUS IS: " + charity_status)
 
     if (charity_member?.length !== 1 || charity_status == false) {
-      console.log("NOT A CHARITY FUCK OFF")
+      // console.log("NOT A CHARITY FUCK OFF")
       return Response.redirect('http://localhost:3000')
     }
   }
@@ -55,16 +55,16 @@ export async function middleware(req: NextRequest) {
       .from('donor')
       .select('*')
       .eq('id', uid)
-    console.log(donor)
+    // console.log(donor)
 
     if (donor?.length !== 1) {
-      console.log("NOT A DONOR FUCK OFF")
+      // console.log("NOT A DONOR FUCK OFF")
       return Response.redirect('http://localhost:3000')
     }
   }
   else if (originalUrl.includes('/owner-invite')) {
     if (user) {
-      console.log("ALREADY AN ADMIN, SO FUCK OFF")
+      // console.log("ALREADY AN ADMIN, SO FUCK OFF")
       return Response.redirect('http://localhost:3000')
     }
   }

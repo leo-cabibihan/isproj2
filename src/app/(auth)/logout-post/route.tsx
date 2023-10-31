@@ -29,7 +29,7 @@ export async function POST() {
     ]
     
     const { error } = await supabase.auth.signOut()
-    console.log("this is logout eroor", error)
+    // console.log("this is logout eroor", error)
     return NextResponse.redirect("http://localhost:3000/", {
         status: 301,
     })
