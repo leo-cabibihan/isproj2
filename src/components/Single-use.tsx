@@ -2,6 +2,7 @@ import supabase from "@/app/utils/supabase"
 import { Button } from "./Button"
 import { Container } from "./Container"
 import { BannerImg } from "./DisplayImg"
+import { LightBulbIcon } from "@heroicons/react/24/solid"
 
 
 const orgs = [
@@ -203,7 +204,7 @@ export function Hero() {
   )
 }
 
-export async function Causes({ id }) {
+export async function Causes({ id }: any) {
 
   const { data: events } = await supabase
     .from('event')
@@ -221,17 +222,10 @@ export async function Causes({ id }) {
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {events?.map((event) => (
             <article key={event.id} className="flex flex-col items-start justify-between">
-              <div className="relative w-full">
-                <img
-                  src={event.imageUrl}
-                  alt=""
-                  className="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]"
-                />
-                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
-              </div>
+              <BannerImg folder1={"event"} charityID={id} recordID={event.id} />
               <div className="max-w-xl">
                 <div className="mt-8 flex items-center gap-x-4 text-xs">
-                  <time dateTime={event.start_date} className="text-gray-500">
+                  <time dateTime={String(event.start_date)} className="text-gray-500">
                     {event.start_date}
                   </time>
                 </div>
@@ -253,7 +247,7 @@ export async function Causes({ id }) {
   )
 }
 
-export async function ContentLeft({ id }) {
+export async function ContentLeft({ id }: any) {
 
   const { data: orgs } = await supabase
     .from('charity')
@@ -289,11 +283,11 @@ export async function ContentLeft({ id }) {
   )
 }
 
-export async function Receipts({ id }) {
+export async function Receipts({ id }: any) {
   const eventID = id
   const { data: events, error: events_error } = await supabase.from('event').select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name, contact )').eq('id', eventID)
 
-  const charityID = events?.map(event => event.charity.id);
+  const charityID = events?.map(event => event.charity?.id);
   const { data: images, error } = await supabase
     .storage
     .from('uploads')
@@ -322,7 +316,10 @@ export async function Receipts({ id }) {
   )
 }
 
-export function ContentRight() {
+export async function ContentRight({ id }: any) {
+
+  const { data, error } = await supabase.from('drop_off_location').select('*').eq('charity_id', id)
+
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -374,28 +371,23 @@ export function ContentRight() {
             </div>
           </div>
           <div>
-            <div className="text-base leading-7 text-gray-700 lg:max-w-lg">
-              <p className="text-base font-semibold leading-7 text-indigo-600">Drop-off Locations</p>
-              <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                Here, you can drop off your donations.
-              </h1>
-              <div className="max-w-xl">
-                <p className="mt-6">
-                  Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris semper sed amet
-                  vitae sed turpis id. Id dolor praesent donec est. Odio penatibus risus viverra tellus varius sit neque
-                  erat velit. Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris
-                  semper sed amet vitae sed turpis id.
-                </p>
-                <p className="mt-8">
-                  Et vitae blandit facilisi magna lacus commodo. Vitae sapien duis odio id et. Id blandit molestie
-                  auctor fermentum dignissim. Lacus diam tincidunt ac cursus in vel. Mauris varius vulputate et ultrices
-                  hac adipiscing egestas. Iaculis convallis ac tempor et ut. Ac lorem vel integer orci.
-                </p>
-                <p className="mt-8">
-                  Et vitae blandit facilisi magna lacus commodo. Vitae sapien duis odio id et. Id blandit molestie
-                  auctor fermentum dignissim. Lacus diam tincidunt ac cursus in vel. Mauris varius vulputate et ultrices
-                  hac adipiscing egestas. Iaculis convallis ac tempor et ut. Ac lorem vel integer orci.
-                </p>
+            <div className="text-base leading-7 text-gray-700 lg:max-w-lg space-y-10">
+              <div>
+                <p className="text-base font-semibold leading-7 text-indigo-600">Drop-off Locations</p>
+                <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                  Here, you can drop off your donations.
+                </h1>
+              </div>
+              <div className="space-y-5">
+                {data?.map(address => (
+                  <div className="max-w-xl" key={address.id}>
+                    <dt className="inline font-semibold text-gray-900">
+                      <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                      Address:
+                    </dt>{' '}
+                    <dd className="inline">{address.address}</dd>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -454,7 +446,7 @@ export function GraphTemp() {
   )
 }
 
-export async function News({ id }) {
+export async function News({ id }: any) {
 
   const { data: posts } = await supabase
     .from('campaign_post')
@@ -473,14 +465,7 @@ export async function News({ id }) {
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {posts?.map((post) => (
             <article key={post.id} className="flex flex-col items-start justify-between">
-              <div className="relative w-full">
-                <img
-                  src={"https://i.imgflip.com/4lst2s.jpg?a470736"}
-                  alt=""
-                  className="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover sm:aspect-[2/1] lg:aspect-[3/2]"
-                />
-                <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
-              </div>
+              <BannerImg folder1={"campaign_post"} charityID={id} recordID={post.id} />
               <div className="max-w-xl">
                 {/* <div className="mt-8 flex items-center gap-x-4 text-xs">
                         <time dateTime={post.datetime} className="text-gray-500">

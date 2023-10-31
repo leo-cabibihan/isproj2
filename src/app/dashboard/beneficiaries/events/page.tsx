@@ -11,7 +11,7 @@ import { CharityLog } from "@/app/admin/audit-log/function";
 
 export const revalidate = 0;
 
-export default async function Page() {    
+export default async function Page() {
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
@@ -35,18 +35,7 @@ export default async function Page() {
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
-       //const { data: images, error } = await supabase
-       //.storage
-       //.from('uploads')
-       //.list("event" + "/" + charity_id + "/" + (event_id![0] + 1), {
-       //    limit: 100,
-       //    offset: 0,
-       //    sortBy: { column: "name", order: "asc" },
-       //})
-       //const imageName = String(images?.map(image => image.name))
-       //const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + "event" + "/" + charity_id + "/" 
-       //+ (event_id![0] + 1) + "/" + imageName
-        const event = {    
+        const event = {
             name: formData.get("event_name"),
             description: formData.get("details"),
             start_date: formData.get("start_date"),
@@ -56,7 +45,7 @@ export default async function Page() {
             beneficiary_id: formData.get("beneficiary_id")
         };
 
-        const {data: insert_event, error: insert_error} = await supabase.from('event').insert(event);
+        const { data: insert_event, error: insert_error } = await supabase.from('event').insert(event);
         //console.log("CDNURL is: " + CDNURL)
         revalidatePath('/');
         CharityLog("ADDED NEW EVENT " + formData.get("event_name"))
@@ -70,10 +59,11 @@ export default async function Page() {
             name: formData.get("event_name"),
             description: formData.get("description"),
             start_date: formData.get("start_date"),
-            end_date: formData.get("end_date")
+            end_date: formData.get("end_date"),
+            beneficiary_id: formData.get("beneficiary_id")
         };
 
-        const {data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         CharityLog("UPDATED EVENT " + formData.get("event_name"))
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/events?err=${update_error?.message}`, update_error)
@@ -89,7 +79,7 @@ export default async function Page() {
             end_date: formData.get("end_date"),
         };
 
-        const {data: delete_event, error: delete_error} = await supabase.from('event').delete().eq("id", eventId)
+        const { data: delete_event, error: delete_error } = await supabase.from('event').delete().eq("id", eventId)
         revalidatePath('/');
         CharityLog("DELETED EVENT")
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/events?err=${delete_error?.message}`, delete_error)
@@ -138,13 +128,13 @@ export default async function Page() {
                             </div>
 
                             <SelectField
-                            className="col-span-full py-5"
-                            label="Assign Beneficiary"
-                            name="beneficiary_id"
+                                className="col-span-full py-5"
+                                label="Assign Beneficiary"
+                                name="beneficiary_id"
                             >
-                           {beneficiaries?.map(beneficiary => (
-                            <option key={beneficiary.id} value={beneficiary.id}>{beneficiary.beneficiary_name}</option>
-                            ))}
+                                {beneficiaries?.map(beneficiary => (
+                                    <option key={beneficiary.id} value={beneficiary.id}>{beneficiary.beneficiary_name}</option>
+                                ))}
                             </SelectField>
 
                             <TextField
@@ -160,7 +150,7 @@ export default async function Page() {
                                 type="date"
 
                             />
-                            <ImageUpload folderName="event" charityID={charity_id![0]} recordID={event_id![0] + 1}/>
+                            <ImageUpload folderName="event" charityID={charity_id![0]} recordID={event_id![0] + 1} />
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">
@@ -246,16 +236,16 @@ export default async function Page() {
                                                     required
 
                                                 />
-                                                {/* {events?.map(event => (
-                                                    <SelectField
-                                                        className="col-span-full"
-                                                        label="I am a"
-                                                        name="beneficiaries"
-                                                        key={event.id}
-                                                    >
-                                                        <option value={event.beneficiaries.name}>{event.beneficiaries.name}</option>
-                                                    </SelectField>
-                                                ))} */}
+
+                                                <SelectField
+                                                    className="col-span-full py-5"
+                                                    label="Assign Beneficiary"
+                                                    name="beneficiary_id"
+                                                >
+                                                    {beneficiaries?.map(beneficiary => (
+                                                        <option key={beneficiary.id} value={beneficiary.id}>{beneficiary.beneficiary_name}</option>
+                                                    ))}
+                                                </SelectField>
 
                                                 <div className="col-span-full">
                                                     <Button type="submit" variant="solid" color="blue" className="w-full">
@@ -265,11 +255,11 @@ export default async function Page() {
                                                     </Button>
                                                 </div>
                                                 <div className="col-span-full">
-                                                <Button formAction={deleteEvent} type="submit" variant="solid" color="red" className="w-full">
+                                                    <Button formAction={deleteEvent} type="submit" variant="solid" color="red" className="w-full">
                                                         <span>
                                                             Delete Event <span aria-hidden="true">&rarr;</span>
                                                         </span>
-                                                </Button>
+                                                    </Button>
                                                 </div>
                                             </form>
                                         </SlideOver>

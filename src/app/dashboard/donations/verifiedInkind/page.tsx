@@ -62,7 +62,7 @@ export default async function VerifiedTable() {
                   <Td>{item.date}</Td>
                   <Td>
                     <SlideOver variant="solid" color="blue" buttontext="View Details">
-                      <EditForm id={item.id} />
+                      <EditForm id={item.id} orgID={charity_id} />
                     </SlideOver>
                   </Td>
                 </Tr>

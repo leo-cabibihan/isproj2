@@ -3,6 +3,7 @@
 import supabase from "@/app/utils/supabase";
 import { Button } from "@/components/Button";
 import { TextField, SelectField } from "@/components/Fields";
+import { ImageUpload } from "@/components/ImgUpload";
 import { SetStateAction, useEffect, useState } from "react";
 
 export function MultilayeredForm(ID: any) {
@@ -164,23 +165,6 @@ export function MultilayeredForm(ID: any) {
                     </div>
                 </div>
 
-                <div className="col-span-full">
-                    <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                        <div className="text-center">
-                            <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                <label
-                                    htmlFor="file-upload"
-                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                >
-                                    <span>Upload a file</span>
-                                    <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                                </label>
-                                <p className="pl-1">or drag and drop</p>
-                            </div>
-                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                        </div>
-                    </div>
-                </div>
             </form>
             <div className="grid grid-cols-2 gap-4">
                 <Button onClick={submit} variant="solid" color="green" className="w-full">
@@ -198,7 +182,7 @@ export function MultilayeredForm(ID: any) {
     );
 }
 
-export function EditForm({id}: {id:number}) {
+export function EditForm({ id, orgID }: { id: number, orgID: any }) {
     const [formFields, setFormFields] = useState<any>({})
 
     const [toDelete, setToDelete] = useState<number[]>([])
@@ -209,8 +193,8 @@ export function EditForm({id}: {id:number}) {
     useEffect(() => {
 
         const fetchData = async () => {
-            const {data, error} = await supabase.from("items_donation_transaction").select(`*, inventory_item ( * ), donor ( id, name ), address ( * )`).eq("id", id).single()
-            
+            const { data, error } = await supabase.from("items_donation_transaction").select(`*, inventory_item ( * ), donor ( id, name ), address ( * )`).eq("id", id).single()
+
             if (data) setFormFields(data!)
         }
 
@@ -223,7 +207,7 @@ export function EditForm({id}: {id:number}) {
         let data = [...formFields.inventory_item];
         console.log(event.target.name)
         data.find(item => item.id === index)[event.target.name] = event.target.value;
-        setFormFields({...formFields, inventory_item: data});
+        setFormFields({ ...formFields, inventory_item: data });
     }
 
     const submit = async (e: any) => {
@@ -243,21 +227,21 @@ export function EditForm({id}: {id:number}) {
     }
 
     const addFields = async () => {
-        let object = { name: null, quantity: null, perishable: true, unit_of_measurement: null , donation_id: id}
-    
+        let object = { name: null, quantity: null, perishable: true, unit_of_measurement: null, donation_id: id }
+
         const { data: field, error } = await supabase
-        .from('inventory_item')
-        .insert(object)
-        .select()
-        .single()
+            .from('inventory_item')
+            .insert(object)
+            .select()
+            .single()
         console.log("ERRORS: ", error)
         console.log("I added a field, what's here?", field)
-        if (field)       setFormFields({...formFields, inventory_item: formFields.inventory_item.concat(field)})
-        
+        if (field) setFormFields({ ...formFields, inventory_item: formFields.inventory_item.concat(field) })
+
     }
 
     const removeFields = (id: number) => {
-        setFormFields({...formFields, inventory_item: formFields.inventory_item.filter((item: any) => item.id !== id)})
+        setFormFields({ ...formFields, inventory_item: formFields.inventory_item.filter((item: any) => item.id !== id) })
         setToDelete(toDelete.concat(id))
     }
 
@@ -268,7 +252,7 @@ export function EditForm({id}: {id:number}) {
                     label="Donor Name"
                     name="donor"
                     type="text"
-                    
+
                     readOnly
                 />
 
@@ -348,6 +332,8 @@ export function EditForm({id}: {id:number}) {
                                 value={form.expiry}
                             />
 
+                            <ImageUpload folderName={"inventory_item"} charityID={orgID} recordID={form.id}/>
+
                             <div className="col-span-full">
                                 <Button onClick={() => removeFields(form.id)} variant="solid" color="red" className="w-full">
                                     <span>
@@ -365,24 +351,6 @@ export function EditForm({id}: {id:number}) {
                     </div>
                     <div className="relative flex justify-center">
                         <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">Proof of Delivery</span>
-                    </div>
-                </div>
-
-                <div className="col-span-full">
-                    <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                        <div className="text-center">
-                            <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                <label
-                                    htmlFor="file-upload"
-                                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                                >
-                                    <span>Upload a file</span>
-                                    <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                                </label>
-                                <p className="pl-1">or drag and drop</p>
-                            </div>
-                            <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                        </div>
                     </div>
                 </div>
             </form>

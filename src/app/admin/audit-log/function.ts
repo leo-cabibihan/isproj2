@@ -24,7 +24,7 @@ export async function CharityLog(action: any) {
     const charityId = charity_id![0]
 
     const log = {
-        id: userID,
+        member_id: userID,
         action: action,
         charity_id: charityId
     }
