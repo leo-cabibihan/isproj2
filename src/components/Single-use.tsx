@@ -382,7 +382,7 @@ export async function ContentRight({ id }: any) {
                 {data?.map(address => (
                   <div className="max-w-xl" key={address.id}>
                     <dt className="inline font-semibold text-gray-900">
-                      <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                      
                       Address:
                     </dt>{' '}
                     <dd className="inline">{address.address}</dd>

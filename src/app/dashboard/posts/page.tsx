@@ -15,20 +15,9 @@ import { createServerActionClient } from "@supabase/auth-helpers-nextjs";
 import { DisplayImage } from "@/app/utils/display_image";
 import { ShowImg } from "@/components/DisplayImg";
 import { CharityLog } from "@/app/admin/audit-log/function";
+import { GetUID } from "@/app/utils/user_id";
 
 export const revalidate = 0;
-
-async function GetUID() {
-    const cookieStore = cookies()
-
-    const supabase = createServerActionClient({ cookies: () => cookieStore })
-
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-    console.log("SESSION ID IS: " + session?.user.id)
-    const uid = session?.user.id
-
-    return (uid)
-}
 
 export default async function Page() {
 
@@ -36,7 +25,7 @@ export default async function Page() {
 
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
-    const charity_id = charity_member?.map(member => member.charity.id)
+    const charity_id = charity_member?.map(member => member.charity?.id)
 
     const charityId = charity_id![0]
 

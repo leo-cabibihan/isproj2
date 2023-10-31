@@ -8,11 +8,17 @@ import Alert from "@/components/Alert"
 import { NextResponse } from "next/server"
 import { DisplayError } from "@/app/(auth)/error-handling/function"
 import { CharityLog } from "@/app/admin/audit-log/function"
+import { GetUID } from "@/app/utils/user_id"
 
 export const revalidate = 0;
 
 export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-  const { data: contacts } = await supabase.from('contacts').select("*").order("id", { ascending: true })
+
+  const uid = await GetUID()
+  const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+  const charity_id = charity_member?.map(member => member.charity?.id)
+
+  const { data: contacts } = await supabase.from('beneficiaries').select("*").order("id", { ascending: true }).eq('charity_id', charity_id)
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
@@ -38,7 +44,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
       address: formData.get("address")
     };
 
-    const {data: beneficiaries_update, error: update_error} = await supabase.from('contacts').update(beneficiary).eq("id", contactId)
+    const { data: beneficiaries_update, error: update_error } = await supabase.from('contacts').update(beneficiary).eq("id", contactId)
     revalidatePath('/');
     CharityLog("UPDATED CONTACT " + formData.get("beneficiary") + ".")
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${update_error?.message}`, update_error)
@@ -53,7 +59,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
       address: formData.get("address")
     };
 
-    const {data: beneficiary_delete, error: delete_error} = await supabase.from('contacts').delete().eq("id", contactId)
+    const { data: beneficiary_delete, error: delete_error } = await supabase.from('contacts').delete().eq("id", contactId)
     revalidatePath('/');
     CharityLog("DELETED CONTACT.")
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${delete_error?.message}`, delete_error)
@@ -62,8 +68,8 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
   return (
     <>
       <div className="sm:flex sm:items-center py-9">
-         <div className="sm:flex-auto">
-         </div>
+        <div className="sm:flex-auto">
+        </div>
       </div>
       <TableContainer>
         <TableHeaderButton header="Contacts">
@@ -127,8 +133,8 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
             <Tbody>
               {contacts?.map(contact => (
                 <Tr key={contact.id}>
-                  <Td>{contact.name}</Td>
-                  <Td>{contact.contact_no}</Td>
+                  <Td>{contact.beneficiary_name}</Td>
+                  <Td>{contact.contact}</Td>
                   <Td>{contact.address}</Td>
                   <Td>
                     {/* This is the EDIT CONTACT form */}
@@ -144,15 +150,15 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
                         <TextField
                           label="Beneficiary Name"
-                          name="beneficiary"
+                          name="beneficiary_name"
                           type="text"
-                          defaultValue={contact.name as string}
+                          defaultValue={contact.beneficiary_name as string}
                           required
                         />
 
                         <TextField
                           label="Contact Number"
-                          name="contact_no"
+                          name="contact"
                           type="number"
                           autoComplete="number"
                           maxLength={15}
