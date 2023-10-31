@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const requestUrl = new URL(request.url)
     const formData = await request.json()
     const cookieStore = cookies()
-    const supabaseAuth = createRouteHandlerClient({ cookies: () => cookieStore })
+    const supabaseAuth = createRouteHandlerClient({                                                                                                                 cookies: () => cookieStore })
 
     const orgID = formData.orgID
     const userID = formData.donorID

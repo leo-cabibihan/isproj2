@@ -20,7 +20,7 @@ export function FormComponent({ ID, DonorID }: any) {
                                 Donate Goods
                             </span>
                         </Button>
-                        <Button type="button" onClick={() => showCash(true)} variant="solid" color="green" className="relative inline-flex items-center rounded-l-md px-3 py-2 ring-1 ring-inset ring-gray-300">
+                        <Button type="button" href={'https://sandbox.mymaya.me/SbxInv?amt=0'} variant="solid" color="green" className="relative inline-flex items-center rounded-l-md px-3 py-2 ring-1 ring-inset ring-gray-300">
                             <span>
                                 Donate Cash
                             </span>
@@ -39,7 +39,7 @@ export function FormComponent({ ID, DonorID }: any) {
                     {cash ? (
                         <CashForm />
                     ) : (
-                        <GoodsForm ID={ID} UserID={DonorID}/>
+                        <GoodsForm ID={ID} UserID={DonorID} />
                     )}
                 </>
 
@@ -207,7 +207,9 @@ export function GoodsForm(object: any, { ID, UserID }: any) {
 
 export function CashForm() {
     return (
-        <form action="#">
+        <form action={'/details/cash'}
+            method="post"
+            className="mt-10 grid grid-cols-1 gap-y-8">
             <div className="space-y-12"></div>
             <div className="border-b border-gray-900/10 pb-12"></div>
             <h2 className="text-base font-semibold leading-7 text-gray-900">Donate Cash</h2>
