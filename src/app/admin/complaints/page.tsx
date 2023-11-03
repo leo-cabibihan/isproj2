@@ -4,7 +4,7 @@ import { Button } from "@/components/Button";
 import { TextField } from "@/components/Fields";
 import SlideOver from "@/components/SlideOverButton";
 import { Table, TableContainer, TableContent, TableHeader, TableHeaderButton, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
-import { AlertEmail, Email } from "@/components/email-template";
+import { AlertEmail, Email, NoURLMail } from "@/components/email-template";
 import Plunk from "@plunk/node";
 import { render } from "@react-email/render";
 import { request } from "http";
@@ -12,9 +12,30 @@ import { redirect } from "next/navigation";
 
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
-export default async function Complaints({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
+export default async function Complaints({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
     const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name, email_address ), donor ( id, name )')
+
+    const notifyOrg = async (formData: FormData) => {
+        'use server'
+
+        const email = String(formData.get('email'))
+        const donor = String(formData.get('donor'))
+        const date = String(formData.get('date'))
+
+        console.log('THIS WORKS ', email, donor, date)
+
+        const body = render(<NoURLMail heading={"You have been reported!"}
+            content={"You have been reported by " + donor + " at " + date + ". Please click the link to learn more."} />);
+
+        const success = await plunk.emails.send({
+            to: email,
+            subject: "ALERT!",
+            body,
+        })
+
+        console.log("SUCCESS??? ", success)
+    }
 
     return (
         <>
@@ -44,9 +65,9 @@ export default async function Complaints({searchParams}: {searchParams: { [key: 
                                     <Td>{complaint.created_at}</Td>
                                     <Td>
                                         <SlideOver variant="solid" color="blue" buttontext="View Details">
-                                            <form className="space-y-6" action={'/view-charity/post'} method="POST">
-                                            {searchParams.err && <Alert message={searchParams.err as string}/>}
-                                            <TextField
+                                            <form className="space-y-6" action={notifyOrg} method="POST">
+                                                {searchParams.err && <Alert message={searchParams.err as string} />}
+                                                <TextField
                                                     label="Charity Name"
                                                     name="charity"
                                                     type="text"

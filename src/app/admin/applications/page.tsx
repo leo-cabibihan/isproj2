@@ -7,6 +7,9 @@ import { AdminAuth } from "../auth";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { AdminLog } from "../audit-log/function";
+import Plunk from "@plunk/node";
+import { render } from "@react-email/render";
+import { NoURLMail } from "@/components/email-template";
 
 export const revalidate = 0;
 
@@ -17,6 +20,8 @@ const requests = [
   { Name: "Hope4All", Email: "hope4all@gmail.com", Date: "05/05/2023" },
   { Name: "TheSoupKitchen.org", Email: "soup@gmail.com", Date: "05/05/2023" },
 ]
+
+const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export default async function Applications() {
 
@@ -38,6 +43,27 @@ export default async function Applications() {
     await AdminLog("Approved the application of charity " + charityName + ".")
     revalidatePath('/');
   };
+
+  const rejectOrg = async (formData: FormData) => {
+    'use server'
+    const email = String(formData.get('email'))
+    const name = String(formData.get('name'))
+    const reason = String(formData.get('reason'))
+
+    console.log('THIS WORKS ', email, name)
+
+  const body = render(<NoURLMail heading={"APPLICATION STATUS UPDATE"} 
+  content={"Greetings, " + name + ". Unfortunately, your charity's application has been rejected for the following reason:\n " + reason + "."}/>);
+
+  const success = await plunk.emails.send({
+    to: email,
+    subject: "ALERT!",
+    body,
+  })
+
+  console.log("SUCCESS??? ", success)
+
+  }
 
 
   return (
@@ -80,7 +106,7 @@ export default async function Applications() {
                           label="Charity Name"
                           name="name"
                           type="text"
-                          placeholder={request.name}
+                          defaultValue={request.name}
                           readOnly
                         />
 
@@ -88,7 +114,7 @@ export default async function Applications() {
                           label="Phone Number"
                           name="phone"
                           type="tel"
-                          placeholder={request.charity_phone}
+                          defaultValue={request.charity_phone}
                           readOnly
                         />
 
@@ -96,7 +122,7 @@ export default async function Applications() {
                           label="Email"
                           name="email"
                           type="email"
-                          placeholder={request.email_address as string}
+                          defaultValue={request.email_address as string}
                           readOnly
                         />
 
@@ -111,7 +137,7 @@ export default async function Applications() {
                               rows={3}
                               readOnly
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                              placeholder={request.about}
+                              defaultValue={request.about}
                             />
                           </div>
                         </div>
@@ -120,6 +146,30 @@ export default async function Applications() {
                           <Button type="submit" variant="solid" color="blue" className="w-full">
                             <span>
                               Accept Request <span aria-hidden="true">&rarr;</span>
+                            </span>
+                          </Button>
+                        </div>
+
+                        <div className="col-span-full">
+                          <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
+                            Reason/s for rejection
+                          </label>
+                          <div className="mt-2">
+                            <textarea
+                              id="reason"
+                              name="reason"
+                              rows={3}
+
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="Lorem Ipsum Dolor Sit Amet..."
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-full">
+                          <Button formAction={rejectOrg} type="submit" variant="solid" color="red" className="w-full">
+                            <span>
+                              Notify Charity <span aria-hidden="true">&rarr;</span>
                             </span>
                           </Button>
                         </div>

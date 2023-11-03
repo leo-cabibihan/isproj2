@@ -1,4 +1,7 @@
 import supabase from "@/app/utils/supabase";
+import { NoURLMail, ReceiptEmail } from "@/components/email-template";
+import Plunk from "@plunk/node";
+import { render } from "@react-email/render";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 import { revalidatePath } from "next/cache"
 import { cookies } from "next/headers"
@@ -7,17 +10,22 @@ import { NextResponse } from "next/server"
 export const revalidate = 0;
 var i
 
+const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
+
 export async function POST(request: Request) {
     const requestUrl = new URL(request.url)
     const formData = await request.json()
     const cookieStore = cookies()
-    const supabaseAuth = createRouteHandlerClient({                                                                                                                 cookies: () => cookieStore })
+    const supabaseAuth = createRouteHandlerClient({ cookies: () => cookieStore })
 
     const orgID = formData.orgID
     const userID = formData.donorID
 
+    console.log("ORG ID???" + orgID)
+
     const { data: { session }, error: session_error } = await supabaseAuth.auth.getSession()
     const uid = session?.user.id
+    const email = session?.user.email
     console.log("USER ID IS: " + uid)
 
     //GETS THE DATA INSERTED INTO ADDRESS FORM
@@ -64,7 +72,20 @@ export async function POST(request: Request) {
     const { data: item_data, error: item_error } = await supabase.from('inventory_item').insert(item).select()
     console.log("INSERT ERROR (3) IS: ", item_error)
 
-    console.log("DONATION SUCCESS!")
+    console.log("DONATION SUCCESS! ", new_item, item_data)
+
+    console.log('THIS WORKS ', email)
+
+    const body = render(<ReceiptEmail heading={"YOUR DONATION RECEIPT"}
+        content={new_item} content_2={item_data}/>);
+
+    const success = await plunk.emails.send({
+        to: email as string,
+        subject: "THANK YOU!",
+        body,
+    })
+
+    console.log("SUCCESS??? ", success)
 
     return Response.redirect(`${requestUrl.origin}/thankyou`)
 

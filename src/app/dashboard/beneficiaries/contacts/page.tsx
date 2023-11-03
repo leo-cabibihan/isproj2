@@ -23,14 +23,17 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
   const handleSubmit = async (formData: FormData) => {
     'use server'
     const beneficiary = {
-      name: formData.get("beneficiary"),
-      contact_no: formData.get("contact_no"),
-      address: formData.get("address")
+      beneficiary_name: formData.get("beneficiary"),
+      contact: formData.get("contact_no"),
+      address: formData.get("address"),
+      charity_id: parseInt(charity_id)
     };
 
-    const { data: beneficiary_insert, error: insert_error } = await supabase.from('contacts').insert(beneficiary);
+    const { data: beneficiary_insert, error: insert_error } = await supabase.from('beneficiaries').insert(beneficiary).select();
     revalidatePath('/');
-    CharityLog("ADDED CONTACT " + formData.get("beneficiary") + ".")
+    console.log("THE ERROR IS: ", beneficiary_insert, insert_error)
+    CharityLog("ADDED BENEFICIARY " + beneficiary_insert![0].beneficiary_name + " ON " + beneficiary_insert![0].date + ".", insert_error)
+    console.log("ERROR IS ", insert_error)
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${insert_error?.message}`, insert_error)
 
   };
@@ -39,14 +42,14 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     'use server'
     const contactId = formData.get("id")
     const beneficiary = {
-      name: formData.get("beneficiary"),
-      contact_no: formData.get("contact_no"),
+      beneficiary_name: formData.get("beneficiary"),
+      contact: formData.get("contact_no"),
       address: formData.get("address")
     };
 
-    const { data: beneficiaries_update, error: update_error } = await supabase.from('contacts').update(beneficiary).eq("id", contactId)
+    const { data: beneficiaries_update, error: update_error } = await supabase.from('beneficiaries').update(beneficiary).eq("id", contactId).select()
     revalidatePath('/');
-    CharityLog("UPDATED CONTACT " + formData.get("beneficiary") + ".")
+    CharityLog("UPDATED BENEFICIARY " + beneficiaries_update![0].beneficiary_name + " ON " + beneficiaries_update![0].date + ".", update_error)
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${update_error?.message}`, update_error)
   };
 
@@ -54,14 +57,14 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     'use server'
     const contactId = formData.get("id")
     const beneficiary = {
-      name: formData.get("beneficiary"),
-      contact_no: formData.get("contact_no"),
+      beneficiary_name: formData.get("beneficiary"),
+      contact: formData.get("contact_no"),
       address: formData.get("address")
     };
 
-    const { data: beneficiary_delete, error: delete_error } = await supabase.from('contacts').delete().eq("id", contactId)
+    const { data: beneficiary_delete, error: delete_error } = await supabase.from('beneficiaries').delete().eq("id", contactId).select()
     revalidatePath('/');
-    CharityLog("DELETED CONTACT.")
+    CharityLog("ADDED BENEFICIARY " + beneficiary_delete![0].beneficiary_name + " ON " + beneficiary_delete![0].date + ".", delete_error)
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${delete_error?.message}`, delete_error)
   };
 

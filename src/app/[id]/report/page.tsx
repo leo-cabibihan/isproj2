@@ -8,16 +8,22 @@ import { type Metadata } from 'next'
 import { Footer } from '@/components/Footer'
 import supabase from '@/app/utils/supabase'
 import { revalidatePath } from 'next/cache'
-import { GetUID } from '@/app/utils/user_id'
+import { GetEmail, GetUID } from '@/app/utils/user_id'
 import { ImageUpload } from '@/components/ImgUpload'
+import { render } from '@react-email/render'
+import { NoURLMail, ReceiptEmail } from '@/components/email-template'
+import Plunk from '@plunk/node'
 
 export const revalidate = 0;
+
+const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export default async function Report({ params }: any) {
 
   const orgID = params.id
 
   const donorID = await GetUID()
+  const email = await GetEmail()
 
   const { data: orgs } = await supabase
     .from('charity')
@@ -41,8 +47,18 @@ export default async function Report({ params }: any) {
       charity_id: orgID
     };
 
-    const { data, error } = await supabase.from('donor_complaints').insert(complaint);
+    const { data, error } = await supabase.from('donor_complaints').insert(complaint).select();
     revalidatePath('/');
+    const body = render(<NoURLMail heading={"COMPLAINT RECEIVED"}
+        content={"Thank you for filing a complaint. Rest assured that the admins will review this as soon as possible and take immediate action."}/>);
+
+    const success = await plunk.emails.send({
+        to: email as string,
+        subject: "Complaint Received",
+        body,
+    })
+
+    console.log("SUCCESS??? ", success)
     console.log('ERROR: ', error)
   };
 

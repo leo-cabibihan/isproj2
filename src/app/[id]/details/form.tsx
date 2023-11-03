@@ -10,6 +10,8 @@ export function FormComponent({ ID, DonorID }: any) {
 
     console.log("DONOR ID IS " + DonorID)
 
+    console.log("SHOW UP??? " + ID)
+
     return (
         <>
             <div>
@@ -48,7 +50,7 @@ export function FormComponent({ ID, DonorID }: any) {
     )
 }
 
-export function GoodsForm(object: any, { ID, UserID }: any) {
+export function GoodsForm({ ID, UserID }: any) {
     const [formFields, setFormFields] = useState([
         { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' },
     ])
@@ -96,13 +98,15 @@ export function GoodsForm(object: any, { ID, UserID }: any) {
         });
     }
 
+    console.log("FORM ORG ID IS: " + ID)
+
     const addFields = () => {
         let object = { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' }
 
         setFormFields([...formFields, object])
     }
 
-    const removeFields = (index) => {
+    const removeFields = (index: any) => {
         let data = [...formFields];
         data.splice(index, 1)
         setFormFields(data)

@@ -16,19 +16,24 @@ export async function AdminLog(action: any) {
     console.log("ERROR IS: ", error)
 }
 
-export async function CharityLog(action: any) {
+export async function CharityLog(action: any, crud_error: any) {
     const userID = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', userID)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     const charityId = charity_id![0]
 
-    const log = {
-        member_id: userID,
-        action: action,
-        charity_id: charityId
-    }
+    if (!crud_error) {
+        const log = {
+            member_id: userID,
+            action: action,
+            charity_id: charityId
+        }
 
-    const { data, error } = await supabase.from('charity_audit_log').insert(log)
-    console.log("ERROR IS: ", error)
+        const { data, error } = await supabase.from('charity_audit_log').insert(log)
+        console.log("ERROR IS: ", error)
+    }
+    else if (crud_error) {
+        console.log("U suck lmao.")
+    }
 }

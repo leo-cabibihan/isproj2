@@ -5,6 +5,11 @@ import { Button } from "@/components/Button";
 import { TextField, SelectField } from "@/components/Fields";
 import { ImageUpload } from "@/components/ImgUpload";
 import { SetStateAction, useEffect, useState } from "react";
+import { Switch } from '@headlessui/react'
+
+function classNames(...classes: any[]) {
+    return classes.filter(Boolean).join(' ')
+}
 
 export function MultilayeredForm(ID: any) {
     const [formFields, setFormFields] = useState([
@@ -12,11 +17,37 @@ export function MultilayeredForm(ID: any) {
     ])
     console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
+    const [newDonor, setNewDonor] = useState(false)
+    const [newAddress, setNewAddress] = useState(false)
+
+
     const [name, setName] = useState("")
-    const [address, setAddress] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [house_number, setHouseNumber] = useState("")
+    const [street_name, setStreetName] = useState("")
+    const [village_name, setVillageName] = useState("")
+    const [barangay, setBarangay] = useState("")
+    const [city, setCity] = useState("")
+    const [province, setProvince] = useState("")
+    const [zipcode, setZipCode] = useState("")
     const org_id = ID.ID
 
+    const [donorslist, setDonorslist] = useState<any>({})
+
     console.log('ORG ID IS', org_id[0])
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            const { data, error } = await supabase.from("donor").select(`*`)
+
+            if (data) setDonorslist(data!)
+        }
+
+        fetchData()
+
+    }, [])
 
 
     const handleFormChange = (event, index) => {
@@ -36,7 +67,12 @@ export function MultilayeredForm(ID: any) {
             },
             body: JSON.stringify({
                 name: name,
-                address: address,
+                email: email,
+                password: password,
+                house_number: house_number,
+                street_name: street_name,
+                village_name: village_name,
+                barangay
                 charity_id: org_id[0],
                 items: formFields
             })
@@ -57,22 +93,173 @@ export function MultilayeredForm(ID: any) {
 
     return (
         <div className="App">
+
+            <Switch.Group as="div" className="flex items-center">
+                <Switch
+                    checked={newDonor}
+                    onChange={setNewDonor}
+                    className={classNames(
+                        newDonor ? 'bg-indigo-600' : 'bg-gray-200',
+                        'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2'
+                    )}
+                >
+                    <span
+                        aria-hidden="true"
+                        className={classNames(
+                            newDonor ? 'translate-x-5' : 'translate-x-0',
+                            'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                        )}
+                    />
+                </Switch>
+                <Switch.Label as="span" className="ml-3 text-sm">
+                    <span className="font-medium text-gray-900">New Donor</span>{' '}
+                </Switch.Label>
+            </Switch.Group>
+
+            <div className="relative">
+                <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                    <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center">
+                    <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">Donor</span>
+                </div>
+            </div>
             <form className="space-y-6" onSubmit={submit}>
+
+                {newDonor ?
+                    (
+                        <>
+                            <TextField
+                                label="Donor Name"
+                                name="donor"
+                                type="text"
+                                placeholder="John Doe"
+                                onChange={e => setName(e.target.value)}
+                                required
+                            />
+
+                            <TextField
+                                label="Donor Email"
+                                name="email"
+                                type="email"
+                                placeholder="john.doe@hotmail.com"
+                                onChange={e => setEmail(e.target.value)}
+                                required
+                            />
+
+                            <TextField
+                                label="Donor's Password"
+                                name="password"
+                                type="password"
+                                placeholder="10 characters minimum"
+                                onChange={e => setPassword(e.target.value)}
+                                required
+                            />
+                        </>
+                    )
+                    :
+                    (
+                        <SelectField
+                            className="col-span-full py-5"
+                            label="Assign Beneficiary"
+                            name="beneficiary_id"
+                        >
+                            {donorslist?.map((form: any) => {
+                                <option key={form.id} value={form.id}>{form.beneficiary_name}</option>
+                            })}
+                        </SelectField>
+                    )}
+
+                <div className="relative">
+                    <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div className="w-full border-t border-gray-300" />
+                    </div>
+                    <div className="relative flex justify-center">
+                        <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">Donor&apos;s Address</span>
+                    </div>
+                </div>
+
+                <Switch.Group as="div" className="flex items-center">
+                    <Switch
+                        checked={newAddress}
+                        onChange={setNewAddress}
+                        className={classNames(
+                            newAddress ? 'bg-indigo-600' : 'bg-gray-200',
+                            'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2'
+                        )}
+                    >
+                        <span
+                            aria-hidden="true"
+                            className={classNames(
+                                newAddress ? 'translate-x-5' : 'translate-x-0',
+                                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+                            )}
+                        />
+                    </Switch>
+                    <Switch.Label as="span" className="ml-3 text-sm">
+                        <span className="font-medium text-gray-900">New Donor</span>{' '}
+                    </Switch.Label>
+                </Switch.Group>
+
                 <TextField
-                    label="Donor Name"
-                    name="donor"
+                    label="House Number"
+                    name="house_number"
                     type="text"
-                    placeholder="John Doe"
-                    onChange={e => setName(e.target.value)}
+                    placeholder="24 balalallala"
+                    onChange={e => setHouseNumber(e.target.value)}
                     required
                 />
 
                 <TextField
-                    label="Pickup Address"
-                    name="address"
+                    label="Street Name"
+                    name="street_name"
                     type="text"
-                    placeholder="123 Sesame Sreet"
-                    onChange={e => setAddress(e.target.value)}
+                    placeholder="Sesame Street"
+                    onChange={e => setStreetName(e.target.value)}
+                    required
+                />
+
+                <TextField
+                    label="Village Name"
+                    name="village_name"
+                    type="text"
+                    placeholder="Amityville"
+                    onChange={e => setVillageName(e.target.value)}
+                />
+
+                <TextField
+                    label="Barangay"
+                    name="barangay"
+                    type="text"
+                    placeholder="Barangay Aswang"
+                    onChange={e => setBarangay(e.target.value)}
+                    required
+                />
+
+                <TextField
+                    label="City"
+                    name="city"
+                    type="text"
+                    placeholder="Manila"
+                    onChange={e => setCity(e.target.value)}
+                    required
+                />
+
+                <TextField
+                    label="Province/Region"
+                    name="province"
+                    type="text"
+                    placeholder="NCR"
+                    onChange={e => setProvince(e.target.value)}
+                    required
+                />
+
+                <TextField
+                    label="Zip Code"
+                    name="zipcode"
+                    type="number"
+                    placeholder="3019"
+                    onChange={e => setZipCode(e.target.value)}
                     required
                 />
 
@@ -332,7 +519,7 @@ export function EditForm({ id, orgID }: { id: number, orgID: any }) {
                                 value={form.expiry}
                             />
 
-                            <ImageUpload folderName={"inventory_item"} charityID={orgID} recordID={form.id}/>
+                            <ImageUpload folderName={"inventory_item"} charityID={orgID} recordID={form.id} />
 
                             <div className="col-span-full">
                                 <Button onClick={() => removeFields(form.id)} variant="solid" color="red" className="w-full">
