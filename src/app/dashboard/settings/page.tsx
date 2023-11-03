@@ -14,6 +14,7 @@ import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
 import { TextField } from "@/components/Fields";
 import { ImageUpdate, ImageUpload } from "@/components/ImgUpload";
+import { QRUpload } from "@/components/QrUpload";
 import { Table, TableContainer, TableContent, Tbody, Th, Thead, Tr } from "@/components/Table";
 import { revalidatePath } from "next/cache";
 
@@ -255,6 +256,11 @@ export default async function Settings() {
                                             <div>
                                                 <h2 className="text-base font-semibold leading-7 text-gray-900">Change Charity Banner</h2>
                                                 <ImageUpdate folderName="charity" charityID={charity_id} recordID={charity_id} />
+                                            </div>
+
+                                            <div>
+                                                <h2 className="text-base font-semibold leading-7 text-gray-900">Upload QR Code for Cash Donations</h2>
+                                                <QRUpload folderName="TEST" charityID={"TEST"} recordID={"qr"} />
                                             </div>
 
                                             <div>

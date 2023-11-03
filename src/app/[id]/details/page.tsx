@@ -9,6 +9,8 @@ import { revalidatePath } from "next/cache"
 import { useState } from "react"
 import { FormComponent, GoodsForm } from "./form"
 import { GetUID } from "@/app/utils/user_id"
+import { ShowQr } from "./cash/form"
+import { BannerImg, ShowImg } from "@/components/DisplayImg"
 
 export const revalidate = 0;
 
@@ -50,7 +52,7 @@ export default async function Organization({ params }: any) {
     <>
       <DefaultLayout>
         <ContentLeft id={orgID} />
-        <ContentRight id={orgID}/>
+        <ContentRight id={orgID} />
         <GraphTemp />
         <div className="bg-white px-6 py-32 lg:px-8">
           <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
@@ -59,15 +61,27 @@ export default async function Organization({ params }: any) {
                 {orgs?.map(org => (
                   <h2 key={org.id} className="text-2xl font-bold tracking-tight text-gray-900">Donate to {org.name}</h2>
                 ))}
-                <p className="mt-8">
-                  Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris semper sed amet vitae
-                  sed turpis id. Id dolor praesent donec est. Odio penatibus risus viverra tellus varius sit neque erat velit.
-                </p>
+                <div className="space-y-8">
+                  <p className="mt-8">
+                    Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris semper sed amet vitae
+                    sed turpis id. Id dolor praesent donec est. Odio penatibus risus viverra tellus varius sit neque erat velit.
+                  </p>
+                  <Button variant="solid" color="red" href={'/' + orgID + '/report'}>
+                    <span>
+                      Report Charity
+                    </span>
+                  </Button>
+                </div>
               </div>
-
               {
                 donor?.length === 1 ? (
-                  <FormComponent ID={orgID} DonorID={donorID} />
+                  <>
+                    <GoodsForm ID={orgID} UserID={donorID} />
+                    <div className="space-y-12"></div>
+                    <div className="border-b border-gray-900/10 pb-12"></div>
+                    <h2 className="text-base font-semibold leading-7 text-gray-900">Donate Cash</h2>
+                    <ShowImg folder1={"charity"} charityID={orgID} recordID={"qr"} />
+                  </>
                 ) : (
                   <h1 className="text-2xl font-bold tracking-tight text-gray-900">Please <a className="text-blue-600" href={"/login"}>log in</a> in order to donate.</h1>
                 )

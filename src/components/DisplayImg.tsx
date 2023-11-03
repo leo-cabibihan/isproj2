@@ -1,3 +1,5 @@
+'use server'
+
 import { DisplayImage, DownloadImage } from "@/app/utils/display_image"
 
 export async function ShowImg({ folder1, charityID, recordID }: any) {
@@ -10,7 +12,7 @@ export async function ShowImg({ folder1, charityID, recordID }: any) {
             <img
                 src={CDNURL}
                 alt=""
-                className="absolute inset-0 h-full w-full rounded-2xl bg-gray-50 object-cover"
+                className="absolute md:w-full md:object-contain inset-0 h-full w-full rounded-2xl bg-gray-50 object-cover"
             />
             <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
         </div>
@@ -47,5 +49,22 @@ export async function DownloadableImg({ path, children }: { path: any, children:
                 {children}
             </a>
         </>
+    )
+}
+
+export async function ShowQr({ folder1, charityID, recordID }: any) {
+
+    const CDNURL = await DisplayImage(folder1, charityID, recordID)
+
+    return (
+        <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
+
+            <img
+                src={CDNURL}
+                alt=""
+                className="absolute inset-0 h-full w-full rounded-2xl bg-gray-50 object-cover"
+            />
+            <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" />
+        </div>
     )
 }

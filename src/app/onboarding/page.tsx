@@ -9,7 +9,7 @@ import { type Metadata } from 'next'
 import supabase from '@/app/utils/supabase'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { ImageUpload } from '@/components/ImgUpload'
+import { ImageUpload, QRUpload } from '@/components/ImgUpload'
 import { cookies } from "next/headers";
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
 
@@ -224,6 +224,7 @@ export default async function Example() {
           </div>
 
           <ImageUpload folderName="onboarding" charityID={last_id![0] + 1} recordID={last_id![0] + 1} />
+          
         </div>
         <div className="mt-6 flex items-center justify-end gap-x-6 mb-4">
           <Button type="submit" variant="solid" color="blue" className="w-1/5">

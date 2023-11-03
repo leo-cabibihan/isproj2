@@ -20,6 +20,9 @@ export function MultilayeredForm(ID: any) {
     const [newDonor, setNewDonor] = useState(false)
     const [newAddress, setNewAddress] = useState(false)
 
+    const [donor_id, setDonorID] = useState("")
+    const [address_id, setAddressID] = useState("")
+
 
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
@@ -33,7 +36,8 @@ export function MultilayeredForm(ID: any) {
     const [zipcode, setZipCode] = useState("")
     const org_id = ID.ID
 
-    const [donorslist, setDonorslist] = useState<any>({})
+    const [donorslist, setDonorslist] = useState<any>([])
+    const [addresslist, setAddresslist] = useState<any>([])
 
     console.log('ORG ID IS', org_id[0])
 
@@ -42,13 +46,22 @@ export function MultilayeredForm(ID: any) {
         const fetchData = async () => {
             const { data, error } = await supabase.from("donor").select(`*`)
 
-            if (data) setDonorslist(data!)
+            const { data: address, error: address_error } = await supabase.from("address").select("*")
+            setDonorslist(data!)
+            setAddresslist(address!)
+
+            console.log("DONORS LIST ", donorslist, data)
+            setDonorslist(data!)
+
         }
 
         fetchData()
-
     }, [])
 
+
+    useEffect(() => {
+        console.log("DONORS LIST wtfwtf", donorslist);
+    }, [donorslist]);
 
     const handleFormChange = (event, index) => {
         let data = [...formFields];
@@ -72,7 +85,14 @@ export function MultilayeredForm(ID: any) {
                 house_number: house_number,
                 street_name: street_name,
                 village_name: village_name,
-                barangay
+                barangay: barangay,
+                city: city,
+                province: province,
+                zipcode: zipcode,
+                new_user: newDonor,
+                new_address: newAddress,
+                donor_id: donor_id,
+                address_id: address_id,
                 charity_id: org_id[0],
                 items: formFields
             })
@@ -161,13 +181,15 @@ export function MultilayeredForm(ID: any) {
                     (
                         <SelectField
                             className="col-span-full py-5"
-                            label="Assign Beneficiary"
+                            label="Assign Donor"
                             name="beneficiary_id"
+                            onChange={e => setDonorID(e.target.value)}
                         >
-                            {donorslist?.map((form: any) => {
-                                <option key={form.id} value={form.id}>{form.beneficiary_name}</option>
-                            })}
+                            {donorslist?.map((form: any) => (
+                                <option key={form.id} value={form.id}>{form.name}</option>
+                            ))}
                         </SelectField>
+                        
                     )}
 
                 <div className="relative">
@@ -197,71 +219,89 @@ export function MultilayeredForm(ID: any) {
                         />
                     </Switch>
                     <Switch.Label as="span" className="ml-3 text-sm">
-                        <span className="font-medium text-gray-900">New Donor</span>{' '}
+                        <span className="font-medium text-gray-900">New Address</span>{' '}
                     </Switch.Label>
                 </Switch.Group>
 
-                <TextField
-                    label="House Number"
-                    name="house_number"
-                    type="text"
-                    placeholder="24 balalallala"
-                    onChange={e => setHouseNumber(e.target.value)}
-                    required
-                />
+                {newAddress ?
+                    (
+                        <>
+                            <TextField
+                                label="House Number"
+                                name="house_number"
+                                type="text"
+                                placeholder="24 balalallala"
+                                onChange={e => setHouseNumber(e.target.value)}
+                                required
+                            />
 
-                <TextField
-                    label="Street Name"
-                    name="street_name"
-                    type="text"
-                    placeholder="Sesame Street"
-                    onChange={e => setStreetName(e.target.value)}
-                    required
-                />
+                            <TextField
+                                label="Street Name"
+                                name="street_name"
+                                type="text"
+                                placeholder="Sesame Street"
+                                onChange={e => setStreetName(e.target.value)}
+                                required
+                            />
 
-                <TextField
-                    label="Village Name"
-                    name="village_name"
-                    type="text"
-                    placeholder="Amityville"
-                    onChange={e => setVillageName(e.target.value)}
-                />
+                            <TextField
+                                label="Village Name"
+                                name="village_name"
+                                type="text"
+                                placeholder="Amityville"
+                                onChange={e => setVillageName(e.target.value)}
+                            />
 
-                <TextField
-                    label="Barangay"
-                    name="barangay"
-                    type="text"
-                    placeholder="Barangay Aswang"
-                    onChange={e => setBarangay(e.target.value)}
-                    required
-                />
+                            <TextField
+                                label="Barangay"
+                                name="barangay"
+                                type="text"
+                                placeholder="Barangay Aswang"
+                                onChange={e => setBarangay(e.target.value)}
+                                required
+                            />
 
-                <TextField
-                    label="City"
-                    name="city"
-                    type="text"
-                    placeholder="Manila"
-                    onChange={e => setCity(e.target.value)}
-                    required
-                />
+                            <TextField
+                                label="City"
+                                name="city"
+                                type="text"
+                                placeholder="Manila"
+                                onChange={e => setCity(e.target.value)}
+                                required
+                            />
 
-                <TextField
-                    label="Province/Region"
-                    name="province"
-                    type="text"
-                    placeholder="NCR"
-                    onChange={e => setProvince(e.target.value)}
-                    required
-                />
+                            <TextField
+                                label="Province/Region"
+                                name="province"
+                                type="text"
+                                placeholder="NCR"
+                                onChange={e => setProvince(e.target.value)}
+                                required
+                            />
 
-                <TextField
-                    label="Zip Code"
-                    name="zipcode"
-                    type="number"
-                    placeholder="3019"
-                    onChange={e => setZipCode(e.target.value)}
-                    required
-                />
+                            <TextField
+                                label="Zip Code"
+                                name="zipcode"
+                                type="number"
+                                placeholder="3019"
+                                onChange={e => setZipCode(e.target.value)}
+                                required
+                            />
+                        </>
+                    )
+                    :
+                    (
+                        <SelectField
+                            className="col-span-full py-5"
+                            label="Assign Address"
+                            name="beneficiary_id"
+                            onChange={e => setAddressID(e.target.value)}
+                        >
+                            {addresslist?.map((form: any) => (
+                                <option key={form.id} value={form.id}>{form.house_number} {form.street_name} {form.barangay}...</option>
+                            ))}
+                        </SelectField>
+                    )}
 
                 <div className="col-span-full">
                     <Button onClick={addFields} variant="solid" color="green" className="w-full">

@@ -1,8 +1,10 @@
 "use client"
 
 import { Button } from "@/components/Button";
+import { ShowImg } from "@/components/DisplayImg";
 import { TextField, SelectField } from "@/components/Fields";
 import { useState } from "react";
+import { ShowQr } from "./cash/form";
 
 export function FormComponent({ ID, DonorID }: any) {
 
@@ -22,7 +24,7 @@ export function FormComponent({ ID, DonorID }: any) {
                                 Donate Goods
                             </span>
                         </Button>
-                        <Button type="button" href={'https://sandbox.mymaya.me/SbxInv?amt=0'} variant="solid" color="green" className="relative inline-flex items-center rounded-l-md px-3 py-2 ring-1 ring-inset ring-gray-300">
+                        <Button type="button" onClick={() => showCash(true)} variant="solid" color="green" className="relative inline-flex items-center rounded-l-md px-3 py-2 ring-1 ring-inset ring-gray-300">
                             <span>
                                 Donate Cash
                             </span>
@@ -39,7 +41,7 @@ export function FormComponent({ ID, DonorID }: any) {
 
                 <>
                     {cash ? (
-                        <CashForm />
+                        <ShowQr ID={ID} recordID={"qr"}/>
                     ) : (
                         <GoodsForm ID={ID} UserID={DonorID} />
                     )}
