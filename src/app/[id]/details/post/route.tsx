@@ -87,6 +87,6 @@ export async function POST(request: Request) {
 
     console.log("SUCCESS??? ", success)
 
-    return Response.redirect(`${requestUrl.origin}/thankyou`)
+    return NextResponse.redirect(`${requestUrl.origin}/thankyou`)
 
 }

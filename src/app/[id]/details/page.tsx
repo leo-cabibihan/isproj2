@@ -76,11 +76,7 @@ export default async function Organization({ params }: any) {
               {
                 donor?.length === 1 ? (
                   <>
-                    <GoodsForm ID={orgID} UserID={donorID} />
-                    <div className="space-y-12"></div>
-                    <div className="border-b border-gray-900/10 pb-12"></div>
-                    <h2 className="text-base font-semibold leading-7 text-gray-900">Donate Cash</h2>
-                    <ShowImg folder1={"charity"} charityID={orgID} recordID={"qr"} />
+                    <FormComponent ID={orgID} DonorID={donorID} />
                   </>
                 ) : (
                   <h1 className="text-2xl font-bold tracking-tight text-gray-900">Please <a className="text-blue-600" href={"/login"}>log in</a> in order to donate.</h1>

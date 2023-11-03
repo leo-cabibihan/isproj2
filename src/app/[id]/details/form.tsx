@@ -4,7 +4,6 @@ import { Button } from "@/components/Button";
 import { ShowImg } from "@/components/DisplayImg";
 import { TextField, SelectField } from "@/components/Fields";
 import { useState } from "react";
-import { ShowQr } from "./cash/form";
 
 export function FormComponent({ ID, DonorID }: any) {
 
@@ -41,7 +40,7 @@ export function FormComponent({ ID, DonorID }: any) {
 
                 <>
                     {cash ? (
-                        <ShowQr ID={ID} recordID={"qr"}/>
+                        <CashForm ID={ID} UserID={DonorID} />
                     ) : (
                         <GoodsForm ID={ID} UserID={DonorID} />
                     )}
@@ -211,11 +210,30 @@ export function GoodsForm({ ID, UserID }: any) {
     );
 }
 
-export function CashForm() {
+export function CashForm({ ID, UserID }: any) {
+
+    const [amount, setAmount] = useState("")
+
+    const submit = async (e) => {
+        e.preventDefault();
+        const rawResponse = await fetch('http://localhost:3000/' + ID + '/details/cash', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                amount: amount,
+                charity_id: ID,
+                donor_id: UserID,
+                is_external: false,
+
+            })
+        });
+    }
+
     return (
-        <form action={'/details/cash'}
-            method="post"
-            className="mt-10 grid grid-cols-1 gap-y-8">
+        <form className="mt-10 grid grid-cols-1 gap-y-8" onSubmit={submit}>
             <div className="space-y-12"></div>
             <div className="border-b border-gray-900/10 pb-12"></div>
             <h2 className="text-base font-semibold leading-7 text-gray-900">Donate Cash</h2>
@@ -223,7 +241,7 @@ export function CashForm() {
                 <div className="sm:col-span-4">
                     <TextField
                         label="Amount"
-                        name="number"
+                        name="amount"
                         type="number"
                         autoComplete="number"
                         step="0.01"
@@ -231,6 +249,7 @@ export function CashForm() {
                         max="100000"
                         placeholder="0.00"
                         required
+                        onChange={e => setAmount(e.target.value)}
                     />
                 </div>
             </div>

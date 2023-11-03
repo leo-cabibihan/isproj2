@@ -7,7 +7,7 @@ export async function DisplayImage(folder1: any, charityID: any, recordID: any) 
         .list(folder1?.toString() + "/" + charityID?.toString() + "/" + recordID?.toString(), {
             limit: 1,
             offset: 0,
-            sortBy: { column: "name", order: "asc" },
+            sortBy: { column: "created_at", order: "asc" },
         })
     const img_name = images?.map(image => image.name)
 
