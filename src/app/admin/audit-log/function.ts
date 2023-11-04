@@ -18,7 +18,7 @@ export async function AdminLog(action: any) {
 
 export async function CharityLog(action: any, crud_error: any) {
     const userID = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', userID)
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', userID as string)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     const charityId = charity_id![0]

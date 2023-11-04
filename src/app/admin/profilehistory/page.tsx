@@ -15,7 +15,7 @@ export default async function Auditlog() {
     console.log('FUUUUUUUUCK' + uid)
 
     //RED IS JUST TS BEING A BITCH SO IGNORE IT.
-    const { data: actions } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )').eq('admin_id', uid)
+    const { data: actions } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )').eq('admin_id', uid as string)
 
     return (
         <>

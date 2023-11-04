@@ -188,3 +188,60 @@ export function ReceiptEmail(props: any) {
         </Html>
     );
 }
+
+export function CashReceiptEmail(props: any) {
+    const heading = props.heading;
+    const content = props.content;
+    const previewText = "You have an Alert"
+    const children = props.children
+
+    return (
+        <Html>
+            <Head />
+            <Preview>{previewText}</Preview>
+            <Tailwind>
+                <Body className='bg-white my-auto mx-auto font-sans'>
+                    <Container className='my-[20px] mx-auto p-[20px] max-w-4xl'>
+                        <Heading className='text-black text-[20px] font-normal text-left'>
+                            <strong>{heading}</strong>
+                        </Heading>
+
+                        <Text className='text-[#000000] text-[20px]'>
+                            Thank you for your donation! Here is your receipt
+                        </Text>
+
+                        <Text className='text-[#000000] text-[20px]'>
+                            TRANSACTION DETAILS:
+                        </Text>
+                        <>
+                            {content?.map(item => (
+                                <>
+                                    <Text className='text-[#000000] text-[20px]'>
+                                        DONATION DETAILS:
+                                    </Text>
+                                    <ol>
+                                        <li>Donation Amount: {item.amount}</li>
+                                        <li>Donor Name: {item.donor}</li>
+                                        <li>Donated on: {item.date}</li>
+                                        <li>Donated to: {item.charity}</li>
+                                        <li>Target Event: {item.event}</li>
+                                    </ol>
+                                </>
+                            ))}
+                        </>
+
+                        <Hr className='my-[16px] mx-0 w-full' />
+                        <Text className='text-[#666666] text-[12px]'>
+                            In a world where every email matters, Resend empowers you to send emails that captivate, engage, and convert. Its more than just an email platform; its a catalyst for modernizing your email communication.
+                            Dont settle for outdated email practices. Embrace the future of email communication with Resend and watch your messages soar to new heights.
+                        </Text>
+                        <Text className='text-[#666666] text-[12px]'>
+                            This email is delivered to you through the Resend SDK
+                            integrations.✨
+                        </Text>
+                    </Container>
+                </Body>
+            </Tailwind>
+        </Html>
+    );
+}

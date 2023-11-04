@@ -14,10 +14,10 @@ export default async function Page() {
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
-    const { data: charity_member, error: idk } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const { data: charity_member, error: idk } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid as string)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
-    const { data: inventory, error: error_2 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', charity_id)
+    const { data: inventory, error: error_2 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', Number(charity_id))
 
     const saveChanges = async (formData: FormData) => {
         'use server'
@@ -30,8 +30,8 @@ export default async function Page() {
             expiry: formData.get("expiry")
         };
 
-        const { data: update_item, error: update_error } = await supabase.from('inventory_item').update(item).eq("id", itemId).select()
-        CharityLog("UPDATED INVENTORY ITEM " + update_item![0].name)
+        const { data: update_item, error: update_error } = await supabase.from('inventory_item').update(item).eq("id", Number(itemId)).select()
+        CharityLog("UPDATED INVENTORY ITEM " + update_item![0].name, update_error)
         revalidatePath('/');
     };
 
@@ -39,8 +39,8 @@ export default async function Page() {
         'use server'
         const itemId = formData.get("id")
 
-        const { data: delete_item, error: delete_error } = await supabase.from('inventory_item').delete().eq("id", itemId).select()
-        CharityLog("DELETED INVENTORY ITEM " + delete_item![0].name)
+        const { data: delete_item, error: delete_error } = await supabase.from('inventory_item').delete().eq("id", Number(itemId)).select()
+        CharityLog("DELETED INVENTORY ITEM " + delete_item![0].name, delete_error)
         revalidatePath('/');
     };
 
@@ -141,7 +141,7 @@ export default async function Page() {
                                                     label="Expiry Date (if perishable)"
                                                     name="expiry"
                                                     type="date"
-                                                    defaultValue={item.expiry}
+                                                    defaultValue={item.expiry as string}
                                                 />
 
                                                 <div className="grid grid-cols-3 gap-4">

@@ -96,7 +96,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
                                                     name="date"
                                                     type="date"
                                                     readOnly
-                                                    defaultValue={complaint.created_at}
+                                                    defaultValue={complaint.created_at as string}
                                                 />
 
                                                 <div className="col-span-full">

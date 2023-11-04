@@ -1,9 +1,10 @@
 "use client"
 
+import supabase from "@/app/utils/supabase";
 import { Button } from "@/components/Button";
 import { ShowImg } from "@/components/DisplayImg";
 import { TextField, SelectField } from "@/components/Fields";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function FormComponent({ ID, DonorID }: any) {
 
@@ -69,13 +70,13 @@ export function GoodsForm({ ID, UserID }: any) {
     const [province, setProvince] = useState("")
 
 
-    const handleFormChange = (event, index) => {
+    const handleFormChange = (event: any, index: any) => {
         let data = [...formFields];
         data[index][event.target.name] = event.target.value;
         setFormFields(data);
     }
 
-    const submit = async (e) => {
+    const submit = async (e: any) => {
         e.preventDefault();
         console.log(formFields)
         const rawResponse = await fetch('http://localhost:3000/' + ID + '/details/post', {
@@ -213,8 +214,30 @@ export function GoodsForm({ ID, UserID }: any) {
 export function CashForm({ ID, UserID }: any) {
 
     const [amount, setAmount] = useState("")
+    const [eventID, setEventID] = useState("")
+    const [eventslist, setEventsList] = useState<any>([])
 
-    const submit = async (e) => {
+    useEffect(() => {
+
+        const fetchData = async () => {
+            const { data, error } = await supabase.from("donor").select(`*`)
+
+            const { data: event } = await supabase
+                .from('event')
+                .select('*')
+                .eq('charity_id', Number(ID))
+                .order("id", { ascending: true })
+            setEventsList(data!)
+
+            console.log("EVENTS LIST ", eventslist)
+            setEventsList(data!)
+
+        }
+
+        fetchData()
+    }, [])
+
+    const submit = async (e: any) => {
         e.preventDefault();
         const rawResponse = await fetch('http://localhost:3000/' + ID + '/details/cash', {
             method: 'POST',
@@ -227,6 +250,7 @@ export function CashForm({ ID, UserID }: any) {
                 charity_id: ID,
                 donor_id: UserID,
                 is_external: false,
+                event_id: eventID
 
             })
         });
@@ -251,6 +275,17 @@ export function CashForm({ ID, UserID }: any) {
                         required
                         onChange={e => setAmount(e.target.value)}
                     />
+
+                    <SelectField
+                        className="col-span-full py-5"
+                        label="Choose Event to Donate to"
+                        name="event_id"
+                        onChange={e => setEventID(e.target.value)}
+                    >
+                        {eventslist?.map((form: any) => (
+                            <option key={form.id} value={form.id}>{form.name}</option>
+                        ))}
+                    </SelectField>
                 </div>
             </div>
             <div>

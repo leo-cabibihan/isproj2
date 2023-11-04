@@ -22,7 +22,7 @@ export default async function Expenses() {
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', Number(uid))
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     console.log("CHARITY ID IN EXPENSES IS" + charity_id)
@@ -30,7 +30,7 @@ export default async function Expenses() {
     const { data: expenses, error } = await supabase
         .from('expenses')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
-        .eq('charity_id', charity_id)
+        .eq('charity_id', Number(charity_id))
 
     const { data: beneficiaries, error: beneficiaries_error } = await supabase
         .from('beneficiaries')
@@ -47,7 +47,7 @@ export default async function Expenses() {
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', charity_id)
+        .eq('charity_id', Number(charity_id))
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
@@ -61,7 +61,7 @@ export default async function Expenses() {
 
         const {data, error} = await supabase.from('expenses').insert(expense);
         revalidatePath('/');
-        CharityLog("ADDED EXPENSE")
+        CharityLog("ADDED EXPENSE", error)
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error?.message}`, error)
     };
 
@@ -75,9 +75,9 @@ export default async function Expenses() {
             beneficiary_id: formData.get("beneficiary_id"),
         };
 
-        const {data, error} = await supabase.from('expenses').update(expense).eq("id", expenseId)
+        const {data, error} = await supabase.from('expenses').update(expense).eq("id", Number(expenseId))
         revalidatePath('/');
-        CharityLog("UPDATED EXPENSE")
+        CharityLog("UPDATED EXPENSE" + expenseId + ".", error)
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error?.message}`, error)
     };
 
@@ -91,9 +91,9 @@ export default async function Expenses() {
             beneficiary_id: formData.get("beneficiary_id"),
         };
 
-        const {data, error} = await supabase.from('expenses').delete().eq("id", expenseId)
+        const {data, error} = await supabase.from('expenses').delete().eq("id", Number(expenseId))
         revalidatePath('/');
-        CharityLog("DELETE EXPENSE")
+        CharityLog("DELETE EXPENSE" + expenseId + ".", error)
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error}`, error)
     };
 
@@ -121,7 +121,7 @@ export default async function Expenses() {
                                                 label=""
                                                 name="charity_id"
                                                 type="hidden"
-                                                defaultValue={charity_id}
+                                                defaultValue={Number(charity_id)}
                                             />
 
                                             <TextField
@@ -208,7 +208,7 @@ export default async function Expenses() {
                                 <Tr key={expense.id}>
                                     <Td>{expense.reason}</Td>
                                     <Td>{expense.amount}</Td>
-                                    <Td>{expense.beneficiaries.beneficiary_name}</Td>
+                                    <Td>{expense.beneficiaries?.beneficiary_name}</Td>
                                     <Td>{expense.date}</Td>
                                     <Td>
                                         <SlideOver buttontext="View Details" variant='solid' color="blue">
@@ -250,7 +250,7 @@ export default async function Expenses() {
                                                                                 name="reason"
                                                                                 rows={3}
                                                                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                                                defaultValue={expense.reason}
+                                                                                defaultValue={expense.reason as string}
                                                                             />
                                                                         </div>
                                                                     </div>

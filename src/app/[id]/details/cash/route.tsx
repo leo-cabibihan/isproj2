@@ -15,7 +15,8 @@ export async function POST(request: Request) {
         amount: formData.amount,
         charity_id: formData.charity_id,
         donor_id: formData.donor_id,
-        is_external: formData.is_external
+        is_external: formData.is_external,
+        event_id: formData.event_id
     }
 
     const { data, error } = await supabase.from('cash').insert(cash).select();

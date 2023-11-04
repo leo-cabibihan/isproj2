@@ -136,7 +136,7 @@ export default async function Organization({ params }: any) {
                                                     name="date"
                                                     type="date"
                                                     readOnly
-                                                    defaultValue={complaint.created_at}
+                                                    defaultValue={complaint.created_at as string}
                                                 />
 
                                                 <div className="col-span-full">
@@ -221,7 +221,7 @@ export default async function Organization({ params }: any) {
                                                     name="complainant"
                                                     type="text"
                                                     readOnly
-                                                    defaultValue={appeal.donor_complaints?.donor?.name as st}
+                                                    defaultValue={appeal.donor_complaints?.donor?.name as string}
                                                 />
 
                                                 <div className="col-span-full">

@@ -9,7 +9,6 @@ import { revalidatePath } from "next/cache"
 import { useState } from "react"
 import { FormComponent, GoodsForm } from "./form"
 import { GetUID } from "@/app/utils/user_id"
-import { ShowQr } from "./cash/form"
 import { BannerImg, ShowImg } from "@/components/DisplayImg"
 
 export const revalidate = 0;

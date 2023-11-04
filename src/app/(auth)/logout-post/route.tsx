@@ -22,7 +22,7 @@ export async function POST() {
         .eq('id', uid)
 
     if (charity_member?.length === 1) {
-        CharityLog(charity_member![0].member_name + " has logged out.")
+        CharityLog(charity_member![0].member_name + " has logged out.", null)
     }
     else if (admin?.length === 1) [
         AdminLog(admin![0].name + " has logged out.")
