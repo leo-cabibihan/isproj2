@@ -58,7 +58,7 @@ export async function CashForm() {
     )
 }
 
-export async function GoodsForm({ id }) {
+export async function GoodsForm({ id } : any) {
 
     const handleSubmit = async (formData: FormData) => {
         'use server'

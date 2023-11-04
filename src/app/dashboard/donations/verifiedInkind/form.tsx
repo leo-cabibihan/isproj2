@@ -105,7 +105,7 @@ export function MultilayeredForm(ID: any) {
         setFormFields([...formFields, object])
     }
 
-    const removeFields = (index) => {
+    const removeFields = (index: any) => {
         let data = [...formFields];
         data.splice(index, 1)
         setFormFields(data)

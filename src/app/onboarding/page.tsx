@@ -9,9 +9,9 @@ import { type Metadata } from 'next'
 import supabase from '@/app/utils/supabase'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { ImageUpload, QRUpload } from '@/components/ImgUpload'
 import { cookies } from "next/headers";
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
+import { ImageUpload } from '@/components/ImgUpload'
 
 export const revalidate = 0;
 
