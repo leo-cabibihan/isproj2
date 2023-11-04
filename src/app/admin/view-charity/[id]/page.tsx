@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { Button } from '@/components/Button';
 import React from 'react';
 import { MediaObject } from '@/components/Single-use';

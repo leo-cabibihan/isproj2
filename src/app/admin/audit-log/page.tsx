@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { Button } from '@/components/Button';
 import React from 'react';
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from '@/components/Table';

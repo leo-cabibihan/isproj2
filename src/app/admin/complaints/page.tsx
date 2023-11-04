@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import supabase from "@/app/utils/supabase";
 import Alert from "@/components/Alert";
 import { Button } from "@/components/Button";

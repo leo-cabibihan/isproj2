@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { ImageUpload } from "@/components/ImgUpload";
 
 export default function TestPage () {

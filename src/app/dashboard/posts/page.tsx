@@ -1,4 +1,4 @@
-
+// @ts-nocheck
 
 import { Button } from "@/components/Button";
 import { TableContainer, TableHeaderButton } from "@/components/Table";

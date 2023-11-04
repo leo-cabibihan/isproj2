@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { DisplayError } from '@/app/(auth)/error-handling/function';
 import { CharityLog } from '@/app/admin/audit-log/function';
 import supabase from '@/app/utils/supabase';

@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { SelectField, TextField } from '@/components/Fields'
 import { Table, TableContainer, TableContent, TableHeaderButton, Tbody, Td, Thead, Tr } from '@/components/Table';

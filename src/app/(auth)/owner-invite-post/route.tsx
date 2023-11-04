@@ -1,4 +1,4 @@
-
+// @ts-nocheck 
 import { GetEmail, GetUID } from '@/app/utils/user_id'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'

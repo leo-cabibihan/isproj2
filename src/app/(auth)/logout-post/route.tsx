@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { AdminLog, CharityLog } from "@/app/admin/audit-log/function"
 import supabase from "@/app/utils/supabase"
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"

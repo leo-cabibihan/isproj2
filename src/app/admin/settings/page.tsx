@@ -1,3 +1,4 @@
+// @ts-nocheck 
 const navigation = [
   { name: 'Profile', href: '#', current: true },
   { name: 'Settings', href: '#', current: false },

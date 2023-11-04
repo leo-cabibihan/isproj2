@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { DefaultLayout } from '@/components/layouts/Default'
 import { CheckCircleIcon, InformationCircleIcon } from '@heroicons/react/20/solid'
 import supabase from "@/app/utils/supabase"

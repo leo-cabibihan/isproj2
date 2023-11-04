@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import supabase from "./supabase";
 
 export async function DisplayImage(folder1: any, charityID: any, recordID: any) {

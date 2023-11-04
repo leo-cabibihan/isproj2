@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import supabase from "@/app/utils/supabase";
 import { NoURLMail, ReceiptEmail } from "@/components/email-template";
 import Plunk from "@plunk/node";

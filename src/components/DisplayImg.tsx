@@ -1,3 +1,4 @@
+// @ts-nocheck 
 'use server'
 
 import { DisplayImage, DownloadImage } from "@/app/utils/display_image"

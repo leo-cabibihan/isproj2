@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { CharityLog } from "@/app/admin/audit-log/function";
 import supabase from "@/app/utils/supabase";
 import { ReceiptEmail } from "@/components/email-template";

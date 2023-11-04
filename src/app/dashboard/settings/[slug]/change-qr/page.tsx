@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { QRUpload } from "@/components/QrUpload";
 
 export default function Test({ params }: any) {

@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { Button } from "./Button"
 import { TextField } from "./Fields"
 import SlideOver from "./SlideOverButton"

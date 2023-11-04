@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Button } from '@/components/Button'

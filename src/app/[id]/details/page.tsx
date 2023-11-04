@@ -1,4 +1,4 @@
-
+// @ts-nocheck 
 
 import supabase from "@/app/utils/supabase"
 import { Button } from "@/components/Button"

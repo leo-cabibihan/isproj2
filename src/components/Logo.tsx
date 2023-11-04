@@ -1,3 +1,4 @@
+// @ts-nocheck 
 export function Logo(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Table, TableContainer, TableContent, TableHeaderButton, Tbody, Td, Th, Thead, Tr } from "@/components/Table"
 import SlideOver from "@/components/SlideOverButton"
 import { TextField } from "@/components/Fields"

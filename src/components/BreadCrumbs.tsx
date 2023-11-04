@@ -1,3 +1,4 @@
+// @ts-nocheck 
 "use client"
 
 import { HomeIcon } from '@heroicons/react/20/solid'

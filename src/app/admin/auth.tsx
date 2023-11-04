@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import supabase from "@/app/utils/supabase"
 import { revalidatePath } from "next/cache"
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'

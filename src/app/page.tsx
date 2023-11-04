@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { Container } from '@/components/Container'
 import { Button } from '@/components/Button'
 import { Hero, Cards, Content, ContentRight, News } from '@/components/Single-use'

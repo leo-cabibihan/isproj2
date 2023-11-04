@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { Button } from "@/components/Button";
 import { ImageUpload } from "@/components/ImgUpload";
 

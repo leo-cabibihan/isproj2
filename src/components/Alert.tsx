@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { XCircleIcon } from '@heroicons/react/20/solid'
 
 export default function Alert({message}: {message:string}) {

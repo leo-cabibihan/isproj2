@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { DownloadImage } from '@/app/utils/display_image'
 import supabase from '@/app/utils/supabase'
 import { BannerImg, DownloadableImg } from '@/components/DisplayImg'

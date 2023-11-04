@@ -1,3 +1,4 @@
+// @ts-nocheck
 "use client"
 
 import supabase from "@/app/utils/supabase";

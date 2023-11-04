@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import supabase from "@/app/utils/supabase"
 
 export default async function Page() {

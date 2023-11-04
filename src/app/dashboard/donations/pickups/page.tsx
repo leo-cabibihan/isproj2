@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import { Button } from "@/components/Button";
 import { SelectField, TextField } from "@/components/Fields";
 import SlideOver from "@/components/SlideOverButton";

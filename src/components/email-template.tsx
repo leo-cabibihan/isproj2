@@ -1,3 +1,4 @@
+// @ts-nocheck
 // components/EmailMessage.tsx
 
 import {

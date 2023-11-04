@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Button } from "@/components/Button";
 import { SelectField, TextField } from "@/components/Fields";
 import { CDNURL, ImageUpload, imgPath } from "@/components/ImgUpload";

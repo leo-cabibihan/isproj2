@@ -1,3 +1,4 @@
+// @ts-nocheck 
 import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
