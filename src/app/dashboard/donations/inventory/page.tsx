@@ -6,7 +6,7 @@ import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
 import { TextField, SelectField } from "@/components/Fields";
 import SlideOver from "@/components/SlideOverButton";
-import { TableContainer, TableHeaderButton, TableContent, Table, Thead, Tr, Td, Tbody, TableHeader } from "@/components/Table";
+import { TableContainer, TableHeaderButton, TableContent, Table, Thead, Tr, Td, Tbody, TableHeader, Th } from "@/components/Table";
 import { revalidatePath } from "next/cache";
 
 export const revalidate = 0;
@@ -58,10 +58,10 @@ export default async function Page() {
                     <Table>
                         <Thead>
                             <Tr>
-                                <Td>Name</Td>
-                                <Td>Quantity</Td>
-                                <Td>Unit of Measurement</Td>
-                                <Td>Perishable?</Td>
+                                <Th>Name</Th>
+                                <Th>Quantity</Th>
+                                <Th>Unit of Measurement</Th>
+                                <Th>Perishable?</Th>
                                 <Td> </Td>
                             </Tr>
                         </Thead>
