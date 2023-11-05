@@ -16,10 +16,10 @@ export const revalidate = 0;
 export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
   const uid = await GetUID()
-  const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid as string)
+  const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
   const charity_id = charity_member?.map(member => member.charity?.id)
 
-  const { data: contacts } = await supabase.from('beneficiaries').select("*").order("id", { ascending: true }).eq('charity_id', Number(charity_id))
+  const { data: contacts } = await supabase.from('beneficiaries').select("*").order("id", { ascending: true }).eq('charity_id', charity_id)
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
@@ -27,7 +27,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
       beneficiary_name: formData.get("beneficiary"),
       contact: formData.get("contact_no"),
       address: formData.get("address"),
-      charity_id: Number(charity_id)
+      charity_id: charity_id
     };
 
     const { data: beneficiary_insert, error: insert_error } = await supabase.from('beneficiaries').insert(beneficiary).select();
@@ -48,7 +48,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
       address: formData.get("address")
     };
 
-    const { data: beneficiaries_update, error: update_error } = await supabase.from('beneficiaries').update(beneficiary).eq("id", Number(contactId)).select()
+    const { data: beneficiaries_update, error: update_error } = await supabase.from('beneficiaries').update(beneficiary).eq("id", contactId).select()
     revalidatePath('/');
     CharityLog("UPDATED BENEFICIARY " + beneficiaries_update![0].beneficiary_name + " ON " + beneficiaries_update![0].date + ".", update_error)
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${update_error?.message}`, update_error)
@@ -63,7 +63,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
       address: formData.get("address")
     };
 
-    const { data: beneficiary_delete, error: delete_error } = await supabase.from('beneficiaries').delete().eq("id", Number(contactId)).select()
+    const { data: beneficiary_delete, error: delete_error } = await supabase.from('beneficiaries').delete().eq("id", contactId).select()
     revalidatePath('/');
     CharityLog("ADDED BENEFICIARY " + beneficiary_delete![0].beneficiary_name + " ON " + beneficiary_delete![0].date + ".", delete_error)
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${delete_error?.message}`, delete_error)
@@ -167,7 +167,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                           autoComplete="number"
                           maxLength={15}
                           max={99999999999}
-                          defaultValue={Number(contact.contact)}
+                          defaultValue={contact.contact}
                           required
                         />
 

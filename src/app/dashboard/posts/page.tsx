@@ -24,7 +24,7 @@ export default async function Page() {
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
 
     const uid = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid as string)
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     const charityId = charity_id![0]
@@ -32,7 +32,7 @@ export default async function Page() {
     const { data: posts, error } = await supabase
         .from('campaign_post')
         .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
-        .eq('charity_id', Number(charity_id))
+        .eq('charity_id', charity_id)
 
     const { data: last_post, error: post_error } = await supabase
         .from('campaign_post')
@@ -69,7 +69,7 @@ export default async function Page() {
             charity_member_id: uid
         };
 
-        const {data, error} = await supabase.from('campaign_post').update(post).eq("id", Number(postId)).select()
+        const {data, error} = await supabase.from('campaign_post').update(post).eq("id", postId).select()
         CharityLog("UPDATED POST " + data![0].title, error)
         revalidatePath('/');
     };
@@ -85,7 +85,7 @@ export default async function Page() {
             charity_member_id: uid
         };
 
-        const {data, error} = await supabase.from('campaign_post').delete().eq("id", Number(postId)).select()
+        const {data, error} = await supabase.from('campaign_post').delete().eq("id", postId).select()
         CharityLog("DELETED POST " + data![0].title, error)
         revalidatePath('/');
     };

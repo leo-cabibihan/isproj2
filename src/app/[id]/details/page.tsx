@@ -40,7 +40,7 @@ export default async function Organization({ params }: any) {
   const { data: donor, error: error_1 } = await supabase
     .from('donor')
     .select('*')
-    .eq('id', donorID as string)
+    .eq('id', donorID)
 
   const { data: orgs } = await supabase
     .from('charity')

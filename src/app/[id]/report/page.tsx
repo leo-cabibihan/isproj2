@@ -54,7 +54,7 @@ export default async function Report({ params }: any) {
         content={"Thank you for filing a complaint. Rest assured that the admins will review this as soon as possible and take immediate action."}/>);
 
     const success = await plunk.emails.send({
-        to: email as string,
+        to: email,
         subject: "Complaint Received",
         body,
     })

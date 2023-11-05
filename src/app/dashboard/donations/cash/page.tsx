@@ -28,24 +28,24 @@ export default async function ExternalTable() {
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
 
     const uid = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid as string)
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     const charityId = charity_id![0]
     const { data: event } = await supabase
         .from('event')
         .select('*')
-        .eq('charity_id', Number(charityId))
+        .eq('charity_id', charityId)
         .order("id", { ascending: true })
 
     const { data: cash, error: cash_error } = await supabase.from('cash')
         .select('*, charity ( id, name ), donor ( id, name ), event( id, name )')
-        .eq('charity_id', Number(charityId))
+        .eq('charity_id', charityId)
         .order("id", { ascending: true })
 
     const { data, error } = await supabase.from('cash')
         .select('*')
-        .eq('charity_id', Number(charityId))
+        .eq('charity_id', charityId)
         .order("id", { ascending: false }).limit(1)
 
     const cash_id = data?.map(post => post.id)
@@ -56,7 +56,7 @@ export default async function ExternalTable() {
         const cash = {
             amount: formData.get('amount'),
             date: formData.get('date'),
-            charity_id: Number(charityId),
+            charity_id: charityId,
             is_external: true,
             event_id: formData.get('event')
 
@@ -73,12 +73,12 @@ export default async function ExternalTable() {
         const cash = {
             amount: formData.get('amount'),
             date: formData.get('date'),
-            charity_id: Number(charityId),
+            charity_id: charityId,
             is_external: true,
             event_id: formData.get('event')
         }
 
-        const { data, error } = await supabase.from('cash').update(cash).eq("id", Number(cashID)).select()
+        const { data, error } = await supabase.from('cash').update(cash).eq("id", cashID).select()
         CharityLog("EDITED EXTERNAL INCOME WORTH PHP " + data![0].amount, error)
         revalidatePath('/');
     };
@@ -87,7 +87,7 @@ export default async function ExternalTable() {
         'use server'
         const cashID = formData.get("id")
 
-        const { data, error } = await supabase.from('cash').delete().eq("id", Number(cashID)).select()
+        const { data, error } = await supabase.from('cash').delete().eq("id", cashID).select()
         CharityLog("DELETED EXTERNAL INCOME " + data![0].id, error)
         revalidatePath('/');
     };

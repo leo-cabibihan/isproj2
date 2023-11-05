@@ -23,7 +23,8 @@ export default async function Expenses() {
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', Number(uid))
+    console.log("UID IS" + uid)
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     console.log("CHARITY ID IN EXPENSES IS" + charity_id)
@@ -31,7 +32,9 @@ export default async function Expenses() {
     const { data: expenses, error } = await supabase
         .from('expenses')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
-        .eq('charity_id', Number(charity_id))
+        .eq('charity_id', charity_id)
+
+    console.log("TF", expenses)
 
     const { data: beneficiaries, error: beneficiaries_error } = await supabase
         .from('beneficiaries')
@@ -48,7 +51,7 @@ export default async function Expenses() {
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', Number(charity_id))
+        .eq('charity_id', charity_id)
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
@@ -76,7 +79,7 @@ export default async function Expenses() {
             beneficiary_id: formData.get("beneficiary_id"),
         };
 
-        const {data, error} = await supabase.from('expenses').update(expense).eq("id", Number(expenseId))
+        const {data, error} = await supabase.from('expenses').update(expense).eq("id", expenseId)
         revalidatePath('/');
         CharityLog("UPDATED EXPENSE" + expenseId + ".", error)
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error?.message}`, error)
@@ -92,7 +95,7 @@ export default async function Expenses() {
             beneficiary_id: formData.get("beneficiary_id"),
         };
 
-        const {data, error} = await supabase.from('expenses').delete().eq("id", Number(expenseId))
+        const {data, error} = await supabase.from('expenses').delete().eq("id", expenseId)
         revalidatePath('/');
         CharityLog("DELETE EXPENSE" + expenseId + ".", error)
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error}`, error)
@@ -122,7 +125,7 @@ export default async function Expenses() {
                                                 label=""
                                                 name="charity_id"
                                                 type="hidden"
-                                                defaultValue={Number(charity_id)}
+                                                defaultValue={charity_id}
                                             />
 
                                             <TextField

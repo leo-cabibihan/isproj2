@@ -16,7 +16,7 @@ export default async function Page() {
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid as string)
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     const { data: beneficiaries, error: beneficiaries_error } = await supabase
@@ -25,7 +25,7 @@ export default async function Page() {
     const { data: events, error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', Number(charity_id))
+        .eq('charity_id', charity_id)
     const { data: last_event, error: event_error } = await supabase
         .from('event')
         .select('*')
@@ -64,7 +64,7 @@ export default async function Page() {
             beneficiary_id: formData.get("beneficiary_id")
         };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", Number(eventId))
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/events?err=${update_error?.message}`, update_error)
@@ -80,7 +80,7 @@ export default async function Page() {
             end_date: formData.get("end_date"),
         };
 
-        const { data: delete_event, error: delete_error } = await supabase.from('event').delete().eq("id", Number(eventId))
+        const { data: delete_event, error: delete_error } = await supabase.from('event').delete().eq("id", eventId)
         revalidatePath('/');
         CharityLog("DELETED EVENT" + formData.get("event_name") + ".", delete_error)
         DisplayError(`http://localhost:3000/dashboard/beneficiaries/events?err=${delete_error?.message}`, delete_error)
@@ -101,7 +101,7 @@ export default async function Page() {
                                 label=""
                                 name="charity_id"
                                 type="hidden"
-                                defaultValue={Number(charity_id)}
+                                defaultValue={charity_id}
                                 required
                             />
 

@@ -23,11 +23,11 @@ export const revalidate = 0;
 
 export default async function Settings() {
     const uid = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid as string)
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
-    const { data: members, error } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('charity_id', Number(charity_id))
-    const { data: locations, error: error_3 } = await supabase.from('drop_off_location').select('*').eq('charity_id', Number(charity_id))
-    const { data: orgs, error: error_4 } = await supabase.from('charity').select('*').eq('id', Number(charity_id))
+    const { data: members, error } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('charity_id', charity_id)
+    const { data: locations, error: error_3 } = await supabase.from('drop_off_location').select('*').eq('charity_id', charity_id)
+    const { data: orgs, error: error_4 } = await supabase.from('charity').select('*').eq('id', charity_id)
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
@@ -50,7 +50,7 @@ export default async function Settings() {
             charity_id: formData.get("id"),
         };
 
-        const { data: delete_address, error: delete_error } = await supabase.from('drop_off_location').delete().eq("id", Number(addressId))
+        const { data: delete_address, error: delete_error } = await supabase.from('drop_off_location').delete().eq("id", addressId)
         revalidatePath('/');
     };
 
@@ -62,7 +62,7 @@ export default async function Settings() {
             about: formData.get("description"),
         };
 
-        const { data: update_org, error: update_error } = await supabase.from('charity').update(details).eq("id", Number(orgId))
+        const { data: update_org, error: update_error } = await supabase.from('charity').update(details).eq("id", orgId)
         revalidatePath('/');
     };
 

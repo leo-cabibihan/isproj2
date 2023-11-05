@@ -225,7 +225,7 @@ export function CashForm({ ID, UserID }: any) {
             const { data } = await supabase
                 .from('event')
                 .select('*')
-                .eq('charity_id', Number(ID))
+                .eq('charity_id', ID)
                 .order("id", { ascending: true })
             setEventsList(data!)
 

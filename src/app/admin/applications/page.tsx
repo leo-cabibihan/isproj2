@@ -115,7 +115,7 @@ export default async function Applications() {
                           label="Phone Number"
                           name="phone"
                           type="tel"
-                          defaultValue={Number(request.charity_phone)}
+                          defaultValue={request.charity_phone}
                           readOnly
                         />
 

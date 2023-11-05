@@ -19,7 +19,7 @@ export default async function beneficiaryitem() {
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid as string)
+    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     console.log("CHARITY ID " + charity_id)
@@ -27,16 +27,16 @@ export default async function beneficiaryitem() {
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', Number(charity_id))
+        .eq('charity_id', charity_id)
 
     console.log("EVENTS ERROR", events_error)
 
-    const { data: inventory, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', Number(charity_id))
+    const { data: inventory, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', charity_id)
 
     const { data: beneficiary_items, error: bs_error } = await supabase
         .from('beneficiary_items')
         .select('*, inventory_item ( id, name ), charity ( id, name )')
-        .eq('charity_id', Number(charity_id))
+        .eq('charity_id', charity_id)
 
     console.log("hello I suck ", bs_error)
 
@@ -45,15 +45,15 @@ export default async function beneficiaryitem() {
 
         const current_item_id = formData.get("item_id")
 
-        const { data: item_to_add, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', Number(charity_id)).eq("id", Number(current_item_id)).single()
+        const { data: item_to_add, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', charity_id).eq("id", current_item_id).single()
         
         const inventoryQuantity = item_to_add?.quantity as number - parseInt(formData.get("amount") as string)
               
-        const { error: idk } = await supabase.from('inventory_item').update({quantity: inventoryQuantity}).eq("id", Number(current_item_id))
+        const { error: idk } = await supabase.from('inventory_item').update({quantity: inventoryQuantity}).eq("id", current_item_id)
         
         const item = {
             item_id: current_item_id,
-            charity_id: Number(charity_id),
+            charity_id: charity_id,
             event_id: formData.get("event_id"),
             quantity: formData.get('amount'),
             description: formData.get("desc")
@@ -80,7 +80,7 @@ export default async function beneficiaryitem() {
                                 label=""
                                 name="charity_id"
                                 type="hidden"
-                                defaultValue={Number(charity_id)}
+                                defaultValue={charity_id}
                             />
 
                             <TextField

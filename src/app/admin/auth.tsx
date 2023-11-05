@@ -15,7 +15,7 @@ export async function AdminAuth() {
   console.log("UID IS " + uid)
 
   //This checks for the admin role
-  const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid as string)
+  const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
 
   console.log("ADMIN IS " + admin)
 

@@ -82,7 +82,7 @@ export async function POST(request: Request) {
         content={new_item} content_2={item_data}/>);
 
     const success = await plunk.emails.send({
-        to: email as string,
+        to: email,
         subject: "THANK YOU!",
         body,
     })
