@@ -27,12 +27,13 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
       beneficiary_name: formData.get("beneficiary"),
       contact: formData.get("contact_no"),
       address: formData.get("address"),
-      charity_id: charity_id
+      charity_id: parseInt(charity_id)
     };
 
     const { data: beneficiary_insert, error: insert_error } = await supabase.from('beneficiaries').insert(beneficiary).select();
     revalidatePath('/');
     console.log("THE ERROR IS: ", beneficiary_insert, insert_error)
+    console.log("ERROR IS ", insert_error)
     CharityLog("ADDED BENEFICIARY " + beneficiary_insert![0].beneficiary_name + " ON " + beneficiary_insert![0].date + ".", insert_error)
     console.log("ERROR IS ", insert_error)
     DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${insert_error?.message}`, insert_error)
