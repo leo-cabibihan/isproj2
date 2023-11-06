@@ -218,6 +218,8 @@ export function CashForm({ ID, UserID }: any) {
     const [eventID, setEventID] = useState("")
     const [eventslist, setEventsList] = useState<any>([])
 
+    console.log("AMOUNT" + amount)
+
     useEffect(() => {
 
         const fetchData = async () => {

@@ -53,7 +53,7 @@ export default async function beneficiaryitem() {
         
         const item = {
             item_id: current_item_id,
-            charity_id: charity_id,
+            charity_id: parseInt(charity_id),
             event_id: formData.get("event_id"),
             quantity: formData.get('amount'),
             description: formData.get("desc")

@@ -12,15 +12,19 @@ export async function POST(request: Request) {
 
     const orgID = formData.charity_id
 
+    console.log("PASSED SHIT" + formData.amount)
+
     const cash = {
-        amount: formData.amount,
+        amount: parseInt(formData.amount),
         charity_id: formData.charity_id,
         donor_id: formData.donor_id,
         is_external: formData.is_external,
-        event_id: formData.event_id
+        event_id: parseInt(formData.event_id)
     }
 
     const { data, error } = await supabase.from('cash').insert(cash).select();
+
+    console.log('CASH ERROR', error)
 
     const recordID = data![0].id
 
