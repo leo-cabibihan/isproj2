@@ -6,14 +6,25 @@ import { DefaultLayout } from '@/components/layouts/Default'
 import supabase from "@/app/utils/supabase"
 import { revalidatePath } from "next/cache"
 import { BannerImg } from '@/components/DisplayImg'
+import { cookies } from 'next/headers'
+import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
+
 
 export const revalidate = 0;
 
 export default async function Home() {
 
-  const { data: charity } = await supabase.from('charity').select("*")
+  const cookieStore = cookies()
 
-  const { data: campaign_post } = await supabase.from('campaign_post').select("*, charity ( id )")
+  const supabase = createServerActionClient({ cookies: () => cookieStore })
+
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+  console.log("SESSION ID IS: " + session?.user.id)
+
+  const { data: charity } = await supabase.from('charity').select("*").eq("charity_verified", true)
+  
+
+  const { data: campaign_post } = await supabase.from('campaign_post').select("*, charity ( id )").eq("charity.charity_verified", true)
 
   return (
     <>

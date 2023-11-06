@@ -16,8 +16,8 @@ export const revalidate = 0;
 export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
   const uid = await GetUID()
-  const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
-  const charity_id = charity_member?.map(member => member.charity?.id)
+  const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid).single()
+  const charity_id = charity_member?.charity?.id
 
   const { data: contacts } = await supabase.from('beneficiaries').select("*").order("id", { ascending: true }).eq('charity_id', charity_id)
 
@@ -32,11 +32,11 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
     const { data: beneficiary_insert, error: insert_error } = await supabase.from('beneficiaries').insert(beneficiary).select();
     revalidatePath('/');
-    console.log("THE ERROR IS: ", beneficiary_insert, insert_error)
-    console.log("ERROR IS ", insert_error)
+    console.log("THE ERROR IS: ", beneficiary_insert, insert_error)    
+    DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${insert_error?.message}`, insert_error)
+
     CharityLog("ADDED BENEFICIARY " + beneficiary_insert![0].beneficiary_name + " ON " + beneficiary_insert![0].date + ".", insert_error)
     console.log("ERROR IS ", insert_error)
-    DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${insert_error?.message}`, insert_error)
 
   };
 
@@ -155,7 +155,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
                         <TextField
                           label="Beneficiary Name"
-                          name="beneficiary_name"
+                          name="beneficiary"
                           type="text"
                           defaultValue={contact.beneficiary_name as string}
                           required
@@ -163,7 +163,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
                         <TextField
                           label="Contact Number"
-                          name="contact"
+                          name="contact_no"
                           type="number"
                           autoComplete="number"
                           maxLength={15}

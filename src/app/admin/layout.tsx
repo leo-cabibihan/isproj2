@@ -17,7 +17,10 @@ import {
   XMarkIcon,
   BuildingOfficeIcon,
   IdentificationIcon,
-  ChatBubbleLeftRightIcon
+  ChatBubbleLeftRightIcon,
+  Cog8ToothIcon
+
+
 } from '@heroicons/react/24/outline'
 
 
@@ -26,6 +29,8 @@ const navigation = [
   { name: 'Application/s', href: '/admin/applications', icon: IdentificationIcon},
   { name: 'Complaints', href: '/admin/complaints', icon: ChatBubbleLeftRightIcon},
   { name: 'Audit Logs', href: '/admin/audit-log', icon: DocumentDuplicateIcon},
+  { name: 'Settings', href: '/admin/settings', icon: Cog8ToothIcon}
+
 ]
 
 const isCurrent = (pathname: string, href: string): boolean => pathname === href

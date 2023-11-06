@@ -10,12 +10,13 @@ import { GetUID } from '@/app/utils/user_id';
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { CharityLog } from "@/app/admin/audit-log/function";
+import Alert from "@/components/Alert";
 
 
 
 export const revalidate = 0;
 
-export default async function beneficiaryitem() {
+export default async function beneficiaryitem({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
@@ -60,6 +61,9 @@ export default async function beneficiaryitem() {
         };
 
         const { data, error } = await supabase.from('beneficiary_items').insert(item);
+        const errors = [error_3, idk, error]
+
+        if (errors.some(id => id)) redirect(`/dashboard/beneficiaries/given-items?err=${errors.map(err => err?.message).join()}`)
         revalidatePath('/');
         CharityLog("ADDED GIVEN-ITEM " + item_to_add?.name + ".", error)
         console.log("I am tired and I want to perish. ", error_3, idk, error)
@@ -76,6 +80,8 @@ export default async function beneficiaryitem() {
                 <TableHeaderButton header="Given Items">
                     <SlideOver buttontext="Add Item" variant="solid" color="blue">
                         <form className="space-y-6" action={handleSubmit} method="POST">
+                            {searchParams.err && <Alert message={searchParams.err as string}/>}
+
                             <TextField
                                 label=""
                                 name="charity_id"
