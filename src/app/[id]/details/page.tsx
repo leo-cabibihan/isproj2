@@ -52,7 +52,7 @@ export default async function Organization({ params }: any) {
       <DefaultLayout>
         <ContentLeft id={orgID} />
         <ContentRight id={orgID} />
-        <GraphTemp />
+        <GraphTemp id={orgID}/>
         <div className="bg-white px-6 py-32 lg:px-8">
           <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
             <div className="mt-16 max-w-2xl space-y-20">
