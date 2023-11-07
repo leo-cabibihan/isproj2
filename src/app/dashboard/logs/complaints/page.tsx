@@ -80,18 +80,18 @@ export default async function Page() {
                                                 />
 
                                                 <div className="col-span-full">
-                                                    <h3 htmlFor="explanation" className="block text-sm font-medium leading-6 text-gray-900">
+                                                    <label htmlFor="complaint" className="block text-sm font-medium leading-6 text-gray-900">
                                                         Complaint
-                                                    </h3>
+                                                    </label>
                                                     <div className="mt-2">
-                                                        <p
-                                               
+                                                        <textarea
+                                                            id="complaint"
+                                                            name="complaint"
+                                                            rows={3}
+                                                            readOnly
                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                        
-                                                        >
-
-                                                            {complaint.complaint}
-                                                            </p>
+                                                            defaultValue={complaint.complaint}
+                                                        />
                                                     </div>
                                                 </div>
 
@@ -129,7 +129,7 @@ export default async function Page() {
                                                             name="explanation"
                                                             rows={3}
                                                             className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                            placeholder="Lorem Ipsum Dolor Sit Amet..."
+                                                            placeholder="Enter your Appeal Details here..."
                                                         />
                                                     </div>
                                                 </div>

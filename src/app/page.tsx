@@ -22,7 +22,7 @@ export default async function Home() {
   console.log("SESSION ID IS: " + session?.user.id)
 
   const { data: charity } = await supabase.from('charity').select("*").eq("charity_verified", true)
-  
+
 
   const { data: campaign_post } = await supabase.from('campaign_post').select("*, charity ( id )").eq("charity.charity_verified", true)
 
@@ -47,7 +47,13 @@ export default async function Home() {
               to make the world better.
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Feugiat nisl pretium fusce id velit ut tortor pretium viverra.
+              At GiveMore, we believe that everyone deserves the opportunity to make a difference. That&apos;s why we make it easy for charities and donors to connect. We are committed to providing a safe and transparent way for people to give, and we believe that everyone deserves the opportunity to make a difference.
+            </p>
+            <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
+              When you give through GiveMore, you can be confident that your donation is going to a legitimate charity and that it is being used to make a positive impact. We have a team of experienced fundraising experts who work with charities to ensure that they are using our platform effectively and that their campaigns are successful. We also have a strict vetting process for all charities that list themselves on our platform, so you can be sure that you are supporting a reputable organization.
+            </p>
+            <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
+              We believe that everyone deserves the opportunity to make a difference, and we are committed to making it easy for people to do so. When you give through GiveMore, you can be confident that your donation is going to a good cause and that it is being used to make a positive impact.
             </p>
           </Container>
 
