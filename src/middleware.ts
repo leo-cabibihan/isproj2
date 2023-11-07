@@ -69,6 +69,24 @@ export async function middleware(req: NextRequest) {
       return Response.redirect('http://localhost:3000')
     }
   }
+  else if (originalUrl.includes('/appeals-form')) {
+    const { data: charity_member, error: error_2 } = await supabase
+      .from('charity_member')
+      .select('*, charity ( id, charity_verified )')
+      .eq('user_uuid', uid)
+    // console.log(charity_member)
+
+    //CHECK IF CHARITY IS VERIFIED
+    charity_member?.map(member => (
+      charity_status = member.charity.charity_verified
+    ))
+    // console.log("THE CHARITY STATUS IS: " + charity_status)
+
+    if (charity_member?.length !== 1) {
+      // console.log("NOT A CHARITY FUCK OFF")
+      return Response.redirect('http://localhost:3000')
+    }
+  }
 
   return res
 }
