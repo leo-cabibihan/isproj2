@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Container } from '@/components/Container'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/NavLink'
+import { getURL } from '@/app/utils/url'
 
 export function Footer() {
   return (
@@ -14,7 +15,7 @@ export function Footer() {
             <div className="-my-1 flex justify-center gap-x-6">
               <NavLink href="/">Home</NavLink>
               <NavLink href="#Causes">Causes</NavLink>
-              <NavLink href="http://localhost:3000/settings">Settings</NavLink>
+              <NavLink href={getURL() + "settings"}>Settings</NavLink>
             </div>
           </nav>
         </div>

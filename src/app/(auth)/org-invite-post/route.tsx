@@ -5,6 +5,7 @@ import { cookies } from 'next/headers'
 import { useRouter } from 'next/router'
 import { NextResponse } from 'next/server'
 import Cryptr from 'cryptr';
+import { getURL } from '@/app/utils/url'
 
 const cryptr = new Cryptr("3UzEs9SUb9rbc3SlQuw9H462JK9xWxJwElh7f5knBaDQ6te9u6")
 
@@ -56,7 +57,7 @@ export async function POST(request: Request) {
         .insert(charity_member)
     console.log(charity, charityError)
 
-    return NextResponse.redirect('http://localhost:3000/email-pending', {
+    return NextResponse.redirect(getURL() + 'email-pending', {
         status: 301,
     })
 

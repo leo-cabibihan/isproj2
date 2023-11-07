@@ -10,6 +10,7 @@ import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/NavLink'
+import { getURL } from '@/app/utils/url'
 
 function MobileNavLink({
   href,
@@ -88,7 +89,7 @@ function MobileNavigation() {
           >
             <MobileNavLink href="/">Home</MobileNavLink>
             <MobileNavLink href="#causes">Causes</MobileNavLink>
-            <MobileNavLink href="http://localhost:3000/settings">
+            <MobileNavLink href={getURL() + "settings"}>
               Settings
             </MobileNavLink>
             <hr className="m-2 border-slate-300/40" />
@@ -112,7 +113,7 @@ export function Header({}) {
             <div className="hidden md:flex md:gap-x-6">
               <NavLink href="/">Home</NavLink>
               <NavLink href="#causes">Causes</NavLink>
-              <NavLink href="http://localhost:3000/settings">Settings</NavLink>
+              <NavLink href={getURL() + "settings"}>Settings</NavLink>
             </div>
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">

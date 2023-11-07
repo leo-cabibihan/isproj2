@@ -2,6 +2,7 @@
 import { AdminLog, CharityLog } from "@/app/admin/audit-log/function"
 import supabase from "@/app/utils/supabase"
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
+import { getURL } from '@/app/utils/url'
 import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
 
@@ -31,7 +32,7 @@ export async function POST() {
     
     const { error } = await supabase.auth.signOut()
     // console.log("this is logout eroor", error)
-    return NextResponse.redirect("http://localhost:3000/", {
+    return NextResponse.redirect(getURL(), {
         status: 301,
     })
 }

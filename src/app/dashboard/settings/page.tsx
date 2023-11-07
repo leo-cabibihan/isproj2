@@ -11,6 +11,7 @@ function classNames(...classes: string[]) {
 }
 
 import supabase from "@/app/utils/supabase";
+import { getURL } from "@/app/utils/url";
 import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
 import { TextField } from "@/components/Fields";
@@ -260,7 +261,7 @@ export default async function Settings() {
                                             </div>
 
                                             <div>
-                                                <a className="text-blue-600" href={"http://localhost:3000/dashboard/settings/" + charity_id + "/change-qr"}>
+                                                <a className="text-blue-600" href={getURL() + "dashboard/settings/" + charity_id + "/change-qr"}>
                                                     <h2 className="text-base font-semibold leading-7 text-blue-600">Upload QR Code for Cash Donations</h2>
                                                 </a>
                                             </div>

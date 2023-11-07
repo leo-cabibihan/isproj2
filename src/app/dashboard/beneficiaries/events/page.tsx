@@ -9,6 +9,7 @@ import { GetUID } from "@/app/utils/user_id";
 import supabase from "@/app/utils/supabase"
 import { DisplayError } from "@/app/(auth)/error-handling/function";
 import { CharityLog } from "@/app/admin/audit-log/function";
+import { getURL } from "@/app/utils/url";
 
 export const revalidate = 0;
 
@@ -50,7 +51,7 @@ export default async function Page() {
         //console.log("CDNURL is: " + CDNURL)
         revalidatePath('/');
         CharityLog("ADDED NEW EVENT " + formData.get("event_name"), event_error)
-        DisplayError(`http://localhost:3000/dashboard/beneficiaries/events?err=${insert_error?.message}`, insert_error)
+        DisplayError(`${getURL}dashboard/beneficiaries/events?err=${insert_error?.message}`, insert_error)
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -67,7 +68,7 @@ export default async function Page() {
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`http://localhost:3000/dashboard/beneficiaries/events?err=${update_error?.message}`, update_error)
+        DisplayError(`${getURL()}dashboard/beneficiaries/events?err=${update_error?.message}`, update_error)
     };
 
     const deleteEvent = async (formData: FormData) => {
@@ -83,7 +84,7 @@ export default async function Page() {
         const { data: delete_event, error: delete_error } = await supabase.from('event').delete().eq("id", eventId)
         revalidatePath('/');
         CharityLog("DELETED EVENT" + formData.get("event_name") + ".", delete_error)
-        DisplayError(`http://localhost:3000/dashboard/beneficiaries/events?err=${delete_error?.message}`, delete_error)
+        DisplayError(`${getURL()}dashboard/beneficiaries/events?err=${delete_error?.message}`, delete_error)
     };
 
     return (

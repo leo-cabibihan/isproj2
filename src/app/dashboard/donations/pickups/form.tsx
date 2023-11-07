@@ -4,6 +4,7 @@
 import supabase from "@/app/utils/supabase";
 import { Button } from "@/components/Button";
 import { TextField, SelectField } from "@/components/Fields";
+import { getURL } from '@/app/utils/url';
 import { SetStateAction, useEffect, useState } from "react";
 
 export function PickupForm({id}: {id:number}) {
@@ -37,7 +38,7 @@ export function PickupForm({id}: {id:number}) {
     const submit = async (e: any) => {
         e.preventDefault();
         console.log(formFields)
-        const rawResponse = await fetch('http://localhost:3000/dashboard/donations/pickups/post', {
+        const rawResponse = await fetch(getURL() + 'dashboard/donations/pickups/post', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

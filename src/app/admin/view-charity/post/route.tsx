@@ -7,6 +7,7 @@ import { render } from '@react-email/render';
 import Plunk from '@plunk/node';
 import { v4 as uuidv4 } from "uuid";
 import Cryptr from 'cryptr';
+import { getURL } from '@/app/utils/url'
 
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
@@ -23,7 +24,7 @@ export async function POST(request: Request) {
 
   console.log('THIS WORKS ', email, donor, date)
 
-  const body = render(<AlertEmail url={"http://localhost:3000/dashboard/logs/complaints"} heading={"You have been reported!"} 
+  const body = render(<AlertEmail url={getURL() + "dashboard/logs/complaints"} heading={"You have been reported!"} 
   content={"You have been reported by " + donor + " at " + date + ". Please click the link to learn more."}/>);
 
   const success = await plunk.emails.send({
@@ -34,7 +35,7 @@ export async function POST(request: Request) {
 
   console.log("SUCCESS??? ", success)
 
-  return NextResponse.redirect('http://localhost:3000/email-pending', {
+  return NextResponse.redirect(getURL() + 'email-pending', {
     status: 301,
   })
 

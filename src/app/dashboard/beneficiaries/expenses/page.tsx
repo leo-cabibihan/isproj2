@@ -2,6 +2,7 @@
 import { DisplayError } from '@/app/(auth)/error-handling/function';
 import { CharityLog } from '@/app/admin/audit-log/function';
 import supabase from '@/app/utils/supabase';
+import { getURL } from '@/app/utils/url';
 import { GetUID } from '@/app/utils/user_id';
 import { Button } from '@/components/Button';
 import { SelectField, TextField } from '@/components/Fields'
@@ -66,7 +67,7 @@ export default async function Expenses() {
         const {data, error} = await supabase.from('expenses').insert(expense);
         revalidatePath('/');
         CharityLog("ADDED EXPENSE", error)
-        DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error?.message}`, error)
+        DisplayError(`${getURL()}dashboard/beneficiaries/expenses?err=${error?.message}`, error)
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -82,7 +83,7 @@ export default async function Expenses() {
         const {data, error} = await supabase.from('expenses').update(expense).eq("id", expenseId)
         revalidatePath('/');
         CharityLog("UPDATED EXPENSE" + expenseId + ".", error)
-        DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error?.message}`, error)
+        DisplayError(`${getURL()}dashboard/beneficiaries/expenses?err=${error?.message}`, error)
     };
 
     const deleteExpense = async (formData: FormData) => {
@@ -98,7 +99,7 @@ export default async function Expenses() {
         const {data, error} = await supabase.from('expenses').delete().eq("id", expenseId)
         revalidatePath('/');
         CharityLog("DELETE EXPENSE" + expenseId + ".", error)
-        DisplayError(`http://localhost:3000/dashboard/beneficiaries/expenses?err=${error}`, error)
+        DisplayError(`${getURL()}dashboard/beneficiaries/expenses?err=${error}`, error)
     };
 
 

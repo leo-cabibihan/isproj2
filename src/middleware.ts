@@ -2,6 +2,7 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { getURL } from './app/utils/url'
 
 
 export async function middleware(req: NextRequest) {
@@ -26,7 +27,7 @@ export async function middleware(req: NextRequest) {
 
     if (admin?.length !== 1) {
       // console.log("NOT SIGNED IN")
-      return Response.redirect('http://localhost:3000')
+      return Response.redirect(getURL())
     }
   }
   else if (originalUrl.includes('/dashboard')) {
@@ -47,7 +48,7 @@ export async function middleware(req: NextRequest) {
 
     if (charity_member?.length !== 1 || charity_status == false) {
       // console.log("NOT A CHARITY FUCK OFF")
-      return Response.redirect('http://localhost:3000')
+      return Response.redirect(getURL())
     }
   }
   else if (originalUrl.includes('/settings')) {
@@ -60,13 +61,13 @@ export async function middleware(req: NextRequest) {
 
     if (donor?.length !== 1) {
       // console.log("NOT A DONOR FUCK OFF")
-      return Response.redirect('http://localhost:3000')
+      return Response.redirect(getURL())
     }
   }
   else if (originalUrl.includes('/owner-invite')) {
     if (user) {
       // console.log("ALREADY AN ADMIN, SO FUCK OFF")
-      return Response.redirect('http://localhost:3000')
+      return Response.redirect(getURL())
     }
   }
   else if (originalUrl.includes('/appeals-form')) {
@@ -84,7 +85,7 @@ export async function middleware(req: NextRequest) {
 
     if (charity_member?.length !== 1) {
       // console.log("NOT A CHARITY FUCK OFF")
-      return Response.redirect('http://localhost:3000')
+      return Response.redirect(getURL())
     }
   }
 

@@ -6,6 +6,7 @@ import { Button } from "@/components/Button";
 import { ShowImg } from "@/components/DisplayImg";
 import { TextField, SelectField } from "@/components/Fields";
 import { useEffect, useState } from "react";
+import { getURL } from '@/app/utils/url'
 
 export function FormComponent({ ID, DonorID }: any) {
 
@@ -80,7 +81,7 @@ export function GoodsForm({ ID, UserID }: any) {
     const submit = async (e: any) => {
         e.preventDefault();
         console.log(formFields)
-        const rawResponse = await fetch('http://localhost:3000/' + ID + '/details/post', {
+        const rawResponse = await fetch(getURL() + ID + '/details/post', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -241,7 +242,7 @@ export function CashForm({ ID, UserID }: any) {
 
     const submit = async (e: any) => {
         e.preventDefault();
-        const rawResponse = await fetch('http://localhost:3000/' + ID + '/details/cash', {
+        const rawResponse = await fetch(getURL() + ID + '/details/cash', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

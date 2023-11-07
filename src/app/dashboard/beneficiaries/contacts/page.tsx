@@ -10,6 +10,7 @@ import { NextResponse } from "next/server"
 import { DisplayError } from "@/app/(auth)/error-handling/function"
 import { CharityLog } from "@/app/admin/audit-log/function"
 import { GetUID } from "@/app/utils/user_id"
+import { getURL } from '@/app/utils/url'
 
 export const revalidate = 0;
 
@@ -33,7 +34,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     const { data: beneficiary_insert, error: insert_error } = await supabase.from('beneficiaries').insert(beneficiary).select();
     revalidatePath('/');
     console.log("THE ERROR IS: ", beneficiary_insert, insert_error)    
-    DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${insert_error?.message}`, insert_error)
+    DisplayError(`${getURL()}dashboard/beneficiaries/contacts?err=${insert_error?.message}`, insert_error)
 
     CharityLog("ADDED BENEFICIARY " + beneficiary_insert![0].beneficiary_name + " ON " + beneficiary_insert![0].date + ".", insert_error)
     console.log("ERROR IS ", insert_error)
@@ -52,7 +53,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     const { data: beneficiaries_update, error: update_error } = await supabase.from('beneficiaries').update(beneficiary).eq("id", contactId).select()
     revalidatePath('/');
     CharityLog("UPDATED BENEFICIARY " + beneficiaries_update![0].beneficiary_name + " ON " + beneficiaries_update![0].date + ".", update_error)
-    DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${update_error?.message}`, update_error)
+    DisplayError(`${getURL()}dashboard/beneficiaries/contacts?err=${update_error?.message}`, update_error)
   };
 
   const deleteContact = async (formData: FormData) => {
@@ -67,7 +68,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     const { data: beneficiary_delete, error: delete_error } = await supabase.from('beneficiaries').delete().eq("id", contactId).select()
     revalidatePath('/');
     CharityLog("ADDED BENEFICIARY " + beneficiary_delete![0].beneficiary_name + " ON " + beneficiary_delete![0].date + ".", delete_error)
-    DisplayError(`http://localhost:3000/dashboard/beneficiaries/contacts?err=${delete_error?.message}`, delete_error)
+    DisplayError(`${getURL()}dashboard/beneficiaries/contacts?err=${delete_error?.message}`, delete_error)
   };
 
   return (

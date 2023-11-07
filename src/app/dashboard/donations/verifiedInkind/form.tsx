@@ -7,6 +7,7 @@ import { TextField, SelectField } from "@/components/Fields";
 import { ImageUpload } from "@/components/ImgUpload";
 import { SetStateAction, useEffect, useState } from "react";
 import { Switch } from '@headlessui/react'
+import { getURL } from "@/app/utils/url";
 
 function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')
@@ -73,7 +74,7 @@ export function MultilayeredForm(ID: any) {
     const submit = async (e) => {
         e.preventDefault();
         console.log(formFields)
-        const rawResponse = await fetch('http://localhost:3000/dashboard/donations/verifiedInkind/post', {
+        const rawResponse = await fetch(getURL() + 'dashboard/donations/verifiedInkind/post', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -441,7 +442,7 @@ export function EditForm({ id, orgID }: { id: number, orgID: any }) {
     const submit = async (e: any) => {
         e.preventDefault();
         console.log(formFields)
-        const rawResponse = await fetch('http://localhost:3000/dashboard/donations/verifiedInkind/post', {
+        const rawResponse = await fetch(getURL() + 'dashboard/donations/verifiedInkind/post', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

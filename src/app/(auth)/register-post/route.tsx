@@ -1,4 +1,5 @@
 // @ts-nocheck 
+import { getURL } from '@/app/utils/url'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
@@ -40,10 +41,10 @@ export async function POST(request: Request) {
       console.log("I should redirect")
 
       //DISPLAYS ERROR MESSAGE IN PAGE
-      return NextResponse.redirect(`http://localhost:3000/register?err=${error.message}`, { status: 301 })
+      return NextResponse.redirect(getURL() + `register?err=${error.message}`, { status: 301 })
     }
 
-    return NextResponse.redirect('http://localhost:3000/email-pending', {
+    return NextResponse.redirect(getURL() + 'email-pending', {
         status: 301,
       })
       
@@ -63,10 +64,10 @@ export async function POST(request: Request) {
       console.log("I should redirect")
 
       //DISPLAYS ERROR MESSAGE IN PAGE
-      return NextResponse.redirect(`http://localhost:3000/register?err=${error.message}`, { status: 301 })
+      return NextResponse.redirect(getURL() + `register?err=${error.message}`, { status: 301 })
     }
 
-    return NextResponse.redirect('http://localhost:3000/email-pending', {
+    return NextResponse.redirect(getURL() + 'email-pending', {
       status: 301,
     })
 

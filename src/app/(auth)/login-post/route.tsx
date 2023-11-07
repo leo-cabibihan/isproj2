@@ -4,6 +4,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { redirect } from 'next/dist/server/api-utils'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { getURL } from './app/utils/url'
 
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url)
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
     // console.log("I should redirect")
 
     //DISPLAYS ERROR MESSAGE IN PAGE
-    return NextResponse.redirect(`http://localhost:3000/login?err=${error.message}`, { status: 301 })
+    return NextResponse.redirect(getURL() + `login?err=${error.message}`, { status: 301 })
   }
   // console.log("y am I here")
   const user_id = user?.id
@@ -56,17 +57,17 @@ export async function POST(request: Request) {
   // console.log(requestUrl.origin)
 
   if (donor?.length === 1) {
-    return NextResponse.redirect('http://localhost:3000/settings', {
+    return NextResponse.redirect(getURL() + 'settings', {
       status: 301,
     })
   } else if (charity_member?.length === 1) {
     CharityLog(charity_member![0].member_name + " has logged in.", null)
-    return NextResponse.redirect('http://localhost:3000/dashboard/settings', {
+    return NextResponse.redirect(getURL() + 'dashboard/settings', {
       status: 301,
     })
   } else if (admin?.length === 1) {
     AdminLog(admin![0].name + " has logged in.")
-    return NextResponse.redirect('http://localhost:3000/admin/applications', {
+    return NextResponse.redirect(getURL() + 'admin/applications', {
       status: 301,
     })
   }
