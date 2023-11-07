@@ -1,10 +1,10 @@
 // @ts-nocheck 
 import { AdminLog, CharityLog } from '@/app/admin/audit-log/function'
+import { getURL } from '@/app/utils/url'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { redirect } from 'next/dist/server/api-utils'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import { getURL } from './app/utils/url'
 
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url)

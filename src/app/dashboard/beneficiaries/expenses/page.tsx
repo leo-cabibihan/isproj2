@@ -2,7 +2,7 @@
 import { DisplayError } from '@/app/(auth)/error-handling/function';
 import { CharityLog } from '@/app/admin/audit-log/function';
 import supabase from '@/app/utils/supabase';
-import { getURL } from '@/app/utils/url';
+import { getURL } from '@/app/utils/url'
 import { GetUID } from '@/app/utils/user_id';
 import { Button } from '@/components/Button';
 import { SelectField, TextField } from '@/components/Fields'

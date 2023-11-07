@@ -4,7 +4,7 @@
 import supabase from "@/app/utils/supabase";
 import { Button } from "@/components/Button";
 import { TextField, SelectField } from "@/components/Fields";
-import { getURL } from '@/app/utils/url';
+import { getURL } from '@/app/utils/url'
 import { SetStateAction, useEffect, useState } from "react";
 
 export function PickupForm({id}: {id:number}) {

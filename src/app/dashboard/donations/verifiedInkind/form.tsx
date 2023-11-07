@@ -7,7 +7,7 @@ import { TextField, SelectField } from "@/components/Fields";
 import { ImageUpload } from "@/components/ImgUpload";
 import { SetStateAction, useEffect, useState } from "react";
 import { Switch } from '@headlessui/react'
-import { getURL } from "@/app/utils/url";
+import { getURL } from '@/app/utils/url'
 
 function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')

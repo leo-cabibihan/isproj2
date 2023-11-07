@@ -9,7 +9,7 @@ import { GetUID } from "@/app/utils/user_id";
 import supabase from "@/app/utils/supabase"
 import { DisplayError } from "@/app/(auth)/error-handling/function";
 import { CharityLog } from "@/app/admin/audit-log/function";
-import { getURL } from "@/app/utils/url";
+import { getURL } from '@/app/utils/url'
 
 export const revalidate = 0;
 

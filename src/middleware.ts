@@ -2,7 +2,7 @@
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { getURL } from './app/utils/url'
+import { getURL } from '@/app/utils/url'
 
 
 export async function middleware(req: NextRequest) {

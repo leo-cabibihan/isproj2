@@ -7,7 +7,7 @@ import { render } from '@react-email/render';
 import Plunk from '@plunk/node';
 import { v4 as uuidv4 } from "uuid";
 import Cryptr from 'cryptr';
-import { getURL } from './app/utils/url'
+import { getURL } from '@/app/utils/url'
 
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 const cryptr = new Cryptr("3UzEs9SUb9rbc3SlQuw9H462JK9xWxJwElh7f5knBaDQ6te9u6")
