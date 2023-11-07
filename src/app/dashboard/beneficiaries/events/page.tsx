@@ -20,6 +20,8 @@ export default async function Page() {
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
+    const generic_error = "Unable to Process request. Please check your data and try again."
+
     const { data: beneficiaries, error: beneficiaries_error } = await supabase
         .from('beneficiaries')
         .select('*')
@@ -51,7 +53,7 @@ export default async function Page() {
         //console.log("CDNURL is: " + CDNURL)
         revalidatePath('/');
         CharityLog("ADDED NEW EVENT " + formData.get("event_name"), event_error)
-        DisplayError(`${getURL}dashboard/beneficiaries/events?err=${insert_error?.message}`, insert_error)
+        DisplayError(`${getURL}dashboard/beneficiaries/events?err=${generic_error}`, insert_error)
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -68,7 +70,7 @@ export default async function Page() {
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`${getURL()}dashboard/beneficiaries/events?err=${update_error?.message}`, update_error)
+        DisplayError(`${getURL()}dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const deleteEvent = async (formData: FormData) => {
@@ -84,7 +86,7 @@ export default async function Page() {
         const { data: delete_event, error: delete_error } = await supabase.from('event').delete().eq("id", eventId)
         revalidatePath('/');
         CharityLog("DELETED EVENT" + formData.get("event_name") + ".", delete_error)
-        DisplayError(`${getURL()}dashboard/beneficiaries/events?err=${delete_error?.message}`, delete_error)
+        DisplayError(`${getURL()}dashboard/beneficiaries/events?err=${generic_error}`, delete_error)
     };
 
     return (

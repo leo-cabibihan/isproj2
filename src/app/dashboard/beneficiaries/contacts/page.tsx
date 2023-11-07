@@ -20,6 +20,8 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
   const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid).single()
   const charity_id = charity_member?.charity?.id
 
+  const generic_error = "Transaction error. Please check your data and try again."
+
   const { data: contacts } = await supabase.from('beneficiaries').select("*").order("id", { ascending: true }).eq('charity_id', charity_id)
 
   const handleSubmit = async (formData: FormData) => {
@@ -34,7 +36,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     const { data: beneficiary_insert, error: insert_error } = await supabase.from('beneficiaries').insert(beneficiary).select();
     revalidatePath('/');
     console.log("THE ERROR IS: ", beneficiary_insert, insert_error)    
-    DisplayError(`${getURL()}dashboard/beneficiaries/contacts?err=${insert_error?.message}`, insert_error)
+    DisplayError(`${getURL()}dashboard/beneficiaries/contacts?err=${generic_error}`, insert_error)
 
     CharityLog("ADDED BENEFICIARY " + beneficiary_insert![0].beneficiary_name + " ON " + beneficiary_insert![0].date + ".", insert_error)
     console.log("ERROR IS ", insert_error)
@@ -53,7 +55,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     const { data: beneficiaries_update, error: update_error } = await supabase.from('beneficiaries').update(beneficiary).eq("id", contactId).select()
     revalidatePath('/');
     CharityLog("UPDATED BENEFICIARY " + beneficiaries_update![0].beneficiary_name + " ON " + beneficiaries_update![0].date + ".", update_error)
-    DisplayError(`${getURL()}dashboard/beneficiaries/contacts?err=${update_error?.message}`, update_error)
+    DisplayError(`${getURL()}dashboard/beneficiaries/contacts?err=${generic_error?.message}`, update_error)
   };
 
   const deleteContact = async (formData: FormData) => {
@@ -68,7 +70,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     const { data: beneficiary_delete, error: delete_error } = await supabase.from('beneficiaries').delete().eq("id", contactId).select()
     revalidatePath('/');
     CharityLog("ADDED BENEFICIARY " + beneficiary_delete![0].beneficiary_name + " ON " + beneficiary_delete![0].date + ".", delete_error)
-    DisplayError(`${getURL()}dashboard/beneficiaries/contacts?err=${delete_error?.message}`, delete_error)
+    DisplayError(`${getURL()}dashboard/beneficiaries/contacts?err=${generic_error?.message}`, delete_error)
   };
 
   return (

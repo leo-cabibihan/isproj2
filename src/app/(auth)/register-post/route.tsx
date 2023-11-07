@@ -15,6 +15,8 @@ export async function POST(request: Request) {
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
+  const signup_error = "Email Address already exists. Please use a different one or Login."
+
   const { data: { user }, error } = await supabase.auth.signUp({
     email,
     password,
@@ -41,7 +43,7 @@ export async function POST(request: Request) {
       console.log("I should redirect")
 
       //DISPLAYS ERROR MESSAGE IN PAGE
-      return NextResponse.redirect(getURL() + `register?err=${error.message}`, { status: 301 })
+      return NextResponse.redirect(getURL() + `register?err=${signup_error}`, { status: 301 })
     }
 
     return NextResponse.redirect(getURL() + 'email-pending', {
@@ -64,7 +66,7 @@ export async function POST(request: Request) {
       console.log("I should redirect")
 
       //DISPLAYS ERROR MESSAGE IN PAGE
-      return NextResponse.redirect(getURL() + `register?err=${error.message}`, { status: 301 })
+      return NextResponse.redirect(getURL() + `register?err=${signup_error}`, { status: 301 })
     }
 
     return NextResponse.redirect(getURL() + 'email-pending', {

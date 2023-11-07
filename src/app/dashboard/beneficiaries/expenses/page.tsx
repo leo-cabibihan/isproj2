@@ -28,6 +28,8 @@ export default async function Expenses() {
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
+    const generic_error = "Unable to process request. Please check your data and try again."
+
     console.log("CHARITY ID IN EXPENSES IS" + charity_id)
     
     const { data: expenses, error } = await supabase
@@ -67,7 +69,7 @@ export default async function Expenses() {
         const {data, error} = await supabase.from('expenses').insert(expense);
         revalidatePath('/');
         CharityLog("ADDED EXPENSE", error)
-        DisplayError(`${getURL()}dashboard/beneficiaries/expenses?err=${error?.message}`, error)
+        DisplayError(`${getURL()}dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -83,7 +85,7 @@ export default async function Expenses() {
         const {data, error} = await supabase.from('expenses').update(expense).eq("id", expenseId)
         revalidatePath('/');
         CharityLog("UPDATED EXPENSE" + expenseId + ".", error)
-        DisplayError(`${getURL()}dashboard/beneficiaries/expenses?err=${error?.message}`, error)
+        DisplayError(`${getURL()}dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
     const deleteExpense = async (formData: FormData) => {
@@ -99,7 +101,7 @@ export default async function Expenses() {
         const {data, error} = await supabase.from('expenses').delete().eq("id", expenseId)
         revalidatePath('/');
         CharityLog("DELETE EXPENSE" + expenseId + ".", error)
-        DisplayError(`${getURL()}dashboard/beneficiaries/expenses?err=${error}`, error)
+        DisplayError(`${getURL()}dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
 
