@@ -74,7 +74,7 @@ export function MultilayeredForm(ID: any) {
     const submit = async (e) => {
         e.preventDefault();
         console.log(formFields)
-        const rawResponse = await fetch(getURL() + 'dashboard/donations/verifiedInkind/post', {
+        const rawResponse = await fetch('https://givemore.vercel.app/dashboard/donations/verifiedInkind/post', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
