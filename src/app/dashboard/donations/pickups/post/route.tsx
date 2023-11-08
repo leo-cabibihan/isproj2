@@ -36,7 +36,7 @@ export async function PUT(request: Request) {
     
     console.log("CHECKPOINT - USER EMAIL IS " + transactions![0].donor_id)
 
-    const { data, error: email_error } = await supabase.from('users').select('email').eq('id', transactions![0].donor_id)
+    const { data, error: email_error } = await supabase.from('users').select('email').eq('id', transactions![0].donor_id as string)
 
     console.log("EMAIL CHECKPOINT ", data![0].email, email_error)
 
