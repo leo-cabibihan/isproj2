@@ -1,7 +1,7 @@
 // @ts-nocheck
 'use client'
 
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Popover, Transition } from '@headlessui/react'
 import clsx from 'clsx'
@@ -11,6 +11,7 @@ import { Container } from '@/components/Container'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/NavLink'
 import { getURL } from '@/app/utils/url'
+import supabase from '@/app/utils/supabase'
 
 function MobileNavLink({
   href,
@@ -53,7 +54,8 @@ function MobileNavIcon({ open }: { open: boolean }) {
   )
 }
 
-function MobileNavigation() {
+function MobileNavigation({ session }) {
+  const isLoggedIn = Boolean(session?.user?.id)
   return (
     <Popover>
       <Popover.Button
@@ -89,11 +91,13 @@ function MobileNavigation() {
           >
             <MobileNavLink href="/">Home</MobileNavLink>
             <MobileNavLink href="#causes">Causes</MobileNavLink>
-            <MobileNavLink href={getURL() + "settings"}>
-              Settings
-            </MobileNavLink>
+
             <hr className="m-2 border-slate-300/40" />
-            <MobileNavLink href="/login">Sign in</MobileNavLink>
+            {isLoggedIn ? (
+              <MobileNavLink href="/login-post">Open Dashboard</MobileNavLink>
+            ) : (
+              <MobileNavLink href="/login">Sign in</MobileNavLink>
+            )}
           </Popover.Panel>
         </Transition.Child>
       </Transition.Root>
@@ -101,7 +105,11 @@ function MobileNavigation() {
   )
 }
 
-export function Header({}) {
+export function Header({ session }) {
+  console.log('i am header', session)
+
+  const isLoggedIn = Boolean(session?.user?.id)
+  console.log('I am logged in', isLoggedIn)
   return (
     <header className="py-10">
       <Container>
@@ -113,18 +121,31 @@ export function Header({}) {
             <div className="hidden md:flex md:gap-x-6">
               <NavLink href="/">Home</NavLink>
               <NavLink href="#causes">Causes</NavLink>
-              <NavLink href={getURL() + "settings"}>Settings</NavLink>
             </div>
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
-            <div className="hidden md:block">
-              <NavLink href="/login">Sign in</NavLink>
-            </div>
-            <Button href="/register" color="green">
-              <span>Register</span>
-            </Button>
+            {!isLoggedIn ? (
+              <>
+                {' '}
+                <div className="hidden md:block">
+                  <NavLink href="/login">Sign in</NavLink>
+                </div>{' '}
+                <Button href="/register" color="green">
+                  <span>Register</span>
+                </Button>
+              </>
+            ) : (
+              <Button
+                className="hidden md:block"
+                href="/login-post"
+                color="green"
+              >
+                Open Dashboard
+              </Button>
+            )}
+
             <div className="-mr-1 md:hidden">
-              <MobileNavigation />
+              <MobileNavigation session={session} />
             </div>
           </div>
         </nav>
