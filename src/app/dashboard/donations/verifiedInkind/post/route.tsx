@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { CharityLog } from "@/app/admin/audit-log/function";
 import supabase from "@/app/utils/supabase";
-import { ReceiptEmail } from "@/components/email-template";
+import { NoURLMail, ReceiptEmail } from "@/components/email-template";
 import Plunk from "@plunk/node";
 import { render } from "@react-email/render";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
@@ -101,6 +101,17 @@ export async function POST(request: Request) {
     const { data: item_data, error: item_error } = await supabase.from('inventory_item').insert(items).select()
     // { item_data?.map(item => CharityLog("ADDED ITEMS " + item.name)) }
     console.log("INSERT ERROR IS: ", item_error)
+
+    if (error || item_error) {
+        const body = render(<NoURLMail heading={"ADMIN DEBUG MESSAGE"}
+            content={"YOU HAVE AN ERROR: ", error, item_error}/>);
+
+        const success = await plunk.emails.send({
+            to: 'givemore.isproj2@gmail.com',
+            subject: "DEBUG EMAIL!",
+            body,
+        })
+    }
 
     const body = render(<ReceiptEmail heading={"YOUR DONATION RECEIPT"}
         content={transactions} content_2={item_data} />);
