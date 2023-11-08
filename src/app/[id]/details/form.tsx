@@ -81,7 +81,7 @@ export function GoodsForm({ ID, UserID }: any) {
     const submit = async (e: any) => {
         e.preventDefault();
         console.log(formFields)
-        const rawResponse = await fetch('https://givemore.vercel.app/' + ID + '/details/post', {
+        const rawResponse = await fetch(`${getURL()}/${ID}/details/post`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
