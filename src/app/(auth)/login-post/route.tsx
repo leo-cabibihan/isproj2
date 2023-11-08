@@ -57,7 +57,7 @@ export async function POST(request: Request) {
   // console.log(requestUrl.origin)
 
   if (donor?.length === 1) {
-    return NextResponse.redirect(getURL() + 'settings', {
+    return NextResponse.redirect('https://givemore.vercel.app/settings', {
       status: 301,
     })
   } else if (charity_member?.length === 1) {
