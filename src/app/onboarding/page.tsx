@@ -86,7 +86,7 @@ export default async function Example() {
     console.log("MEMBER ERROR IS ", member_error)
 
     revalidatePath('/');
-    redirect('/onboarding/pending')
+    redirect('/pending')
   }
 
   return (
