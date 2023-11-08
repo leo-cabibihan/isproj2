@@ -161,6 +161,6 @@ export async function PUT(request: Request) {
     //     const {error} = await supabase.from
     //     console.log()
     // }
-    return Response.json({ status: 200 })
+    return Response.json({ status: 200 , error: error, item_error})
 
 }
