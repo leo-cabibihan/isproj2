@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     })
   } else if (charity_member?.length === 1) {
     CharityLog(charity_member![0].member_name + " has logged in.", null)
-    return NextResponse.redirect(getURL() + 'dashboard/settings', {
+    return NextResponse.redirect('https://givemore.vercel.app/dashboard/settings', {
       status: 301,
     })
   } else if (admin?.length === 1) {
