@@ -75,7 +75,7 @@ export async function POST(request: Request) {
         address_id = formData.address_id
     }
 
-    const { data, error: email_error } = await supabase.from('users').select('email').eq('id', donor_id)
+    const { data, error: email_error } = await supabase.from('users').select('email').eq('id', donor_id as string)
 
     console.log("EMAIL RETREIVAL ERROR: ", email_error, data)
 
