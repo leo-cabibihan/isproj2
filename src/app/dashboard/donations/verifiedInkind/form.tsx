@@ -442,7 +442,7 @@ export function EditForm({ id, orgID }: { id: number, orgID: any }) {
     const submit = async (e: any) => {
         e.preventDefault();
         console.log(formFields)
-        const rawResponse = await fetch(getURL() + 'dashboard/donations/verifiedInkind/post', {
+        const rawResponse = await fetch('https://givemore.vercel.app/dashboard/donations/verifiedInkind/post', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
