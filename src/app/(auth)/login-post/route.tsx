@@ -67,7 +67,7 @@ export async function POST(request: Request) {
     })
   } else if (admin?.length === 1) {
     AdminLog(admin![0].name + " has logged in.")
-    return NextResponse.redirect('https://youtu.be/dQw4w9WgXcQ?si=AbiLZ7zHQ9P3W50C', {
+    return NextResponse.redirect('https://givemore.vercel.app/admin/applications', {
       status: 301,
     })
   }
