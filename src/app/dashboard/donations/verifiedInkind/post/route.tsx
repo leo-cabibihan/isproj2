@@ -125,7 +125,7 @@ export async function POST(request: Request) {
     console.log("SUCCESS??? ", success)
 
 
-    return Response.json({ status: 200 })
+    return Response.json(error, item_error)
 
 }
 
