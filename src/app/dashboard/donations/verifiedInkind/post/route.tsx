@@ -125,11 +125,9 @@ export async function POST(request: Request) {
     console.log("SUCCESS??? ", success)
 
 
-    return Response.json(error, item_error)
+    return Response.json({ status: 200 })
 
 }
-
-//AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA SEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEGSSSSSSSSSSSSSSSSSS
 
 export async function PUT(request: Request) {
     const requestUrl = new URL(request.url)
