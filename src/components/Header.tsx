@@ -93,7 +93,7 @@ function MobileNavigation({ session }) {
             <MobileNavLink href="#causes">Causes</MobileNavLink>
 
             <hr className="m-2 border-slate-300/40" />
-            {isLoggedIn ? (
+            {!isLoggedIn ? (
               <MobileNavLink href="/login-post">Open Dashboard</MobileNavLink>
             ) : (
               <MobileNavLink href="/login">Sign in</MobileNavLink>
@@ -124,7 +124,15 @@ export function Header({ session }) {
             </div>
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">
-            {!isLoggedIn ? (
+            {isLoggedIn ? (
+              <Button
+                className="hidden md:block"
+                href="/login-post"
+                color="green"
+              >
+                Open Dashboard
+              </Button>
+            ) : (
               <>
                 {' '}
                 <div className="hidden md:block">
@@ -134,14 +142,6 @@ export function Header({ session }) {
                   <span>Register</span>
                 </Button>
               </>
-            ) : (
-              <Button
-                className="hidden md:block"
-                href="/login-post"
-                color="green"
-              >
-                Open Dashboard
-              </Button>
             )}
 
             <div className="-mr-1 md:hidden">
