@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import backgroundImage from '@/images/background-auth.jpg'
 
-export function SlimLayout({ children }: { children: React.ReactNode }) {
+export function SlimLayout({ children, backgroundImage }: { children: React.ReactNode, backgroundImage: string }) {
   return (
     <>
       <div className="relative flex min-h-full justify-center md:px-12 lg:px-0">
@@ -17,6 +17,7 @@ export function SlimLayout({ children }: { children: React.ReactNode }) {
             className="absolute inset-0 h-full w-full object-cover"
             src={backgroundImage}
             alt=""
+            layout="fill" // Add this line to set layout to "fill"
             unoptimized
           />
         </div>

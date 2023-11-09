@@ -17,6 +17,21 @@ const people = [
 
 
 export default async function DonorHistory({params} : any) {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
+
     const donorID = params.id
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
@@ -63,7 +78,7 @@ export default async function DonorHistory({params} : any) {
                                 <Tr key={donor_history.donor_id}>
                                     <Td>{donor_history.event_name}</Td>
                                     <Td>{donor_history.donation_type}</Td>
-                                    <Td>{donor_history.donation_date}</Td>
+                                    <Td>{formatDate(donor_history.donation_date) + ' ' + formatTime(donor_history.donation_date)}</Td>
                                 </Tr>
                                 )}
                             </Tbody>

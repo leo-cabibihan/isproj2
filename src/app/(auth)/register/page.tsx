@@ -7,11 +7,6 @@ import { SelectField, TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
-import supabase from '@/app/utils/supabase'
-import { redirect } from 'next/navigation'
-// import Form from './form'
-import { cookies } from 'next/headers'
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
 import Alert from '@/components/Alert'
 
 export const metadata: Metadata = {
@@ -22,7 +17,7 @@ export default async function Register({searchParams}: {searchParams: { [key: st
   
   return (
     <>
-      <SlimLayout>
+      <SlimLayout backgroundImage={"https://c1.wallpaperflare.com/preview/770/967/632/door-wood-door-office-office-interior.jpg"}>
         <div className="flex">
           <Link href="/" aria-label="Home">
             <Logo className="h-10 w-auto" />
@@ -32,7 +27,7 @@ export default async function Register({searchParams}: {searchParams: { [key: st
           Get started for free
         </h2>
         <p className="mt-2 text-sm text-gray-700">
-          Already registered?
+          Already registered?{' '}
           <Link
             href="/login"
             className="font-medium text-blue-600 hover:underline"
@@ -43,7 +38,7 @@ export default async function Register({searchParams}: {searchParams: { [key: st
         </p>
         <form
           action={'/register-post'}
-          className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2"
+          className="mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2"
           method="post"
         >
           {/* CHECKS IF NULL */}

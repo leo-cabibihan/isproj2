@@ -1,17 +1,12 @@
 // @ts-nocheck 
 import Link from 'next/link'
-import { Footer } from '@/components/Footer'
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/Fields'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 import { type Metadata } from 'next'
-import supabase from '@/app/utils/supabase'
-import { redirect, useSearchParams } from 'next/navigation'
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import { useRouter } from 'next/router'
 import Alert from '@/components/Alert'
+import login_background from '@/images/login_background.jpg'
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -23,7 +18,7 @@ export default async function Login({searchParams}: {searchParams: { [key: strin
   
   return (
     <>
-      <SlimLayout>
+      <SlimLayout backgroundImage={login_background}>
         <div className="flex">
           <Link href="/" aria-label="Home">
             <Logo className="h-10 w-auto" />
@@ -45,7 +40,7 @@ export default async function Login({searchParams}: {searchParams: { [key: strin
         <form
           action={'/login-post'}
           method="post"
-          className="mt-10 grid grid-cols-1 gap-y-8"
+          className="mt-10 grid grid-cols-1 gap-y-8 py-10"
         >
           {/* CHECKS IF NULL */}
           {searchParams.err && <Alert message={searchParams.err as string}/>}

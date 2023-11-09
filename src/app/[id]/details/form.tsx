@@ -145,12 +145,16 @@ export function GoodsForm({ ID, UserID }: any) {
 
                                                     <TextField label="Item name" name="name" type="text" placeholder="Rice Sack"
                                                         onChange={event => handleFormChange(event, index)} value={form.name} required />
+                                                    <br/>
                                                     <TextField label="Unit of Measurement" name="unit_of_measurement" type="text" placeholder="Sacks"
                                                         onChange={event => handleFormChange(event, index)} value={form.unit_of_measurement} required />
+                                                    <br/>
                                                     <TextField label="Quantity" name="quantity" type="number" min="1" max="100000" autoComplete="number" placeholder="1"
                                                         onChange={event => handleFormChange(event, index)} value={form.quantity} required />
+                                                    <br/>
                                                     <TextField label="Expiry Date" name="expiry" type="date" placeholder=""
                                                         onChange={event => handleFormChange(event, index)} value={form.expiry} required />
+                                                    <br/>
                                                     <SelectField label="Perishable?" name="perishable" placeholder="yes"
                                                         onChange={event => handleFormChange(event, index)} required>
                                                         <option value={1}>yes</option>
@@ -182,16 +186,22 @@ export function GoodsForm({ ID, UserID }: any) {
                             <div>
                                 <TextField label="House Number/Unit Number" name="house_no" type="text" autoComplete="text"
                                     placeholder="123" onChange={e => setHouse_no(e.target.value)} required />
+                                <br/>
                                 <TextField label="Street Name" name="street" type="text" autoComplete="text" placeholder="123 Bonifacio Street"
                                     onChange={e => setStreet(e.target.value)} />
+                                <br/>
                                 <TextField label="Village Name" name="village" type="text" autoComplete="text" placeholder="villa"
                                     onChange={e => setVillage(e.target.value)} />
+                                <br/>
                                 <TextField label="Barangay" name="brgy" type="text" autoComplete="text" placeholder="Saog"
                                     onChange={e => setBrgy(e.target.value)} required />
+                                <br/>
                                 <TextField label="Zip Code" name="zip_code" type="number" autoComplete="number" min="1" max="9999" placeholder="3019"
                                     onChange={e => setZip_code(e.target.value)} required />
+                                <br/>
                                 <TextField label="City" name="city" type="text" autoComplete="text" placeholder="Manila"
                                     onChange={e => setCity(e.target.value)} />
+                                <br/>
                                 <TextField label="Region/Province" name="province" type="text" autoComplete="text" placeholder="NCR"
                                     onChange={e => setProvince(e.target.value)} />
                             </div>

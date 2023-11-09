@@ -13,17 +13,26 @@ import { render } from '@react-email/render';
 import { revalidatePath } from 'next/cache';
 import React from 'react';
 
-const people = [
-    { DonorName: 'bruh Walton', Amount: 'Front-end Developer', Date: 'lindsay.walton@example.com' },
-    { DonorName: 'bruh', Amount: 'ginormous godzilla', Date: 'inormous godzilla' },
-    // More people...
-];
-
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export const revalidate = 0;
 
 export default async function ExternalTable() {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
+
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
 
@@ -126,12 +135,9 @@ export default async function ExternalTable() {
 
             <TableContainer>
                 <TableHeaderButton header="Cash">
-                    <SlideOver buttontext="Add External Income" variant="solid" color="blue">
-                        <form className="py-9" action={handleSubmit} method='POST'>
+                    <SlideOver title="Add External Income" buttontext="Add External Income" variant="solid" color="blue">
+                        <form className="py-4" action={handleSubmit} method='POST'>
                             <div className="space-y-12">
-                                <div>
-                                    <h2 className="text-base font-semibold leading-7 text-gray-900">Add External Income</h2>
-                                </div>
                                 <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
                                     <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
                                         <div className='sm:col-span-1'></div>
@@ -144,8 +150,8 @@ export default async function ExternalTable() {
                                                 autoComplete="number"
                                                 required
                                             />
-
-                                            <div className="sm:col-span-4 py-5">
+                                            <br/>
+                                            <div className="sm:col-span-4">
                                                 <TextField
                                                     label="Date Donated"
                                                     name="date"
@@ -154,7 +160,7 @@ export default async function ExternalTable() {
                                                     required
                                                     max={new Date().toISOString().split('T')[0]}
                                                 />
-
+                                             <br/>
                                                 <SelectField
                                                     label='Assign to Event'
                                                     name="event"
@@ -164,16 +170,14 @@ export default async function ExternalTable() {
                                                         <option key={event.id} value={event.id}>{event.name}</option>
                                                     ))}
                                                 </SelectField>
-
+                                                <br/>
                                                 <div className="col-span-full">
                                                     <ImageUpload folderName="cash" charityID={charityId} recordID={cash_id![0] + 1} />
                                                 </div>
-
-
-                                                <div className="mt-6 flex items-center justify-start gap-x-6">
-                                                    <Button type='submit' variant='solid' color='blue'>Submit</Button>
+                                                <br/>
+                                                <div className="flex justify-center">
+                                                    <Button type='submit' variant='solid' color='blue' style={{ width: '80%' }} className="mx-auto">Submit</Button>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -189,7 +193,7 @@ export default async function ExternalTable() {
                                 <Th>Source</Th>
                                 <Th>Amount</Th>
                                 <Th>Date</Th>
-                                <Th> </Th>
+                                <Th>Actions</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -201,21 +205,17 @@ export default async function ExternalTable() {
                                         <Td>{cash.donor?.name}</Td>
                                     )}
                                     <Td>{cash.amount}</Td>
-                                    <Td>{cash.date}</Td>
+                                    <Td>{formatDate(cash.date) + ' ' + formatTime(cash.date)}</Td>
                                     <Td>
                                         {cash.is_external ?
                                             (
-                                                <SlideOver variant="solid" color="blue" buttontext="Edit External Income">
-                                                    <form className="py-9" action={saveChanges} method='PUT'>
+                                                <SlideOver title="Edit External Income" variant="solid" color="blue" buttontext="Edit External Income">
+                                                    <form className="py-1" action={saveChanges} method='PUT'>
                                                         <div className="space-y-12">
-                                                            <div>
-                                                                <h2 className="text-base font-semibold leading-7 text-gray-900">Add External Income</h2>
-                                                            </div>
                                                             <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
                                                                 <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
                                                                     <div className='sm:col-span-1'></div>
                                                                     <div className="sm:col-span-5">
-
                                                                         <TextField
                                                                             label=""
                                                                             name="id"
@@ -223,7 +223,7 @@ export default async function ExternalTable() {
                                                                             defaultValue={cash.id}
                                                                             required
                                                                         />
-
+                                                                        <br/>
                                                                         <TextField
                                                                             label="Amount"
                                                                             name="amount"
@@ -231,7 +231,6 @@ export default async function ExternalTable() {
                                                                             defaultValue={cash.amount}
                                                                             required
                                                                         />
-
                                                                         <div className="sm:col-span-4 py-5">
                                                                             <TextField
                                                                                 label="Date Donated"
@@ -241,7 +240,7 @@ export default async function ExternalTable() {
                                                                                 required
                                                                                 max={new Date().toISOString().split('T')[0]}
                                                                             />
-
+                                                                        <br/>
                                                                             <SelectField
                                                                                 label='Assign to Event'
                                                                                 name="event"
@@ -251,14 +250,12 @@ export default async function ExternalTable() {
                                                                                     <option key={event.id} value={event.id}>{event.name}</option>
                                                                                 ))}
                                                                             </SelectField>
-
+                                                                            <br/>
                                                                             <div className="col-span-full">
                                                                                 <ImageUpload folderName="cash" charityID={charityId} recordID={cash.id} />
                                                                             </div>
-
-
                                                                             <div className="mt-6 flex items-center justify-start gap-x-6">
-                                                                                <Button type='submit' variant='solid' color='blue' className="w-full">Submit</Button>
+                                                                                <Button type='submit' variant='solid' color='blue' className="w-full">Save Changes</Button>
                                                                             </div>
                                                                             <div className="mt-6 flex items-center justify-start gap-x-6">
                                                                                 <Button type="submit" variant="solid" color="red" className="w-full" formAction={deletePost}>Delete</Button>
@@ -273,17 +270,13 @@ export default async function ExternalTable() {
                                                 </SlideOver>
                                             ) :
                                             (
-                                                <SlideOver variant="solid" color="blue" buttontext="View Details">
-                                                    <form className="py-9" action={emailReceipt} method='POST'>
+                                                <SlideOver title="Edit Details" variant="solid" color="blue" buttontext="View Details">
+                                                    <form className="py-4" action={emailReceipt} method='POST'>
                                                         <div className="space-y-12">
                                                             <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
-                                                                <div>
-                                                                    <h2 className="text-base font-semibold leading-7 text-gray-900">Edit External Income</h2>
-                                                                </div>
-
                                                                 <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-                                                                    <div className="sm:col-span-4">
-
+                                                                    <div className='sm:col-span-1'></div>
+                                                                    <div className="sm:col-span-5">
                                                                         <TextField
                                                                             label=""
                                                                             name="donor_id"
@@ -299,7 +292,7 @@ export default async function ExternalTable() {
                                                                             defaultValue={cash.donor?.name as string}
                                                                             readOnly
                                                                         />
-
+                                                                        <br/>
                                                                         <TextField
                                                                             label="Amount"
                                                                             name="amount"
@@ -307,15 +300,15 @@ export default async function ExternalTable() {
                                                                             defaultValue={cash.amount}
                                                                             readOnly
                                                                         />
-
+                                                                        <br/>
                                                                         <TextField
                                                                             label="Donated on"
                                                                             name="date"
                                                                             type="text"
-                                                                            defaultValue={cash.date}
+                                                                            defaultValue={formatDate(cash.date) + ' ' + formatTime(cash.date)}
                                                                             readOnly
                                                                         />
-
+                                                                        <br/>
                                                                         <TextField
                                                                             label="Donated on"
                                                                             name="charity"
@@ -323,7 +316,7 @@ export default async function ExternalTable() {
                                                                             defaultValue={cash.charity?.name}
                                                                             readOnly
                                                                         />
-
+                                                                        <br/>
                                                                         <TextField
                                                                             label="Event Donated to"
                                                                             name="event"
@@ -331,22 +324,14 @@ export default async function ExternalTable() {
                                                                             defaultValue={cash.event?.name}
                                                                             readOnly
                                                                         />
-
-                                                                        <div className="mt-6 flex items-center justify-start gap-x-6">
-                                                                            <button
-                                                                                type="submit"
-                                                                                className="rounded-md bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                                            >
-                                                                                Save
-                                                                            </button>
-                                                                            <button
-                                                                                type="submit"
-                                                                                className="rounded-md bg-red-600 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                                                                            >
-                                                                                Delete
-                                                                            </button>
+                                                                        <div className="col-span-full">
+                                                                            </div>
+                                                                            <div className="mt-6 flex items-center justify-start gap-x-6">
+                                                                                <Button type='submit' variant='solid' color='blue' className="w-full">Email Receipt</Button>
+                                                                            </div>
+                                                                            <div className="mt-6 flex items-center justify-start gap-x-6">
+                                                                                <Button type="submit" variant="solid" color="red" className="w-full" formAction={deletePost}>Delete</Button>
                                                                         </div>
-
                                                                     </div>
                                                                 </div>
                                                             </div>

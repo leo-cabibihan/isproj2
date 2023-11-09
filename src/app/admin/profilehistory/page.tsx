@@ -10,12 +10,26 @@ import { GetUID } from '@/app/utils/user_id';
 export const revalidate = 0;
 
 export default async function Auditlog() {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
+
 
     const uid = await GetUID()
     
-    console.log('FUUUUUUUUCK' + uid)
+    console.log('UID is: ' + uid)
 
-    //RED IS JUST TS BEING A BITCH SO IGNORE IT.
     const { data: actions } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )').eq('admin_id', uid)
 
     return (
@@ -42,7 +56,7 @@ export default async function Auditlog() {
                                 <Tr key={action.id}>
                                     <Td>{action.system_owner?.name}</Td>
                                     <Td>{action.action}</Td>
-                                    <Td>{action.date}</Td>
+                                    <Td>{formatDate(action.date) + ' ' + formatTime(action.date)}</Td>
                                     <Td>
                                         <Button variant='solid' color='blue' href="#">View Profile</Button>
                                     </Td>

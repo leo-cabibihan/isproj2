@@ -6,7 +6,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Button, VariantKey, ColorKey } from './Button'
 
-export default function SlideOver({ buttontext, children, variant, color }: { buttontext: String, children: React.ReactNode, variant: VariantKey, color: ColorKey }) {
+export default function SlideOver({ buttontext, children, variant, color, title }: { buttontext: String, children: React.ReactNode, variant: VariantKey, color: ColorKey, title: String }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -33,7 +33,7 @@ export default function SlideOver({ buttontext, children, variant, color }: { bu
                       <div className="px-4 sm:px-6">
                         <div className="flex items-start justify-between">
                           <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
-                            Panel title
+                            {title}
                           </Dialog.Title>
                           <div className="ml-3 flex h-7 items-center">
                             <button

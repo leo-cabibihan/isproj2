@@ -25,7 +25,20 @@ const requests = [
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export default async function Applications() {
-
+  // Function to format the timestamp as 'mm/dd/yyy'
+  const formatDate = (timestamp) => {
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${month}/${day}/${year}`;
+  };
+  
+  // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+  const formatTime = (timestamp) => {
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  };
   const { data: requests, error } = await supabase
     .from('charity')
     .select('*')
@@ -74,12 +87,12 @@ export default async function Applications() {
         </div>
       </div>
       <TableContainer>
-        <TableHeader header="All charity approval requests." />
+        <TableHeader header="All charity approval requests" />
         <TableContent>
           <Table>
             <Thead>
               <Tr>
-                <Th>NAME</Th>
+                <Th>Name</Th>
                 <Th>Email Address</Th>
                 <Th>Date Filed</Th>
                 <Th> </Th>
@@ -91,9 +104,9 @@ export default async function Applications() {
                 <Tr key={request.id}>
                   <Td>{request.name}</Td>
                   <Td>{request.email_address}</Td>
-                  <Td>{request.created_at}</Td>
+                  <Td>{formatDate(request.created_at) + ' ' + formatTime(request.created_at)}</Td>
                   <Td>
-                    <SlideOver buttontext="Review" variant="solid" color="blue">
+                    <SlideOver title="Approval Request Form" buttontext="Review" variant="solid" color="blue">
                       <form className="space-y-6" action={verifyOrg} method="POST">
                         <TextField
                           label=""

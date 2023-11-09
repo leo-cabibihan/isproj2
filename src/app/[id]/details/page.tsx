@@ -13,22 +13,6 @@ import { BannerImg, ShowImg } from "@/components/DisplayImg"
 
 export const revalidate = 0;
 
-const cities = [
-  { id: 1, name: "Manila" },
-  { id: 2, name: "Quezon City" },
-  { id: 3, name: "Mandaluyong" },
-  { id: 4, name: "Marikina" },
-  { id: 5, name: "Pasig" },
-  { id: 6, name: "San Juan" },
-  { id: 7, name: "Caloocan" },
-]
-
-const provinces = [
-  { id: 1, name: "NCR" },
-  { id: 2, name: "Bulacan" },
-  { id: 3, name: "N/A" },
-]
-
 export default async function Organization({ params }: any) {
 
   //THIS JUST GETS THE ORG ID FROM THE ROUTE. US  E THIS TO FILTER TO THE SPECIFIC ORG.
@@ -62,14 +46,13 @@ export default async function Organization({ params }: any) {
                 ))}
                 <div className="space-y-8">
                   <p className="mt-8">
-                    Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris semper sed amet vitae
-                    sed turpis id. Id dolor praesent donec est. Odio penatibus risus viverra tellus varius sit neque erat velit.
+                    Your giving journey doesn't end with a donation; it's an ongoing connection with the causes you support. If you have any concerns, you can choose to report this charity with by clicking the Report Charity button below.
                   </p>
-                  <Button variant="solid" color="red" href={'/' + orgID + '/report'}>
+                  {/*<Button variant="solid" color="red" href={'/' + orgID + '/report'}>
                     <span>
                       Report Charity
                     </span>
-                  </Button>
+                </Button>*/}
                 </div>
               </div>
               {

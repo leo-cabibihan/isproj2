@@ -19,11 +19,12 @@ export default async function ViewCharity() {
             </div>
 
             <TableContainer>
-                <TableHeader header="All Verified Charities." />
+                <TableHeader header="All Verified Charities" />
                 <Table>
                     <Thead>
+                        <br/>
                         <Tr>
-                            <Th>Org Name</Th>
+                            <Th>Organization Name</Th>
                             <Th>Phone Number</Th>
                             <Th>Email Address</Th>
                             <Th> </Th>

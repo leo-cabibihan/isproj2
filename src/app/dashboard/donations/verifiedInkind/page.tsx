@@ -1,7 +1,7 @@
 // @ts-nocheck 
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { SelectField, TextField } from '@/components/Fields'
-import { Table, TableContainer, TableContent, TableHeaderButton, Tbody, Td, Thead, Tr } from '@/components/Table';
+import { Table, TableContainer, TableContent, TableHeaderButton, Tbody, Td, Th, Thead, Tr } from '@/components/Table';
 import { Button } from '@/components/Button';
 import SlideOver from '@/components/SlideOverButton';
 import supabase from '@/app/utils/supabase';
@@ -13,6 +13,20 @@ export const revalidate = 0;
 
 
 export default async function VerifiedTable() {
+  // Function to format the timestamp as 'mm/dd/yyy'
+  const formatDate = (timestamp) => {
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${month}/${day}/${year}`;
+  };
+
+  // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+  const formatTime = (timestamp) => {
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  };
 
   console.log("DOES IT WORK???? MAYBE: " + await GetUID())
   const uid = await GetUID()
@@ -31,7 +45,7 @@ export default async function VerifiedTable() {
 
       <TableContainer>
         <TableHeaderButton header="Verified Item Donations">
-          <SlideOver variant="solid" color="blue" buttontext="View Details">
+          <SlideOver title="Assign Item to Donor" variant="solid" color="blue" buttontext="Assign an item to a donor">
             <MultilayeredForm ID={charity_id}/>
           </SlideOver>
         </TableHeaderButton>
@@ -39,10 +53,10 @@ export default async function VerifiedTable() {
           <Table>
             <Thead>
               <Tr>
-                <Td>Donor Name</Td>
-                <Td>Status</Td>
-                <Td>Date</Td>
-                <Td> </Td>
+                <Th>Donor Name</Th>
+                <Th>Status</Th>
+                <Th>Date</Th>
+                <Th>Actions</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -58,9 +72,9 @@ export default async function VerifiedTable() {
                       (<Td>VERIFIED</Td>) :
                       (<Td>NOT VERIFIED</Td>)}
                   </>
-                  <Td>{item.date}</Td>
+                  <Td>{formatDate(item.date) + ' ' + formatTime(item.date)}</Td>
                   <Td>
-                    <SlideOver variant="solid" color="blue" buttontext="View Details">
+                    <SlideOver title="Edit Item Details" variant="solid" color="blue" buttontext="View Details">
                       <EditForm id={item.id} orgID={charity_id} />
                     </SlideOver>
                   </Td>

@@ -66,10 +66,10 @@ export async function POST(request: Request) {
       console.log("I should redirect")
 
       //DISPLAYS ERROR MESSAGE IN PAGE
-      return NextResponse.redirect(requestUrl.origin + `register?err=${signup_error}`, { status: 301 })
+      return NextResponse.redirect(requestUrl.origin + `/register?err=${signup_error}`, { status: 301 })
     }
 
-    return NextResponse.redirect(requestUrl.origin + 'email-pending', {
+    return NextResponse.redirect(requestUrl.origin + `/email-pending`, {
       status: 301,
     })
 

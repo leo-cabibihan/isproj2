@@ -21,6 +21,20 @@ const subheader = "A table list of expenses";
 const columns = ["Description", "Amount", "Date"];
 
 export default async function Expenses() {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
@@ -114,16 +128,14 @@ export default async function Expenses() {
 
             <TableContainer>
                 <TableHeaderButton header="Expenses">
-                    <SlideOver buttontext="Add Expense" variant="solid" color="blue">
+                    <SlideOver title="Add Expense Details" buttontext="Add Expense" variant="solid" color="blue">
                         <form className="py-9" action={handleSubmit} method="POST">
                             <div className="space-y-12">
                                 <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
-                                    <div>
-                                        <h2 className="text-base font-semibold leading-7 text-gray-900">Add Expense</h2>
-                                    </div>
-
                                     <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-                                        <div className="sm:col-span-4">
+                                        <div className='sm:col-span-1'></div>
+                                        <div className="sm:col-span-5">
+
                                             <TextField
                                                 label=""
                                                 name="charity_id"
@@ -207,6 +219,7 @@ export default async function Expenses() {
                                 <Th>Amount</Th>
                                 <Th>Beneficiary</Th>
                                 <Th>Date Added</Th>
+                                <Th>Actions</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -216,19 +229,17 @@ export default async function Expenses() {
                                     <Td>{expense.reason}</Td>
                                     <Td>{expense.amount}</Td>
                                     <Td>{expense.beneficiaries?.beneficiary_name}</Td>
-                                    <Td>{expense.date}</Td>
+                                    <Td>{formatDate(expense.date) + ' ' + formatTime(expense.date)}</Td>
                                     <Td>
-                                        <SlideOver buttontext="View Details" variant='solid' color="blue">
+                                        <SlideOver title="Edit Expense Details" buttontext="View Details" variant='solid' color="blue">
                                             {/**This is Edit expense form, put slideover on this later*/}
                                             <form className="py-9" action={saveChanges} method="PUT">
                                                 <div className="space-y-12">
                                                     <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
-                                                        <div>
-                                                            <h2 className="text-base font-semibold leading-7 text-gray-900">Edit Expense</h2>
-                                                        </div>
-
                                                         <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
-                                                            <div className="sm:col-span-4">
+                                                            <div className='sm:col-span-1'></div>
+                                                            <div className="sm:col-span-5">
+
 
                                                                 <TextField
                                                                     label=""

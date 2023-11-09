@@ -42,7 +42,7 @@ export default async function ListofDonors() {
                                 <Th>Donor Name</Th>
                                 <Th>Number of Donations Made</Th>
                                 <Th>Total Cash Donated</Th>
-                                <Th> </Th>
+                                <Th>Actions</Th>
                             </Tr>
                         </Thead>
                         <Tbody>

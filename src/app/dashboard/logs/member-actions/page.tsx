@@ -14,6 +14,21 @@ const actions = [
 ]
 
 export default async function Page() {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
+
 
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
@@ -29,15 +44,14 @@ export default async function Page() {
             </div>
 
             <TableContainer>
-                <TableHeader header="Admin Actions" />
+                <TableHeader header="Charity Actions" />
                 <TableContent>
                 <Table>
                         <Thead>
                             <Tr>
-                                <Th>Admin Name</Th>
+                                <Th>Charity Member Name</Th>
                                 <Th>Action</Th>
                                 <Th>Date</Th>
-
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -46,7 +60,7 @@ export default async function Page() {
                                 <Tr key={log.id}>
                                     <Td>{log.charity_member.member_name}</Td>
                                     <Td>{log.action}</Td>
-                                    <Td>{log.date}</Td>
+                                    <Td>{formatDate(log.date) + ' ' + formatTime(log.date)}</Td>
                                 </Tr>
                             )}
                         </Tbody>
