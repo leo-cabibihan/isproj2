@@ -76,6 +76,8 @@ export async function POST(request: Request) {
     }
     //hate vercel
 
+    console.log("DONOR ID IS: ", donor_id)
+
     const { data, error: email_error } = await supabase.from('users').select('email').eq('id', donor_id)
 
     console.log("EMAIL RETREIVAL ERROR: ", email_error, data)
