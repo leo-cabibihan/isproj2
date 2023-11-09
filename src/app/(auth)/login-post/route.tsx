@@ -5,16 +5,17 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { redirect } from 'next/dist/server/api-utils'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import supabase from "@/app/utils/supabase"
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const cookieStore = cookies()
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+  const supabaseAuth = createRouteHandlerClient({ cookies: () => cookieStore })
   console.log("SO THE GET METHOD WORKS")
   const {
     data: { session },
     error: sessionError,
-  } = await supabase.auth.getSession()
+  } = await supabaseAuth.auth.getSession()
 
   const user_id = session?.user.id
 
