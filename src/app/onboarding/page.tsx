@@ -13,22 +13,9 @@ import { redirect } from 'next/navigation'
 import { cookies } from "next/headers";
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
 import { ImageUpload } from '@/components/ImgUpload'
+import { GetUID } from '../utils/user_id'
 
 export const revalidate = 0;
-
-
-
-async function GetUID() {
-  const cookieStore = cookies()
-
-  const supabase = createServerActionClient({ cookies: () => cookieStore })
-
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-  console.log("SESSION ID IS: " + session?.user.id)
-  const uid = session?.user.id
-
-  return (uid)
-}
 
 export default async function Example() {
 
