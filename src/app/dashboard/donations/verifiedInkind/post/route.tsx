@@ -74,6 +74,7 @@ export async function POST(request: Request) {
     } else {
         address_id = formData.address_id
     }
+    //hate vercel
 
     const { data, error: email_error } = await supabase.from('users').select('email').eq('id', donor_id)
 
