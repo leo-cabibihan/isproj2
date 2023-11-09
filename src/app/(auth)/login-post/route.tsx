@@ -18,15 +18,19 @@ export async function GET(request: Request) {
 
   const user_id = session?.user.id
 
+  console.log("THE USER'S ID IS ", user_id)
+
   if (
     (await supabase.from('donor').select('*').eq('id', user_id)?.data
       ?.length) === 1
   ) {
+    console.log("HE'S A DONOR")
     return NextResponse.redirect(`${requestUrl.origin}/settings`, { status: 301 })
   } else if (
     (await supabase.from('charity_member').select('*').eq('id', user_id)?.data
       ?.length) === 1
   ) {
+    console.log("HE'S A CHARITY GUY")
     return NextResponse.redirect(`${requestUrl.origin}/dashboard/settings`, {
       status: 301,
     })
@@ -34,10 +38,12 @@ export async function GET(request: Request) {
     (await supabase.from('system_owner').select('*').eq('id', user_id)?.data
       ?.length) === 1
   ) {
+    console.log("HE'S AN ADMIN")
     return NextResponse.redirect(`${requestUrl.origin}/admin/applications`, {
       status: 301,
     })
   } else {
+    console.log("HE'S A BITCHASS POSER STFU")
     return NextResponse.redirect(`${requestUrl.origin}`, { status: 301 })
   }
 }
