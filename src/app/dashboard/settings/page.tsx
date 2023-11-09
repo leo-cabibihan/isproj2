@@ -261,7 +261,7 @@ export default async function Settings() {
                                             </div>
 
                                             <div>
-                                                <a className="text-blue-600" href={getURL() + "dashboard/settings/" + charity_id + "/change-qr"}>
+                                                <a className="text-blue-600" href={"https://givemore.vercel.app/dashboard/settings/" + charity_id + "/change-qr"}>
                                                     <h2 className="text-base font-semibold leading-7 text-blue-600">Upload QR Code for Cash Donations</h2>
                                                 </a>
                                             </div>

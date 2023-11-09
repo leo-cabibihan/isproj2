@@ -15,7 +15,7 @@ export function Footer() {
             <div className="-my-1 flex justify-center gap-x-6">
               <NavLink href="/">Home</NavLink>
               <NavLink href="#Causes">Causes</NavLink>
-              <NavLink href={getURL() + "settings"}>Settings</NavLink>
+              <NavLink href={"https://givemore.vercel.app/settings"}>Settings</NavLink>
             </div>
           </nav>
         </div>
