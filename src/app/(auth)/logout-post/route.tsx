@@ -4,11 +4,11 @@ import supabase from "@/app/utils/supabase"
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 import { getURL } from '@/app/utils/url'
 import { cookies } from "next/headers"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-export async function POST() {
+export async function POST(request: NextRequest) {
     const cookieStore = cookies()
-
+    const requestUrl = new URL(request.url)
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
     const { data: { session }, error: sessionError } = await supabase.auth.getSession()
@@ -29,10 +29,10 @@ export async function POST() {
     else if (admin?.length === 1) [
         AdminLog(admin![0].name + " has logged out.")
     ]
-    
+
     const { error } = await supabase.auth.signOut()
     // console.log("this is logout eroor", error)
-    return NextResponse.redirect(getURL(), {
+    return NextResponse.redirect(requestUrl.origin, {
         status: 301,
     })
 }

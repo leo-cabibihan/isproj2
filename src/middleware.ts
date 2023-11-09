@@ -9,6 +9,8 @@ export async function middleware(req: NextRequest) {
   var charity_status: any
   const res = NextResponse.next()
 
+  const requestUrl = new URL(req.url)
+
   const originalUrl = req.nextUrl.protocol + req.headers.get('host') + req.nextUrl.pathname
 
   const supabase = createMiddlewareClient({ req, res })
@@ -27,7 +29,7 @@ export async function middleware(req: NextRequest) {
 
     if (admin?.length !== 1) {
       // console.log("NOT SIGNED IN")
-      return Response.redirect(getURL())
+      return Response.redirect(requestUrl.origin)
     }
   }
   else if (originalUrl.includes('/dashboard')) {
@@ -48,7 +50,7 @@ export async function middleware(req: NextRequest) {
 
     if (charity_member?.length !== 1 || charity_status == false) {
       // console.log("NOT A CHARITY FUCK OFF")
-      return Response.redirect(getURL())
+      return Response.redirect(requestUrl.origin)
     }
   }
   else if (originalUrl.includes('/settings')) {
@@ -61,13 +63,13 @@ export async function middleware(req: NextRequest) {
 
     if (donor?.length !== 1) {
       // console.log("NOT A DONOR FUCK OFF")
-      return Response.redirect(getURL())
+      return Response.redirect(requestUrl.origin)
     }
   }
   else if (originalUrl.includes('/owner-invite')) {
     if (user) {
       // console.log("ALREADY AN ADMIN, SO FUCK OFF")
-      return Response.redirect(getURL())
+      return Response.redirect(requestUrl.origin)
     }
   }
   else if (originalUrl.includes('/appeals-form')) {
@@ -85,7 +87,7 @@ export async function middleware(req: NextRequest) {
 
     if (charity_member?.length !== 1) {
       // console.log("NOT A CHARITY FUCK OFF")
-      return Response.redirect(getURL())
+      return Response.redirect(requestUrl.origin)
     }
   }
 

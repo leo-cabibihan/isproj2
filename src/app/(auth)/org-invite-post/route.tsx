@@ -57,7 +57,7 @@ export async function POST(request: Request) {
         .insert(charity_member)
     console.log(charity, charityError)
 
-    return NextResponse.redirect(getURL() + 'email-pending', {
+    return NextResponse.redirect(requestUrl.origin + 'email-pending', {
         status: 301,
     })
 

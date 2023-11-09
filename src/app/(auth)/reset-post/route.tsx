@@ -18,10 +18,10 @@ export async function POST(request: Request) {
     //CHECKS FOR LOGIN ERRORS
     if (error) {
         //DISPLAYS ERROR MESSAGE IN PAGE
-        return NextResponse.redirect(getURL() + `reset?err=${error.message}`, { status: 301 })
+        return NextResponse.redirect(requestUrl.origin + `reset?err=${error.message}`, { status: 301 })
     }
 
-    return NextResponse.redirect(getURL() + 'email-pending', {
+    return NextResponse.redirect(requestUrl.origin + 'email-pending', {
         status: 301,
     })
 

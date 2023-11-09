@@ -50,7 +50,7 @@ export async function POST(request: Request) {
     .insert(system_owner)
   console.log(admin, adminError)
 
-  return NextResponse.redirect(getURL() + 'email-pending', {
+  return NextResponse.redirect(requestUrl.origin + 'email-pending', {
     status: 301,
   })
 }

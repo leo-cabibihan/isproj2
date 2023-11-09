@@ -24,7 +24,7 @@ export async function POST(request: Request) {
 
   console.log('THIS WORKS ', email, donor, date)
 
-  const body = render(<AlertEmail url={getURL() + "dashboard/logs/complaints"} heading={"You have been reported!"} 
+  const body = render(<AlertEmail url={requestUrl.origin + "dashboard/logs/complaints"} heading={"You have been reported!"} 
   content={"You have been reported by " + donor + " at " + date + ". Please click the link to learn more."}/>);
 
   const success = await plunk.emails.send({
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
   console.log("SUCCESS??? ", success)
 
-  return NextResponse.redirect(getURL() + 'email-pending', {
+  return NextResponse.redirect(requestUrl.origin + 'email-pending', {
     status: 301,
   })
 

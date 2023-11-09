@@ -7,6 +7,7 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
+  const requestUrl = new URL(request.url)
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
   const {
@@ -20,23 +21,23 @@ export async function GET(request: Request) {
     (await supabase.from('donor').select('*').eq('id', user_id)?.data
       ?.length) === 1
   ) {
-    return NextResponse.redirect(`${getURL()}/settings`, { status: 301 })
+    return NextResponse.redirect(`${requestUrl.origin}/settings`, { status: 301 })
   } else if (
     (await supabase.from('charity_member').select('*').eq('id', user_id)?.data
       ?.length) === 1
   ) {
-    return NextResponse.redirect(`${getURL()}/dashboard/settings`, {
+    return NextResponse.redirect(`${requestUrl.origin}/dashboard/settings`, {
       status: 301,
     })
   } else if (
     (await supabase.from('system_owner').select('*').eq('id', user_id)?.data
       ?.length) === 1
   ) {
-    return NextResponse.redirect(`${getURL()}/admin/applications`, {
+    return NextResponse.redirect(`${requestUrl.origin}/admin/applications`, {
       status: 301,
     })
   } else {
-    return NextResponse.redirect(`${getURL()}`, { status: 301 })
+    return NextResponse.redirect(`${requestUrl.origin}`, { status: 301 })
   }
 }
 
@@ -66,7 +67,7 @@ export async function POST(request: Request) {
     // console.log("I should redirect")
 
     //DISPLAYS ERROR MESSAGE IN PAGE
-    return NextResponse.redirect(getURL() + `login?err=${error.message}`, {
+    return NextResponse.redirect(requestUrl.origin + `login?err=${error.message}`, {
       status: 301,
     })
   }
@@ -93,20 +94,20 @@ export async function POST(request: Request) {
   // console.log(admin)
 
   console.log('wtf', requestUrl.origin)
-  console.log('wtf, wtf', getURL())
+  console.log('wtf, wtf', requestUrl.origin)
 
   if (donor?.length === 1) {
-    return NextResponse.redirect(`${getURL()}/settings`, {
+    return NextResponse.redirect(`${requestUrl.origin}/settings`, {
       status: 301,
     })
   } else if (charity_member?.length === 1) {
     CharityLog(charity_member![0].member_name + ' has logged in.', null)
-    return NextResponse.redirect(`${getURL()}/dashboard/settings`, {
+    return NextResponse.redirect(`${requestUrl.origin}/dashboard/settings`, {
       status: 301,
     })
   } else if (admin?.length === 1) {
     AdminLog(admin![0].name + ' has logged in.')
-    return NextResponse.redirect(`${getURL()}/admin/applications`, {
+    return NextResponse.redirect(`${requestUrl.origin}/admin/applications`, {
       status: 301,
     })
   }

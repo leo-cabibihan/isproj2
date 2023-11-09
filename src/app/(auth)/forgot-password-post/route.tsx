@@ -19,11 +19,11 @@ export async function POST(request: Request) {
         // console.log("I should redirect")
 
         //DISPLAYS ERROR MESSAGE IN PAGE
-        return NextResponse.redirect(getURL() + `forgot-password?err=${error.message}`, { status: 301 })
+        return NextResponse.redirect(requestUrl.origin + `forgot-password?err=${error.message}`, { status: 301 })
     }
 
 
-    return NextResponse.redirect(getURL(), {
+    return NextResponse.redirect(requestUrl.origin, {
         status: 301,
     })
 
