@@ -5,39 +5,49 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { redirect } from 'next/dist/server/api-utils'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import supabase from "@/app/utils/supabase"
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const cookieStore = cookies()
-  const supabaseAuth = createRouteHandlerClient({ cookies: () => cookieStore })
+  const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
   console.log("SO THE GET METHOD WORKS")
   const {
     data: { session },
     error: sessionError,
-  } = await supabaseAuth.auth.getSession()
+  } = await supabase.auth.getSession()
 
   const user_id = session?.user.id
 
   console.log("THE USER'S ID IS ", user_id)
 
+  // //Checks if current user is a charity member or donor (It works)
+  const { data: donor, error: error_1 } = await supabase
+    .from('donor')
+    .select('*')
+    .eq('id', user_id)
+  const { data: charity_member, error: error_2 } = await supabase
+    .from('charity_member')
+    .select('*')
+    .eq('user_uuid', user_id)
+  const { data: admin, error: error_3 } = await supabase
+    .from('system_owner')
+    .select('*')
+    .eq('id', user_id)
+
   if (
-    (await supabase.from('donor').select('*').eq('id', user_id)?.data
-      ?.length) === 1
+    donor?.length === 1
   ) {
     console.log("HE'S A DONOR")
     return NextResponse.redirect(`${requestUrl.origin}/settings`, { status: 301 })
   } else if (
-    (await supabase.from('charity_member').select('*').eq('id', user_id)?.data
-      ?.length) === 1
+    charity_member?.length === 1
   ) {
     console.log("HE'S A CHARITY GUY")
     return NextResponse.redirect(`${requestUrl.origin}/dashboard/settings`, {
       status: 301,
     })
   } else if (
-    (await supabase.from('system_owner').select('*').eq('id', user_id)?.data
-      ?.length) === 1
+    admin?.length === 1
   ) {
     console.log("HE'S AN ADMIN")
     return NextResponse.redirect(`${requestUrl.origin}/admin/applications`, {
