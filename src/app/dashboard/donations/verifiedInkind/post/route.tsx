@@ -87,6 +87,8 @@ export async function POST(request: Request) {
 
     const email = data![0].email
 
+    console.log("ADDRESS_ID " + address_id)
+
 
     //GETS THE DATA INSERTED INTO TRANSACTION DETAILS FORM
     const transaction = {
