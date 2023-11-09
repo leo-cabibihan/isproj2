@@ -10,6 +10,7 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
+  console.log("SO THE GET METHOD WORKS")
   const {
     data: { session },
     error: sessionError,
