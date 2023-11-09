@@ -66,7 +66,7 @@ export async function POST(request: Request) {
 
     } else {
         donor_id = formData.donor_id
-        console.log("FORM DONOR ID IS: " + formData.donation_id)
+        console.log("FORM DONOR ID IS: " + formData.donor_id)
     }
 
     if (new_address) {
