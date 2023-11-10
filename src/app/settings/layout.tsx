@@ -18,8 +18,10 @@ import { Button } from '@/components/Button'
 //     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
 // }
 const navigation = [
-  { name: 'History', href: '/settings/donationHistory', current: false },
-  { name: 'Settings', href: '/settings', current: false },
+  { name: 'Home', href: '/', current: false },
+  { name: 'Causes', href: '/#causes', current: false },
+  { name: 'Donation History', href: '/settings/donationHistory', current: false },
+  { name: 'Settings', href: '/settings', current: false }
 ]
 
 const userNavigation = [
@@ -34,11 +36,11 @@ function classNames(...classes: String[]) {
 export default function settings({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className="min-h-full">
+      <div className="min-h-full mt-4">
         <Disclosure as="nav" className="border-b border-gray-200 bg-white">
           {({ open }) => (
             <>
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mb-2">
                 <div className="flex h-16 justify-between">
                   <div className="flex">
                     <div className="flex flex-shrink-0 items-center">

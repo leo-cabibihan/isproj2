@@ -50,6 +50,7 @@ export default async function Page() {
     .from('total_cash_donations_donated')
     .select('total_amount, month')
     .eq('charity_id', charity_id)
+    .limit(12)
     const totalCashDonatedData = totalCashDonationsDonated?.flatMap(CashDonated => (
         [
             {
@@ -64,6 +65,7 @@ export default async function Page() {
     .from('total_inkind_donations_donated')
     .select('total_quantity, month')
     .eq('charity_id', charity_id)
+    .limit(12)
     const totalInKindDonatedData= totalInKindDonated?.flatMap(InKindDonated => (
         [
             {
