@@ -14,6 +14,20 @@ import { getURL } from '@/app/utils/url'
 export const revalidate = 0;
 
 export default async function Page() {
+     // Function to format the timestamp as 'mm/dd/yyy'
+     const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
@@ -98,7 +112,7 @@ export default async function Page() {
 
             <TableContainer>
                 <TableHeaderButton header="Events">
-                    <SlideOver buttontext="Add Event" variant="solid" color="blue">
+                    <SlideOver title="Add Event Details" buttontext="Add Event" variant="solid" color="blue">
                         <form className="space-y-6" action={handleSubmit} method="POST">
                             <TextField
                                 label=""
@@ -132,7 +146,7 @@ export default async function Page() {
                             </div>
 
                             <SelectField
-                                className="col-span-full py-5"
+                                className="col-span-full py-2"
                                 label="Assign Beneficiary"
                                 name="beneficiary_id"
                             >
@@ -175,7 +189,7 @@ export default async function Page() {
                                 <Th>End Date</Th>
                                 <Th>Charity</Th>
                                 <Th>Beneficiary</Th>
-                                <Th> </Th>
+                                <Th>Actions</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -183,12 +197,12 @@ export default async function Page() {
 
                                 <Tr key={event.id}>
                                     <Td>{event.name}</Td>
-                                    <Td>{event.start_date}</Td>
-                                    <Td>{event.end_date}</Td>
+                                    <Td>{formatDate(event.start_date) + ' ' + formatTime(event.start_date)}</Td>
+                                    <Td>{formatDate(event.end_date) + ' ' + formatTime(event.end_date)}</Td>
                                     <Td>{event.charity?.name}</Td>
                                     <Td>{event.beneficiaries?.beneficiary_name}</Td>
                                     <Td>
-                                        <SlideOver buttontext="View Details" variant="solid" color="blue">
+                                        <SlideOver title="Edit Event Details" buttontext="View Details" variant="solid" color="blue">
                                             <form className="space-y-6" action={saveChanges} method="PUT">
 
                                                 <TextField
@@ -226,7 +240,7 @@ export default async function Page() {
                                                     label="Current Start Date"
                                                     name="current_start_date"
                                                     type="text"                                        
-                                                    defaultValue={event.start_date as string}
+                                                    defaultValue={formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
                                                     readOnly
                                                 />
                                                  <TextField
@@ -240,7 +254,7 @@ export default async function Page() {
                                                     label="Current End Date"
                                                     name="end_date"
                                                     type="text"
-                                                    defaultValue={event.end_date as string}
+                                                    defaultValue={formatDate(event.end_date as string) + ' ' + formatTime(event.end_date as string)}
                                                     readOnly
                                                 />
 

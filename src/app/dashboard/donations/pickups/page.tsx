@@ -2,7 +2,7 @@
 import { Button } from "@/components/Button";
 import { SelectField, TextField } from "@/components/Fields";
 import SlideOver from "@/components/SlideOverButton";
-import { TableContainer, TableHeader, TableContent, Table, Thead, Tr, Td, Tbody, TableHeaderButton } from "@/components/Table";
+import { TableContainer, TableHeader, TableContent, Table, Thead, Tr, Td, Tbody, TableHeaderButton, Th } from "@/components/Table";
 import { PickupForm } from "./form";
 import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
@@ -17,6 +17,21 @@ const pickups = [
 ]
 
 export default async function Page() {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
+
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
     const { data: charity_member, error: idk } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
@@ -38,10 +53,10 @@ export default async function Page() {
                     <Table>
                         <Thead>
                             <Tr>
-                                <Td>Donor Name</Td>
-                                <Td>Status</Td>
-                                <Td>Date</Td>
-                                <Td> </Td>
+                                <Th>Donor Name</Th>
+                                <Th>Status</Th>
+                                <Th>Date</Th>
+                                <Th>Actions</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -57,7 +72,7 @@ export default async function Page() {
                                             (<Td>VERIFIED</Td>) :
                                             (<Td>NOT VERIFIED</Td>)}
                                     </>
-                                    <Td>{item.date}</Td>
+                                    <Td>{formatDate(item.date) + ' ' + formatTime(item.date)}</Td>
                                     <Td>
                                         <SlideOver variant="solid" color="blue" buttontext="View Details">
                                             <PickupForm id={item.id} />

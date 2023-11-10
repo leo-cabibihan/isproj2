@@ -25,7 +25,7 @@ export default async function Settings({ searchParams }: { searchParams: { [key:
             <div>
               <h2 className="text-base font-semibold leading-7 text-gray-900">Settings</h2>
             </div>
-
+            <br/>
             <div className="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
               <div className="sm:col-span-4">
                 <form action={'/invite-post'} method='post'>
@@ -55,11 +55,14 @@ export default async function Settings({ searchParams }: { searchParams: { [key:
       <form
         action={'/logout-post'}
         method="post"
-        className="mt-10 grid grid-cols-1 gap-y-8"
+        className="mt-10 grid grid-cols-1 gap-y-8 justify-center"
       >
-        <Button type='submit' variant="solid" color="red" >Log Out</Button>
+          <div className="flex justify-center">
+            <Button type='submit' variant="solid" color="red" style={{ width: '30%' }} className="mx-auto">
+              Log Out
+            </Button>
+          </div>
       </form>
-
     </>
   )
 }

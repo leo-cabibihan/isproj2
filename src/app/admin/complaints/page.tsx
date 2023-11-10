@@ -14,7 +14,20 @@ import { redirect } from "next/navigation";
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export default async function Complaints({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
 
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
     const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name, email_address ), donor ( id, name )')
 
     const notifyOrg = async (formData: FormData) => {
@@ -63,9 +76,9 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
                                 <Tr key={complaint.id} >
                                     <Td>{complaint.donor?.name}</Td>
                                     <Td>{complaint.charity?.name}</Td>
-                                    <Td>{complaint.created_at}</Td>
+                                    <Td>{formatDate(complaint.created_at) + ' ' + formatTime(complaint.created_at)}</Td>
                                     <Td>
-                                        <SlideOver variant="solid" color="blue" buttontext="View Details">
+                                        <SlideOver title="Complaint Details" variant="solid" color="blue" buttontext="View Details">
                                             <form className="space-y-6" action={notifyOrg} method="POST">
                                                 {searchParams.err && <Alert message={searchParams.err as string} />}
                                                 <TextField
@@ -95,9 +108,9 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
                                                 <TextField
                                                     label="Filed at"
                                                     name="date"
-                                                    type="date"
+                                                    type="text"
                                                     readOnly
-                                                    defaultValue={complaint.created_at as string}
+                                                    defaultValue={formatDate(complaint.created_at) + ' ' + formatTime(complaint.created_at)}
                                                 />
 
                                                 <div className="col-span-full">

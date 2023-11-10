@@ -12,6 +12,20 @@ import { revalidatePath } from "next/cache";
 export const revalidate = 0;
 
 export default async function Page() {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
@@ -58,7 +72,7 @@ export default async function Page() {
                                 <Th>Donor Name</Th>
                                 <Th>Complaint</Th>
                                 <Th>Date Filed</Th>
-                                <Th> </Th>
+                                <Th>Actions</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -67,9 +81,9 @@ export default async function Page() {
                                 <Tr key={complaint.id}>
                                     <Td>{complaint.donor?.name}</Td>
                                     <Td>{complaint.charity?.name}</Td>
-                                    <Td>{complaint.created_at}</Td>
+                                    <Td>{formatDate(complaint.created_at) + ' ' + formatTime(complaint.created_at)}</Td>
                                     <Td>
-                                        <SlideOver variant="solid" color="blue" buttontext="View Details">
+                                        <SlideOver title="Complaint Details" variant="solid" color="blue" buttontext="View Details">
                                             <form className="space-y-6" action={handleSubmit} method="POST">
                                                 <TextField
                                                     label=""
@@ -115,7 +129,7 @@ export default async function Page() {
                                                     label="Complainant"
                                                     name="donor"
                                                     type="text"
-                                                    placeholder={complaint.donor?.name as string}
+                                                    defaultValue={complaint.donor?.name as string}
                                                     readOnly
                                                 />
 

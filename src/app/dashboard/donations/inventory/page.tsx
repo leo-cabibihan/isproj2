@@ -62,7 +62,7 @@ export default async function Page() {
                                 <Th>Quantity</Th>
                                 <Th>Unit of Measurement</Th>
                                 <Th>Perishable?</Th>
-                                <Td> </Td>
+                                <Th>Actions</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -79,7 +79,7 @@ export default async function Page() {
                                         )}
                                     </>
                                     <Td>
-                                        <SlideOver variant="solid" color="blue" buttontext="View Details">
+                                        <SlideOver title="Item Details" variant="solid" color="blue" buttontext="View Details">
                                             <form className="space-y-6" action={saveChanges} method="PUT">
 
                                                 <TextField
@@ -156,11 +156,11 @@ export default async function Page() {
                                                             Delete Item <span aria-hidden="true">&rarr;</span>
                                                         </span>
                                                     </Button>
-                                                    <Button href={"#"} variant="solid" color="red" className="w-full">
+                                                   {/* <Button href={"#"} variant="solid" color="red" className="w-full">
                                                         <span>
                                                             Cancel <span aria-hidden="true">&rarr;</span>
                                                         </span>
-                                                    </Button>
+                                                    </Button> */}
                                                 </div>
                                             </form>
                                         </SlideOver>

@@ -1,12 +1,7 @@
 // @ts-nocheck
-import Link from 'next/link'
-import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/Fields'
-import { Logo } from '@/components/Logo'
-import { SlimLayout } from '@/components/SlimLayout'
-import { type Metadata } from 'next'
 import supabase from '@/app/utils/supabase'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -79,7 +74,7 @@ export default async function Example() {
   return (
     <>
       <Header></Header>
-      <form className="space-y-6" action={handleSubmit} method="POST">
+      <form className="space-y-6 py-8" action={handleSubmit} method="POST">
         <div className="container mx-auto px-20 mt-16 mb-16 space-y-24">
           <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
             <div>
@@ -96,25 +91,28 @@ export default async function Example() {
                   name="org_name"
                   type="name"
                   autoComplete="name"
+                  placeholder='Name of your charity'
                   required
                 />
-
+                <br/>
                 <TextField
                   label="Contact Number"
                   name="phone"
                   type="tel"
                   autoComplete="tel"
+                  placeholder='e.g: 0918-123-4567, 09181234567, etc.'
                   required
                 />
-
+                <br/>
                 <TextField
                   label="Email Address"
                   name="email"
                   type="email"
                   autoComplete="email"
+                  placeholder='e.g: abc@email.com'
                   required
                 />
-
+                <br/>
                 <div className="col-span-full">
                   <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
                     Description
@@ -147,30 +145,34 @@ export default async function Example() {
                   name="house_number"
                   type="address"
                   autoComplete="address"
+                  placeholder='e.g: 123'
                   required
                 />
-
-                <TextField
-                  label="House Name"
-                  name="house_name"
-                  type="address"
-                  autoComplete="address"
-                  required
-                />
-
+                <br/>
                 <TextField
                   label="Street Name"
                   name="street_name"
                   type="address"
                   autoComplete="address"
+                  placeholder='e.g: Anystreet'
                   required
                 />
-
+                <br/>
                 <TextField
                   label="Village Name"
                   name="village_name"
                   type="address"
                   autoComplete="address"
+                  placeholder='e.g: Anyvillage'
+                  required
+                />
+                <br/>
+                <TextField
+                  label="Zipcode"
+                  name="zipcode"
+                  type="address"
+                  autoComplete="address"
+                  placeholder='e.g: 1119'
                   required
                 />
               </div>
@@ -181,30 +183,25 @@ export default async function Example() {
                   name="barangay"
                   type="address"
                   autoComplete="address"
+                  placeholder='e.g: Anybarangay'
                   required
                 />
-
+                <br/>
                 <TextField
                   label="City"
                   name="city"
                   type="address"
                   autoComplete="address"
+                  placeholder='e.g: Anycity'
                   required
                 />
-
+                <br/>
                 <TextField
                   label="Province"
                   name="province"
                   type="address"
                   autoComplete="address"
-                  required
-                />
-
-                <TextField
-                  label="Zipcode"
-                  name="zipcode"
-                  type="address"
-                  autoComplete="address"
+                  placeholder='e.g: Anyprovince'
                   required
                 />
               </div>
@@ -214,7 +211,7 @@ export default async function Example() {
           <ImageUpload folderName="onboarding" charityID={last_id![0] + 1} recordID={last_id![0] + 1} />
           
         </div>
-        <div className="mt-6 flex items-center justify-end gap-x-6 mb-4">
+        <div className="mt-6 flex flex-col items-center justify-end gap-x-6 mb-4">
           <Button type="submit" variant="solid" color="blue" className="w-1/5">
             <span>
               Submit <span aria-hidden="true">&rarr;</span>

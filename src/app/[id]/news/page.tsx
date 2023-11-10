@@ -5,6 +5,20 @@ import supabase from "@/app/utils/supabase"
 import { useRouter } from 'next/navigation'
 
 export default async function News({ params } : any) {
+ // Function to format the timestamp as 'mm/dd/yyy'
+ const formatDate = (timestamp) => {
+  const date = new Date(timestamp);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${month}/${day}/${year}`;
+};
+
+// Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+const formatTime = (timestamp) => {
+  const date = new Date(timestamp);
+  return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+};
 
   const postID = params.id
   const { data: posts, error } = await supabase.from('campaign_post').select('*, charity ( id, name ), charity_member( user_uuid, member_name )').eq('id', postID)
@@ -27,7 +41,7 @@ export default async function News({ params } : any) {
         {posts?.map((post) => (
           <div key={post.id} className="bg-white px-6 py-32 lg:px-8">
             <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
-              <p className="text-base font-semibold leading-7 text-indigo-600">{post.charity?.name}&apos;s posts</p>
+              <p className="text-base font-semibold leading-7 text-[#01794A]">{post.charity?.name}&apos;s post</p>
               <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">{post.title}</h1>
               <p className="mt-6 text-xl leading-8">
                 {post.subheading}
@@ -66,7 +80,7 @@ export default async function News({ params } : any) {
                     />
                     <figcaption className="mt-4 flex gap-x-2 text-sm leading-6 text-gray-500">
                       <InformationCircleIcon className="mt-0.5 h-5 w-5 flex-none text-gray-300" aria-hidden="true" />
-                      Faucibus commodo massa rhoncus, volutpat.
+                      A picture says a thousand words.
                     </figcaption>
                   </figure>
                 )

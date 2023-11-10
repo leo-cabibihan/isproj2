@@ -91,7 +91,7 @@ export function PickupForm({id}: {id:number}) {
                 <div className="col-span-full">
                     <Button onClick={addFields} variant="solid" color="green" className="w-full">
                         <span>
-                            Add Another Itemm <span aria-hidden="true">&rarr;</span>
+                            Add Another Item <span aria-hidden="true">&rarr;</span>
                         </span>
                     </Button>
                 </div>
@@ -116,7 +116,7 @@ export function PickupForm({id}: {id:number}) {
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.name}
                                 required />
-
+                            <br/>
                             <TextField
                                 label="Quantity"
                                 name="quantity"
@@ -127,7 +127,7 @@ export function PickupForm({id}: {id:number}) {
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.quantity}
                                 required />
-
+                            <br/>
                             <TextField
                                 label="Unit of Measurement"
                                 name="unit_of_measurement"
@@ -136,7 +136,7 @@ export function PickupForm({id}: {id:number}) {
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.unit_of_measurement}
                                 required />
-
+                            <br/>
                             <SelectField
                                 label="Perishable?"
                                 name="perishable"
@@ -147,7 +147,7 @@ export function PickupForm({id}: {id:number}) {
                                 <option value={"true"}>Yes</option>
                                 <option value={"false"}>No</option>
                             </SelectField>
-
+                            <br/>
                             <TextField
                                 label="Expiry Date (if perishable)"
                                 name="expiry"
@@ -156,7 +156,7 @@ export function PickupForm({id}: {id:number}) {
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.expiry}
                             />
-
+                            <br/>
                             <div className="col-span-full">
                                 <Button onClick={() => removeFields(form.id)} variant="solid" color="red" className="w-full">
                                     <span>

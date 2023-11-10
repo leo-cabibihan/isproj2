@@ -299,15 +299,15 @@ export default async function Settings() {
                     </div>
                 </div>
             </div>
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
                 <form
                     action={'/logout-post'}
                     method="post"
-                    className="mt-10 grid grid-cols-1 gap-y-8"
+                    className="mt-10 grid grid-cols-1 gap-y-8 flex justify-center"
                 >
-                    <Button type='submit' variant="solid" color="red" >Log Out</Button>
-                </form>
-            </div>
+                <div className="flex justify-center">
+                    <Button type='submit' variant="solid" color="red" style={{ width: '30%' }} className="mx-auto">Log Out</Button>
+                </div>
+            </form>
         </>
     )
 }

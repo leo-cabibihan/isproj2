@@ -1,13 +1,12 @@
 // @ts-nocheck 
 import Link from 'next/link'
-
 import { Button } from '@/components/Button'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 
 export default function NotFound() {
   return (
-    <SlimLayout>
+    <SlimLayout backgroundImage={"https://miro.medium.com/v2/resize:fit:1100/format:webp/1*w4lNtRoCqOClLp2WVL_pQw.jpeg"}>
       <div className="flex">
         <Link href="/" aria-label="Home">
           <Logo className="h-10 w-auto" />

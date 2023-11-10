@@ -20,6 +20,20 @@ import { GetUID } from "@/app/utils/user_id";
 export const revalidate = 0;
 
 export default async function Page() {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
 
@@ -98,10 +112,10 @@ export default async function Page() {
                 </div>
             </div>
 
-
-            <TableContainer>
-                <TableHeaderButton header="Posts of Red Cross Philippines">
-                    <SlideOver buttontext={"Create Post"} variant="solid" color="blue">
+                <TableContainer>
+                {charity_member?.map(charityId =>(
+                    <TableHeaderButton header={charityId.charity.name + "'s Posts"}>
+                    <SlideOver title="Create Post Details" buttontext={"Create Post"} variant="solid" color="blue">
                         <form className="space-y-6" action={handleSubmit} method="POST">
                             <TextField
                                 label="Post Title"
@@ -142,14 +156,15 @@ export default async function Page() {
                                 </Button>
                             </div>
                         </form>
-                    </SlideOver>
+                    </SlideOver>                            
                 </TableHeaderButton>
+                ))}
                 <div className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:max-w-4xl">
-                            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">From the blog</h2>
+                            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Campaign Posts</h2>
                             <p className="mt-2 text-lg leading-8 text-gray-600">
-                                Learn how to grow your business with our expert advice.
+                                Here you can see this charity's posts.
                             </p>
                             <div className="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
                                 {posts?.map((post) => (
@@ -159,7 +174,7 @@ export default async function Page() {
                                         <div>
                                             <div className="flex items-center gap-x-4 text-xs">
                                                 <time dateTime={post.date_posted} className="text-gray-500">
-                                                    {post.date_posted}
+                                                    {formatDate(post.date_posted) + ' ' + formatTime(post.date_posted)}
                                                 </time>
 
                                             </div>
@@ -184,7 +199,7 @@ export default async function Page() {
                                                             </p>
                                                             <p className="text-gray-600">{post.charity?.name}</p>
                                                         </div>
-                                                        <SlideOver buttontext="View Details" variant="solid" color="blue">
+                                                        <SlideOver title="Edit Post Details" buttontext="View Details" variant="solid" color="blue">
                                                             <form className="space-y-6" action={saveChanges} method="PUT">
 
                                                                 <TextField
@@ -247,6 +262,8 @@ export default async function Page() {
                                                                             Update <span aria-hidden="true">&rarr;</span>
                                                                         </span>
                                                                     </Button>
+                                                                    <br/>
+                                                                    <br/>
                                                                     <Button type="submit" variant="solid" color="red" className="w-full" formAction={deletePost}>
                                                                         <span>
                                                                             Delete <span aria-hidden="true">&rarr;</span>

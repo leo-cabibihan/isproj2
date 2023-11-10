@@ -11,6 +11,21 @@ import { revalidatePath } from "next/cache";
 export const revalidate = 0;
 
 export default async function Auditlog() {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
+
 
     const { data: logs } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )')
 
@@ -38,7 +53,7 @@ export default async function Auditlog() {
                                 <Tr key={log.id}>
                                     <Td>{log.system_owner?.name}</Td>
                                     <Td>{log.action}</Td>
-                                    <Td>{log.date}</Td>
+                                    <Td>{formatDate(log.date) + ' ' + formatTime(log.date)}</Td>
                                 </Tr>
                             )}
                         </Tbody>

@@ -81,7 +81,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
       </div>
       <TableContainer>
         <TableHeaderButton header="Contacts">
-          <SlideOver buttontext="Add Contact" variant="solid" color="blue">
+          <SlideOver title="Add Contact Details" buttontext="Add Contact" variant="solid" color="blue">
             <form className="space-y-6" action={handleSubmit} method="POST">
               {searchParams.err && <Alert message={searchParams.err as string} />}
               <TextField
@@ -146,7 +146,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                   <Td>{contact.address}</Td>
                   <Td>
                     {/* This is the EDIT CONTACT form */}
-                    <SlideOver buttontext="View Details" variant="solid" color="blue">
+                    <SlideOver title="Edit Contact Details" buttontext="View Details" variant="solid" color="blue">
                       <form className="space-y-6" action={saveChanges} method="PUT">
                         <TextField
                           label=""

@@ -13,7 +13,20 @@ import { AdminLog } from '../../audit-log/function';
 export const revalidate = 0;
 
 export default async function Organization({ params }: any) {
-
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+    
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
     const orgID = params.id
 
     const { data: orgs } = await supabase.from('charity').select('*').eq('id', orgID)
@@ -87,7 +100,7 @@ export default async function Organization({ params }: any) {
             </div>
 
             <TableContainer>
-                <TableHeader header="View Complaints." />
+                <TableHeader header="View Complaints" />
                 <TableContent>
                     <Table>
                         <Thead>
@@ -104,9 +117,9 @@ export default async function Organization({ params }: any) {
                                 <Tr key={complaint.id}>
                                     <Td>{complaint.donor?.name}</Td>
                                     <Td>{complaint.charity?.name}</Td>
-                                    <Td>{complaint.created_at}</Td>
+                                    <Td>{formatDate(complaint.created_at) + ' ' + formatTime(complaint.created_at)}</Td>
                                     <Td>
-                                        <SlideOver buttontext="View Complaint" variant="solid" color="blue">
+                                        <SlideOver title="Complaint Details" buttontext="View Complaint" variant="solid" color="blue">
                                             <form className="space-y-6" action={'/view-charity/post'} method="POST">
                                                 <TextField
                                                     label="Charity Name"
@@ -135,9 +148,9 @@ export default async function Organization({ params }: any) {
                                                 <TextField
                                                     label="Filed at"
                                                     name="date"
-                                                    type="date"
+                                                    type="text"
                                                     readOnly
-                                                    defaultValue={complaint.created_at as string}
+                                                    defaultValue={formatDate(complaint.created_at) + ' ' + formatTime(complaint.created_at)}
                                                 />
 
                                                 <div className="col-span-full">
@@ -179,7 +192,7 @@ export default async function Organization({ params }: any) {
             </div>
 
             <TableContainer>
-                <TableHeader header="View Appeals." />
+                <TableHeader header="View Appeals" />
                 <TableContent>
                     <Table>
                         <Thead>
@@ -197,9 +210,9 @@ export default async function Organization({ params }: any) {
                                 <Tr key={appeal.id}>
                                     <Td>{appeal.charity_member?.member_name}</Td>
                                     <Td>{appeal.charity?.name}</Td>
-                                    <Td>{appeal.created_at}</Td>
+                                    <Td>{formatDate(appeal.created_at) + ' ' + formatTime(appeal.created_at)}</Td>
                                     <Td>
-                                        <SlideOver buttontext="View Complaint" variant="solid" color="blue">
+                                        <SlideOver title="Appeal Details" buttontext="View Appeal" variant="solid" color="blue">
                                             <form className="space-y-6" action="#" method="POST">
                                                 <TextField
                                                     label="Charity Name"
@@ -223,6 +236,13 @@ export default async function Organization({ params }: any) {
                                                     type="text"
                                                     readOnly
                                                     defaultValue={appeal.donor_complaints?.donor?.name as string}
+                                                />
+                                                <TextField
+                                                    label="Appeal Filed at"
+                                                    name="appeal_date"                                                   
+                                                    type="text"
+                                                    readOnly
+                                                    defaultValue={formatDate(appeal.created_at) + ' ' + formatTime(appeal.created_at)}
                                                 />
 
                                                 <div className="col-span-full">

@@ -17,6 +17,20 @@ import Alert from "@/components/Alert";
 export const revalidate = 0;
 
 export default async function beneficiaryitem({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
+        const date = new Date(timestamp);
+        const year = date.getFullYear();
+        const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+        const day = date.getDate().toString().padStart(2, '0');
+        return `${month}/${day}/${year}`;
+    };
+
+    // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+    const formatTime = (timestamp) => {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
@@ -36,7 +50,7 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
 
     const { data: beneficiary_items, error: bs_error } = await supabase
         .from('beneficiary_items')
-        .select('*, inventory_item ( id, name ), charity ( id, name )')
+        .select('*, inventory_item ( id, name ), charity ( id, name ), event (id, name)')
         .eq('charity_id', charity_id)
 
     console.log("hello I suck ", bs_error)
@@ -78,7 +92,7 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
             </div>
             <TableContainer>
                 <TableHeaderButton header="Given Items">
-                    <SlideOver buttontext="Add Item" variant="solid" color="blue">
+                    <SlideOver title="Add Item Details" buttontext="Add Item" variant="solid" color="blue">
                         <form className="space-y-6" action={handleSubmit} method="POST">
                             {searchParams.err && <Alert message={searchParams.err as string}/>}
 
@@ -90,7 +104,7 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
                             />
 
                             <TextField
-                                label="Amount"
+                                label="Quantity"
                                 name="amount"
                                 type="number"
                                 min={1}
@@ -146,7 +160,7 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
                                     <div className="col-span-full">
                                         <Button type="submit" variant="solid" color="blue" className="w-full">
                                             <span>
-                                                Save Expense <span aria-hidden="true">&rarr;</span>
+                                                Save Item <span aria-hidden="true">&rarr;</span>
                                             </span>
                                         </Button>
                                     </div>
@@ -160,66 +174,75 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
                     <Table>
                         <Thead>
                             <Tr>
-                                <Th>Name</Th>
+                                <Th>Event</Th>
+                                <Th>Item Name</Th>
                                 <Th>Quantity</Th>
                                 <Th>Date</Th>
-                                <Th> </Th>
+                                <Th>Actions</Th>
                             </Tr>
                         </Thead>
                         <Tbody>
                             {beneficiary_items?.map(item =>
 
                                 <Tr key={item.id}>
+                                    <Td>{item.event.name}</Td>
                                     <Td>{item.inventory_item?.name}</Td>
                                     <Td>{item.quantity}</Td>
-                                    <Td>{item.date}</Td>
+                                    <Td>{formatDate(item.date) + ' ' + formatTime(item.date)}</Td>
                                     <Td>
-                                        <SlideOver buttontext="Details" variant="solid" color="blue">
-                                            <form className="space-y-6" action="#" method="POST">
+                                        <SlideOver title="Item Details" buttontext="View Details" variant="solid" color="blue">
                                                 <TextField
-                                                    label="Email Address"
-                                                    name="email"
-                                                    type="email"
-                                                    autoComplete="email"
+                                                    label=""
+                                                    name="charity_id"
+                                                    type="hidden"
+                                                    defaultValue={item.id}
+                                                    readOnly
                                                     required
                                                 />
-
+                                                <br/>
                                                 <TextField
-                                                    label="Password"
-                                                    name="password"
-                                                    type="password"
-                                                    autoComplete="current-password"
+                                                    label="Event"
+                                                    name="event_name"
+                                                    type="text"
+                                                    defaultValue={item.event.name}
+                                                    readOnly
                                                     required
                                                 />
-
-                                                <div className="flex items-center justify-between">
-                                                    <div className="text-sm leading-6">
-                                                        <a href="/forgot" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                                                            Forgot password?
-                                                        </a>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-span-full">
-                                                    <Button type="submit" variant="solid" color="blue" className="w-full">
-                                                        <span>
-                                                            Sign up <span aria-hidden="true">&rarr;</span>
-                                                        </span>
-                                                    </Button>
-                                                </div>
-                                            </form>
+                                                <br/>
+                                                <TextField
+                                                    label="Item Name"
+                                                    name="name"
+                                                    type="text"
+                                                    defaultValue={item.inventory_item?.name}
+                                                    readOnly
+                                                    required
+                                                />
+                                                <br/>
+                                                 <TextField
+                                                    label="Quantity"
+                                                    name="amount"
+                                                    type="text"
+                                                    defaultValue={item.quantity}
+                                                    readOnly
+                                                    required
+                                                />
+                                                <br/>
+                                                <TextField
+                                                    label="Date"
+                                                    name="date"
+                                                    type="text"
+                                                    defaultValue={formatDate(item.date) + ' ' + formatTime(item.date)}
+                                                    readOnly
+                                                    required
+                                                />
                                         </SlideOver>
                                     </Td>
                                 </Tr>
-
                             )}
-
                         </Tbody>
                     </Table>
                 </TableContent>
             </TableContainer>
-
-
         </>
 
     )
