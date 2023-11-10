@@ -57,9 +57,6 @@ export default async function Auditlog() {
                                     <Td>{action.system_owner?.name}</Td>
                                     <Td>{action.action}</Td>
                                     <Td>{formatDate(action.date) + ' ' + formatTime(action.date)}</Td>
-                                    <Td>
-                                        <Button variant='solid' color='blue' href="#">View Profile</Button>
-                                    </Td>
                                 </Tr>
                             )}
                         </Tbody>
