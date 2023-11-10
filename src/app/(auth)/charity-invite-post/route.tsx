@@ -25,7 +25,7 @@ export async function POST(request: Request) {
   const encryptedEmail = cryptr.encrypt(email)
   const encryptedID = cryptr.encrypt(id)
 
-  const body = render(<Email url={requestUrl.origin + "org-invite/" + encryptedEmail + "/" + encryptedID}/>);
+  const body = render(<Email url={`${requestUrl.origin}/org-invite/${encryptedEmail}/${encryptedID}`}/>);
 
   const success = await plunk.emails.send({
     to: email,
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     body,
   })
 
-  return NextResponse.redirect(requestUrl.origin + 'email-pending', {
+  return NextResponse.redirect(`${requestUrl.origin}/email-pending`, {
     status: 301,
   })
 }

@@ -85,7 +85,7 @@ export async function POST(request: Request) {
     // console.log("I should redirect")
 
     //DISPLAYS ERROR MESSAGE IN PAGE
-    return NextResponse.redirect(requestUrl.origin + `login?err=${error.message}`, {
+    return NextResponse.redirect(`${requestUrl.origin}/login?err=${error.message}`, {
       status: 301,
     })
   }
