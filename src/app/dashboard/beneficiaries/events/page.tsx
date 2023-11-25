@@ -201,8 +201,8 @@ export default async function Page() {
                                 <Th>Start Date</Th>
                                 <Th>End Date</Th>
                                 <Th>Charity</Th>
-                                <Th>Beneficiary</Th>
-                                <Th>Actions</Th>
+                                <Th>Status</Th>
+                                <Th> </Th>
                             </Tr>
                         </Thead>
                         <Tbody>
@@ -213,7 +213,11 @@ export default async function Page() {
                                     <Td>{formatDate(event.start_date) + ' ' + formatTime(event.start_date)}</Td>
                                     <Td>{formatDate(event.end_date) + ' ' + formatTime(event.end_date)}</Td>
                                     <Td>{event.charity?.name}</Td>
-                                    <Td>{event.beneficiaries?.beneficiary_name}</Td>
+                                    <Td>
+                                        {
+                                            event.is_ongoing ? ("ongoing"):("ended")
+                                        }
+                                    </Td>
                                     <Td>
                                         <SlideOver title="Edit Event Details" buttontext="View Details" variant="solid" color="blue">
                                             <form className="space-y-6" action={saveChanges} method="PUT">
