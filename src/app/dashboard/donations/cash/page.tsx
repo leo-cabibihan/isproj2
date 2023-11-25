@@ -44,7 +44,7 @@ export default async function ExternalTable() {
     const { data: event } = await supabase
         .from('event')
         .select('*')
-        .eq('charity_id', charityId).eq('is_ongoing', true)
+        .eq('charity_id', charityId).eq('is_ongoing', true).eq('approval_status', "APPROVED")
         .order("id", { ascending: true })
 
     const { data: cash, error: cash_error } = await supabase.from('cash')

@@ -4,7 +4,7 @@ import supabase from "@/app/utils/supabase"
 import { Button } from "@/components/Button"
 import { SelectField, TextField } from "@/components/Fields"
 import { DefaultLayout } from "@/components/layouts/Default"
-import { ContentRight, ContentLeft, Causes, GraphTemp, News } from "@/components/Single-use"
+import { ContentRight, ContentLeft, Causes, GraphTemp, News, PastEvents } from "@/components/Single-use"
 import { revalidatePath } from "next/cache"
 import { useState } from "react"
 import { FormComponent, GoodsForm } from "./form"
@@ -68,6 +68,7 @@ export default async function Organization({ params }: any) {
           </div>
         </div>
         <Causes id={orgID} />
+        <PastEvents id={orgID} />
         <News id={orgID} />
       </DefaultLayout>
     </>

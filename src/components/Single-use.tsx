@@ -199,7 +199,7 @@ export async function Causes({ id }: any) {
   const { data: events } = await supabase
     .from('event')
     .select('*, charity ( id, name )')
-    .eq('charity_id', id)
+    .eq('charity_id', id).eq('approval_status', APPROVED).eq('is_ongoing', true)
   console.log(id + '!!!!!')
   console.log(events)
 
@@ -208,10 +208,10 @@ export async function Causes({ id }: any) {
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Latest Events
+            All Events
           </h2>
           <p className="mt-2 text-lg leading-8 text-gray-600">
-            Check out this charity&apos;s latest events.
+            Check out this charity&apos;s events.
           </p>
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
@@ -244,6 +244,87 @@ export async function Causes({ id }: any) {
             </article>
           ))}
         </div>
+      </div>
+    </div>
+  )
+}
+
+export async function PastEvents({ id }: any) {
+  // Function to format the timestamp as 'mm/dd/yyy'
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp)
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, '0') // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0')
+    return `${month}/${day}/${year}`
+  }
+
+  // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+  const formatTime = (timestamp) => {
+    const date = new Date(timestamp)
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+    })
+  }
+
+  const { data: events } = await supabase
+    .from('event')
+    .select('*, charity ( id, name )')
+    .eq('charity_id', id).eq('approval_status', APPROVED).eq('is_ongoing', false)
+  console.log(id + '!!!!!')
+  console.log(events)
+
+  return (
+    <div className="bg-white py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl text-center">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Past Events
+          </h2>
+          <p className="mt-2 text-lg leading-8 text-gray-600">
+            Check out this charity&apos;s past events.
+          </p>
+        </div>
+        {
+          events?.length !== 1 ?
+            (
+              <h1 className='mt-2 text-lg leading-8 text-gray-600'>All of this charity&apos;s events are still ongoing.</h1>
+            )
+            :
+            (
+              <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+                {events?.map((event) => (
+                  <article
+                    key={event.id}
+                    className="justify-between-center flex flex-col items-start"
+                  >
+                    <BannerImg folder1={'event'} charityID={id} recordID={event.id} />
+                    <div className="max-w-xl">
+                      <div className="mt-5 flex items-center gap-x-4 text-xs">
+                        <time className="text-gray-500">
+                          {formatDate(event.start_date) +
+                            ' ' +
+                            formatTime(event.start_date)}
+                        </time>
+                      </div>
+                      <div className="group relative">
+                        <h3 className="mt-2 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                          <a href={'/' + event.id + '/events'}>
+                            <span className="absolute inset-0" />
+                            {event.name}
+                          </a>
+                        </h3>
+                        <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">
+                          {event.description}
+                        </p>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )
+        }
       </div>
     </div>
   )

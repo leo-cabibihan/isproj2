@@ -200,8 +200,8 @@ export default async function Page() {
                                 <Th>Event Name</Th>
                                 <Th>Start Date</Th>
                                 <Th>End Date</Th>
-                                <Th>Charity</Th>
-                                <Th>Status</Th>
+                                <Th>Approval Status</Th>
+                                <Th>Ongoing?</Th>
                                 <Th> </Th>
                             </Tr>
                         </Thead>
@@ -212,7 +212,7 @@ export default async function Page() {
                                     <Td>{event.name}</Td>
                                     <Td>{formatDate(event.start_date) + ' ' + formatTime(event.start_date)}</Td>
                                     <Td>{formatDate(event.end_date) + ' ' + formatTime(event.end_date)}</Td>
-                                    <Td>{event.charity?.name}</Td>
+                                    <Td>{event.approval_status}</Td>
                                     <Td>
                                         {
                                             event.is_ongoing ? ("ongoing"):("ended")

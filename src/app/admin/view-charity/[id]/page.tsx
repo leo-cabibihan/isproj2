@@ -4,7 +4,7 @@ import React from 'react';
 import { MediaObject } from '@/components/Single-use';
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from '@/components/Table';
 import SlideOver from '@/components/SlideOverButton';
-import { TextField } from '@/components/Fields';
+import { SelectField, TextField } from '@/components/Fields';
 import supabase from '@/app/utils/supabase';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from "next/cache";
@@ -13,6 +13,8 @@ import { AdminLog } from '../../audit-log/function';
 export const revalidate = 0;
 
 export default async function Organization({ params }: any) {
+
+    const generic_error = "Unable to Process request. Please check your data and try again."
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -21,7 +23,7 @@ export default async function Organization({ params }: any) {
         const day = date.getDate().toString().padStart(2, '0');
         return `${month}/${day}/${year}`;
     };
-    
+
     // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
     const formatTime = (timestamp) => {
         const date = new Date(timestamp);
@@ -42,6 +44,11 @@ export default async function Organization({ params }: any) {
         .select('*, charity ( id, name ), charity_member ( user_uuid, member_name ), donor_complaints ( id, donor ( id, name ) )')
         .eq('charity_id', orgID)
 
+    const { data: events, error } = await supabase
+        .from('event')
+        .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
+        .eq('charity_id', orgID)
+
     const freezeOrg = async (formData: FormData) => {
         'use server'
         const charityId = parseInt(formData.get("id") as string)
@@ -53,8 +60,34 @@ export default async function Organization({ params }: any) {
         await supabase.from('charity').update(charity).eq("id", charityId)
         await AdminLog("Froze charity " + charityName + ".")
         revalidatePath('/');
-    }; 
- 
+    };
+
+    const hideEvent = async (formData: FormData) => {
+        'use server'
+        const eventId = formData.get("id")
+        const event = {
+            approval_status: "ON-HOLD"
+        };
+
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        revalidatePath('/');
+        AdminLog("HID EVENT " + formData.get("event_name"), update_error)
+        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+    };
+
+    const unhideEvent = async (formData: FormData) => {
+        'use server'
+        const eventId = formData.get("id")
+        const event = {
+            approval_status: "APPROVED"
+        };
+
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        revalidatePath('/');
+        AdminLog("HID EVENT " + formData.get("event_name"), update_error)
+        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+    };
+
     return (
         <>
             {orgs?.map(org => (
@@ -192,6 +225,137 @@ export default async function Organization({ params }: any) {
             </div>
 
             <TableContainer>
+                <TableHeader header="View Events" />
+                <TableContent>
+                    <Table>
+                        <Thead>
+                            <Tr>
+                                <Th>Event Name</Th>
+                                <Th>Start Date</Th>
+                                <Th>End Date</Th>
+                                <Th>Charity</Th>
+                                <Th>Status</Th>
+                                <Th> </Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {events?.map(event => (
+
+                                <Tr key={event.id}>
+                                    <Td>{event.name}</Td>
+                                    <Td>{formatDate(event.start_date) + ' ' + formatTime(event.start_date)}</Td>
+                                    <Td>{formatDate(event.end_date) + ' ' + formatTime(event.end_date)}</Td>
+                                    <Td>{event.charity?.name}</Td>
+                                    <Td>
+                                        {
+                                            event.is_ongoing ? ("ongoing") : ("ended")
+                                        }
+                                    </Td>
+                                    <Td>
+                                        <SlideOver title="View Event Details" buttontext="View Details" variant="solid" color="blue">
+                                            <form className="space-y-6" action={saveChanges} method="PUT">
+                                                <TextField
+                                                    label=""
+                                                    name="id"
+                                                    type="hidden"
+                                                    defaultValue={event.id}
+                                                    readOnly
+                                                />
+
+                                                <TextField
+                                                    label="Event Name"
+                                                    name="event_name"
+                                                    defaultValue={event.name}
+                                                    type="text"
+                                                    readOnly
+                                                />
+
+                                                <div className="col-span-full">
+                                                    <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Details
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <textarea
+                                                            name="description"
+                                                            rows={4}
+                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            defaultValue={event.description}
+                                                            readOnly
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <TextField
+                                                    label="Current Start Date"
+                                                    name="current_start_date"
+                                                    type="text"
+                                                    defaultValue={formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
+                                                    readOnly
+                                                />
+
+                                                <TextField
+                                                    label="Current End Date"
+                                                    name="end_date"
+                                                    type="text"
+                                                    defaultValue={formatDate(event.end_date as string) + ' ' + formatTime(event.end_date as string)}
+                                                    readOnly
+                                                />
+
+                                                {
+                                                    event.beneficiary_id ?
+                                                        (
+                                                            <TextField
+                                                                label="Beneficiary"
+                                                                name="beneficiary"
+                                                                defaultValue={event.beneficiaries?.beneficiary_name}
+                                                                type="text"
+                                                                readOnly
+                                                            />
+                                                        )
+                                                        :
+                                                        (
+                                                            <p>&nbsp;</p>
+                                                        )
+                                                }
+
+                                                {
+                                                    event.approval_status == "APPROVED" ?
+                                                        (
+                                                            <div className="col-span-full">
+                                                                <Button formAction={hideEvent} type="submit" variant="solid" color="yellow" className="w-full">
+                                                                    <span>
+                                                                        HIDE EVENT <span aria-hidden="true">&rarr;</span>
+                                                                    </span>
+                                                                </Button>
+                                                            </div>
+                                                        ) :
+                                                        (
+                                                            <div className="col-span-full">
+                                                                <Button formAction={unhideEvent} type="submit" variant="solid" color="green" className="w-full">
+                                                                    <span>
+                                                                        UNHIDE EVENT <span aria-hidden="true">&rarr;</span>
+                                                                    </span>
+                                                                </Button>
+                                                            </div>
+                                                        )
+                                                }
+                                            </form>
+                                        </SlideOver>
+                                    </Td>
+                                </Tr>
+
+                            ))}
+                        </Tbody>
+                    </Table>
+                </TableContent>
+            </TableContainer>
+
+            <div className="sm:flex sm:items-center py-9">
+                <div className="sm:flex-auto">
+                </div>
+            </div>
+
+            <TableContainer>
                 <TableHeader header="View Appeals" />
                 <TableContent>
                     <Table>
@@ -239,7 +403,7 @@ export default async function Organization({ params }: any) {
                                                 />
                                                 <TextField
                                                     label="Appeal Filed at"
-                                                    name="appeal_date"                                                   
+                                                    name="appeal_date"
                                                     type="text"
                                                     readOnly
                                                     defaultValue={formatDate(appeal.created_at) + ' ' + formatTime(appeal.created_at)}

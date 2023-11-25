@@ -42,7 +42,7 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', charity_id).eq('is_ongoing', true)
+        .eq('charity_id', charity_id).eq('is_ongoing', true).eq('approval_status', "APPROVED")
 
     console.log("EVENTS ERROR", events_error)
 

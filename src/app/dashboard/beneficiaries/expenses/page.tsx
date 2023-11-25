@@ -69,6 +69,8 @@ export default async function Expenses() {
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', charity_id)
+        .eq('is_ongoing', true)
+        .eq('approval_status', "APPROVED")
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
