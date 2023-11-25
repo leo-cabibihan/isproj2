@@ -25,6 +25,15 @@ export default async function Example({ params }: any) {
   const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/event/" + charityID + "/" + eventID + "/"
   const IMGPATH = "event/" + charityID + "/" + eventID + "/"
 
+  // Function to format the timestamp as 'mm/dd/yyy'
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${month}/${day}/${year}`;
+  };
+
   return (
     <DefaultLayout>
       {events?.map(event => (
@@ -47,6 +56,48 @@ export default async function Example({ params }: any) {
                       </dt>{' '}
                       <dd className="inline">{event.name}</dd>
                     </div>
+                    <div className="relative pl-9">
+                      <dt className="inline font-semibold text-gray-900">
+                        <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                        Event Status:
+                      </dt>{' '}
+                      <dd className="inline">{
+                        event.is_ongoing ?
+                          ('ONGOING') :
+                          ('ENDED')
+                      }
+                      </dd>
+                    </div>
+                    {
+                      event.isongoing ?
+                        (
+                          <div className="relative pl-9">
+                            <dt className="inline font-semibold text-gray-900">
+                              <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                              Start Date:
+                            </dt>{formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
+                            <dd className="inline">{event.name}</dd>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="relative pl-9">
+                              <dt className="inline font-semibold text-gray-900">
+                                <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                                Start Date:
+                              </dt>{formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
+                              <dd className="inline">{event.name}</dd>
+                            </div>
+
+                            <div className="relative pl-9">
+                              <dt className="inline font-semibold text-gray-900">
+                                <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                                End Date:
+                              </dt>{formatDate(event.end_date as string) + ' ' + formatTime(event.end_date as string)}
+                              <dd className="inline">{event.name}</dd>
+                            </div>
+                          </>
+                        )
+                    }
                     {expenses?.map(expense => (
                       <div className="relative pl-9" key={expense.id}>
                         <dt className="inline font-semibold text-gray-900">

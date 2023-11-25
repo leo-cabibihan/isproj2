@@ -344,6 +344,7 @@ export function CashForm({ ID, UserID }: any) {
         .from('event')
         .select('*')
         .eq('charity_id', ID)
+        .eq('is_ongoing', true)
         .order('id', { ascending: true })
       setEventsList(data!)
 
