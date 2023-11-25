@@ -66,7 +66,7 @@ export default async function Organization({ params }: any) {
         'use server'
         const eventId = formData.get("id")
         const event = {
-            approval_status: "ON-HOLD"
+            approval_status: 'ON-HOLD'
         };
 
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
@@ -79,7 +79,8 @@ export default async function Organization({ params }: any) {
         'use server'
         const eventId = formData.get("id")
         const event = {
-            approval_status: "APPROVED"
+            approval_status: 'APPROVED'
+            
         };
 
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
@@ -319,7 +320,7 @@ export default async function Organization({ params }: any) {
                                                 }
 
                                                 {
-                                                    event.approval_status == "APPROVED" ?
+                                                    event.approval_status == 'APPROVED' ?
                                                         (
                                                             <div className="col-span-full">
                                                                 <Button formAction={hideEvent} type="submit" variant="solid" color="yellow" className="w-full">

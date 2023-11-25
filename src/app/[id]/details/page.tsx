@@ -68,7 +68,7 @@ export default async function Organization({ params }: any) {
           </div>
         </div>
         <Causes id={orgID} />
-        
+        <PastEvents id={orgID} />
         <News id={orgID} />
       </DefaultLayout>
     </>

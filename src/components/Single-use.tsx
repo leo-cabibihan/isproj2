@@ -271,7 +271,7 @@ export async function PastEvents({ id }: any) {
   const { data: events } = await supabase
     .from('event')
     .select('*, charity ( id, name )')
-    .eq('charity_id', id).eq('approval_status', APPROVED).eq('is_ongoing', false)
+    .eq('charity_id', id).eq('is_ongoing', false).eq('approval_status', 'APPROVED')
   console.log(id + '!!!!!')
   console.log(events)
 
