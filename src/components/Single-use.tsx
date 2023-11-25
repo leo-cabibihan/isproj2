@@ -199,7 +199,7 @@ export async function Causes({ id }: any) {
   const { data: events } = await supabase
     .from('event')
     .select('*, charity ( id, name )')
-    .eq('charity_id', id).eq('is_ongoing', true)
+    .eq('charity_id', id).eq('is_ongoing', true).eq('approval_status', 'APPROVED')
   console.log(id + '!!!!!')
   console.log(events)
 
