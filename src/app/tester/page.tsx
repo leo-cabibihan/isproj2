@@ -5,7 +5,7 @@ export default function TestPage () {
 
 
     return(
-        <ImageUpload folderName="balls" charityID="tester" recordID="fuck"/>
+        <ImageUpload folderName="test" charityID="tester" recordID="Test"/>
     )
 
 }

@@ -12,7 +12,7 @@ export async function POST(request: Request) {
 
     const orgID = formData.charity_id
 
-    console.log("PASSED SHIT" + formData.amount)
+    console.log("PASSED STUFF" + formData.amount)
 
     const cash = {
         amount: parseInt(formData.amount),

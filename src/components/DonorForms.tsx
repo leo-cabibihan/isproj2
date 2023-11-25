@@ -110,7 +110,7 @@ export async function GoodsForm({ id } : any) {
                         <TextField label="Item name" name="item" type="text" placeholder="Rice Sack" required />
                         <TextField label="Unit of Measurement" name="unit_measure" type="text" placeholder="Sacks" required />
                         <TextField label="Quantity" name="qty" type="number" min="1" max="100000" autoComplete="number" placeholder="1" required />
-                        <TextField label="Expiry Date" name="expiry" type="date" placeholder="" required />
+                        <TextField label="Expiry Date" name="expiry" type="date" placeholder="" />
                         <SelectField label="Perishable?" name="isPerishable" placeholder="yes" required>
                             <option value={1}>yes</option>
                             <option value={0}>no</option>

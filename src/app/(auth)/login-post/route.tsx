@@ -66,7 +66,7 @@ export async function POST(request: Request) {
   const password = String(formData.get('password'))
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
-  // console.log('wtf wtf')
+
   const {
     data: { user },
     error,
@@ -111,8 +111,6 @@ export async function POST(request: Request) {
   // console.log(charity_member)
   // console.log(admin)
 
-  console.log('wtf', requestUrl.origin)
-  console.log('wtf, wtf', requestUrl.origin)
 
   if (donor?.length === 1) {
     return NextResponse.redirect(`${requestUrl.origin}/settings`, {

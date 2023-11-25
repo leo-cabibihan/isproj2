@@ -13,7 +13,7 @@ const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export async function POST(request: Request) {
 
-  //THIS PART WORKS (It generates emails, passwords, does the cookies shit, etc.)
+  //THIS PART WORKS (It generates emails, passwords, does the cookies stuff, etc.)
   const requestUrl = new URL(request.url)
   const formData = await request.formData()
   const email = String(formData.get('email'))

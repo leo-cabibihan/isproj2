@@ -349,7 +349,7 @@ export function MultilayeredForm(ID: any) {
                                 label="Unit of Measurement"
                                 name="unit_of_measurement"
                                 type="text"
-                                placeholder="Balls"
+                                placeholder="boxes"
                                 onChange={event => handleFormChange(event, index)}
                                 value={form.unit_of_measurement}
                                 required />

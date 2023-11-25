@@ -57,9 +57,9 @@ export async function POST(request: Request) {
             subscribed_notification: false
         }
 
-        const { data: ass, error } = await supabase.from('donor').insert(donor).select()
+        const { data: donor_data, error } = await supabase.from('donor').insert(donor).select()
 
-        donor_id = ass![0].id;
+        donor_id = donor_data![0].id;
 
         console.log("NEW DONOR ERROR IS ", signup_error, " & ", error)
         console.log("FORMFIELDS WORK YEY ", formData.email, formData.password)
@@ -136,7 +136,7 @@ export async function POST(request: Request) {
     return Response.json({ status: 200 })
 
 }
-//bitch
+
 export async function PUT(request: Request) {
     const requestUrl = new URL(request.url)
     const formData = await request.json()
@@ -163,8 +163,8 @@ export async function PUT(request: Request) {
     const { data: item_data, error: item_error } = await supabase.from('inventory_item').upsert(items).select()
     // { item_data?.map(item => CharityLog("UPDATED ITEMS " + item.name)) }
     console.log("INSERT ERROR IS: ", item_error)
-    console.log("imma delete ur ass", formData.toDelete)
-    Promise.allSettled(formData.toDelete.map((id: number) => supabase.from('inventory_item').delete().eq("id", id))).then(res => console.log("bruh idk wtf wtf", res))
+    console.log("ERROR", formData.toDelete)
+    Promise.allSettled(formData.toDelete.map((id: number) => supabase.from('inventory_item').delete().eq("id", id))).then(res => console.log("ERROR", res))
     // for (const id of formData.toDelete) {
     //     const {error} = await supabase.from
     //     console.log()

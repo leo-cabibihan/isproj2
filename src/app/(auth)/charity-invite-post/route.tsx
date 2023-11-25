@@ -14,7 +14,7 @@ const cryptr = new Cryptr("3UzEs9SUb9rbc3SlQuw9H462JK9xWxJwElh7f5knBaDQ6te9u6")
 
 export async function POST(request: Request) {
 
-  //THIS PART WORKS (It generates emails, passwords, does the cookies shit, etc.)
+  //THIS PART WORKS (It generates emails, passwords, does the cookies stuff, etc.)
   const requestUrl = new URL(request.url)
   const formData = await request.formData()
   const email = String(formData.get('email'))

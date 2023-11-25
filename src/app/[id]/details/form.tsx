@@ -153,7 +153,7 @@ export function GoodsForm({ ID, UserID }: any) {
                                                         onChange={event => handleFormChange(event, index)} value={form.quantity} required />
                                                     <br/>
                                                     <TextField label="Expiry Date" name="expiry" type="date" placeholder=""
-                                                        onChange={event => handleFormChange(event, index)} value={form.expiry} required />
+                                                        onChange={event => handleFormChange(event, index)} value={form.expiry} />
                                                     <br/>
                                                     <SelectField label="Perishable?" name="perishable" placeholder="yes"
                                                         onChange={event => handleFormChange(event, index)} required>

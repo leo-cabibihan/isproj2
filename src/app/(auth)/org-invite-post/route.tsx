@@ -18,7 +18,6 @@ export async function GET(request: Request) {
     if (code) {
       const supabase = createRouteHandlerClient({ cookies })
       const token = await supabase.auth.exchangeCodeForSession(code)
-      console.log('wtf wtf')
       console.log(token)
     }
   

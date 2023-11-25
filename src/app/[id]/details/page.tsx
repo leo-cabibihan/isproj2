@@ -46,7 +46,7 @@ export default async function Organization({ params }: any) {
                 ))}
                 <div className="space-y-8">
                   <p className="mt-8">
-                    Your giving journey doesn't end with a donation; it's an ongoing connection with the causes you support. If you have any concerns, you can choose to report this charity with by clicking the Report Charity button below.
+                    Your giving journey doesn&apos;t end with a donation; it&apos;s an ongoing connection with the causes you support. If you have any concerns, you can choose to report this charity with by clicking the Report Charity button below.
                   </p>
                   {/*<Button variant="solid" color="red" href={'/' + orgID + '/report'}>
                     <span>

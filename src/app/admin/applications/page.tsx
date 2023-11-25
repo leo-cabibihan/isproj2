@@ -27,17 +27,17 @@ const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 export default async function Applications() {
   // Function to format the timestamp as 'mm/dd/yyy'
   const formatDate = (timestamp) => {
-      const date = new Date(timestamp);
-      const year = date.getFullYear();
-      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
-      const day = date.getDate().toString().padStart(2, '0');
-      return `${month}/${day}/${year}`;
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${month}/${day}/${year}`;
   };
-  
+
   // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
   const formatTime = (timestamp) => {
-      const date = new Date(timestamp);
-      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
   };
   const { data: requests, error } = await supabase
     .from('charity')
@@ -66,16 +66,16 @@ export default async function Applications() {
 
     console.log('THIS WORKS ', email, name)
 
-  const body = render(<NoURLMail heading={"APPLICATION STATUS UPDATE"} 
-  content={"Greetings, " + name + ". Unfortunately, your charity's application has been rejected for the following reason:\n " + reason + "."}/>);
+    const body = render(<NoURLMail heading={"APPLICATION STATUS UPDATE"}
+      content={"Greetings, " + name + ". Unfortunately, your charity's application has been rejected for the following reason:\n " + reason + "."} />);
 
-  const success = await plunk.emails.send({
-    to: email,
-    subject: "ALERT!",
-    body,
-  })
+    const success = await plunk.emails.send({
+      to: email,
+      subject: "ALERT!",
+      body,
+    })
 
-  console.log("SUCCESS??? ", success)
+    console.log("SUCCESS??? ", success)
 
   }
 
@@ -152,6 +152,22 @@ export default async function Applications() {
                               readOnly
                               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                               defaultValue={request.about}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-span-full">
+                          <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
+                            Uploaded File/s
+                          </label>
+                          <div className="mt-2">
+                            <textarea
+                              id="reason"
+                              name="reason"
+                              rows={3}
+
+                              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                              placeholder="Enter your reason for rejection here..."
                             />
                           </div>
                         </div>

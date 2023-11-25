@@ -48,8 +48,8 @@ export async function PUT(request: Request) {
     const { data: item_data, error: item_error } = await supabase.from('inventory_item').upsert(items).select()
     { item_data?.map(item => CharityLog("UPDATED PICKUP ITEM " + item.name, item_error)) }
     console.log("INSERT ERROR IS: ", item_error)
-    console.log("imma delete ur ass", formData.toDelete)
-    Promise.allSettled(formData.toDelete.map((id: number) => supabase.from('inventory_item').delete().eq("id", id))).then(res => console.log("bruh idk wtf wtf", res))
+    console.log("ERROR", formData.toDelete)
+    Promise.allSettled(formData.toDelete.map((id: number) => supabase.from('inventory_item').delete().eq("id", id))).then(res => console.log("ERROR", res))
     // for (const id of formData.toDelete) {
     //     const {error} = await supabase.from
     //     console.log()

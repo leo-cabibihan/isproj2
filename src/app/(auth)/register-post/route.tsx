@@ -32,10 +32,10 @@ export async function POST(request: Request) {
       user_uuid: user?.id,
       member_name: name,
     }
-    const { data: ass, error } = await supabase
+    const { data: member, error } = await supabase
       .from('charity_member')
       .insert(charityMember)
-    console.log(ass, error)
+    console.log(member, error)
 
     //CHECKS FOR SIGNUP ERRORS
     console.log("I am error", error)
@@ -57,8 +57,8 @@ export async function POST(request: Request) {
       name,
     }
 
-    const { data: ass, error } = await supabase.from('donor').insert(donor)
-    console.log(ass, error)
+    const { data: donor_data, error } = await supabase.from('donor').insert(donor)
+    console.log(donor_data, error)
 
     //CHECKS FOR SIGNUP ERRORS
     console.log("I am error", error)
