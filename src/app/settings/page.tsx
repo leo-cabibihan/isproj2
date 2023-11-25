@@ -20,12 +20,7 @@ import { Button } from '@/components/Button'
 const navigation = [
   { name: 'History', href: '/settings/donationHistory', current: false },
   { name: 'Settings', href: '/settings', current: true },
-  { name: 'Causes', href: '/causes', current: false }
-]
- 
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Causes', href: '/causes', current: false },
 ]
 
 function classNames(...classes: String[]) {

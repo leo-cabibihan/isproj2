@@ -1,18 +1,17 @@
-// @ts-nocheck 
-"use client"
+// @ts-nocheck
+'use client'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Logo } from '@/components/Logo'
-import clsx from "clsx"
+import { LogoMobile } from '@/components/LogoMobile'
+import clsx from 'clsx'
 import BreadCrumb from '@/components/BreadCrumbs'
 import { Disclosure } from '@headlessui/react'
 
-
 import {
   Bars3Icon,
-
   ChevronRightIcon,
   XMarkIcon,
   UsersIcon,
@@ -20,13 +19,16 @@ import {
   GiftIcon,
   LightBulbIcon,
   ClipboardDocumentCheckIcon,
-  Cog8ToothIcon
-
+  Cog8ToothIcon,
 } from '@heroicons/react/24/outline'
 
-
 const navigation = [
-  { name: 'Statistics', href: '/dashboard/statistics', icon: ChartBarIcon, current: true },
+  {
+    name: 'Statistics',
+    href: '/dashboard/statistics',
+    icon: ChartBarIcon,
+    current: true,
+  },
   {
     name: 'Donations',
     icon: GiftIcon,
@@ -50,7 +52,12 @@ const navigation = [
       { name: 'Given Items', href: '/dashboard/beneficiaries/given-items' },
     ],
   },
-  { name: 'Posts', href: '/dashboard/posts', icon: LightBulbIcon, current: false },
+  {
+    name: 'Posts',
+    href: '/dashboard/posts',
+    icon: LightBulbIcon,
+    current: false,
+  },
   {
     name: 'Logs',
     icon: ClipboardDocumentCheckIcon,
@@ -60,12 +67,15 @@ const navigation = [
       { name: 'Complaints', href: '/dashboard/logs/complaints' },
     ],
   },
-  { name: 'Settings', href: '/dashboard/settings', icon: Cog8ToothIcon, current: true },
-
+  {
+    name: 'Settings',
+    href: '/dashboard/settings',
+    icon: Cog8ToothIcon,
+    current: true,
+  },
 ]
 
 const isCurrent = (pathname: string, href: string): boolean => pathname === href
-
 
 function Nav({ pathname }: { pathname: string }) {
   return (
@@ -79,11 +89,16 @@ function Nav({ pathname }: { pathname: string }) {
                   <a
                     href={item.href}
                     className={clsx(
-                      isCurrent(pathname, item.href) ? 'bg-gray-50' : 'hover:bg-gray-50',
-                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700'
+                      isCurrent(pathname, item.href)
+                        ? 'bg-gray-50'
+                        : 'hover:bg-gray-50',
+                      'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700',
                     )}
                   >
-                    <item.icon className="h-6 w-6 shrink-0 text-gray-400" aria-hidden="true" />
+                    <item.icon
+                      className="h-6 w-6 shrink-0 text-gray-400"
+                      aria-hidden="true"
+                    />
                     {item.name}
                   </a>
                 ) : (
@@ -93,20 +108,25 @@ function Nav({ pathname }: { pathname: string }) {
                         <Disclosure.Button
                           className={clsx(
                             item.current ? 'bg-gray-50' : 'hover:bg-gray-50',
-                            'flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold text-gray-700'
+                            'flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm font-semibold leading-6 text-gray-700',
                           )}
                         >
-                          <item.icon className="h-6 w-6 shrink-0 text-gray-400" aria-hidden="true" />
+                          <item.icon
+                            className="h-6 w-6 shrink-0 text-gray-400"
+                            aria-hidden="true"
+                          />
                           {item.name}
                           <ChevronRightIcon
                             className={clsx(
-                              open ? 'rotate-90 text-gray-500' : 'text-gray-400',
-                              'ml-auto h-5 w-5 shrink-0'
+                              open
+                                ? 'rotate-90 text-gray-500'
+                                : 'text-gray-400',
+                              'ml-auto h-5 w-5 shrink-0',
                             )}
                             aria-hidden="true"
                           />
                         </Disclosure.Button>
-                         <Disclosure.Panel as="ul" className="mt-1 px-2">
+                        <Disclosure.Panel as="ul" className="mt-1 px-2">
                           {item.children.map((subItem) => (
                             <li key={subItem.name}>
                               {/* 44px */}
@@ -114,8 +134,10 @@ function Nav({ pathname }: { pathname: string }) {
                                 as="a"
                                 href={subItem.href}
                                 className={clsx(
-                                  isCurrent(pathname, subItem.href) ? 'bg-gray-50' : 'hover:bg-gray-50',
-                                  'block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-700'
+                                  isCurrent(pathname, subItem.href)
+                                    ? 'bg-gray-50'
+                                    : 'hover:bg-gray-50',
+                                  'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
                                 )}
                               >
                                 {subItem.name}
@@ -131,15 +153,10 @@ function Nav({ pathname }: { pathname: string }) {
             ))}
           </ul>
         </li>
-
       </ul>
     </nav>
   )
 }
-
-
-
-
 
 export default function DashboardLayout({
   children,
@@ -152,11 +169,13 @@ export default function DashboardLayout({
 
   return (
     <>
-
       <div>
         <Transition.Root show={sidebarOpen} as={Fragment}>
-
-          <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+          <Dialog
+            as="div"
+            className="relative z-50 lg:hidden"
+            onClose={setSidebarOpen}
+          >
             <Transition.Child
               as={Fragment}
               enter="transition-opacity ease-linear duration-300"
@@ -190,19 +209,26 @@ export default function DashboardLayout({
                     leaveTo="opacity-0"
                   >
                     <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                      <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
+                      <button
+                        type="button"
+                        className="-m-2.5 p-2.5"
+                        onClick={() => setSidebarOpen(false)}
+                      >
                         <span className="sr-only">Close sidebar</span>
-                        <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                        <XMarkIcon
+                          className="h-6 w-6 text-white"
+                          aria-hidden="true"
+                        />
                       </button>
                     </div>
                   </Transition.Child>
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
-                      <Link href="/" aria-label="Home">
-                        <Logo className="h-10 w-auto" />
-                      </Link>
-          
-                    <Nav pathname={pathname}/>
+                    <Link href="/" aria-label="Home">
+                      <LogoMobile />
+                    </Link>
+
+                    <Nav pathname={pathname} />
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -215,20 +241,25 @@ export default function DashboardLayout({
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
             <Link href="/" aria-label="Home">
-              <Logo className="h-10 w-auto" />
+              <Logo className="h-8 w-auto" />
             </Link>
-           
-            <Nav pathname={pathname}/>
 
+            <Nav pathname={pathname} />
           </div>
         </div>
 
         <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden">
-          <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden" onClick={() => setSidebarOpen(true)}>
+          <button
+            type="button"
+            className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+            onClick={() => setSidebarOpen(true)}
+          >
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
-          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Dashboard</div>
+          <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
+            Dashboard
+          </div>
           <a href="#">
             <span className="sr-only">Your profile</span>
             <img

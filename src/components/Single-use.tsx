@@ -1,25 +1,30 @@
 // @ts-nocheck
-import supabase from "@/app/utils/supabase"
-import { Button } from "./Button"
-import { Container } from "./Container"
-import { BannerImg } from "./DisplayImg"
-import { LightBulbIcon } from "@heroicons/react/24/solid"
-import TotalCashDonationsChart from "./TotalCashDonationChart"
-import TotalInKindTransactionsChart from "./TotalInKindTransactionsChart"
+import supabase from '@/app/utils/supabase'
+import { Button } from './Button'
+import { Container } from './Container'
+import { BannerImg } from './DisplayImg'
+import { LightBulbIcon } from '@heroicons/react/24/solid'
+import TotalCashDonationsChart from './TotalCashDonationChart'
+import TotalInKindTransactionsChart from './TotalInKindTransactionsChart'
 
 export function Cards() {
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Latest Causes</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Charity Organizations
+          </h2>
           <p className="mt-2 text-lg leading-8 text-gray-600">
             Find an Organization and donate to them.
           </p>
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {orgs.map((org) => (
-            <article key={org.id} className="flex flex-col items-start justify-between">
+            <article
+              key={org.id}
+              className="flex flex-col items-start justify-between"
+            >
               <div className="relative w-full">
                 <img
                   src={org.imageUrl}
@@ -34,10 +39,18 @@ export function Cards() {
                     <span className="absolute inset-0" />
                     {org.title}
                   </h3>
-                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">{org.description}</p>
+                  <p className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600">
+                    {org.description}
+                  </p>
                 </div>
                 <div className="relative mt-8 flex items-center gap-x-4">
-                  <Button type="submit" variant="solid" color="green" className="w-full" href={"/orgs/details"}>
+                  <Button
+                    type="submit"
+                    variant="solid"
+                    color="green"
+                    className="w-full"
+                    href={'/orgs/details'}
+                  >
                     <span>
                       Donate Now <span aria-hidden="true">&rarr;</span>
                     </span>
@@ -78,18 +91,28 @@ export function Content() {
               strokeWidth={0}
             />
           </svg>
-          <rect width="100%" height="100%" strokeWidth={0} fill="url(#e813992c-7d03-4cc4-a2bd-151760b470a0)" />
+          <rect
+            width="100%"
+            height="100%"
+            strokeWidth={0}
+            fill="url(#e813992c-7d03-4cc4-a2bd-151760b470a0)"
+          />
         </svg>
       </div>
       <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
         <div className="lg:col-span-2 lg:col-start-1 lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
           <div className="lg:pr-4">
             <div className="lg:max-w-lg">
-              <p className="text-base font-semibold leading-7 text-emerald-600">What is GiveMore?</p>
-              <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">About Us</h1>
+              <p className="text-base font-semibold leading-7 text-emerald-600">
+                What is GiveMore?
+              </p>
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                About Us
+              </h1>
               <p className="mt-6 text-xl leading-8 text-gray-700">
-                Aliquet nec orci mattis amet quisque ullamcorper neque, nibh sem. At arcu, sit dui mi, nibh dui, diam
-                eget aliquam. Quisque id at vitae feugiat egestas.
+                Aliquet nec orci mattis amet quisque ullamcorper neque, nibh
+                sem. At arcu, sit dui mi, nibh dui, diam eget aliquam. Quisque
+                id at vitae feugiat egestas.
               </p>
             </div>
           </div>
@@ -105,15 +128,19 @@ export function Content() {
           <div className="lg:pr-4">
             <div className="max-w-xl text-base leading-7 text-gray-700 lg:max-w-lg">
               <p>
-                Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris semper sed amet
-                vitae sed turpis id. Id dolor praesent donec est. Odio penatibus risus viverra tellus varius sit neque
-                erat velit. Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget risus enim. Mattis mauris
-                semper sed amet vitae sed turpis id.
+                Faucibus commodo massa rhoncus, volutpat. Dignissim sed eget
+                risus enim. Mattis mauris semper sed amet vitae sed turpis id.
+                Id dolor praesent donec est. Odio penatibus risus viverra tellus
+                varius sit neque erat velit. Faucibus commodo massa rhoncus,
+                volutpat. Dignissim sed eget risus enim. Mattis mauris semper
+                sed amet vitae sed turpis id.
               </p>
               <p className="mt-8">
-                Et vitae blandit facilisi magna lacus commodo. Vitae sapien duis odio id et. Id blandit molestie auctor
-                fermentum dignissim. Lacus diam tincidunt ac cursus in vel. Mauris varius vulputate et ultrices hac
-                adipiscing egestas. Iaculis convallis ac tempor et ut. Ac lorem vel integer orci.
+                Et vitae blandit facilisi magna lacus commodo. Vitae sapien duis
+                odio id et. Id blandit molestie auctor fermentum dignissim.
+                Lacus diam tincidunt ac cursus in vel. Mauris varius vulputate
+                et ultrices hac adipiscing egestas. Iaculis convallis ac tempor
+                et ut. Ac lorem vel integer orci.
               </p>
             </div>
           </div>
@@ -142,53 +169,64 @@ export function Hero() {
         to make the world better.
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Feugiat nisl pretium fusce id velit ut tortor pretium viverra.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Feugiat nisl pretium
+        fusce id velit ut tortor pretium viverra.
       </p>
-
     </Container>
   )
 }
 
 export async function Causes({ id }: any) {
-// Function to format the timestamp as 'mm/dd/yyy'
-const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${month}/${day}/${year}`;
-};
+  // Function to format the timestamp as 'mm/dd/yyy'
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp)
+    const year = date.getFullYear()
+    const month = (date.getMonth() + 1).toString().padStart(2, '0') // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0')
+    return `${month}/${day}/${year}`
+  }
 
-// Function to format the time as 'h:mm a' (e.g., '2:30 PM')
-const formatTime = (timestamp) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-}; 
+  // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+  const formatTime = (timestamp) => {
+    const date = new Date(timestamp)
+    return date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+    })
+  }
 
   const { data: events } = await supabase
     .from('event')
     .select('*, charity ( id, name )')
     .eq('charity_id', id)
-  console.log(id + "!!!!!")
+  console.log(id + '!!!!!')
   console.log(events)
 
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Latest Events</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Latest Events
+          </h2>
           <p className="mt-2 text-lg leading-8 text-gray-600">
             Check out this charity&apos;s latest events.
           </p>
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {events?.map((event) => (
-            <article key={event.id} className="flex flex-col items-start justify-between-center">
-              <BannerImg folder1={"event"} charityID={id} recordID={event.id} />
+            <article
+              key={event.id}
+              className="justify-between-center flex flex-col items-start"
+            >
+              <BannerImg folder1={'event'} charityID={id} recordID={event.id} />
               <div className="max-w-xl">
                 <div className="mt-5 flex items-center gap-x-4 text-xs">
                   <time className="text-gray-500">
-                    {formatDate(event.start_date) + ' ' + formatTime(event.start_date)}
+                    {formatDate(event.start_date) +
+                      ' ' +
+                      formatTime(event.start_date)}
                   </time>
                 </div>
                 <div className="group relative">
@@ -198,7 +236,9 @@ const formatTime = (timestamp) => {
                       {event.name}
                     </a>
                   </h3>
-                  <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">{event.description}</p>
+                  <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">
+                    {event.description}
+                  </p>
                 </div>
               </div>
             </article>
@@ -210,11 +250,7 @@ const formatTime = (timestamp) => {
 }
 
 export async function ContentLeft({ id }: any) {
-
-  const { data: orgs } = await supabase
-    .from('charity')
-    .select('*')
-    .eq('id', id)
+  const { data: orgs } = await supabase.from('charity').select('*').eq('id', id)
 
   return (
     <div className="bg-white py-24 sm:py-32">
@@ -224,18 +260,23 @@ export async function ContentLeft({ id }: any) {
             <>
               <div key={org.id}>
                 <div className="text-base leading-7 text-gray-700 lg:max-w-lg">
-                  <p className="text-base font-semibold leading-7 text-[#01794A]">Donate to Us</p>
+                  <p className="text-base font-semibold leading-7 text-[#01794A]">
+                    Donate to Us
+                  </p>
                   <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                     {org.name}
                   </h1>
                   <div className="max-w-xl">
-                    <p className="mt-6">
-                      {org.about}
-                    </p>
+                    <p className="mt-6">{org.about}</p>
                   </div>
                 </div>
-              </div><div className="lg:pr-4">
-                <BannerImg folder1={"charity"} charityID={org.id} recordID={org.id} />
+              </div>
+              <div className="lg:pr-4">
+                <BannerImg
+                  folder1={'charity'}
+                  charityID={org.id}
+                  recordID={org.id}
+                />
               </div>
             </>
           ))}
@@ -247,28 +288,37 @@ export async function ContentLeft({ id }: any) {
 
 export async function Receipts({ id }: any) {
   const eventID = id
-  const { data: events, error: events_error } = await supabase.from('event').select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name, contact )').eq('id', eventID)
+  const { data: events, error: events_error } = await supabase
+    .from('event')
+    .select(
+      '*, charity ( id, name ), beneficiaries ( id, beneficiary_name, contact )',
+    )
+    .eq('id', eventID)
 
-  const charityID = events?.map(event => event.charity?.id);
-  const { data: images, error } = await supabase
-    .storage
+  const charityID = events?.map((event) => event.charity?.id)
+  const { data: images, error } = await supabase.storage
     .from('uploads')
     .list(charityID?.toString(), {
       limit: 100,
       offset: 0,
-      sortBy: { column: "name", order: "asc" },
+      sortBy: { column: 'name', order: 'asc' },
     })
-  const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + charityID + "/"
+  const CDNURL =
+    'https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/' +
+    charityID +
+    '/'
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <h2 className="text-2xl font-bold tracking-tight text-gray-900">Uploaded Receipts</h2>
+        <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+          Uploaded Receipts
+        </h2>
 
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {images?.map((image) => {
             return (
-              <div key={CDNURL + "/" + image.name}>
-                <img src={CDNURL + "/" + image.name} />
+              <div key={CDNURL + '/' + image.name}>
+                <img src={CDNURL + '/' + image.name} />
               </div>
             )
           })}
@@ -279,8 +329,10 @@ export async function Receipts({ id }: any) {
 }
 
 export async function ContentRight({ id }: any) {
-
-  const { data, error } = await supabase.from('drop_off_location').select('*').eq('charity_id', id)
+  const { data, error } = await supabase
+    .from('drop_off_location')
+    .select('*')
+    .eq('charity_id', id)
 
   return (
     <div className="bg-white py-24 sm:py-32">
@@ -296,18 +348,19 @@ export async function ContentRight({ id }: any) {
             </div>
           </div>
           <div>
-            <div className="text-base leading-7 text-gray-700 lg:max-w-lg space-y-10">
+            <div className="space-y-10 text-base leading-7 text-gray-700 lg:max-w-lg">
               <div>
-                <p className="text-base font-semibold leading-7 text-[#01794A]">Drop-off Locations</p>
+                <p className="text-base font-semibold leading-7 text-[#01794A]">
+                  Drop-off Locations
+                </p>
                 <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                   Here, you can drop off your donations.
                 </h1>
               </div>
               <div className="space-y-5">
-                {data?.map(address => (
+                {data?.map((address) => (
                   <div className="max-w-xl" key={address.id}>
                     <dt className="inline font-semibold text-gray-900">
-                      
                       Address:
                     </dt>{' '}
                     <dd className="inline">{address.address}</dd>
@@ -324,34 +377,34 @@ export async function ContentRight({ id }: any) {
 
 export async function GraphTemp({ id }: any) {
   //Total Cash Donations Received Query (INCOME)
-  const { data: totalCashDonations, error: totalCashDonationsError } = await supabase
-  .from('total_cash_donations_received')
-  .select('total_cash_donations_received, month')
-  .eq('charity_id', id)
-  .limit(12);
-  const totalCashData = totalCashDonations?.flatMap(totalCash => (
-    [
-        {
-            name: totalCash.month,
-            totalCashDonations: totalCash.total_cash_donations_received,
-        }
-    ]
-    )) || [];
+  const { data: totalCashDonations, error: totalCashDonationsError } =
+    await supabase
+      .from('total_cash_donations_received')
+      .select('total_cash_donations_received, month')
+      .eq('charity_id', id)
+      .limit(12)
+  const totalCashData =
+    totalCashDonations?.flatMap((totalCash) => [
+      {
+        name: totalCash.month,
+        totalCashDonations: totalCash.total_cash_donations_received,
+      },
+    ]) || []
 
   //Total In-Kind Transactions Received Query (INCOME)
-  const { data: totalInKindTransactions, error: totalInKindTransactionsError } = await supabase
-  .from('total_inkind_donation_transactions')
-  .select('total_inkind_donation_transactions, month')
-  .eq('charity_id', id)
-  .limit(12);
-  const totalInKindData = totalInKindTransactions?.flatMap(totalInKind => (
-    [
-        {
-            name: totalInKind.month,
-            totalInKindTransactions: totalInKind.total_inkind_donation_transactions,
-        }
-    ]
-    )) || [];
+  const { data: totalInKindTransactions, error: totalInKindTransactionsError } =
+    await supabase
+      .from('total_inkind_donation_transactions')
+      .select('total_inkind_donation_transactions, month')
+      .eq('charity_id', id)
+      .limit(12)
+  const totalInKindData =
+    totalInKindTransactions?.flatMap((totalInKind) => [
+      {
+        name: totalInKind.month,
+        totalInKindTransactions: totalInKind.total_inkind_donation_transactions,
+      },
+    ]) || []
   return (
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -359,27 +412,30 @@ export async function GraphTemp({ id }: any) {
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Organization Statistics
           </h2>
-          <p className="mt-6 text-base leading-7 italic text-gray-600">           
-          The information presented here is derived from the latest 12 months of this charity statistics.
+          <p className="mt-6 text-base italic leading-7 text-gray-600">
+            The information presented here is derived from the latest 12 months
+            of this charity statistics.
           </p>
-          <br/>
-          <h2 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-4x1">Total Cash and In-Kind Donations</h2>
+          <br />
+          <h2 className="sm:text-4x1 text-2xl font-bold tracking-tight text-gray-900">
+            Total Cash and In-Kind Donations
+          </h2>
           <p className="mt-2 text-base leading-8 text-gray-600">
-                How much cash donations and in-kind donation transactions are received per month.
+            How much cash donations and in-kind donation transactions are
+            received per month.
           </p>
-          <br/>
+          <br />
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-            <TotalCashDonationsChart CashData={totalCashData}/>
-            <TotalInKindTransactionsChart InKindData={totalInKindData} />
-            </div>
+        <div className="flex flex-col md:flex-row md:gap-10">
+          <TotalCashDonationsChart CashData={totalCashData} />
+          <TotalInKindTransactionsChart InKindData={totalInKindData} />
+        </div>
       </div>
     </div>
   )
 }
 
 export async function News({ id }: any) {
-
   const { data: posts } = await supabase
     .from('campaign_post')
     .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
@@ -389,15 +445,24 @@ export async function News({ id }: any) {
     <div className="bg-white py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Latest News</h2>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            Latest News
+          </h2>
           <p className="mt-2 text-lg leading-8 text-gray-600">
-          Read posts from this Organization.
+            Read posts from this Organization.
           </p>
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
           {posts?.map((post) => (
-            <article key={post.id} className="flex flex-col items-start justify-between-center">
-              <BannerImg folder1={"campaign_post"} charityID={id} recordID={post.id} />
+            <article
+              key={post.id}
+              className="justify-between-center flex flex-col items-start"
+            >
+              <BannerImg
+                folder1={'campaign_post'}
+                charityID={id}
+                recordID={post.id}
+              />
               <div className="max-w-xl">
                 {/* <div className="mt-8 flex items-center gap-x-4 text-xs">
                         <time dateTime={post.datetime} className="text-gray-500">
@@ -411,7 +476,9 @@ export async function News({ id }: any) {
                       {post.title}
                     </a>
                   </h3>
-                  <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">{post.text}</p>
+                  <p className="mt-2 line-clamp-3 text-sm leading-6 text-gray-600">
+                    {post.text}
+                  </p>
                 </div>
                 {/* <div className="relative mt-8 flex items-center gap-x-4">
                         <img src={post.author.imageUrl} alt="" className="h-10 w-10 rounded-full bg-gray-100" />
@@ -434,17 +501,24 @@ export async function News({ id }: any) {
   )
 }
 
-export function MediaObject({ heading, subheading }: { heading: String, subheading: String }) {
+export function MediaObject({
+  heading,
+  subheading,
+}: {
+  heading: String
+  subheading: String
+}) {
   return (
     <div className="flex">
       <div className="pr-10">
         <h4 className="text-lg font-bold">{heading}</h4>
-        <p className="mt-1 text-justify">
-          {subheading}
-        </p>
+        <p className="mt-1 text-justify">{subheading}</p>
       </div>
       <div className="ml-4 flex-shrink-0">
-        <img src="https://www.nicepng.com/png/detail/640-6404773_umbrella-corp-png-umbrella-corporation-logo-vector.png" className="rounded-full h-20 w-20"></img>
+        <img
+          src="https://www.nicepng.com/png/detail/640-6404773_umbrella-corp-png-umbrella-corporation-logo-vector.png"
+          className="h-20 w-20 rounded-full"
+        ></img>
       </div>
     </div>
   )

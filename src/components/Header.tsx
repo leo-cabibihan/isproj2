@@ -93,7 +93,7 @@ function MobileNavigation({ session }) {
             <MobileNavLink href="#causes">Causes</MobileNavLink>
 
             <hr className="m-2 border-slate-300/40" />
-            {!isLoggedIn ? (
+            {isLoggedIn ? (
               <MobileNavLink href="/login-post">Open Dashboard</MobileNavLink>
             ) : (
               <MobileNavLink href="/login">Sign in</MobileNavLink>
