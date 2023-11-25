@@ -98,7 +98,7 @@ export async function GoodsForm({ id } : any) {
         await supabase.from('inventory_item').insert(item_details);
         revalidatePath('/');
     };
-
+ 
     return (
         <>
             <form className="space-y-6" action={handleSubmit} method="POST">

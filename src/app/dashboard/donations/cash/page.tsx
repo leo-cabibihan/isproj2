@@ -125,7 +125,7 @@ export default async function ExternalTable() {
 
         console.log("SUCCESS??? ", success)
     }
-
+ 
     return (
         <>
             <div className="sm:flex sm:items-center py-9">

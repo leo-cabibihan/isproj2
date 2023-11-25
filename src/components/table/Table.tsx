@@ -1,6 +1,6 @@
 // @ts-nocheck 
 import React from 'react'
-
+ 
 export function Table<T extends {}>({
   columnNames,
   tableRows,

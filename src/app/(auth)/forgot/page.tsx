@@ -69,4 +69,4 @@ export default function Forgot({ searchParams }: { searchParams: { [key: string]
 
     </>
   )
-}
+} 

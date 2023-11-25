@@ -33,7 +33,7 @@ export function QRUpload({ folderName, charityID, recordID }: any) {
         }
 
 
-    }
+    }  
 
     useEffect(() => {
         if (folderName && charityID && recordID) {

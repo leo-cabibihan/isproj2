@@ -20,5 +20,5 @@ export default function CashReceipt() {
                 </div>
             </div>
         </>
-    )
+    ) 
 }

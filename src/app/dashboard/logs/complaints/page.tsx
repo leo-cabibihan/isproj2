@@ -55,7 +55,7 @@ export default async function Page() {
         CharityLog("FILED APPEAL", error)
         console.log("APPEALS ERROR IS: ", error)
         revalidatePath('/');
-    };
+    }; 
 
     return (
         <>

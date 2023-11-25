@@ -42,7 +42,7 @@ export default async function Settings() {
         revalidatePath('/');
         console.log("ADDRESS ERROR ", error)
     };
-
+ 
     const deleteAddress = async (formData: FormData) => {
         'use server'
         const addressId = formData.get("id")

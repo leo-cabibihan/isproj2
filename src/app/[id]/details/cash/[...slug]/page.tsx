@@ -19,7 +19,7 @@ export default function CashQR({ params }: any) {
         if (data) {
             console.log("SUCCESS")
         }
-    }
+    } 
 
     return (
         <>

@@ -18,7 +18,7 @@ export default function Pending() {
           <p className="text-base font-semibold leading-7 text-[#01794A]">Verification Pending</p>
           <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Pending</h2>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Your Charity's Application is still pending. Check your email for updates.
+            Your Charity&apos;s Application is still pending. Check your email for updates.
           </p>
           <div className="mt-10">
               <a href="/" className="text-sm font-semibold leading-7 text-blue-600">
@@ -30,4 +30,4 @@ export default function Pending() {
         <Footer></Footer>
       </>
     )
-  }
+  } 

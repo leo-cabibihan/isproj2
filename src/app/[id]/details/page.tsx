@@ -72,4 +72,4 @@ export default async function Organization({ params }: any) {
       </DefaultLayout>
     </>
   )
-}  
+}   

@@ -104,7 +104,7 @@ function MobileNavigation({ session }) {
     </Popover>
   )
 }
-
+ 
 export function Header({ session }) {
   console.log('i am header', session)
 

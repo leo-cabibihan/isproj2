@@ -53,8 +53,8 @@ export default async function Organization({ params }: any) {
         await supabase.from('charity').update(charity).eq("id", charityId)
         await AdminLog("Froze charity " + charityName + ".")
         revalidatePath('/');
-    };
-
+    }; 
+ 
     return (
         <>
             {orgs?.map(org => (

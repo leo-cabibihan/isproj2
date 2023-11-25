@@ -25,5 +25,5 @@ export async function POST(request: Request) {
     const recordID = data![0].id
 
     return NextResponse.redirect(`${requestUrl.origin}/${orgID}/details/cash/${orgID}/${recordID}`)
-
+ 
 }

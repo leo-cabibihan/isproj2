@@ -24,4 +24,4 @@ export function SlimLayout({ children, backgroundImage }: { children: React.Reac
       </div>
     </>
   )
-}
+} 

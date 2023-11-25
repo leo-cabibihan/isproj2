@@ -38,5 +38,5 @@ export async function POST(request: Request) {
   return NextResponse.redirect(`${requestUrl.origin}/email-pending`, {
     status: 301,
   })
-
+ 
 }

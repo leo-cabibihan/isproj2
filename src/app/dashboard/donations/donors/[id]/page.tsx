@@ -50,7 +50,7 @@ export default async function DonorHistory({params} : any) {
     .eq("donor_id", donorID)
     .eq("charity_id", charity_id)
     
-
+ 
     console.log("donor_id is: " + donorID)
     
     return (

@@ -25,6 +25,6 @@ function TotalInKindDonatedChart({ InKindDonatedData }: TotalInKindDonatedProps)
             </AreaChart>
         </ResponsiveContainer>
     )
-}
+} 
 
 export default TotalInKindDonatedChart;

@@ -50,7 +50,7 @@ export default async function Page() {
 
     const event_id = last_event?.map(event => event.id)
     console.log("LAST EVENT'S ID IS: " + (event_id))
-
+ 
     const handleSubmit = async (formData: FormData) => {
         'use server'
         const event = {

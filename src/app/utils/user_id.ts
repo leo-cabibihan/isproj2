@@ -12,7 +12,7 @@ export async function GetUID() {
     const uid = session?.user.id
 
     return (uid)
-}
+} 
 
 export async function GetEmail() {
     const cookieStore = cookies()
@@ -24,5 +24,5 @@ export async function GetEmail() {
     const email = session?.user.email
 
     return (email)
-}
+} 
 

@@ -81,10 +81,10 @@ export default async function Page() {
                 <div className="sm:flex-auto">
                     {charity_member?.map((charity, index) => (
                     <h2 key={index} className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                        {charity.charity?.name}'s Donation Statistics
+                        {charity.charity?.name}&apos;s Donation Statistics
                     </h2>
                     ))}
-                    <p className="italic text-gray-600">What's displayed here is based on the most recent 12 months of data.</p>
+                    <p className="italic text-gray-600">What&apos;s displayed here is based on the most recent 12 months of data.</p>
                 </div>
             </div>     
             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4x1">Incomes</h2>
@@ -112,4 +112,4 @@ export default async function Page() {
             </div>
         </>
     )
-}
+} 

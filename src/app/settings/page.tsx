@@ -22,7 +22,7 @@ const navigation = [
   { name: 'Settings', href: '/settings', current: true },
   { name: 'Causes', href: '/causes', current: false }
 ]
-
+ 
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Sign out', href: '#' },

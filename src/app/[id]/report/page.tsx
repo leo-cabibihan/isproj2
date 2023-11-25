@@ -66,7 +66,7 @@ export default async function Report({ params }: any) {
       subject: 'Complaint Received',
       body,
     })
-  }
+  } 
 
   return (
     <>

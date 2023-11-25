@@ -24,7 +24,7 @@ export default async function Auditlog() {
         const date = new Date(timestamp);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     };
-
+ 
 
     const uid = await GetUID()
     

@@ -121,4 +121,4 @@ export default async function Example({ params }: any) {
       ))}
     </DefaultLayout>
   )
-}
+} 

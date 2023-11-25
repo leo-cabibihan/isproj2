@@ -35,7 +35,7 @@ export async function POST(request: Request) {
         province: formData.province,
         zipcode: formData.zipcode
     }
-
+ 
     console.log("NEW USER??? " + new_user)
 
     console.log("FORMFIELDS WORK YEY ", formData.email, formData.password)

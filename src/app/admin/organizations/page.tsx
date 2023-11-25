@@ -11,7 +11,7 @@ export default async function ViewCharity() {
 
     const { data: organizations } = await supabase.from('charity').select('*').eq('charity_verified', true)
 
-    return (
+    return ( 
         <>
             <div className="sm:flex sm:items-center py-9">
                 <div className="sm:flex-auto">

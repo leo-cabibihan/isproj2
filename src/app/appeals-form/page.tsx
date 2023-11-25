@@ -44,7 +44,7 @@ export default async function Appeals({ searchParams }: { searchParams: { [key: 
       complaint_id: formData.get("complaint_id"),
       explanation: formData.get("explanation")
     };
-
+ 
     const { data, error } = await supabase.from('charity_appeals').insert(appeals).select()
     CharityLog("FILED APPEAL", error)
     console.log("APPEALS ERROR IS: ", error)

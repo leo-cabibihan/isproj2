@@ -42,8 +42,7 @@ export function ImageUpload({ folderName, charityID, recordID }: any) {
             getImages()
         }
     }, [folderName && charityID && recordID])
-
-
+ 
     async function uploadImage(e: any) {
         let file = e.target.files[0]
 

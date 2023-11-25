@@ -10,7 +10,7 @@ import { TableContainer, TableHeaderButton, TableContent, Table, Thead, Tr, Td, 
 import { revalidatePath } from "next/cache";
 
 export const revalidate = 0;
-
+ 
 export default async function Page() {
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())

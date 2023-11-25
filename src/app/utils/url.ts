@@ -8,4 +8,5 @@ export const getURL = () => {
     // Make sure to including trailing `/`.
     url = url.charAt(url.length - 1) === '/' ? url : `${url}/`;
     return url;
-  };
+  }; 
+  

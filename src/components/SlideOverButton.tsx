@@ -8,7 +8,7 @@ import { Button, VariantKey, ColorKey } from './Button'
 
 export default function SlideOver({ buttontext, children, variant, color, title }: { buttontext: String, children: React.ReactNode, variant: VariantKey, color: ColorKey, title: String }) {
   const [open, setOpen] = useState(false)
-
+ 
   return (
     <>
       <Button variant={variant} color={color} onClick={() => setOpen(true)}>{buttontext}</Button>

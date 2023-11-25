@@ -20,3 +20,4 @@ export default function Alert({message}: {message:string}) {
     </div>
   )
 }
+ 

@@ -28,7 +28,7 @@ export default async function Page() {
         const date = new Date(timestamp);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     };
-
+ 
 
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)

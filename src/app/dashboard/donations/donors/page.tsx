@@ -25,7 +25,7 @@ export default async function ListofDonors() {
     console.log("CHARITY ID IS: " + charity_id)
    //const {data: donationCount, error} = await supabase
    //.from("")
-
+ 
     return (
         <>
             <div className="sm:flex sm:items-center py-9">

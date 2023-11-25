@@ -7,4 +7,4 @@ export function DisplayError (URL: any, error: any) {
         //DISPLAYS ERROR MESSAGE IN PAGE
         return redirect(URL)
       }
-}
+} 

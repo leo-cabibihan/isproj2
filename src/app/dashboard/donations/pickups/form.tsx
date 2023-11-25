@@ -63,7 +63,7 @@ export function PickupForm({id}: {id:number}) {
         console.log("I added a field, what's here?", field)
         if (field)       setFormFields({...formFields, inventory_item: formFields.inventory_item.concat(field)})
         
-    }
+    } 
 
     const removeFields = (id: number) => {
         setFormFields({...formFields, inventory_item: formFields.inventory_item.filter((item: any) => item.id !== id)})

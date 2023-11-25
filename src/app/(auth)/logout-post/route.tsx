@@ -34,4 +34,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.redirect(requestUrl.origin, {
         status: 301,
     })
-}
+} 

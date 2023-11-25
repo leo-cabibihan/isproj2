@@ -88,12 +88,12 @@ export default async function donationHistory() {
                     <div className="sm:flex sm:items-center">
                       <div className="sm:flex-auto">
                         {donors?.map(donor =>(
-                          <h1 className="text-base font-semibold leading-6 text-gray-900">
+                          <h1 className="text-base font-semibold leading-6 text-gray-900" key={donor.name}>
                             {donor.name + "'s Donation History"}                 
                           </h1>
                          ))}
                         <p className="mt-2 text-sm text-gray-700">
-                          Here you'll see all of your donations whether it's cash or an in-kind donation.
+                          Here you&apos;ll see all of your donations whether it&apos;s cash or an in-kind donation.
                         </p>
                       </div>
                     </div>

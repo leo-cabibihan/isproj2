@@ -62,7 +62,7 @@ export default function Forgot({ searchParams }: { searchParams: { [key: string]
             alt=""
           />
         </div>
-      </div>
+      </div> 
 
     </>
   )

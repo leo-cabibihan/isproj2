@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 }
 
 export default async function Register({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
-  
+   
   return (
     <>
       <SlimLayout backgroundImage={"https://c1.wallpaperflare.com/preview/770/967/632/door-wood-door-office-office-interior.jpg"}>

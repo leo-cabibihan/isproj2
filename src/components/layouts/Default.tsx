@@ -20,4 +20,4 @@ export async function DefaultLayout({ children }: { children: React.ReactNode })
             <Footer />
         </>
     )
-}
+} 

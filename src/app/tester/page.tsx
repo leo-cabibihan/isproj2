@@ -8,4 +8,4 @@ export default function TestPage () {
         <ImageUpload folderName="test" charityID="tester" recordID="Test"/>
     )
 
-}
+} 

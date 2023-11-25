@@ -49,7 +49,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
         })
 
         console.log("SUCCESS??? ", success)
-    }
+    } 
 
     return (
         <>

@@ -82,4 +82,4 @@ export default async function Login({searchParams}: {searchParams: { [key: strin
       
     </>
   )
-}
+} 

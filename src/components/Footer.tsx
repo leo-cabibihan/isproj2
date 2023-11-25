@@ -5,7 +5,7 @@ import { Container } from '@/components/Container'
 import { Logo } from '@/components/Logo'
 import { NavLink } from '@/components/NavLink'
 import { getURL } from '@/app/utils/url'
-
+ 
 export function Footer() {
   return (
     <footer className="bg-slate-50">

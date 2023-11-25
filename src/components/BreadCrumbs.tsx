@@ -4,7 +4,6 @@
 import { HomeIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 
-
 export default function BreadCrumb({pathname}:{pathname:string}) {
   const [first, ...paths] = pathname.split("/")
   const pages = paths.map(path => ({href: path, name: path, current: paths[paths.length - 1] === path}))

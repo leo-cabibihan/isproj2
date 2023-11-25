@@ -33,7 +33,7 @@ export default async function Example() {
       city: formData.get("city"),
       province: formData.get("province")
     }
-
+ 
     const { data: new_address, error: address_error } = await supabase.from('address').insert(address).select();
     console.log("ADDRESS ERROR", address_error)
     const address_id = new_address![0].id

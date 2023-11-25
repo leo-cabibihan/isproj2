@@ -18,5 +18,5 @@ export async function AdminAuth() {
     console.log("NOT SIGNED IN")
     redirect('/login')
   }
-
+ 
 }

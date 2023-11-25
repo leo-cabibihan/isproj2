@@ -39,7 +39,7 @@ export default async function Page() {
 
     const { data: items, error } = await supabase.from('items_donation_transaction').select('*, charity ( id, name ), address ( * ), donor ( id, name )').eq('verify', false).eq('charity_id', charity_id)
     const { data: inventory, error: error_2 } = await supabase.from('inventory_item').select('*, items_donation_transaction ( *, charity ( id, name ), address ( * ), donor ( id, name ) )')
-
+ 
     return (
         <>
             <div className="sm:flex sm:items-center py-9">

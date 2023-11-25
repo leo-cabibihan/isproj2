@@ -15,7 +15,7 @@ export function Table({ children }: { children: React.ReactNode }) {
             {children}
         </table>
     )
-}
+} 
 
 export function TableContainer({ children }: { children: React.ReactNode }) {
     return (

@@ -73,4 +73,4 @@ export default function AdminRegister({ params }: any) {
       <Footer></Footer>
     </>
   )
-}
+} 

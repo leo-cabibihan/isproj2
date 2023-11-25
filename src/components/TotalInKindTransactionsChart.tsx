@@ -25,6 +25,6 @@ function TotalInKindTransactionsChart({ InKindData }: TotalInKindTransactionProp
             </AreaChart>
         </ResponsiveContainer>
     )
-}
+} 
 
 export default TotalInKindTransactionsChart;

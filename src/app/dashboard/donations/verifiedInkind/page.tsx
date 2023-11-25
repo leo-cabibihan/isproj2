@@ -86,4 +86,4 @@ export default async function VerifiedTable() {
       </TableContainer>
     </>
   )
-}
+} 

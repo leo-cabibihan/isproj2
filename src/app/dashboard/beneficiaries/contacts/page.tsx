@@ -42,7 +42,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     console.log("ERROR IS ", insert_error)
 
   };
-
+ 
   const saveChanges = async (formData: FormData) => {
     'use server'
     const contactId = formData.get("id")

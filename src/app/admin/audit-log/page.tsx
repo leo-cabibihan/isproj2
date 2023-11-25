@@ -24,7 +24,7 @@ export default async function Auditlog() {
     const formatTime = (timestamp) => {
         const date = new Date(timestamp);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-    };
+    }; 
 
 
     const { data: logs } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )')

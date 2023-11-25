@@ -77,7 +77,7 @@ export default async function Applications() {
 
     console.log("SUCCESS??? ", success)
 
-  }
+  } 
 
 
   return (

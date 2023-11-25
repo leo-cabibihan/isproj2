@@ -64,7 +64,7 @@ export default async function Expenses() {
 
     const expense_id = last_expense?.map(expense => expense.id)
     console.log("LAST EXPENSE'S ID IS: " + (expense_id))
-
+ 
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')

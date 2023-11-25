@@ -83,7 +83,7 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
         console.log("I am tired. ", error_3, idk, error)
 
     };
-
+ 
     return (
         <>
             <div className="sm:flex sm:items-center py-9">

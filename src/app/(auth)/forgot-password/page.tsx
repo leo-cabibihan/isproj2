@@ -68,4 +68,4 @@ export default function ForgotPassword({ searchParams }: { searchParams: { [key:
 
     </>
   )
-}
+} 

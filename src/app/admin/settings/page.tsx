@@ -14,7 +14,7 @@ import Alert from '@/components/Alert';
 import { Button } from '@/components/Button';
 import { TextField } from '@/components/Fields'
 import { redirect } from 'next/navigation';
-
+ 
 export default async function Settings({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
   return (
