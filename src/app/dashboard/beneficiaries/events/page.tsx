@@ -60,7 +60,8 @@ export default async function Page() {
             end_date: formData.get("end_date"),
             //photo: CDNURL,
             charity_id: formData.get("charity_id"),
-            beneficiary_id: formData.get("beneficiary_id")
+            beneficiary_id: formData.get("beneficiary_id"),
+            is_ongoing: true
         };
 
         const { data: insert_event, error: insert_error } = await supabase.from('event').insert(event);
@@ -83,6 +84,19 @@ export default async function Page() {
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
+        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+    };
+
+    const endEvent = async (formData: FormData) => {
+        'use server'
+        const eventId = formData.get("id")
+        const event = {
+            is_ongoing: false
+        };
+
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        revalidatePath('/');
+        CharityLog("ENDED EVENT " + formData.get("event_name"), update_error)
         DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
@@ -278,6 +292,13 @@ export default async function Page() {
                                                     <Button type="submit" variant="solid" color="blue" className="w-full">
                                                         <span>
                                                             Save Changes <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                                <div className="col-span-full">
+                                                    <Button formAction={endEvent} type="submit" variant="solid" color="yellow" className="w-full">
+                                                        <span>
+                                                            Mark Event as &quot;DONE&quot; <span aria-hidden="true">&rarr;</span>
                                                         </span>
                                                     </Button>
                                                 </div>
