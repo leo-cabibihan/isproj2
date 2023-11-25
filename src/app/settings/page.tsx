@@ -64,7 +64,7 @@ export default function settings() {
                             autoComplete="email"
                             required
                           />
-
+                          <br/>
                           <TextField
                             label="Old Password"
                             name="password"
@@ -72,7 +72,7 @@ export default function settings() {
                             autoComplete="current-password"
                             required
                           />
-
+                          <br/>
                           <TextField
                             label="New Password"
                             name="password"
@@ -81,12 +81,13 @@ export default function settings() {
                           />
 
                           <div className="mt-6 flex items-center justify-start gap-x-6">
-                            <button
+                            <Button
                               type="submit"
-                              className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                              variant="solid"
+                              color="yellow"
                             >
                               Update Password
-                            </button>
+                            </Button>
                           </div>
                         </div>
                       </div>
@@ -110,7 +111,7 @@ export default function settings() {
                             type="name"
                             name="name"
                           />
-
+                          <br/>
                           <TextField
                             label="Last Name"
                             placeholder="Doe"
@@ -123,25 +124,30 @@ export default function settings() {
                   </div>
 
                   <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button
+                    <Button
                       type="button"
-                      className="text-sm font-semibold leading-6 text-gray-900"
+                      variant="solid"
+                      color="slate"
                     >
                       Cancel
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                       type="submit"
-                      className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                      variant="solid"
+                      color="green"
+                      style={{ width: '100px' }}
                     >
                       Save
-                    </button>
+                    </Button>
                     <form action={'/logout-post'} method="post">
-                      <button
+                      <Button
                         type="submit"
-                        className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        variant="solid"
+                        color="red"
+                        style={{ width: '150px' }}
                       >
                         Log out
-                      </button>
+                      </Button>
                     </form>
                   </div>
                 </form>

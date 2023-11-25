@@ -436,6 +436,19 @@ export async function GraphTemp({ id }: any) {
 }
 
 export async function News({ id }: any) {
+   // Function to format the timestamp as 'mm/dd/yyy'
+   const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${month}/${day}/${year}`;
+  };
+  // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+  const formatTime = (timestamp) => {
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  };
   const { data: posts } = await supabase
     .from('campaign_post')
     .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
@@ -449,7 +462,7 @@ export async function News({ id }: any) {
             Latest News
           </h2>
           <p className="mt-2 text-lg leading-8 text-gray-600">
-            Read posts from this Organization.
+            Read posts from this Charity Organization.
           </p>
         </div>
         <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
@@ -464,11 +477,13 @@ export async function News({ id }: any) {
                 recordID={post.id}
               />
               <div className="max-w-xl">
-                {/* <div className="mt-8 flex items-center gap-x-4 text-xs">
-                        <time dateTime={post.datetime} className="text-gray-500">
-                          {post.date}
-                        </time>
-                      </div> */}
+                <div className="mt-5 flex items-center gap-x-4 text-xs">
+                  <time className="text-gray-500">
+                    {formatDate(post.date_posted) +
+                      ' ' +
+                      formatTime(post.date_posted)}
+                  </time>
+                </div>
                 <div className="group relative">
                   <h3 className="mt-2 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
                     <a href={'/' + post.id + '/news'}>

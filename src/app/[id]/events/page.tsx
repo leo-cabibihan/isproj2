@@ -33,6 +33,11 @@ export default async function Example({ params }: any) {
     const day = date.getDate().toString().padStart(2, '0');
     return `${month}/${day}/${year}`;
   };
+  // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+  const formatTime = (timestamp) => {
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  };
 
   return (
     <DefaultLayout>
