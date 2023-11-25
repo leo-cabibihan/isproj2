@@ -23,12 +23,9 @@ export async function POST(request: Request) {
     const orgID = formData.orgID
     const userID = formData.donorID
 
-    console.log("ORG ID???" + orgID)
-
     const { data: { session }, error: session_error } = await supabaseAuth.auth.getSession()
     const uid = session?.user.id
     const email = session?.user.email
-    console.log("USER ID IS: " + uid)
 
     //GETS THE DATA INSERTED INTO ADDRESS FORM
     const address = {
@@ -47,8 +44,6 @@ export async function POST(request: Request) {
     //INSERTS ADDRESS DETAILS INTO ADDRESS TABLE AND GETS THE ID OF NEW RECORD
     const { data: new_address, error: address_error } = await supabase.from('address').insert(address).select();
     const address_id = new_address![0].id
-    console.log("ADDRESS ID IS: " + address_id)
-    console.log("INSERT ERROR IS: " + address_error)
 
     const transaction = {
         charity_id: orgID,
@@ -60,8 +55,6 @@ export async function POST(request: Request) {
 
     const { data: new_item, error } = await supabase.from('items_donation_transaction').insert(transaction).select();
     const item_id = new_item![0].id
-    console.log("ITEM ID IS: " + item_id)
-    console.log("INSERT ERROR (2) IS: ", error)
 
     //ITERATES THROUGH THE ITEM ARRAY (Line 32), CONVERTS THE VALUE OF ISPERISHABLE SELECTFIELD INTO BOOL (Line 33) 
     for (i = 0; i < item.length; i++) {
@@ -72,11 +65,6 @@ export async function POST(request: Request) {
 
     //INSERTS DATA OF ITEMS ARRAY INTO RESPECTIVE TABLE
     const { data: item_data, error: item_error } = await supabase.from('inventory_item').insert(item).select()
-    console.log("INSERT ERROR (3) IS: ", item_error)
-
-    console.log("DONATION SUCCESS! ", new_item, item_data)
-
-    console.log('THIS WORKS ', email)
 
     const body = render(<ReceiptEmail heading={"YOUR DONATION RECEIPT"}
         content={new_item} content_2={item_data}/>);

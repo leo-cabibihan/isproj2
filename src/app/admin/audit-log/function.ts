@@ -35,6 +35,6 @@ export async function CharityLog(action: any, crud_error: any) {
         console.log("ERROR IS: ", error)
     }
     else if (crud_error) {
-        console.log("U suck lmao.")
+        console.log("UH OH.")
     }
 }

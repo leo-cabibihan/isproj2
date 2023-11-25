@@ -29,7 +29,6 @@ const formatTime = (timestamp) => {
   const supabase = createServerActionClient({ cookies: () => cookieStore })
 
   const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-  console.log("SESSION ID IS: " + session?.user.id)
 
   const { data: charity } = await supabase.from('charity').select("*").eq("charity_verified", true)
   const { data, error } = await supabase.from('drop_off_location').select('*')
@@ -94,7 +93,7 @@ const formatTime = (timestamp) => {
                     <p className="text-base font-semibold leading-7 text-emerald-600">What is GiveMore?</p>
                     <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">About Us</h1>
                     <p className="mt-6 text-xl leading-8 text-gray-700">
-                    GiveMore connects you with charities and causes you're passionate about. With a few clicks, you can explore different charities, learn about their missions, and make a direct impact by donating. It's as easy as choosing your donation amount and method. Your giving journey doesn't end with a donation; it's an ongoing connection with the causes you support.
+                    GiveMore connects you with charities and causes you&apos;re passionate about. With a few clicks, you can explore different charities, learn about their missions, and make a direct impact by donating. It&apos;s as easy as choosing your donation amount and method. Your giving journey doesn&apos;t end with a donation; it&apos;s an ongoing connection with the causes you support.
                     </p>
                   </div>
                 </div>

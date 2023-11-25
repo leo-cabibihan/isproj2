@@ -25,8 +25,6 @@ export async function POST(request: Request) {
     },
   })
 
-  console.log(user, error)
-
   if (userType === 'Charity Organization') {
     const charityMember = {
       user_uuid: user?.id,
@@ -35,13 +33,9 @@ export async function POST(request: Request) {
     const { data: member, error } = await supabase
       .from('charity_member')
       .insert(charityMember)
-    console.log(member, error)
 
     //CHECKS FOR SIGNUP ERRORS
-    console.log("I am error", error)
     if (error) {
-      console.log("I should redirect")
-
       //DISPLAYS ERROR MESSAGE IN PAGE
       return NextResponse.redirect(`${requestUrl.origin}/register?err=${signup_error}`, { status: 301 })
     }
@@ -58,13 +52,9 @@ export async function POST(request: Request) {
     }
 
     const { data: donor_data, error } = await supabase.from('donor').insert(donor)
-    console.log(donor_data, error)
 
     //CHECKS FOR SIGNUP ERRORS
-    console.log("I am error", error)
     if (error) {
-      console.log("I should redirect")
-
       //DISPLAYS ERROR MESSAGE IN PAGE
       return NextResponse.redirect(`${requestUrl.origin}/register?err=${signup_error}`, { status: 301 })
     }

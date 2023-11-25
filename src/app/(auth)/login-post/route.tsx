@@ -10,15 +10,12 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const cookieStore = cookies()
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
-  console.log("SO THE GET METHOD WORKS")
   const {
     data: { session },
     error: sessionError,
   } = await supabase.auth.getSession()
 
   const user_id = session?.user.id
-
-  console.log("THE USER'S ID IS ", user_id)
 
   // //Checks if current user is a charity member or donor (It works)
   const { data: donor, error: error_1 } = await supabase
@@ -37,24 +34,20 @@ export async function GET(request: Request) {
   if (
     donor?.length === 1
   ) {
-    console.log("HE'S A DONOR")
     return NextResponse.redirect(`${requestUrl.origin}/settings`, { status: 301 })
   } else if (
     charity_member?.length === 1
   ) {
-    console.log("HE'S A CHARITY GUY")
     return NextResponse.redirect(`${requestUrl.origin}/dashboard/settings`, {
       status: 301,
     })
   } else if (
     admin?.length === 1
   ) {
-    console.log("HE'S AN ADMIN")
     return NextResponse.redirect(`${requestUrl.origin}/admin/applications`, {
       status: 301,
     })
   } else {
-    console.log("HE'S A BITCHASS POSER STFU")
     return NextResponse.redirect(`${requestUrl.origin}`, { status: 301 })
   }
 }
@@ -80,18 +73,15 @@ export async function POST(request: Request) {
   })
 
   //CHECKS FOR LOGIN ERRORS
-  // console.log("I am error", error)
   if (error) {
-    // console.log("I should redirect")
 
     //DISPLAYS ERROR MESSAGE IN PAGE
     return NextResponse.redirect(`${requestUrl.origin}/login?err=${error.message}`, {
       status: 301,
     })
   }
-  // console.log("y am I here")
+
   const user_id = user?.id
-  // console.log('UUID IS: ', user_id)
 
   // //Checks if current user is a charity member or donor (It works)
   const { data: donor, error: error_1 } = await supabase
@@ -106,11 +96,6 @@ export async function POST(request: Request) {
     .from('system_owner')
     .select('*')
     .eq('id', user_id)
-
-  // console.log(donor)
-  // console.log(charity_member)
-  // console.log(admin)
-
 
   if (donor?.length === 1) {
     return NextResponse.redirect(`${requestUrl.origin}/settings`, {

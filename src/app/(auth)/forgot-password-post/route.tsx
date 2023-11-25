@@ -16,7 +16,6 @@ export async function POST(request: Request) {
     })
 
     if (error) {
-        // console.log("I should redirect")
 
         //DISPLAYS ERROR MESSAGE IN PAGE
         return NextResponse.redirect(`${requestUrl.origin}/forgot-password?err=${error.message}`, { status: 301 })

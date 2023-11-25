@@ -114,7 +114,7 @@ export default async function Page() {
 
                 <TableContainer>
                 {charity_member?.map(charityId =>(
-                    <TableHeaderButton header={charityId.charity.name + "'s Posts"}>
+                    <TableHeaderButton key={charityId.charity?.name} header={charityId.charity.name + "'s Posts"}>
                     <SlideOver title="Create Post Details" buttontext={"Create Post"} variant="solid" color="blue">
                         <form className="space-y-6" action={handleSubmit} method="POST">
                             <TextField
@@ -164,7 +164,7 @@ export default async function Page() {
                         <div className="mx-auto max-w-2xl lg:max-w-4xl">
                             <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Campaign Posts</h2>
                             <p className="mt-2 text-lg leading-8 text-gray-600">
-                                Here you can see this charity's posts.
+                                Here you can see this charity&apos;s posts.
                             </p>
                             <div className="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
                                 {posts?.map((post) => (

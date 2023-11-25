@@ -32,7 +32,6 @@ const formatTime = (timestamp) => {
       offset: 0,
       sortBy: { column: "name", order: "asc" },
     })
-  console.log('Charity ID:', charityID);
   const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/campaign_post/" + charityID + "/" + postID + "/"
 
   return (

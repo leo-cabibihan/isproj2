@@ -12,8 +12,6 @@ export async function POST(request: Request) {
 
     const orgID = formData.charity_id
 
-    console.log("PASSED STUFF" + formData.amount)
-
     const cash = {
         amount: parseInt(formData.amount),
         charity_id: formData.charity_id,
@@ -23,8 +21,6 @@ export async function POST(request: Request) {
     }
 
     const { data, error } = await supabase.from('cash').insert(cash).select();
-
-    console.log('CASH ERROR', error)
 
     const recordID = data![0].id
 

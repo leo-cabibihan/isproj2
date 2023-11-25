@@ -48,7 +48,6 @@ export async function POST(request: Request) {
   const { data: admin, error: adminError } = await supabase
     .from('system_owner')
     .insert(system_owner)
-  console.log(admin, adminError)
 
   return NextResponse.redirect(`${requestUrl.origin}/email-pending`, {
     status: 301,

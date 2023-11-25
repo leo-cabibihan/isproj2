@@ -13,8 +13,6 @@ export async function POST(request: Request) {
 
     const { data, error } = await supabase.auth.resetPasswordForEmail(email)
 
-    console.log("ERROR IS: " + error)
-
     //CHECKS FOR LOGIN ERRORS
     if (error) {
         //DISPLAYS ERROR MESSAGE IN PAGE

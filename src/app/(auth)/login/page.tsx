@@ -13,8 +13,6 @@ export const metadata: Metadata = {
 }
 
 export default async function Login({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
-
-  // console.log("i am search", searchParams)
   
   return (
     <>

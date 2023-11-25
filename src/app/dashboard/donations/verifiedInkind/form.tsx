@@ -17,7 +17,6 @@ export function MultilayeredForm(ID: any) {
     const [formFields, setFormFields] = useState([
         { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' },
     ])
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
     const [newDonor, setNewDonor] = useState(false)
     const [newAddress, setNewAddress] = useState(false)
@@ -62,7 +61,7 @@ export function MultilayeredForm(ID: any) {
 //e
 
     useEffect(() => {
-        console.log("DONORS LIST wtfwtf", donorslist);
+        console.log("DONORS LIST", donorslist);
     }, [donorslist]);
 
     const handleFormChange = (event, index) => {

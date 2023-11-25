@@ -14,7 +14,6 @@ import { decode, unescape } from "querystring";
 export default function AdminRegister({ params }: any) {
 
   const email = decodeURIComponent(params.slug)
-  console.log("PARAMS ARE :" + email)
 
   return (
     <>

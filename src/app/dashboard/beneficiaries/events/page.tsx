@@ -64,7 +64,6 @@ export default async function Page() {
         };
 
         const { data: insert_event, error: insert_error } = await supabase.from('event').insert(event);
-        //console.log("CDNURL is: " + CDNURL)
         revalidatePath('/');
         CharityLog("ADDED NEW EVENT " + formData.get("event_name"), event_error)
         DisplayError(`${getURL}dashboard/beneficiaries/events?err=${generic_error}`, insert_error)

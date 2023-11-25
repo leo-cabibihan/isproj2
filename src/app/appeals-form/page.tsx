@@ -21,7 +21,6 @@ export const metadata: Metadata = {
 
 export default async function Appeals({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
-  // console.log("i am search", searchParams)
   console.log("DOES IT WORK???? MAYBE: " + await GetUID())
   const uid = await GetUID()
   const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)

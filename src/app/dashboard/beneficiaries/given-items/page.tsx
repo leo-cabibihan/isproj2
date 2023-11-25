@@ -48,12 +48,12 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
 
     const { data: inventory, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', charity_id)
 
-    const { data: beneficiary_items, error: bs_error } = await supabase
+    const { data: beneficiary_items, error: ben_error } = await supabase
         .from('beneficiary_items')
         .select('*, inventory_item ( id, name ), charity ( id, name ), event (id, name)')
         .eq('charity_id', charity_id)
 
-    console.log("hello I suck ", bs_error)
+    console.log("hello I am in pain. ", ben_error)
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
@@ -80,7 +80,7 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
         if (errors.some(id => id)) redirect(`/dashboard/beneficiaries/given-items?err=${errors.map(err => err?.message).join()}`)
         revalidatePath('/');
         CharityLog("ADDED GIVEN-ITEM " + item_to_add?.name + ".", error)
-        console.log("I am tired and I want to perish. ", error_3, idk, error)
+        console.log("I am tired. ", error_3, idk, error)
 
     };
 

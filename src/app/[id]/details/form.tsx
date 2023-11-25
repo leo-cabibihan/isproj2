@@ -12,10 +12,6 @@ export function FormComponent({ ID, DonorID }: any) {
 
     const [cash, showCash] = useState(false)
 
-    console.log("DONOR ID IS " + DonorID)
-
-    console.log("SHOW UP??? " + ID)
-
     return (
         <>
             <div>
@@ -59,10 +55,6 @@ export function GoodsForm({ ID, UserID }: any) {
         { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' },
     ])
 
-    console.log("THE ACTUAL DONOR ID IS: " + ID)
-
-
-
     const [house_no, setHouse_no] = useState("")
     const [street, setStreet] = useState("")
     const [village, setVillage] = useState("")
@@ -101,8 +93,6 @@ export function GoodsForm({ ID, UserID }: any) {
             })
         });
     }
-
-    console.log("FORM ORG ID IS: " + ID)
 
     const addFields = () => {
         let object = { name: '', quantity: '', expiry: '', perishable: '', unit_of_measurement: '' }
@@ -228,8 +218,6 @@ export function CashForm({ ID, UserID }: any) {
     const [amount, setAmount] = useState("")
     const [eventID, setEventID] = useState("")
     const [eventslist, setEventsList] = useState<any>([])
-
-    console.log("AMOUNT" + amount)
 
     useEffect(() => {
 

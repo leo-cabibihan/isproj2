@@ -37,7 +37,6 @@ export default async function Report({ params }: any) {
     .limit(1)
 
   const complaint_id = last_complaint?.map((post) => post.id)
-  console.log("LAST EVENT'S ID IS: " + (complaint_id![0] + 1))
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
@@ -67,9 +66,6 @@ export default async function Report({ params }: any) {
       subject: 'Complaint Received',
       body,
     })
-
-    console.log('SUCCESS??? ', success)
-    console.log('ERROR: ', error)
   }
 
   return (

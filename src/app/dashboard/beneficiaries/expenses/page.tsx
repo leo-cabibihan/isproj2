@@ -51,7 +51,7 @@ export default async function Expenses() {
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
         .eq('charity_id', charity_id)
 
-    console.log("TF", expenses)
+    console.log("UH OH", expenses)
 
     const { data: beneficiaries, error: beneficiaries_error } = await supabase
         .from('beneficiaries')

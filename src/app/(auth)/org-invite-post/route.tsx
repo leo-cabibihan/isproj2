@@ -12,13 +12,10 @@ const cryptr = new Cryptr("3UzEs9SUb9rbc3SlQuw9H462JK9xWxJwElh7f5knBaDQ6te9u6")
 export async function GET(request: Request) {
     const requestUrl = new URL(request.url)
     const code = requestUrl.searchParams.get('code')
-    console.log('okok')
-    console.log(code)
   
     if (code) {
       const supabase = createRouteHandlerClient({ cookies })
       const token = await supabase.auth.exchangeCodeForSession(code)
-      console.log(token)
     }
   
     return NextResponse.redirect(`${requestUrl.origin}/admin/settings`)
@@ -54,7 +51,6 @@ export async function POST(request: Request) {
     const { data: charity, error: charityError } = await supabase
         .from('charity_member')
         .insert(charity_member)
-    console.log(charity, charityError)
 
     return NextResponse.redirect(`${requestUrl.origin}/email-pending`, {
         status: 301,
