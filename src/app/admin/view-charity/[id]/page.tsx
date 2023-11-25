@@ -44,7 +44,7 @@ export default async function Organization({ params }: any) {
         .select('*, charity ( id, name ), charity_member ( user_uuid, member_name ), donor_complaints ( id, donor ( id, name ) )')
         .eq('charity_id', orgID)
 
-    const { data: events, error } = await supabase
+    const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', orgID)
