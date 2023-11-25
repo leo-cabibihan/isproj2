@@ -67,7 +67,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
                                 <Th>Donor Name</Th>
                                 <Th>Charity</Th>
                                 <Th>Date Filed</Th>
-                                <Th> </Th>
+                                <Th>Action</Th>
 
                             </Tr>
                         </Thead>

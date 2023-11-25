@@ -110,7 +110,7 @@ export default async function Applications() {
         <div className="sm:flex-auto"></div>
       </div>
       <TableContainer>
-        <TableHeader header="All charity approval requests" />
+        <TableHeader header="All Charity Approval Requests" />
         <TableContent>
           <Table>
             <Thead>
@@ -118,7 +118,7 @@ export default async function Applications() {
                 <Th>Name</Th>
                 <Th>Email Address</Th>
                 <Th>Date Filed</Th>
-                <Th> </Th>
+                <Th>Action</Th>
               </Tr>
             </Thead>
             <Tbody>

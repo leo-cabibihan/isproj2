@@ -5,8 +5,12 @@ import { HomeIcon } from '@heroicons/react/20/solid'
 import Link from 'next/link'
 
 export default function BreadCrumb({pathname}:{pathname:string}) {
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+  
   const [first, ...paths] = pathname.split("/")
-  const pages = paths.map(path => ({href: path, name: path, current: paths[paths.length - 1] === path}))
+  const pages = paths.map(path => ({href: path, name: capitalizeFirstLetter(path), current: paths[paths.length - 1] === path}))
   return (
     <nav aria-label="Breadcrumb">
       <ol role="list" className="flex items-center space-x-4">

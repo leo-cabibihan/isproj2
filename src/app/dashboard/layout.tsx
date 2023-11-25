@@ -89,16 +89,13 @@ function Nav({ pathname }: { pathname: string }) {
                   <a
                     href={item.href}
                     className={clsx(
-                      isCurrent(pathname, item.href)
-                        ? 'bg-gray-50'
-                        : 'hover:bg-gray-50',
-                      'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700',
+                      isCurrent(pathname, item.href) ? 'bg-gray-100 text-green-700' : 'hover:bg-gray-100 text-[#01784B]',
+                      'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700', 'hover:text-[#01784B]'
                     )}
                   >
-                    <item.icon
-                      className="h-6 w-6 shrink-0 text-gray-400"
-                      aria-hidden="true"
-                    />
+                    <item.icon className={clsx(
+                    isCurrent(pathname, item.href) ? 'h-6 w-6 shrink-0 text-[#01784B]' : 'h-6 w-6 shrink-0 text-gray-400',
+                    'group-hover:text-[#01784B]')} aria-hidden="true" />
                     {item.name}
                   </a>
                 ) : (
@@ -107,14 +104,15 @@ function Nav({ pathname }: { pathname: string }) {
                       <>
                         <Disclosure.Button
                           className={clsx(
-                            item.current ? 'bg-gray-50' : 'hover:bg-gray-50',
-                            'flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm font-semibold leading-6 text-gray-700',
+                            'flex items-center w-full text-left rounded-md p-2 gap-x-3 text-sm leading-6 font-semibold',
+                            item.current || item.children.some((subItem) => subItem.current)
+                            ? 'bg-gray-100 text-green-700' : 'hover:bg-gray-100 text-[#01784B]',
+                            'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700', 'hover:text-[#01784B]'
                           )}
                         >
-                          <item.icon
-                            className="h-6 w-6 shrink-0 text-gray-400"
-                            aria-hidden="true"
-                          />
+                          <item.icon className={clsx(
+                            isCurrent(pathname, item.href) ? 'h-6 w-6 shrink-0 text-[#01784B]' : 'h-6 w-6 shrink-0 text-gray-400',
+                            'group-hover:text-[#01784B]')} aria-hidden="true" />
                           {item.name}
                           <ChevronRightIcon
                             className={clsx(
@@ -134,10 +132,8 @@ function Nav({ pathname }: { pathname: string }) {
                                 as="a"
                                 href={subItem.href}
                                 className={clsx(
-                                  isCurrent(pathname, subItem.href)
-                                    ? 'bg-gray-50'
-                                    : 'hover:bg-gray-50',
-                                  'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
+                                  isCurrent(pathname, subItem.href) ? 'bg-gray-100 : font-semibold text-green-700' : 'hover:bg-gray-100',
+                                  'block rounded-md py-2 pr-2 pl-9 text-sm leading-6 text-gray-700', 'hover:text-green-700', 'hover:font-semibold'
                                 )}
                               >
                                 {subItem.name}
@@ -224,11 +220,10 @@ export default function DashboardLayout({
                   </Transition.Child>
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
-                    <Link href="/" aria-label="Home">
-                      <LogoMobile />
-                    </Link>
-
-                    <Nav pathname={pathname} />
+                      <Link href="/" aria-label="Home">
+                        <Logo className="h-10 w-auto" />
+                      </Link>
+                    <Nav pathname={pathname}/>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

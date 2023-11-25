@@ -128,8 +128,8 @@ export default function DashboardLayout({
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-            <div className="flex h-16 shrink-0 items-center">
+          <div className="flex grow flex-col gap-y-10 overflow-y-auto border-r border-gray-200 bg-white px-6">
+            <div className="flex h-30 shrink-0 items-center">
               <Link href="/" aria-label="Home">
                 <Logo className="h-10 w-auto" />
               </Link>
@@ -184,16 +184,16 @@ function Nav({ pathname }: { pathname: string }) {
                   href={item.href}
                   className={clsx(
                     isCurrent(pathname, item.href)
-                      ? 'bg-gray-50 text-indigo-600'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
+                      ? 'bg-gray-100 text-green-700'
+                      : 'text-gray-700 hover:bg-gray-100 hover:text-green-700',
                     'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6',
                   )}
                 >
                   <item.icon
                     className={clsx(
                       isCurrent(pathname, item.href)
-                        ? 'text-indigo-600'
-                        : 'text-gray-400 group-hover:text-indigo-600',
+                        ? 'text-green-700'
+                        : 'text-gray-400 group-hover:text-green-700',
                       'h-6 w-6 shrink-0',
                     )}
                     aria-hidden="true"
