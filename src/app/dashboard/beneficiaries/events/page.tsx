@@ -221,7 +221,6 @@ export default async function Page() {
                                     <Td>
                                         <SlideOver title="Edit Event Details" buttontext="View Details" variant="solid" color="blue">
                                             <form className="space-y-6" action={saveChanges} method="PUT">
-
                                                 <TextField
                                                     label=""
                                                     name="id"
