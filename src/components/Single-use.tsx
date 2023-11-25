@@ -289,7 +289,7 @@ export async function PastEvents({ id }: any) {
         {
           events?.length !== 1 ?
             (
-              <h1 className='mt-2 text-lg leading-8 text-gray-600'>All of this charity&apos;s events are still ongoing.</h1>
+              <h1 className='mt-4 text-xl self-center leading-8 text-gray-600'>All of this charity&apos;s events are still ongoing.</h1>
             )
             :
             (
