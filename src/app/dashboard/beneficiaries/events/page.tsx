@@ -260,7 +260,7 @@ export default async function Page() {
                                                     label="New Start Date"
                                                     name="start_date"
                                                     type="datetime-local"                                        
-                                                    required       
+                                                           
                                                 />
 
                                                 <TextField
@@ -275,7 +275,7 @@ export default async function Page() {
                                                     label="New End Date"
                                                     name="end_date"
                                                     type="datetime-local"
-                                                    required
+                                                    
                                                 />
 
                                                 <SelectField
