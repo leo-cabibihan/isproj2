@@ -463,7 +463,7 @@ export default async function Organization({ params }: any) {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {pending_events?.map(event => (
+                            {pending?.map(event => (
 
                                 <Tr key={event.id}>
                                     <Td>{event.name}</Td>
