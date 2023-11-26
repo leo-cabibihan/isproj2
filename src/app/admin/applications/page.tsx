@@ -63,7 +63,7 @@ export default async function Applications() {
   const { data: requests, error } = await supabase
     .from('charity')
     .select('*')
-    .eq('charity_verified', false)
+    .eq('charity_verified', false).eq('verification_status', 'HIDDEN')
 
   const verifyOrg = async (formData: FormData) => {
     'use server'
@@ -71,6 +71,7 @@ export default async function Applications() {
     const charityName = String(formData.get('name'))
     const charity = {
       charity_verified: true,
+      verification_status: 'APPROVED'
     }
 
     await supabase.from('charity').update(charity).eq('id', charityId)
@@ -83,6 +84,16 @@ export default async function Applications() {
     const email = String(formData.get('email'))
     const name = String(formData.get('name'))
     const reason = String(formData.get('reason'))
+
+    const charityId = parseInt(formData.get('id') as string)
+
+    const charity = {
+      charity_verified: false,
+      verification_status: 'REJECTED'
+    }
+
+    await supabase.from('charity').update(charity).eq('id', charityId)
+    await AdminLog('Rejected the application of charity ' + charityName + '.')
 
     const body = render(
       <NoURLMail
@@ -102,6 +113,7 @@ export default async function Applications() {
       subject: 'ALERT!',
       body,
     })
+    revalidatePath('/')
   }
 
   return (
