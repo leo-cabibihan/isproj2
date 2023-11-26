@@ -67,45 +67,45 @@ export default async function Organization({ params }: any) {
         revalidatePath('/');
     };
 
-    const hideEvent = async (formData: FormData) => {
-        'use server'
-        const eventId = formData.get("id")
-        const event = {
-            approval_status: 'ON-HOLD'
-        };
+    // const hideEvent = async (formData: FormData) => {
+    //     'use server'
+    //     const eventId = formData.get("id")
+    //     const event = {
+    //         approval_status: 'ON-HOLD'
+    //     };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
-        revalidatePath('/');
-        AdminLog("HID EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
-    };
+    //     const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+    //     revalidatePath('/');
+    //     AdminLog("HID EVENT " + formData.get("event_name"), update_error)
+    //     DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+    // };
 
-    const unhideEvent = async (formData: FormData) => {
-        'use server'
-        const eventId = formData.get("id")
-        const event = {
-            approval_status: 'APPROVED'
-        };
+    // const unhideEvent = async (formData: FormData) => {
+    //     'use server'
+    //     const eventId = formData.get("id")
+    //     const event = {
+    //         approval_status: 'APPROVED'
+    //     };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
-        revalidatePath('/');
-        AdminLog("APPROVED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
-    };
+    //     const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+    //     revalidatePath('/');
+    //     AdminLog("APPROVED EVENT " + formData.get("event_name"), update_error)
+    //     DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+    // };
 
-    const rejectEvent = async (formData: FormData) => {
-        'use server'
-        const eventId = formData.get("id")
-        const event = {
-            approval_status: 'REJECTED',
-            rejection_reason: formData.get("reason")
-        };
+    // const rejectEvent = async (formData: FormData) => {
+    //     'use server'
+    //     const eventId = formData.get("id")
+    //     const event = {
+    //         approval_status: 'REJECTED',
+    //         rejection_reason: formData.get("reason")
+    //     };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
-        revalidatePath('/');
-        AdminLog("APPROVED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
-    };
+    //     const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+    //     revalidatePath('/');
+    //     AdminLog("APPROVED EVENT " + formData.get("event_name"), update_error)
+    //     DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+    // };
 
     return (
         <>
@@ -360,7 +360,7 @@ export default async function Organization({ params }: any) {
                                     </Td>
                                     <Td>
                                         <SlideOver title="View Event Details" buttontext="View Details" variant="solid" color="blue">
-                                            <form className="space-y-6" action={saveChanges} method="PUT">
+                                            <form className="space-y-6">
                                                 <TextField
                                                     label=""
                                                     name="id"
@@ -425,13 +425,13 @@ export default async function Organization({ params }: any) {
                                                         )
                                                 }
 
-                                                <div className="col-span-full">
+                                                {/* <div className="col-span-full">
                                                     <Button formAction={hideEvent} type="submit" variant="solid" color="yellow" className="w-full">
                                                         <span>
                                                             HIDE EVENT <span aria-hidden="true">&rarr;</span>
                                                         </span>
                                                     </Button>
-                                                </div>
+                                                </div> */}
                                             </form>
                                         </SlideOver>
                                     </Td>
