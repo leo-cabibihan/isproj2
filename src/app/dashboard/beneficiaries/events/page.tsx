@@ -523,7 +523,7 @@ export default async function Page() {
                                     </Td>
                                     <Td>
                                         <SlideOver title="View Details" buttontext="View Details" variant="solid" color="blue">
-                                            <form className="space-y-6" action={resubmitEvent} method="PUT">
+                                            <form className="space-y-6" action={saveChanges} method="PUT">
                                                 <TextField
                                                     label=""
                                                     name="id"
