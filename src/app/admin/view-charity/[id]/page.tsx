@@ -47,7 +47,7 @@ export default async function Organization({ params }: any) {
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', orgID)
+        .eq('charity_id', orgID).eq('approval_status', 'APPROVED')
 
     // const { data: pending_events, error: pending_error } = await supabase
     //     .from('event')
