@@ -443,7 +443,7 @@ export default async function Organization({ params }: any) {
                 </TableContent>
             </TableContainer>
 
-            <div className="sm:flex sm:items-center py-9">
+            {/* <div className="sm:flex sm:items-center py-9">
                 <div className="sm:flex-auto">
                 </div>
             </div>
@@ -584,7 +584,7 @@ export default async function Organization({ params }: any) {
                         </Tbody>
                     </Table>
                 </TableContent>
-            </TableContainer>
+            </TableContainer> */}
         </>
 
     )
