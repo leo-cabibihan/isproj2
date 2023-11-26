@@ -99,7 +99,7 @@ export default async function Page() {
         DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
-    const resubmitEvent = async (formData: FormData) => {
+    const saveChanges2 = async (formData: FormData) => {
         'use server'
         const eventId = formData.get("id")
         const event = {
@@ -523,7 +523,7 @@ export default async function Page() {
                                     </Td>
                                     <Td>
                                         <SlideOver title="View Details" buttontext="View Details" variant="solid" color="blue">
-                                            <form className="space-y-6" action={saveChanges} method="PUT">
+                                            <form className="space-y-6" action={saveChanges2} method="PUT">
                                                 <TextField
                                                     label=""
                                                     name="id"
