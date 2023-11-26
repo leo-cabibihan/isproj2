@@ -47,7 +47,12 @@ export default async function Organization({ params }: any) {
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', orgID)
+        .eq('charity_id', orgID).eq('approval_status', 'APPROVED')
+
+    const { data: pending_events, error: pending_error } = await supabase
+        .from('event')
+        .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
+        .eq('charity_id', orgID).eq('approval_status', 'ON-HOLD')
 
     const freezeOrg = async (formData: FormData) => {
         'use server'
@@ -80,12 +85,25 @@ export default async function Organization({ params }: any) {
         const eventId = formData.get("id")
         const event = {
             approval_status: 'APPROVED'
-            
         };
 
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
-        AdminLog("HID EVENT " + formData.get("event_name"), update_error)
+        AdminLog("APPROVED EVENT " + formData.get("event_name"), update_error)
+        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+    };
+
+    const rejectEvent = async (formData: FormData) => {
+        'use server'
+        const eventId = formData.get("id")
+        const event = {
+            approval_status: 'REJECTED',
+            rejection_reason: formData.get("reason")
+        };
+
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        revalidatePath('/');
+        AdminLog("APPROVED EVENT " + formData.get("event_name"), update_error)
         DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
@@ -226,137 +244,6 @@ export default async function Organization({ params }: any) {
             </div>
 
             <TableContainer>
-                <TableHeader header="View Events" />
-                <TableContent>
-                    <Table>
-                        <Thead>
-                            <Tr>
-                                <Th>Event Name</Th>
-                                <Th>Start Date</Th>
-                                <Th>End Date</Th>
-                                <Th>Charity</Th>
-                                <Th>Status</Th>
-                                <Th> </Th>
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            {events?.map(event => (
-
-                                <Tr key={event.id}>
-                                    <Td>{event.name}</Td>
-                                    <Td>{formatDate(event.start_date) + ' ' + formatTime(event.start_date)}</Td>
-                                    <Td>{formatDate(event.end_date) + ' ' + formatTime(event.end_date)}</Td>
-                                    <Td>{event.charity?.name}</Td>
-                                    <Td>
-                                        {
-                                            event.is_ongoing ? ("ongoing") : ("ended")
-                                        }
-                                    </Td>
-                                    <Td>
-                                        <SlideOver title="View Event Details" buttontext="View Details" variant="solid" color="blue">
-                                            <form className="space-y-6" action={saveChanges} method="PUT">
-                                                <TextField
-                                                    label=""
-                                                    name="id"
-                                                    type="hidden"
-                                                    defaultValue={event.id}
-                                                    readOnly
-                                                />
-
-                                                <TextField
-                                                    label="Event Name"
-                                                    name="event_name"
-                                                    defaultValue={event.name}
-                                                    type="text"
-                                                    readOnly
-                                                />
-
-                                                <div className="col-span-full">
-                                                    <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                                                        Details
-                                                    </label>
-                                                    <div className="mt-2">
-                                                        <textarea
-                                                            name="description"
-                                                            rows={4}
-                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                            defaultValue={event.description}
-                                                            readOnly
-                                                        />
-                                                    </div>
-                                                </div>
-
-                                                <TextField
-                                                    label="Current Start Date"
-                                                    name="current_start_date"
-                                                    type="text"
-                                                    defaultValue={formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
-                                                    readOnly
-                                                />
-
-                                                <TextField
-                                                    label="Current End Date"
-                                                    name="end_date"
-                                                    type="text"
-                                                    defaultValue={formatDate(event.end_date as string) + ' ' + formatTime(event.end_date as string)}
-                                                    readOnly
-                                                />
-
-                                                {
-                                                    event.beneficiary_id ?
-                                                        (
-                                                            <TextField
-                                                                label="Beneficiary"
-                                                                name="beneficiary"
-                                                                defaultValue={event.beneficiaries?.beneficiary_name}
-                                                                type="text"
-                                                                readOnly
-                                                            />
-                                                        )
-                                                        :
-                                                        (
-                                                            <p>&nbsp;</p>
-                                                        )
-                                                }
-
-                                                {
-                                                    event.approval_status == 'APPROVED' ?
-                                                        (
-                                                            <div className="col-span-full">
-                                                                <Button formAction={hideEvent} type="submit" variant="solid" color="yellow" className="w-full">
-                                                                    <span>
-                                                                        HIDE EVENT <span aria-hidden="true">&rarr;</span>
-                                                                    </span>
-                                                                </Button>
-                                                            </div>
-                                                        ) :
-                                                        (
-                                                            <div className="col-span-full">
-                                                                <Button formAction={unhideEvent} type="submit" variant="solid" color="green" className="w-full">
-                                                                    <span>
-                                                                        UNHIDE EVENT <span aria-hidden="true">&rarr;</span>
-                                                                    </span>
-                                                                </Button>
-                                                            </div>
-                                                        )
-                                                }
-                                            </form>
-                                        </SlideOver>
-                                    </Td>
-                                </Tr>
-
-                            ))}
-                        </Tbody>
-                    </Table>
-                </TableContent>
-            </TableContainer>
-
-            <div className="sm:flex sm:items-center py-9">
-                <div className="sm:flex-auto">
-                </div>
-            </div>
-
-            <TableContainer>
                 <TableHeader header="View Appeals" />
                 <TableContent>
                     <Table>
@@ -430,6 +317,270 @@ export default async function Organization({ params }: any) {
                                     </Td>
                                 </Tr>
                             )}
+                        </Tbody>
+                    </Table>
+                </TableContent>
+            </TableContainer>
+
+            <div className="sm:flex sm:items-center py-9">
+                <div className="sm:flex-auto">
+                </div>
+            </div>
+
+            <TableContainer>
+                <TableHeader header="Approved Events" />
+                <TableContent>
+                    <Table>
+                        <Thead>
+                            <Tr>
+                                <Th>Event Name</Th>
+                                <Th>Start Date</Th>
+                                <Th>End Date</Th>
+                                <Th>Charity</Th>
+                                <Th>Status</Th>
+                                <Th> </Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {events?.map(event => (
+
+                                <Tr key={event.id}>
+                                    <Td>{event.name}</Td>
+                                    <Td>{formatDate(event.start_date) + ' ' + formatTime(event.start_date)}</Td>
+                                    {
+                                        event.is_ongoing ?
+                                            (<Td>N/A</Td>) :
+                                            (<Td>{formatDate(event.end_date) + ' ' + formatTime(event.end_date)}</Td>)
+                                    }
+                                    <Td>{event.charity?.name}</Td>
+                                    <Td>
+                                        {
+                                            event.is_ongoing ? ("ongoing") : ("ended")
+                                        }
+                                    </Td>
+                                    <Td>
+                                        <SlideOver title="View Event Details" buttontext="View Details" variant="solid" color="blue">
+                                            <form className="space-y-6" action={saveChanges} method="PUT">
+                                                <TextField
+                                                    label=""
+                                                    name="id"
+                                                    type="hidden"
+                                                    defaultValue={event.id}
+                                                    readOnly
+                                                />
+
+                                                <TextField
+                                                    label="Event Name"
+                                                    name="event_name"
+                                                    defaultValue={event.name}
+                                                    type="text"
+                                                    readOnly
+                                                />
+
+                                                <div className="col-span-full">
+                                                    <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Details
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <textarea
+                                                            name="description"
+                                                            rows={4}
+                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            defaultValue={event.description}
+                                                            readOnly
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <TextField
+                                                    label="Current Start Date"
+                                                    name="current_start_date"
+                                                    type="text"
+                                                    defaultValue={formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
+                                                    readOnly
+                                                />
+
+                                                <TextField
+                                                    label="Current End Date"
+                                                    name="end_date"
+                                                    type="text"
+                                                    defaultValue={formatDate(event.end_date as string) + ' ' + formatTime(event.end_date as string)}
+                                                    readOnly
+                                                />
+
+                                                {
+                                                    event.beneficiary_id ?
+                                                        (
+                                                            <TextField
+                                                                label="Beneficiary"
+                                                                name="beneficiary"
+                                                                defaultValue={event.beneficiaries?.beneficiary_name}
+                                                                type="text"
+                                                                readOnly
+                                                            />
+                                                        )
+                                                        :
+                                                        (
+                                                            <p>&nbsp;</p>
+                                                        )
+                                                }
+
+                                                <div className="col-span-full">
+                                                    <Button formAction={hideEvent} type="submit" variant="solid" color="yellow" className="w-full">
+                                                        <span>
+                                                            HIDE EVENT <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        </SlideOver>
+                                    </Td>
+                                </Tr>
+
+                            ))}
+                        </Tbody>
+                    </Table>
+                </TableContent>
+            </TableContainer>
+
+            <div className="sm:flex sm:items-center py-9">
+                <div className="sm:flex-auto">
+                </div>
+            </div>
+
+            <TableContainer>
+                <TableHeader header="Pending Events" />
+                <TableContent>
+                    <Table>
+                        <Thead>
+                            <Tr>
+                                <Th>Event Name</Th>
+                                <Th>Start Date</Th>
+                                <Th>End Date</Th>
+                                <Th>Charity</Th>
+                                <Th>Status</Th>
+                                <Th> </Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {pending_events?.map(event => (
+
+                                <Tr key={event.id}>
+                                    <Td>{event.name}</Td>
+                                    <Td>{formatDate(event.start_date) + ' ' + formatTime(event.start_date)}</Td>
+                                    {
+                                        event.is_ongoing ?
+                                            (<Td>N/A</Td>) :
+                                            (<Td>{formatDate(event.end_date) + ' ' + formatTime(event.end_date)}</Td>)
+                                    }
+                                    <Td>{event.charity?.name}</Td>
+                                    <Td>
+                                        {
+                                            event.is_ongoing ? ("ongoing") : ("ended")
+                                        }
+                                    </Td>
+                                    <Td>
+                                        <SlideOver title="View Event Details" buttontext="View Details" variant="solid" color="blue">
+                                            <form className="space-y-6" method="PUT">
+                                                <TextField
+                                                    label=""
+                                                    name="id"
+                                                    type="hidden"
+                                                    defaultValue={event.id}
+                                                    readOnly
+                                                />
+
+                                                <TextField
+                                                    label="Event Name"
+                                                    name="event_name"
+                                                    defaultValue={event.name}
+                                                    type="text"
+                                                    readOnly
+                                                />
+
+                                                <div className="col-span-full">
+                                                    <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Details
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <textarea
+                                                            name="description"
+                                                            rows={4}
+                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            defaultValue={event.description}
+                                                            readOnly
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <TextField
+                                                    label="Current Start Date"
+                                                    name="current_start_date"
+                                                    type="text"
+                                                    defaultValue={formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
+                                                    readOnly
+                                                />
+
+                                                <TextField
+                                                    label="Current End Date"
+                                                    name="end_date"
+                                                    type="text"
+                                                    defaultValue={formatDate(event.end_date as string) + ' ' + formatTime(event.end_date as string)}
+                                                    readOnly
+                                                />
+
+                                                {
+                                                    event.beneficiary_id ?
+                                                        (
+                                                            <TextField
+                                                                label="Beneficiary"
+                                                                name="beneficiary"
+                                                                defaultValue={event.beneficiaries?.beneficiary_name}
+                                                                type="text"
+                                                                readOnly
+                                                            />
+                                                        )
+                                                        :
+                                                        (
+                                                            <p>&nbsp;</p>
+                                                        )
+                                                }
+
+                                                <div className="col-span-full">
+                                                    <Button formAction={unhideEvent} type="submit" variant="solid" color="green" className="w-full">
+                                                        <span>
+                                                            APPROVE EVENT <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                </div>
+
+                                                <div className="col-span-full">
+                                                    <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Reason for Rejection
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <textarea
+                                                            name="reason"
+                                                            rows={4}
+                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            placeholder='Lorem Ipsum Dolor Sit Amet...'
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-span-full">
+                                                    <Button formAction={rejectEvent} type="submit" variant="solid" color="red" className="w-full">
+                                                        <span>
+                                                            REJECT EVENT <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        </SlideOver>
+                                    </Td>
+                                </Tr>
+
+                            ))}
                         </Tbody>
                     </Table>
                 </TableContent>

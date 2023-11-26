@@ -14,8 +14,8 @@ import { getURL } from '@/app/utils/url'
 export const revalidate = 0;
 
 export default async function Page() {
-     // Function to format the timestamp as 'mm/dd/yyy'
-     const formatDate = (timestamp) => {
+    // Function to format the timestamp as 'mm/dd/yyy'
+    const formatDate = (timestamp) => {
         const date = new Date(timestamp);
         const year = date.getFullYear();
         const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
@@ -42,7 +42,18 @@ export default async function Page() {
     const { data: events, error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
-        .eq('charity_id', charity_id)
+        .eq('charity_id', charity_id).eq('approval_status', 'APPROVED')
+
+    const { data: pending_events, error: pending_error } = await supabase
+        .from('event')
+        .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
+        .eq('charity_id', charity_id).eq('approval_status', 'ON-HOLD')
+
+    const { data: rejected_events, error: rejected_error } = await supabase
+        .from('event')
+        .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
+        .eq('charity_id', charity_id).eq('approval_status', 'REJECTED')
+
     const { data: last_event, error: event_error } = await supabase
         .from('event')
         .select('*')
@@ -50,7 +61,7 @@ export default async function Page() {
 
     const event_id = last_event?.map(event => event.id)
     console.log("LAST EVENT'S ID IS: " + (event_id))
- 
+
     const handleSubmit = async (formData: FormData) => {
         'use server'
         const event = {
@@ -61,12 +72,13 @@ export default async function Page() {
             //photo: CDNURL,
             charity_id: formData.get("charity_id"),
             beneficiary_id: formData.get("beneficiary_id"),
-            is_ongoing: true
+            is_ongoing: true,
+            approval_status: 'ON-HOLD'
         };
 
         const { data: insert_event, error: insert_error } = await supabase.from('event').insert(event);
         revalidatePath('/');
-        CharityLog("ADDED NEW EVENT " + formData.get("event_name"), event_error)
+        CharityLog("ADDED NEW EVENT " + formData.get("event_name") + ".", event_error)
         DisplayError(`${getURL}dashboard/beneficiaries/events?err=${generic_error}`, insert_error)
     };
 
@@ -79,6 +91,24 @@ export default async function Page() {
             start_date: formData.get("start_date"),
             end_date: formData.get("end_date"),
             beneficiary_id: formData.get("beneficiary_id")
+        };
+
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        revalidatePath('/');
+        CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
+        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+    };
+
+    const resubmitEvent = async (formData: FormData) => {
+        'use server'
+        const eventId = formData.get("id")
+        const event = {
+            name: formData.get("event_name"),
+            description: formData.get("description"),
+            start_date: formData.get("start_date"),
+            end_date: formData.get("end_date"),
+            beneficiary_id: formData.get("beneficiary_id"),
+            approval_status: 'ON-HOLD'
         };
 
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
@@ -124,7 +154,7 @@ export default async function Page() {
             </div>
 
             <TableContainer>
-                <TableHeaderButton header="Events">
+                <TableHeaderButton header="Pending Events">
                     <SlideOver title="Add Event Details" buttontext="Add Event" variant="solid" color="blue">
                         <form className="space-y-6" action={handleSubmit} method="POST">
                             <TextField
@@ -186,7 +216,7 @@ export default async function Page() {
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">
                                     <span>
-                                        Save Event <span aria-hidden="true">&rarr;</span>
+                                        Submit for Approval <span aria-hidden="true">&rarr;</span>
                                     </span>
                                 </Button>
                             </div>
@@ -206,7 +236,7 @@ export default async function Page() {
                             </Tr>
                         </Thead>
                         <Tbody>
-                            {events?.map(event => (
+                            {pending_events?.map(event => (
 
                                 <Tr key={event.id}>
                                     <Td>{event.name}</Td>
@@ -215,7 +245,7 @@ export default async function Page() {
                                     <Td>{event.approval_status}</Td>
                                     <Td>
                                         {
-                                            event.is_ongoing ? ("ongoing"):("ended")
+                                            event.is_ongoing ? ("ongoing") : ("ended")
                                         }
                                     </Td>
                                     <Td>
@@ -255,15 +285,15 @@ export default async function Page() {
                                                 <TextField
                                                     label="Current Start Date"
                                                     name="current_start_date"
-                                                    type="text"                                        
+                                                    type="text"
                                                     defaultValue={formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
                                                     readOnly
                                                 />
-                                                 <TextField
+                                                <TextField
                                                     label="New Start Date"
                                                     name="start_date"
-                                                    type="datetime-local"                                        
-                                                           
+                                                    type="datetime-local"
+
                                                 />
 
                                                 <TextField
@@ -278,7 +308,142 @@ export default async function Page() {
                                                     label="New End Date"
                                                     name="end_date"
                                                     type="datetime-local"
-                                                    
+
+                                                />
+
+                                                <SelectField
+                                                    className="col-span-full py-5"
+                                                    label="Assign Beneficiary"
+                                                    name="beneficiary_id"
+                                                >
+                                                    {beneficiaries?.map(beneficiary => (
+                                                        <option key={beneficiary.id} value={beneficiary.id}>{beneficiary.beneficiary_name}</option>
+                                                    ))}
+                                                </SelectField>
+
+                                                <div className="col-span-full">
+                                                    <Button type="submit" variant="solid" color="blue" className="w-full">
+                                                        <span>
+                                                            Save Changes <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                                <div className="col-span-full">
+                                                    <Button formAction={deleteEvent} type="submit" variant="solid" color="red" className="w-full">
+                                                        <span>
+                                                            Delete Event <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        </SlideOver>
+                                    </Td>
+                                </Tr>
+
+                            ))}
+
+                        </Tbody>
+                    </Table>
+                </TableContent>
+            </TableContainer>
+
+            <div className="sm:flex sm:items-center py-9">
+                <div className="sm:flex-auto">
+                </div>
+            </div>
+
+            <TableContainer>
+                <TableHeader header="Approved Events" />
+                <TableContent>
+                    <Table>
+                        <Thead>
+                            <Tr>
+                                <Th>Event Name</Th>
+                                <Th>Start Date</Th>
+                                <Th>End Date</Th>
+                                <Th>Approval Status</Th>
+                                <Th>Ongoing?</Th>
+                                <Th> </Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {events?.map(event => (
+
+                                <Tr key={event.id}>
+                                    <Td>{event.name}</Td>
+                                    <Td>{formatDate(event.start_date) + ' ' + formatTime(event.start_date)}</Td>
+                                    {
+                                        event.is_ongoing ?
+                                            (<Td>N/A</Td>) :
+                                            (<Td>{formatDate(event.end_date) + ' ' + formatTime(event.end_date)}</Td>)
+                                    }
+                                    <Td>{event.approval_status}</Td>
+                                    <Td>
+                                        {
+                                            event.is_ongoing ? ("ongoing") : ("ended")
+                                        }
+                                    </Td>
+                                    <Td>
+                                        <SlideOver title="Edit Event Details" buttontext="View Details" variant="solid" color="blue">
+                                            <form className="space-y-6" action={saveChanges} method="PUT">
+                                                <TextField
+                                                    label=""
+                                                    name="id"
+                                                    type="hidden"
+                                                    defaultValue={event.id}
+                                                    required
+                                                />
+
+                                                <TextField
+                                                    label="Event Name"
+                                                    name="event_name"
+                                                    defaultValue={event.name}
+                                                    type="text"
+                                                    required
+                                                />
+
+                                                <div className="col-span-full">
+                                                    <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Details
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <textarea
+                                                            name="description"
+                                                            rows={4}
+                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            defaultValue={event.description}
+                                                            placeholder="Event Details go here..."
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <TextField
+                                                    label="Current Start Date"
+                                                    name="current_start_date"
+                                                    type="text"
+                                                    defaultValue={formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
+                                                    readOnly
+                                                />
+                                                <TextField
+                                                    label="New Start Date"
+                                                    name="start_date"
+                                                    type="datetime-local"
+
+                                                />
+
+                                                <TextField
+                                                    label="Current End Date"
+                                                    name="end_date"
+                                                    type="text"
+                                                    defaultValue={formatDate(event.end_date as string) + ' ' + formatTime(event.end_date as string)}
+                                                    readOnly
+                                                />
+
+                                                <TextField
+                                                    label="New End Date"
+                                                    name="end_date"
+                                                    type="datetime-local"
+
                                                 />
 
                                                 <SelectField
@@ -302,6 +467,152 @@ export default async function Page() {
                                                     <Button formAction={endEvent} type="submit" variant="solid" color="yellow" className="w-full">
                                                         <span>
                                                             Mark Event as &quot;DONE&quot; <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                                <div className="col-span-full">
+                                                    <Button formAction={deleteEvent} type="submit" variant="solid" color="red" className="w-full">
+                                                        <span>
+                                                            Delete Event <span aria-hidden="true">&rarr;</span>
+                                                        </span>
+                                                    </Button>
+                                                </div>
+                                            </form>
+                                        </SlideOver>
+                                    </Td>
+                                </Tr>
+
+                            ))}
+
+                        </Tbody>
+                    </Table>
+                </TableContent>
+            </TableContainer>
+
+            <div className="sm:flex sm:items-center py-9">
+                <div className="sm:flex-auto">
+                </div>
+            </div>
+
+            <TableContainer>
+                <TableHeader header="Rejected Events" />
+                <TableContent>
+                    <Table>
+                        <Thead>
+                            <Tr>
+                                <Th>Event Name</Th>
+                                <Th>Start Date</Th>
+                                <Th>End Date</Th>
+                                <Th>Approval Status</Th>
+                                <Th>Ongoing?</Th>
+                                <Th> </Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {rejected_events?.map(event => (
+
+                                <Tr key={event.id}>
+                                    <Td>{event.name}</Td>
+                                    <Td>{formatDate(event.start_date) + ' ' + formatTime(event.start_date)}</Td>
+                                    <Td>{formatDate(event.end_date) + ' ' + formatTime(event.end_date)}</Td>
+                                    <Td>{event.approval_status}</Td>
+                                    <Td>
+                                        {
+                                            event.is_ongoing ? ("ongoing") : ("ended")
+                                        }
+                                    </Td>
+                                    <Td>
+                                        <SlideOver title="View Details" buttontext="View Details" variant="solid" color="blue">
+                                            <form className="space-y-6" action={resubmitEvent} method="PUT">
+                                                <TextField
+                                                    label=""
+                                                    name="id"
+                                                    type="hidden"
+                                                    defaultValue={event.id}
+                                                    required
+                                                />
+
+                                                <TextField
+                                                    label="Event Name"
+                                                    name="event_name"
+                                                    defaultValue={event.name}
+                                                    type="text"
+                                                    required
+                                                />
+
+                                                <div className="col-span-full">
+                                                    <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Details
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <textarea
+                                                            name="description"
+                                                            rows={4}
+                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            defaultValue={event.description}
+                                                            placeholder="Event Details go here..."
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <TextField
+                                                    label="Current Start Date"
+                                                    name="current_start_date"
+                                                    type="text"
+                                                    defaultValue={formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
+                                                    readOnly
+                                                />
+                                                <TextField
+                                                    label="New Start Date"
+                                                    name="start_date"
+                                                    type="datetime-local"
+
+                                                />
+
+                                                <TextField
+                                                    label="Current End Date"
+                                                    name="end_date"
+                                                    type="text"
+                                                    defaultValue={formatDate(event.end_date as string) + ' ' + formatTime(event.end_date as string)}
+                                                    readOnly
+                                                />
+
+                                                <TextField
+                                                    label="New End Date"
+                                                    name="end_date"
+                                                    type="datetime-local"
+
+                                                />
+
+                                                <SelectField
+                                                    className="col-span-full py-5"
+                                                    label="Assign Beneficiary"
+                                                    name="beneficiary_id"
+                                                >
+                                                    {beneficiaries?.map(beneficiary => (
+                                                        <option key={beneficiary.id} value={beneficiary.id}>{beneficiary.beneficiary_name}</option>
+                                                    ))}
+                                                </SelectField>
+
+                                                <div className="col-span-full">
+                                                    <label htmlFor="reason" className="block text-sm font-medium leading-6 text-gray-900">
+                                                        Reason for Rejection
+                                                    </label>
+                                                    <div className="mt-2">
+                                                        <textarea
+                                                            name="reason"
+                                                            rows={4}
+                                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                            defaultValue={event.rejection_reason}
+                                                            readOnly
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div className="col-span-full">
+                                                    <Button type="submit" variant="solid" color="blue" className="w-full">
+                                                        <span>
+                                                            Resubmit Event <span aria-hidden="true">&rarr;</span>
                                                         </span>
                                                     </Button>
                                                 </div>
