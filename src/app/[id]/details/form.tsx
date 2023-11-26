@@ -188,16 +188,6 @@ export function GoodsForm({ ID, UserID }: any) {
                             required
                           />
                           <br />
-                          <TextField
-                            label="Expiry Date"
-                            name="expiry"
-                            type="date"
-                            placeholder=""
-                            onChange={(event) => handleFormChange(event, index)}
-                            value={form.expiry}
-                            required
-                          />
-                          <br />
                           <SelectField
                             label="Perishable?"
                             name="perishable"
@@ -208,6 +198,15 @@ export function GoodsForm({ ID, UserID }: any) {
                             <option value={1}>yes</option>
                             <option value={0}>no</option>
                           </SelectField>
+                          <br />
+                          <TextField
+                            label="Expiry Date (if perishable)"
+                            name="expiry"
+                            type="date"
+                            placeholder=""
+                            onChange={(event) => handleFormChange(event, index)}
+                            value={form.expiry}
+                          />
                         </div>
 
                         <div className="col-span-full">
