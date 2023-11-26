@@ -36,10 +36,10 @@ export async function middleware(req: NextRequest) {
       .eq('user_uuid', uid)
 
     charity_member?.map(member => (
-      charity_status = member.charity.verification_status
+      charity_status = member.charity.charity_verified
     ))
 
-    if (charity_member?.length !== 1 || charity_status !== 'APPROVED') {
+    if (charity_member?.length !== 1 || charity_status == false) {
       return Response.redirect(requestUrl.origin)
     }
   }
