@@ -64,6 +64,7 @@ export default async function Applications() {
     .from('charity')
     .select('*')
     .eq('charity_verified', false)
+    .eq('is_rejected', false)
 
   const verifyOrg = async (formData: FormData) => {
     'use server'
@@ -87,7 +88,9 @@ export default async function Applications() {
     const charityId = parseInt(formData.get('id') as string)
 
     const charity = {
-      charity_verified: false
+      charity_verified: false,
+      is_rejected: true,
+      rejection_reason: reason
     }
 
     await supabase.from('charity').update(charity).eq('id', charityId)
@@ -263,7 +266,7 @@ export default async function Applications() {
                             className="w-full"
                           >
                             <span>
-                              Notify Charity{' '}
+                              Reject & Notify Charity{' '}
                               <span aria-hidden="true">&rarr;</span>
                             </span>
                           </Button>
