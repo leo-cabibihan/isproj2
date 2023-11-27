@@ -63,15 +63,14 @@ export default async function Applications() {
   const { data: requests, error } = await supabase
     .from('charity')
     .select('*')
-    .eq('charity_verified', false).eq('verification_status', 'HIDDEN')
+    .eq('charity_verified', false)
 
   const verifyOrg = async (formData: FormData) => {
     'use server'
     const charityId = parseInt(formData.get('id') as string)
     const charityName = String(formData.get('name'))
     const charity = {
-      charity_verified: true,
-      verification_status: 'APPROVED'
+      charity_verified: true
     }
 
     await supabase.from('charity').update(charity).eq('id', charityId)
@@ -88,8 +87,7 @@ export default async function Applications() {
     const charityId = parseInt(formData.get('id') as string)
 
     const charity = {
-      charity_verified: false,
-      verification_status: 'REJECTED'
+      charity_verified: false
     }
 
     await supabase.from('charity').update(charity).eq('id', charityId)

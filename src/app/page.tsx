@@ -39,7 +39,6 @@ export default async function Home() {
     .from('charity')
     .select('*')
     .eq('charity_verified', true)
-    .eq('verification_status', 'APPROVED')
   const { data, error } = await supabase.from('drop_off_location').select('*')
 
   const { data: campaign_post } = await supabase

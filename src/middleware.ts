@@ -68,7 +68,7 @@ export async function middleware(req: NextRequest) {
       charity_status = member.charity.charity_verified
     ))
 
-    if (charity_member?.length !== 1) {
+    if (charity_member?.length !== 1 || charity_status == false) {
       return Response.redirect(requestUrl.origin)
     }
   }
