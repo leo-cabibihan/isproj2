@@ -9,7 +9,7 @@ import React from 'react';
 
 export default async function ViewCharity() {
 
-    const { data: organizations } = await supabase.from('charity').select('*').eq('charity_verified', true).eq('verification_status', 'APPROVED')
+    const { data: organizations } = await supabase.from('charity').select('*').eq('charity_verified', true)
 
     return ( 
         <>
