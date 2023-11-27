@@ -47,6 +47,9 @@ export async function middleware(req: NextRequest) {
     else if (charity_status == false && rejected == false) {
       return Response.redirect(`${requestUrl.origin}/pending`)
     }
+    else if (charity_status == false && rejected == true) {
+      return Response.redirect(`${requestUrl.origin}/rejected-form`)
+    }
   }
   else if (originalUrl.includes('/settings')) {
     const { data: donor, error: error_1 } = await supabase
@@ -73,8 +76,44 @@ export async function middleware(req: NextRequest) {
       charity_status = member.charity.charity_verified
     ))
 
-    if (charity_member?.length !== 1 || charity_status == false) {
+    if (charity_member?.length !== 1 || charity_status == true) {
       return Response.redirect(requestUrl.origin)
+    }
+  }
+  else if (originalUrl.includes('/pending')) {
+    const { data: charity_member, error: error_2 } = await supabase
+      .from('charity_member')
+      .select('*, charity ( id, charity_verified, is_rejected )')
+      .eq('user_uuid', uid)
+
+    charity_member?.map(member => (
+      charity_status = member.charity.charity_verified,
+      rejected = member.charity.is_rejected
+    ))
+
+    if (charity_member?.length !== 1 || charity_status == true) {
+      return Response.redirect(requestUrl.origin)
+    }
+    else if (charity_status == false && rejected == true) {
+      return Response.redirect(`${requestUrl.origin}/rejected-form`)
+    }
+  }
+  else if (originalUrl.includes('/rejected-form')) {
+    const { data: charity_member, error: error_2 } = await supabase
+      .from('charity_member')
+      .select('*, charity ( id, charity_verified, is_rejected )')
+      .eq('user_uuid', uid)
+
+    charity_member?.map(member => (
+      charity_status = member.charity.charity_verified,
+      rejected = member.charity.is_rejected
+    ))
+
+    if (charity_member?.length !== 1 || charity_status == true) {
+      return Response.redirect(requestUrl.origin)
+    }
+    else if (charity_status == false && rejected == false) {
+      return Response.redirect(`${requestUrl.origin}/pending`)
     }
   }
 
