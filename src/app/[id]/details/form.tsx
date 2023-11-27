@@ -83,7 +83,7 @@ export function GoodsForm({ ID, UserID }: any) {
     e.preventDefault()
 
     const rawResponse = await fetch(
-      `https://givemore.vercel.app/${ID}/details/post`,
+      `https://isproj2.vercel.app/${ID}/details/post`,
       {
         method: 'POST',
         headers: {
@@ -357,7 +357,7 @@ export function CashForm({ ID, UserID }: any) {
   const submit = async (e: any) => {
     e.preventDefault()
     const rawResponse = await fetch(
-      `https://givemore.vercel.app/${ID}/details/cash`,
+      `https://isproj2.vercel.app/${ID}/details/cash`,
       {
         method: 'POST',
         headers: {

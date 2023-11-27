@@ -306,7 +306,7 @@ export default async function Settings() {
                         <a
                           className="text-blue-600"
                           href={
-                            'https://givemore.vercel.app/dashboard/settings/' +
+                            'https://isproj2.vercel.app/dashboard/settings/' +
                             charity_id +
                             '/change-qr'
                           }

@@ -38,7 +38,7 @@ export function PickupForm({id}: {id:number}) {
     const submit = async (e: any) => {
         e.preventDefault();
         console.log(formFields)
-        const rawResponse = await fetch(`https://givemore.vercel.app/dashboard/donations/pickups/post`, {
+        const rawResponse = await fetch(`https://isproj2.vercel.app/dashboard/donations/pickups/post`, {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',

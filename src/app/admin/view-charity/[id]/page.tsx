@@ -81,7 +81,7 @@ export default async function Organization({ params }: any) {
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         AdminLog("HID EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const unhideEvent = async (formData: FormData) => {
@@ -94,7 +94,7 @@ export default async function Organization({ params }: any) {
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         AdminLog("APPROVED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const rejectEvent = async (formData: FormData) => {
@@ -108,7 +108,7 @@ export default async function Organization({ params }: any) {
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         AdminLog("APPROVED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     return (

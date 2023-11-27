@@ -99,7 +99,7 @@ export default async function Page() {
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const saveChanges2 = async (formData: FormData) => {
@@ -117,7 +117,7 @@ export default async function Page() {
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const endEvent = async (formData: FormData) => {
@@ -130,7 +130,7 @@ export default async function Page() {
         const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
         revalidatePath('/');
         CharityLog("ENDED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const deleteEvent = async (formData: FormData) => {
@@ -146,7 +146,7 @@ export default async function Page() {
         const { data: delete_event, error: delete_error } = await supabase.from('event').delete().eq("id", eventId)
         revalidatePath('/');
         CharityLog("DELETED EVENT" + formData.get("event_name") + ".", delete_error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, delete_error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, delete_error)
     };
 
     return (

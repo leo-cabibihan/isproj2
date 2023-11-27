@@ -88,7 +88,7 @@ export default async function Expenses() {
         const { data, error } = await supabase.from('expenses').insert(expense);
         revalidatePath('/');
         CharityLog("ADDED EXPENSE", error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -104,7 +104,7 @@ export default async function Expenses() {
         const { data, error } = await supabase.from('expenses').update(expense).eq("id", expenseId)
         revalidatePath('/');
         CharityLog("UPDATED EXPENSE" + expenseId + ".", error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
     const deleteExpense = async (formData: FormData) => {
@@ -120,7 +120,7 @@ export default async function Expenses() {
         const { data, error } = await supabase.from('expenses').delete().eq("id", expenseId)
         revalidatePath('/');
         CharityLog("DELETE EXPENSE" + expenseId + ".", error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
 
