@@ -6,6 +6,7 @@ import '@/styles/tailwind.css'
 import { type Metadata } from 'next'
 import { ClerkProvider } from '@clerk/nextjs'
 
+//test
 export const metadata: Metadata = {
   title: {
     template: '%s - GiveMore',
