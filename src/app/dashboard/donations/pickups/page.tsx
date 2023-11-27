@@ -37,7 +37,11 @@ export default async function Page() {
     const { data: charity_member, error: idk } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)  
 
-    const { data: items, error } = await supabase.from('items_donation_transaction').select('*, charity ( id, name ), address ( * ), donor ( id, name )').eq('verify', false).eq('charity_id', charity_id)
+    const { data: items, error } = await supabase.from('items_donation_transaction')
+    .select('*, charity ( id, name ), address ( * ), donor ( id, name )')
+    .eq('verify', false).eq('charity_id', charity_id)
+    .order('date', {ascending: false})
+
     const { data: inventory, error: error_2 } = await supabase.from('inventory_item').select('*, items_donation_transaction ( *, charity ( id, name ), address ( * ), donor ( id, name ) )')
  
     return (

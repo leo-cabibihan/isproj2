@@ -39,12 +39,14 @@ export default async function Home() {
     .from('charity')
     .select('*')
     .eq('charity_verified', true)
+    .order('created_at', {ascending: false})
   const { data, error } = await supabase.from('drop_off_location').select('*')
 
   const { data: campaign_post } = await supabase
     .from('campaign_post')
     .select('*, charity ( id )')
     .eq('charity.charity_verified', true)
+    .order('date_posted', {ascending: false})
 
   return (
     <>

@@ -29,6 +29,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     };
     const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name, email_address ), donor ( id, name )')
+    .order('created_at', {ascending: false})
 
     const notifyOrg = async (formData: FormData) => {
         'use server'

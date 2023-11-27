@@ -27,7 +27,7 @@ export default async function Auditlog() {
     }; 
 
 
-    const { data: logs } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )')
+    const { data: logs } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )').order('date', {ascending: false})
     //.order('date', {ascending: false}) <-- If you want the most recent log to be on top of the list.
 
     return (

@@ -65,6 +65,7 @@ export default async function Applications() {
     .select('*')
     .eq('charity_verified', false)
     .eq('is_rejected', false)
+    .order('created_at', {ascending: false})
 
   const verifyOrg = async (formData: FormData) => {
     'use server'

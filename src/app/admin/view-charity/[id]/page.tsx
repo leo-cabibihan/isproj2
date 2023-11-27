@@ -37,22 +37,26 @@ export default async function Organization({ params }: any) {
         .from('donor_complaints')
         .select('*, charity ( id, name, email_address ), donor ( id, name )')
         .eq('charity_id', orgID)
+        .order('created_at', {ascending: false})
     console.log(complaints ? "IT WORK" : "DONT WORK")
 
     const { data: appeals, error: appeals_error } = await supabase
         .from('charity_appeals')
         .select('*, charity ( id, name ), charity_member ( user_uuid, member_name ), donor_complaints ( id, donor ( id, name ) )')
         .eq('charity_id', orgID)
+        .order('created_at', {ascending: false})
 
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', orgID).eq('approval_status', 'APPROVED')
+        .order('start_date', {ascending: false})
 
     const { data: pending, error: pending_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', orgID).neq('approval_status', 'APPROVED')
+        .order('start_date', {ascending: false})
 
     const freezeOrg = async (formData: FormData) => {
         'use server'

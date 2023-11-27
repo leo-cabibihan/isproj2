@@ -43,16 +43,19 @@ export default async function Page() {
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', charity_id).eq('approval_status', 'APPROVED')
+        .order('start_date', {ascending: false})
 
     const { data: pending_events, error: pending_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', charity_id).eq('approval_status', 'ON-HOLD')
+        .order('start_date', {ascending: false})
 
     const { data: rejected_events, error: rejected_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', charity_id).eq('approval_status', 'REJECTED')
+        .order('start_date', {ascending: false})
 
     const { data: last_event, error: event_error } = await supabase
         .from('event')

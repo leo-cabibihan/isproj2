@@ -22,7 +22,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
   const generic_error = "Transaction error. Please check your data and try again."
 
-  const { data: contacts } = await supabase.from('beneficiaries').select("*").order("id", { ascending: true }).eq('charity_id', charity_id)
+  const { data: contacts } = await supabase.from('beneficiaries').select("*").order("id", { ascending: true }).eq('charity_id', charity_id).order('date', {ascending: false})
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
