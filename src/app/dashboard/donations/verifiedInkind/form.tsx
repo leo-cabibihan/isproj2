@@ -58,7 +58,7 @@ export function MultilayeredForm(ID: any) {
 
         fetchData()
     }, [])
-//e
+    //e
 
     useEffect(() => {
         console.log("DONORS LIST", donorslist);
@@ -190,7 +190,7 @@ export function MultilayeredForm(ID: any) {
                                 <option key={form.id} value={form.id}>{form.name}</option>
                             ))}
                         </SelectField>
-                        
+
                     )}
 
                 <div className="relative">
@@ -332,7 +332,7 @@ export function MultilayeredForm(ID: any) {
                                 onChange={event => handleFormChange(event, index)}
                                 value={form.name}
                                 required />
-                            <br/>
+                            <br />
                             <TextField
                                 label="Quantity"
                                 name="quantity"
@@ -343,7 +343,7 @@ export function MultilayeredForm(ID: any) {
                                 onChange={event => handleFormChange(event, index)}
                                 value={form.quantity}
                                 required />
-                            <br/>
+                            <br />
                             <TextField
                                 label="Unit of Measurement"
                                 name="unit_of_measurement"
@@ -352,7 +352,7 @@ export function MultilayeredForm(ID: any) {
                                 onChange={event => handleFormChange(event, index)}
                                 value={form.unit_of_measurement}
                                 required />
-                            <br/>
+                            <br />
                             <SelectField
                                 label="Perishable?"
                                 name="perishable"
@@ -363,7 +363,7 @@ export function MultilayeredForm(ID: any) {
                                 <option value={"true"}>Yes</option>
                                 <option value={"false"}>No</option>
                             </SelectField>
-                            <br/>
+                            <br />
                             <TextField
                                 label="Expiry Date (if perishable)"
                                 name="expiry"
@@ -372,7 +372,7 @@ export function MultilayeredForm(ID: any) {
                                 onChange={event => handleFormChange(event, index)}
                                 value={form.expiry}
                             />
-                            <br/>
+                            <br />
                             <div className="col-span-full">
                                 <Button onClick={() => removeFields(index)} variant="solid" color="red" className="w-full">
                                     <span>
@@ -392,7 +392,7 @@ export function MultilayeredForm(ID: any) {
                         <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">Proof of Delivery</span>
                     </div>
                 </div>
-                <br/>
+                <br />
             </form>
             <div className="grid grid-cols-2 gap-4">
                 <Button onClick={submit} variant="solid" color="green" className="w-full">
@@ -489,14 +489,7 @@ export function EditForm({ id, orgID }: { id: number, orgID: any }) {
                     type="text"
                     readOnly
                 />
-                <div className="col-span-full">
-                    <Button onClick={addFields} variant="solid" color="green" className="w-full">
-                        <span>
-                            Add Another Item <span aria-hidden="true">&rarr;</span>
-                        </span>
-                    </Button>
-                </div>
-                <br/>
+                <br />
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center" aria-hidden="true">
                         <div className="w-full border-t border-gray-300" />
@@ -505,7 +498,7 @@ export function EditForm({ id, orgID }: { id: number, orgID: any }) {
                         <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">Item Details</span>
                     </div>
                 </div>
-                <br/>
+                <br />
                 {formFields?.inventory_item?.map((form: any) => {
                     return (
                         <div key={form.id}>
@@ -516,8 +509,8 @@ export function EditForm({ id, orgID }: { id: number, orgID: any }) {
                                 placeholder={form.name}
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.name}
-                                required />
-                            <br/>
+                                readOnly />
+                            <br />
                             <TextField
                                 label="Quantity"
                                 name="quantity"
@@ -527,8 +520,8 @@ export function EditForm({ id, orgID }: { id: number, orgID: any }) {
                                 max={10000}
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.quantity}
-                                required />
-                            <br/>
+                                readOnly />
+                            <br />
                             <TextField
                                 label="Unit of Measurement"
                                 name="unit_of_measurement"
@@ -536,19 +529,18 @@ export function EditForm({ id, orgID }: { id: number, orgID: any }) {
                                 placeholder={form.unit_of_measurement}
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.unit_of_measurement}
-                                required />
-                            <br/>
-                            <SelectField
+                                readOnly />
+                            <br />
+                            <TextField
                                 label="Perishable?"
                                 name="perishable"
-                                placeholder="Yes"
+                                type="text"
+                                placeholder={form.perishable}
                                 onChange={event => handleFormChange(event, form.id)}
-                                required
-                            >
-                                <option value={"true"}>Yes</option>
-                                <option value={"false"}>No</option>
-                            </SelectField>
-                            <br/>
+                                value={form.perishable ? "YES":"NO"}
+                                readOnly />
+                            <br />
+                            <br />
                             <TextField
                                 label="Expiry Date (if perishable)"
                                 name="expiry"
@@ -556,21 +548,13 @@ export function EditForm({ id, orgID }: { id: number, orgID: any }) {
                                 placeholder={form.date}
                                 onChange={event => handleFormChange(event, form.id)}
                                 value={form.expiry}
+                                readOnly
                             />
-                            <br/>
-                            <ImageUpload folderName={"inventory_item"} charityID={orgID} recordID={form.id} />
-                            <br/>
-                            <div className="col-span-full">
-                                <Button onClick={() => removeFields(form.id)} variant="solid" color="red" className="w-full">
-                                    <span>
-                                        Remove Item <span aria-hidden="true">&rarr;</span>
-                                    </span>
-                                </Button>
-                            </div>
+                            <br />
                         </div>
                     )
                 })}
-                
+
                 <div className="relative">
                     <div className="absolute inset-0 flex items-center" aria-hidden="true">
                         <div className="w-full border-t border-gray-300" />
@@ -580,19 +564,7 @@ export function EditForm({ id, orgID }: { id: number, orgID: any }) {
                     </div>
                 </div>
             </form>
-            <br/>
-            <div className="grid grid-cols-2 gap-4">
-                <Button onClick={submit} variant="solid" color="green" className="w-full">
-                    <span>
-                        Save <span aria-hidden="true">&rarr;</span>
-                    </span>
-                </Button>
-                <Button href={"#"} variant="solid" color="red" className="w-full">
-                    <span>
-                        Cancel <span aria-hidden="true">&rarr;</span>
-                    </span>
-                </Button>
-            </div>
+            <br />
         </div>
     );
 } 

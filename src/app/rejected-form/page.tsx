@@ -15,19 +15,40 @@ export const revalidate = 0;
 
 export default async function Page() {
 
+    //THIS GETS THE CHARITY ID AND LOGS ERRORS
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase
         .from('charity_member')
         .select('*, charity ( id, name )')
         .eq('user_uuid', uid)
+
+    //THIS IS USED TO STORE THE CHARITY ID FOR LATER AND CHECK IF IT'S RETRIEVED
     const charity_id = charity_member?.map((member) => member.charity?.id)
+    if (charity_id) {
+        console.log("THE CHARITY'S ID IS: " + charity_id)
+    }
+
+    if (error_2) {
+        console.log("ERROR RETRIEVING THE CHARITY MEMBER. DETAILS ARE BELOW: \n" + error_2)
+    }
+
+    //THIS JUST GETS THE CHARITY DETAILS BASED ON THE ORG ID AND LOGS ANY ERRORS
     const { data: org, error: error_4 } = await supabase
         .from('charity')
         .select('*, address ( * )')
         .eq('id', charity_id)
 
-    const address_id = org?.map((org) => org.address?.id)
+    if (error_4) {
+        console.log("ERROR RETRIEVING THE CHARITY. DETAILS ARE BELOW: \n" + error_4)
+    }
 
+    //THIS IS HERE TO STORE THE ADDRESS DETAILS FOR LATER AND CHECKS IF IT'S RETRIEVED
+    const address_id = org?.map((org) => org.address?.id)
+    if (address_id) {
+        console.log("THE ORG'S ADDRESS ID IS: " + address_id)
+    }
+
+    //THIS HANDLES THE UPDATING OF THE ORG APPLICATION DETAILS
     const handleSubmit = async (formData: FormData) => {
         'use server'
         const address = {
@@ -40,7 +61,10 @@ export default async function Page() {
             province: formData.get("province")
         }
 
-        const { data: new_address, error: address_error } = await supabase.from('address').update(address).eq('id', address_id);
+        const { error: address_error } = await supabase.from('address').update(address).eq('id', address_id);
+        if (address_error) {
+            console.log("ERROR UPDATING THE ADDRESS. DETAILS ARE BELOW: \n" + address_error)
+        }
 
         const charity_details = {
             name: formData.get('org_name'),
@@ -52,8 +76,10 @@ export default async function Page() {
             email_address: formData.get('email')
         }
 
-        const { data: charity, error: charity_error } = await supabase.from('charity').update(charity_details).eq('id', charity_id);
-        console.log("CHARITY ERROR IS ", charity_error)
+        const { error: charity_error } = await supabase.from('charity').update(charity_details).eq('id', charity_id);
+        if (charity_error) {
+            console.log("ERROR UPDATING THE CHARITY. DETAILS ARE BELOW: \n" + charity_error)
+        }
 
         revalidatePath('/');
         redirect('/pending')
