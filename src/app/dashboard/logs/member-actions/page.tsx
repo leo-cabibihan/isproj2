@@ -34,7 +34,7 @@ export default async function Page() {
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
-    const { data: logs, error } = await supabase.from('charity_audit_log')
+    const { data: logs, error } = await supabase.from('decrypted_charity_audit_log')
     .select('*, charity_member ( * ), charity ( * )')
     .eq('charity_id', charity_id)
     .order('date', {ascending: false})
@@ -63,7 +63,7 @@ export default async function Page() {
 
                                 <Tr key={log.id}>
                                     <Td>{log.charity_member.member_name}</Td>
-                                    <Td>{log.action}</Td>
+                                    <Td>{log.decrypted_action}</Td>
                                     <Td>{formatDate(log.date) + ' ' + formatTime(log.date)}</Td>
                                 </Tr>
                             )}
