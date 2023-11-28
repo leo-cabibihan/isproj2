@@ -200,6 +200,7 @@ export async function Causes({ id }: any) {
     .from('event')
     .select('*, charity ( id, name )')
     .eq('charity_id', id).eq('is_ongoing', true).eq('approval_status', 'APPROVED')
+    .order('start_date', {ascending: false})
   console.log(id + '!!!!!')
   console.log(events)
 
@@ -272,6 +273,7 @@ export async function PastEvents({ id }: any) {
     .from('event')
     .select('*, charity ( id, name )')
     .eq('charity_id', id).eq('is_ongoing', false).eq('approval_status', 'APPROVED')
+    .order('start_date', {ascending: false})
   console.log(id + '!!!!!')
   console.log(events)
 
@@ -534,6 +536,7 @@ export async function News({ id }: any) {
     .from('campaign_post')
     .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
     .eq('charity_id', id)
+    .order('date_posted', {ascending: false})
 
   return (
     <div className="bg-white py-24 sm:py-32">

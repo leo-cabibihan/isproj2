@@ -8,6 +8,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { revalidatePath } from 'next/cache'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { redirect } from 'next/navigation'
 
 export const revalidate = 0
 var i
@@ -99,5 +100,5 @@ export async function POST(request: Request) {
     body,
   })
 
-  return NextResponse.redirect(`${requestUrl.origin}/thankyou`)
+  return NextResponse.redirect(`https://isproj2.vercel.app/thankyou`)
 }

@@ -47,6 +47,7 @@ export default async function Page() {
         .from('campaign_post')
         .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
         .eq('charity_id', charity_id)
+        .order('date_posted', {ascending: false})
 
     const { data: last_post, error: post_error } = await supabase
         .from('campaign_post')
@@ -146,7 +147,7 @@ export default async function Page() {
                                 </div>
                             </div>
 
-                            <ImageUpload folderName="campaign_post" charityID={charityId} recordID={post_id![0] + 1} />
+                            <ImageUpload folderName="campaign_post" charityID={charityId} recordID={post_id![0] + 1} labelText="Upload Image" />
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">

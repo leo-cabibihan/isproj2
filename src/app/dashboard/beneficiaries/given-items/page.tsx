@@ -43,15 +43,19 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', charity_id).eq('is_ongoing', true).eq('approval_status', "APPROVED")
+        .order('start_date', {ascending: false})
 
     console.log("EVENTS ERROR", events_error)
 
-    const { data: inventory, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', charity_id)
+    const { data: inventory, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ')
+    .eq('items_donation_transaction.charity_id', charity_id)
+    .order('expiry', {ascending: false})
 
     const { data: beneficiary_items, error: ben_error } = await supabase
         .from('beneficiary_items')
         .select('*, inventory_item ( id, name ), charity ( id, name ), event (id, name)')
         .eq('charity_id', charity_id)
+        .order('date', {ascending: false})
 
     console.log("hello I am in pain. ", ben_error)
 

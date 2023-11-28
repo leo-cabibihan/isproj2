@@ -10,7 +10,7 @@ export default function CashReceipt() {
                 <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                     Scan the QR Code to finish transaction:
                 </h1>
-                <ImageUpload folderName="cash_receipts" charityID={12} recordID={23} />
+                <ImageUpload folderName="cash_receipts" charityID={12} recordID={23} labelText="Upload Receipt/s" />
                 <div className="pt-6">
                     <Button type="submit" href={''} variant="solid" color="green" className="w-1/5">
                         <span>

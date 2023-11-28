@@ -30,7 +30,7 @@ export default async function Auditlog() {
     
     console.log('UID is: ' + uid)
 
-    const { data: actions } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )').eq('admin_id', uid)
+    const { data: actions } = await supabase.from('admin_audit_log').select('*, system_owner ( id, name )').eq('admin_id', uid).order('date', {ascending: false})
 
     return (
         <>

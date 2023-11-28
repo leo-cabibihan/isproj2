@@ -33,7 +33,7 @@ export default function CashQR({ params }: any) {
                 <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
                     Upload Receipt:
                 </h1>
-                <ImageUpload folderName="receipts" charityID={charityID} recordID={recordID} />
+                <ImageUpload folderName="receipts" charityID={charityID} recordID={recordID} labelText="Upload Receipt/s"/>
                 <form className="space-y-6" action={handleSubmit}>
                     <div className="col-span-full">
                         <Button type="submit" variant="solid" color="blue" className="w-full">

@@ -172,7 +172,7 @@ export default async function ExternalTable() {
                                                 </SelectField>
                                                 <br/>
                                                 <div className="col-span-full">
-                                                    <ImageUpload folderName="cash" charityID={charityId} recordID={cash_id![0] + 1} />
+                                                    <ImageUpload folderName="cash" charityID={charityId} recordID={cash_id![0] + 1} labelText="Upload Receipt/s" />
                                                 </div>
                                                 <br/>
                                                 <div className="flex justify-center">
@@ -252,7 +252,7 @@ export default async function ExternalTable() {
                                                                             </SelectField>
                                                                             <br/>
                                                                             <div className="col-span-full">
-                                                                                <ImageUpload folderName="cash" charityID={charityId} recordID={cash.id} />
+                                                                                <ImageUpload folderName="cash" charityID={charityId} recordID={cash.id} labelText="Upload Receipt/s" />
                                                                             </div>
                                                                             <div className="mt-6 flex items-center justify-start gap-x-6">
                                                                                 <Button type='submit' variant='solid' color='blue' className="w-full">Save Changes</Button>

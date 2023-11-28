@@ -555,36 +555,24 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
       <form className="space-y-6" onSubmit={submit}>
         <TextField label="Donor Name" name="donor" type="text" readOnly />
         <TextField label="Pickup Address" name="address" type="text" readOnly />
-        <div className="col-span-full">
-          <Button
-            onClick={addFields}
-            variant="solid"
-            color="green"
-            className="w-full"
-          >
-            <span>
-              Add Another Item <span aria-hidden="true">&rarr;</span>
-            </span>
-          </Button>
-        </div>
-        <br />
-        <div className="relative">
-          <div
-            className="absolute inset-0 flex items-center"
-            aria-hidden="true"
-          >
-            <div className="w-full border-t border-gray-300" />
-          </div>
-          <div className="relative flex justify-center">
-            <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">
-              Item Details
-            </span>
-          </div>
-        </div>
         <br />
         {formFields?.inventory_item?.map((form: any) => {
           return (
             <div key={form.id}>
+              <div className="relative">
+                <div
+                  className="absolute inset-0 flex items-center"
+                  aria-hidden="true"
+                >
+                  <div className="w-full border-t border-gray-300" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="bg-white px-3 text-base font-semibold leading-6 text-gray-900">
+                    Item Details
+                  </span>
+                </div>
+              </div>
+              <br />
               <TextField
                 label="Item Name"
                 name="name"
@@ -592,7 +580,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
                 placeholder={form.name}
                 onChange={(event) => handleFormChange(event, form.id)}
                 value={form.name}
-                required
+                readOnly
               />
               <br />
               <TextField
@@ -604,7 +592,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
                 max={10000}
                 onChange={(event) => handleFormChange(event, form.id)}
                 value={form.quantity}
-                required
+                readOnly
               />
               <br />
               <TextField
@@ -614,19 +602,19 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
                 placeholder={form.unit_of_measurement}
                 onChange={(event) => handleFormChange(event, form.id)}
                 value={form.unit_of_measurement}
-                required
+                readOnly
               />
               <br />
-              <SelectField
+              <TextField
                 label="Perishable?"
                 name="perishable"
-                placeholder="Yes"
+                type="text"
+                placeholder={form.perishable}
                 onChange={(event) => handleFormChange(event, form.id)}
-                required
-              >
-                <option value={'true'}>Yes</option>
-                <option value={'false'}>No</option>
-              </SelectField>
+                value={form.perishable ? 'YES' : 'NO'}
+                readOnly
+              />
+              <br />
               <br />
               <TextField
                 label="Expiry Date (if perishable)"
@@ -635,27 +623,9 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
                 placeholder={form.date}
                 onChange={(event) => handleFormChange(event, form.id)}
                 value={form.expiry}
-                min={getMinExpiryDate()}
+                readOnly
               />
               <br />
-              <ImageUpload
-                folderName={'inventory_item'}
-                charityID={orgID}
-                recordID={form.id}
-              />
-              <br />
-              <div className="col-span-full">
-                <Button
-                  onClick={() => removeFields(form.id)}
-                  variant="solid"
-                  color="red"
-                  className="w-full"
-                >
-                  <span>
-                    Remove Item <span aria-hidden="true">&rarr;</span>
-                  </span>
-                </Button>
-              </div>
             </div>
           )
         })}
@@ -675,23 +645,6 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
         </div>
       </form>
       <br />
-      <div className="grid grid-cols-2 gap-4">
-        <Button
-          onClick={submit}
-          variant="solid"
-          color="green"
-          className="w-full"
-        >
-          <span>
-            Save <span aria-hidden="true">&rarr;</span>
-          </span>
-        </Button>
-        <Button href={'#'} variant="solid" color="red" className="w-full">
-          <span>
-            Cancel <span aria-hidden="true">&rarr;</span>
-          </span>
-        </Button>
-      </div>
     </div>
   )
 }

@@ -64,13 +64,15 @@ export default async function Applications() {
     .from('charity')
     .select('*')
     .eq('charity_verified', false)
+    .eq('is_rejected', false)
+    .order('created_at', {ascending: false})
 
   const verifyOrg = async (formData: FormData) => {
     'use server'
     const charityId = parseInt(formData.get('id') as string)
     const charityName = String(formData.get('name'))
     const charity = {
-      charity_verified: true,
+      charity_verified: true
     }
 
     await supabase.from('charity').update(charity).eq('id', charityId)
@@ -83,6 +85,17 @@ export default async function Applications() {
     const email = String(formData.get('email'))
     const name = String(formData.get('name'))
     const reason = String(formData.get('reason'))
+
+    const charityId = parseInt(formData.get('id') as string)
+
+    const charity = {
+      charity_verified: false,
+      is_rejected: true,
+      rejection_reason: reason
+    }
+
+    await supabase.from('charity').update(charity).eq('id', charityId)
+    await AdminLog('Rejected the application of charity ' + charityName + '.')
 
     const body = render(
       <NoURLMail
@@ -102,6 +115,7 @@ export default async function Applications() {
       subject: 'ALERT!',
       body,
     })
+    revalidatePath('/')
   }
 
   return (
@@ -253,7 +267,7 @@ export default async function Applications() {
                             className="w-full"
                           >
                             <span>
-                              Notify Charity{' '}
+                              Reject & Notify Charity{' '}
                               <span aria-hidden="true">&rarr;</span>
                             </span>
                           </Button>

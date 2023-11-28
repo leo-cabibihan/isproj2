@@ -217,24 +217,15 @@ export function GoodsForm({ ID, UserID }: any) {
 
                             <option value={1}>yes</option>
                           </SelectField>
-
-                          {form.perishable === 1 && (
-                            <>
-                              <br />
-                              <TextField
-                                label="Expiry Date"
-                                name="expiry"
-                                type="date"
-                                placeholder=""
-                                onChange={(event) =>
-                                  handleFormChange(event, index)
-                                }
-                                value={form.expiry}
-                                required //THIS IS AN ISSUE, Need to set it to expiry textfield 'required' if the perishable is set to yes
-                                min={getMinExpiryDate()}
-                              />
-                            </>
-                          )}
+                          <br />
+                          <TextField
+                            label="Expiry Date (if perishable)"
+                            name="expiry"
+                            type="date"
+                            placeholder=""
+                            onChange={(event) => handleFormChange(event, index)}
+                            value={form.expiry}
+                          />
                         </div>
 
                         <div className="col-span-full">

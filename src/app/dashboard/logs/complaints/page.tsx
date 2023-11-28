@@ -32,7 +32,10 @@ export default async function Page() {
     const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
-    const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name ), donor ( id, name )').eq('charity_id', charity_id)
+    const { data: complaints } = await supabase.from('donor_complaints')
+    .select('*, charity ( id, name ), donor ( id, name )')
+    .eq('charity_id', charity_id)
+    .order('created_at', {ascending: false})
 
     const { data: last_appeal, error: event_error } = await supabase
         .from('charity_appeals')
@@ -148,7 +151,7 @@ export default async function Page() {
                                                     </div>
                                                 </div>
 
-                                                <ImageUpload folderName='charity_appeals' charityID={charity_id} recordID={appeal_id![0] + 1} />
+                                                <ImageUpload folderName='charity_appeals' charityID={charity_id} recordID={appeal_id![0] + 1} labelText="Upload Proof" />
 
                                                 <div className="col-span-full">
                                                     <Button type="submit" variant="solid" color="yellow" className="w-full">

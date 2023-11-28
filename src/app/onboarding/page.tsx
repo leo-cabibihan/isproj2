@@ -208,7 +208,7 @@ export default async function Example() {
             </div>
           </div>
 
-          <ImageUpload folderName="onboarding" charityID={last_id![0] + 1} recordID={last_id![0] + 1} />
+          <ImageUpload folderName="onboarding" charityID={last_id![0] + 1} recordID={last_id![0] + 1} labelText="Upload Certifying Documents" />
           
         </div>
         <div className="mt-6 flex flex-col items-center justify-end gap-x-6 mb-4">

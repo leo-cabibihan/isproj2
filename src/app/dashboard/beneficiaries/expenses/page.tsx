@@ -45,17 +45,19 @@ export default async function Expenses() {
     const generic_error = "Unable to process request. Please check your data and try again."
 
     console.log("CHARITY ID IN EXPENSES IS" + charity_id)
-    
+
     const { data: expenses, error } = await supabase
         .from('expenses')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
         .eq('charity_id', charity_id)
+        .order('date', {ascending: false})
 
     console.log("UH OH", expenses)
 
     const { data: beneficiaries, error: beneficiaries_error } = await supabase
         .from('beneficiaries')
         .select('*')
+        .order('date', {ascending: false})
 
     const { data: last_expense, error: event_error } = await supabase
         .from('expenses')
@@ -64,14 +66,15 @@ export default async function Expenses() {
 
     const expense_id = last_expense?.map(expense => expense.id)
     console.log("LAST EXPENSE'S ID IS: " + (expense_id))
- 
+
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', charity_id)
         .eq('is_ongoing', true)
-        eq('approval_status', 'APPROVED')
-        
+        .eq('approval_status', 'APPROVED')
+        .order('start_date', { ascending: false })
+
     const handleSubmit = async (formData: FormData) => {
         'use server'
         const expense = {
@@ -82,10 +85,10 @@ export default async function Expenses() {
             charity_id: formData.get("charity_id")
         };
 
-        const {data, error} = await supabase.from('expenses').insert(expense);
+        const { data, error } = await supabase.from('expenses').insert(expense);
         revalidatePath('/');
         CharityLog("ADDED EXPENSE", error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -98,10 +101,10 @@ export default async function Expenses() {
             beneficiary_id: formData.get("beneficiary_id"),
         };
 
-        const {data, error} = await supabase.from('expenses').update(expense).eq("id", expenseId)
+        const { data, error } = await supabase.from('expenses').update(expense).eq("id", expenseId)
         revalidatePath('/');
         CharityLog("UPDATED EXPENSE" + expenseId + ".", error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
     const deleteExpense = async (formData: FormData) => {
@@ -114,10 +117,10 @@ export default async function Expenses() {
             beneficiary_id: formData.get("beneficiary_id"),
         };
 
-        const {data, error} = await supabase.from('expenses').delete().eq("id", expenseId)
+        const { data, error } = await supabase.from('expenses').delete().eq("id", expenseId)
         revalidatePath('/');
         CharityLog("DELETE EXPENSE" + expenseId + ".", error)
-        DisplayError(`https://givemore.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
 
@@ -193,15 +196,15 @@ export default async function Expenses() {
                                                 </SelectField>
 
 
-                                                <ImageUpload folderName="expenses" charityID={charity_id} recordID={expense_id![0] + 1} />
+                                                <ImageUpload folderName="expenses" charityID={charity_id} recordID={expense_id![0] + 1} labelText="Upload Receipt/s" />
 
                                                 <div className="mt-6 col-span-full">
                                                     <div className="col-span-full">
-                                                    <Button type="submit" variant="solid" color="blue" className="w-full">
-                                                        <span>
-                                                            Save Expense <span aria-hidden="true">&rarr;</span>
-                                                        </span>
-                                                    </Button>
+                                                        <Button type="submit" variant="solid" color="blue" className="w-full">
+                                                            <span>
+                                                                Save Expense <span aria-hidden="true">&rarr;</span>
+                                                            </span>
+                                                        </Button>
                                                     </div>
                                                 </div>
 
@@ -277,28 +280,28 @@ export default async function Expenses() {
 
 
                                                                     {/* This will display the list of events linked to charity_id, and all beneficiaries available */}
-                                                                    
+
                                                                     <SelectField
-                                                                    className="col-span-full py-5"
-                                                                    label="Assign Event"
-                                                                    name="event_id"
-                                                                >
-                                                                    {events?.map(event => (
-                                                                        <option key={event.id} value={event.id}>{event.name}</option>
-                                                                    ))}
-                                                                </SelectField>
+                                                                        className="col-span-full py-5"
+                                                                        label="Assign Event"
+                                                                        name="event_id"
+                                                                    >
+                                                                        {events?.map(event => (
+                                                                            <option key={event.id} value={event.id}>{event.name}</option>
+                                                                        ))}
+                                                                    </SelectField>
 
-                                                                <SelectField
-                                                                    className="col-span-full py-5"
-                                                                    label="Assign Beneficiary"
-                                                                    name="beneficiary_id"
-                                                                >
-                                                                    {beneficiaries?.map(beneficiary => (
-                                                                        <option key={beneficiary.id} value={beneficiary.id}>{beneficiary.beneficiary_name}</option>
-                                                                    ))}
-                                                                </SelectField>
+                                                                    <SelectField
+                                                                        className="col-span-full py-5"
+                                                                        label="Assign Beneficiary"
+                                                                        name="beneficiary_id"
+                                                                    >
+                                                                        {beneficiaries?.map(beneficiary => (
+                                                                            <option key={beneficiary.id} value={beneficiary.id}>{beneficiary.beneficiary_name}</option>
+                                                                        ))}
+                                                                    </SelectField>
 
-                                                                    <ImageUpload folderName="expenses" charityID={charity_id![0]} recordID={expense.id} />
+                                                                    <ImageUpload folderName="expenses" charityID={charity_id![0]} recordID={expense.id} labelText="Upload Receipt/s" />
 
 
                                                                     <div className="mt-6 flex items-center justify-start gap-x-6">

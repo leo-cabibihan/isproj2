@@ -111,7 +111,7 @@ export default async function Appeals({ searchParams }: { searchParams: { [key: 
             </div>
           </div>
 
-          <ImageUpload folderName='charity_appeals' charityID={charity_id} recordID={appeal_id![0] + 1} />
+          <ImageUpload folderName='charity_appeals' charityID={charity_id} recordID={appeal_id![0] + 1} labelText="donor_complaints"/>
 
           <div>
             <Button

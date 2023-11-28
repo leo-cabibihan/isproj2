@@ -39,12 +39,14 @@ export default async function Home() {
     .from('charity')
     .select('*')
     .eq('charity_verified', true)
+    .order('created_at', {ascending: false})
   const { data, error } = await supabase.from('drop_off_location').select('*')
 
   const { data: campaign_post } = await supabase
     .from('campaign_post')
     .select('*, charity ( id )')
     .eq('charity.charity_verified', true)
+    .order('date_posted', {ascending: false})
 
   return (
     <>
@@ -127,12 +129,12 @@ export default async function Home() {
                       About Us
                     </h1>
                     <p className="mt-6 text-xl leading-8 text-gray-700">
-                      GiveMore connects you with charities and causes you're
+                      GiveMore connects you with charities and causes you&apos;re
                       passionate about. With a few clicks, you can explore
                       different charities, learn about their missions, and make
-                      a direct impact by donating. It's as easy as choosing your
-                      donation amount and method. Your giving journey doesn't
-                      end with a donation; it's an ongoing connection with the
+                      a direct impact by donating. It&apos;s as easy as choosing your
+                      donation amount and method. Your giving journey doesn&apos;t
+                      end with a donation; it&apos;s an ongoing connection with the
                       causes you support.
                     </p>
                   </div>
