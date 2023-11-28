@@ -102,7 +102,7 @@ export async function POST(request: Request) {
       status: 301,
     })
   } else if (charity_member?.length === 1) {
-    CharityLog(charity_member![0].member_name + ' has logged in.', null)
+    CharityLog(charity_member![0].decrypted_member_name + ' has logged in.', null)
     return NextResponse.redirect(`${requestUrl.origin}/dashboard/settings`, {
       status: 301,
     })
