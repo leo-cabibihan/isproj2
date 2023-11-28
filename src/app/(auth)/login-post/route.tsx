@@ -27,7 +27,7 @@ export async function GET(request: Request) {
     .select('*')
     .eq('user_uuid', user_id)
   const { data: admin, error: error_3 } = await supabase
-    .from('system_owner')
+    .from('decrypted_system_owner')
     .select('*')
     .eq('id', user_id)
 
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
     .select('*')
     .eq('user_uuid', user_id)
   const { data: admin, error: error_3 } = await supabase
-    .from('system_owner')
+    .from('decrypted_system_owner')
     .select('*')
     .eq('id', user_id)
 

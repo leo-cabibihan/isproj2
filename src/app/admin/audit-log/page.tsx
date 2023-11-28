@@ -27,7 +27,7 @@ export default async function Auditlog() {
     }; 
 
 
-    const { data: logs } = await supabase.from('decrypted_admin_audit_log').select('*, system_owner ( id, name )').order('date', {ascending: false})
+    const { data: logs } = await supabase.from('decrypted_admin_audit_log').select('*, decrypted_system_owner ( id, name )').order('date', {ascending: false})
     //.order('date', {ascending: false}) <-- If you want the most recent log to be on top of the list.
 
     return (
@@ -52,7 +52,7 @@ export default async function Auditlog() {
                             {logs?.map(log =>
 
                                 <Tr key={log.id}>
-                                    <Td>{log.system_owner?.name}</Td>
+                                    <Td>{log.decrypted_system_owner?.name}</Td>
                                     <Td>{log.decrypted_action}</Td>
                                     <Td>{formatDate(log.date) + ' ' + formatTime(log.date)}</Td>
                                 </Tr>

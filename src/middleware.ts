@@ -21,7 +21,7 @@ export async function middleware(req: NextRequest) {
   if (originalUrl.includes('/admin')) {
 
     const { data: admin, error: error_3 } = await supabase
-      .from('system_owner')
+      .from('decrypted_system_owner')
       .select('*')
       .eq('id', uid)
 

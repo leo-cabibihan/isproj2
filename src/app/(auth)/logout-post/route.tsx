@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         .select('*')
         .eq('user_uuid', uid)
     const { data: admin, error: error_3 } = await supabase
-        .from('system_owner')
+        .from('decrypted_system_owner')
         .select('*')
         .eq('id', uid)
 

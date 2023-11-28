@@ -11,7 +11,7 @@ export async function AdminAuth() {
   const uid = user?.id
 
   //This checks for the admin role
-  const { data: admin, error: error_3 } = await supabase.from('system_owner').select('*').eq('id', uid)
+  const { data: admin, error: error_3 } = await supabase.from('decrypted_system_owner').select('*').eq('id', uid)
 
   //This redirects anyone that's not signed in and not admin
   if (!user && !admin) {
