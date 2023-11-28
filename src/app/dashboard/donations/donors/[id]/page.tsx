@@ -34,7 +34,7 @@ export default async function DonorHistory({params} : any) {
 
     const donorID = params.id
     const uid = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity_id)
     //const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
 

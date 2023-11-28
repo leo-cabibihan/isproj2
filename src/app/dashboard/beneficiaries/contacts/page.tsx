@@ -17,7 +17,7 @@ export const revalidate = 0;
 export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
   const uid = await GetUID()
-  const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid).single()
+  const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid).single()
   const charity_id = charity_member?.charity?.id
 
   const generic_error = "Transaction error. Please check your data and try again."

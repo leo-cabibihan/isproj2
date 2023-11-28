@@ -23,7 +23,7 @@ export async function GET(request: Request) {
     .select('*')
     .eq('id', user_id)
   const { data: charity_member, error: error_2 } = await supabase
-    .from('charity_member')
+    .from('decrypted_charity_member')
     .select('*')
     .eq('user_uuid', user_id)
   const { data: admin, error: error_3 } = await supabase
@@ -89,7 +89,7 @@ export async function POST(request: Request) {
     .select('*')
     .eq('id', user_id)
   const { data: charity_member, error: error_2 } = await supabase
-    .from('charity_member')
+    .from('decrypted_charity_member')
     .select('*')
     .eq('user_uuid', user_id)
   const { data: admin, error: error_3 } = await supabase

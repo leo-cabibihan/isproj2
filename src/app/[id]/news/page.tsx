@@ -21,7 +21,7 @@ const formatTime = (timestamp) => {
 };
 
   const postID = params.id
-  const { data: posts, error } = await supabase.from('campaign_post').select('*, charity ( id, name ), charity_member( user_uuid, member_name )').eq('id', postID)
+  const { data: posts, error } = await supabase.from('campaign_post').select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )').eq('id', postID)
 
   const charityID = posts?.map(post => post.charity?.id);
   const { data: images, error: image_error } = await supabase
@@ -57,7 +57,7 @@ const formatTime = (timestamp) => {
                   <div className="text-sm leading-6 grid grid-cols-4 gap-4">
                     <div className="col-span-3">
                       <p className="font-semibold text-gray-900">
-                        written by {post.charity_member?.member_name}
+                        written by {post.decrypted_charity_member?.decrypted_member_name}
                       </p>
                       <p className="text-gray-600">{post.charity?.name}</p>
                     </div>

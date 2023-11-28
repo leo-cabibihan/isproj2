@@ -534,7 +534,7 @@ export async function News({ id }: any) {
   };
   const { data: posts } = await supabase
     .from('campaign_post')
-    .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
+    .select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )')
     .eq('charity_id', id)
     .order('date_posted', {ascending: false})
 

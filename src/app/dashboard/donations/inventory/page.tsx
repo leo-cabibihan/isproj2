@@ -26,7 +26,7 @@ export default async function Page() {
   console.log('DOES IT WORK???? MAYBE: ' + (await GetUID()))
   const uid = await GetUID()
   const { data: charity_member, error: idk } = await supabase
-    .from('charity_member')
+    .from('decrypted_charity_member')
     .select('*, charity ( id, name )')
     .eq('user_uuid', uid)
   const charity_id = charity_member?.map((member) => member.charity?.id)

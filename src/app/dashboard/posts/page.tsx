@@ -38,14 +38,14 @@ export default async function Page() {
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
 
     const uid = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     const charityId = charity_id![0]
 
     const { data: posts, error } = await supabase
         .from('campaign_post')
-        .select('*, charity ( id, name ), charity_member( user_uuid, member_name )')
+        .select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )')
         .eq('charity_id', charity_id)
         .order('date_posted', {ascending: false})
 
@@ -196,7 +196,7 @@ export default async function Page() {
                                                         <div className="col-span-3">
                                                             <p className="font-semibold text-gray-900">
 
-                                                                {post.charity_member?.member_name}
+                                                                {post.decrypted_charity_member?.decrypted_member_name}
                                                             </p>
                                                             <p className="text-gray-600">{post.charity?.name}</p>
                                                         </div>

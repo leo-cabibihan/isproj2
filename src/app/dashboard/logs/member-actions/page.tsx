@@ -31,11 +31,11 @@ export default async function Page() {
  
 
     const uid = await GetUID()
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
-    const { data: logs, error } = await supabase.from('decrypted_charity_audit_log')
-    .select('*, charity_member ( * ), charity ( * )')
+    const { data: logs, error } = await supabase.from('charity_member_actions')
+    .select('*')
     .eq('charity_id', charity_id)
     .order('date', {ascending: false})
     
@@ -62,7 +62,7 @@ export default async function Page() {
                             {logs?.map(log =>
 
                                 <Tr key={log.id}>
-                                    <Td>{log.charity_member.member_name}</Td>
+                                    <Td>{log.decrypted_member_name}</Td>
                                     <Td>{log.decrypted_action}</Td>
                                     <Td>{formatDate(log.date) + ' ' + formatTime(log.date)}</Td>
                                 </Tr>

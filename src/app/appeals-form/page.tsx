@@ -14,6 +14,7 @@ import { useRouter } from 'next/router'
 import Alert from '@/components/Alert'
 import { ImageUpload } from "@/components/ImgUpload";
 import { GetUID } from "@/app/utils/user_id";
+import { CharityLog } from '../admin/audit-log/function';
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -23,7 +24,7 @@ export default async function Appeals({ searchParams }: { searchParams: { [key: 
 
   console.log("DOES IT WORK???? MAYBE: " + await GetUID())
   const uid = await GetUID()
-  const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+  const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
   const charity_id = charity_member?.map(member => member.charity?.id)
 
   const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name ), donor ( id, name )').eq('charity_id', charity_id)

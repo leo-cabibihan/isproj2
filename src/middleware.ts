@@ -32,7 +32,7 @@ export async function middleware(req: NextRequest) {
   else if (originalUrl.includes('/dashboard')) {
 
     const { data: charity_member, error: error_2 } = await supabase
-      .from('charity_member')
+      .from('decrypted_charity_member')
       .select('*, charity ( id, charity_verified, is_rejected )')
       .eq('user_uuid', uid)
 
@@ -68,7 +68,7 @@ export async function middleware(req: NextRequest) {
   }
   else if (originalUrl.includes('/appeals-form')) {
     const { data: charity_member, error: error_2 } = await supabase
-      .from('charity_member')
+      .from('decrypted_charity_member')
       .select('*, charity ( id, charity_verified )')
       .eq('user_uuid', uid)
 
@@ -82,7 +82,7 @@ export async function middleware(req: NextRequest) {
   }
   else if (originalUrl.includes('/pending')) {
     const { data: charity_member, error: error_2 } = await supabase
-      .from('charity_member')
+      .from('decrypted_charity_member')
       .select('*, charity ( id, charity_verified, is_rejected )')
       .eq('user_uuid', uid)
 
@@ -100,7 +100,7 @@ export async function middleware(req: NextRequest) {
   }
   else if (originalUrl.includes('/rejected-form')) {
     const { data: charity_member, error: error_2 } = await supabase
-      .from('charity_member')
+      .from('decrypted_charity_member')
       .select('*, charity ( id, charity_verified, is_rejected )')
       .eq('user_uuid', uid)
 

@@ -18,7 +18,7 @@ export default async function Page() {
     //THIS GETS THE CHARITY ID AND LOGS ERRORS
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase
-        .from('charity_member')
+        .from('decrypted_charity_member')
         .select('*, charity ( id, name )')
         .eq('user_uuid', uid)
 

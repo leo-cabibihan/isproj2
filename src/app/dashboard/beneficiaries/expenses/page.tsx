@@ -39,7 +39,7 @@ export default async function Expenses() {
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
     console.log("UID IS" + uid)
-    const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     const generic_error = "Unable to process request. Please check your data and try again."

@@ -33,12 +33,12 @@ export const revalidate = 0
 export default async function Settings() {
   const uid = await GetUID()
   const { data: charity_member, error: error_2 } = await supabase
-    .from('charity_member')
+    .from('decrypted_charity_member')
     .select('*, charity ( id, name )')
     .eq('user_uuid', uid)
   const charity_id = charity_member?.map((member) => member.charity?.id)
   const { data: members, error } = await supabase
-    .from('charity_member')
+    .from('decrypted_charity_member')
     .select('*, charity ( id, name )')
     .eq('charity_id', charity_id)
   const { data: locations, error: error_3 } = await supabase
@@ -155,7 +155,7 @@ export default async function Settings() {
                                                         {members?.map(person => (
                                                             <tr key={person.user_uuid}>
                                                                 <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                                                    {person.member_name}
+                                                                    {person.decrypted_member_name}
                                                                 </td>
                                                             </tr>
                                                         ))}

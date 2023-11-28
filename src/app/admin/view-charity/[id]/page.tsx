@@ -42,7 +42,7 @@ export default async function Organization({ params }: any) {
 
     const { data: appeals, error: appeals_error } = await supabase
         .from('charity_appeals')
-        .select('*, charity ( id, name ), charity_member ( user_uuid, member_name ), donor_complaints ( id, donor ( id, name ) )')
+        .select('*, charity ( id, name ), decrypted_charity_member ( user_uuid, decrypted_member_name ), donor_complaints ( id, donor ( id, name ) )')
         .eq('charity_id', orgID)
         .order('created_at', {ascending: false})
 
@@ -264,7 +264,7 @@ export default async function Organization({ params }: any) {
                             {appeals?.map(appeal =>
 
                                 <Tr key={appeal.id}>
-                                    <Td>{appeal.charity_member?.member_name}</Td>
+                                    <Td>{appeal.decrypted_charity_member?.decrypted_member_name}</Td>
                                     <Td>{appeal.charity?.name}</Td>
                                     <Td>{formatDate(appeal.created_at) + ' ' + formatTime(appeal.created_at)}</Td>
                                     <Td>
@@ -283,7 +283,7 @@ export default async function Organization({ params }: any) {
                                                     name="charity_worker"
                                                     type="text"
                                                     readOnly
-                                                    defaultValue={String(appeal.charity_member?.member_name)}
+                                                    defaultValue={String(appeal.decrypted_charity_member?.decrypted_member_name)}
                                                 />
 
                                                 <TextField
