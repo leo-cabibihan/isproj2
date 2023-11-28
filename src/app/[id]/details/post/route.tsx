@@ -78,6 +78,6 @@ export async function POST(request: Request) {
 
     console.log("SUCCESS??? ", success)
 
-    return NextResponse.redirect(`isproj2.vercel.app/thankyou`)
+    return NextResponse.redirect(`https://isproj2.vercel.app/thankyou`)
 
 } 
