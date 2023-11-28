@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
         CharityLog(charity_member![0].member_name + " has logged out.", null)
     }
     else if (admin?.length === 1) [
-        AdminLog(admin![0].name + " has logged out.")
+        AdminLog(admin![0].decrypted_name + " has logged out.")
     ]
 
     const { error } = await supabase.auth.signOut()

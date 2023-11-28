@@ -107,7 +107,7 @@ export async function POST(request: Request) {
       status: 301,
     })
   } else if (admin?.length === 1) {
-    AdminLog(admin![0].name + ' has logged in.')
+    AdminLog(admin![0].decrypted_name + ' has logged in.')
     return NextResponse.redirect(`${requestUrl.origin}/admin/applications`, {
       status: 301,
     })

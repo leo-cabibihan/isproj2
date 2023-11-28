@@ -30,7 +30,7 @@ export default async function Auditlog() {
     
     console.log('UID is: ' + uid)
 
-    const { data: actions } = await supabase.from('decrypted_admin_audit_log').select('*, decrypted_system_owner ( id, name )').eq('admin_id', uid).order('date', {ascending: false})
+    const { data: actions } = await supabase.from('admin_actions').select('*').eq('id', uid).order('date', {ascending: false})
 
     return (
         <>
@@ -54,7 +54,7 @@ export default async function Auditlog() {
                         <Tbody>
                             {actions?.map(action =>
                                 <Tr key={action.id}>
-                                    <Td>{action.decrypted_system_owner?.name}</Td>
+                                    <Td>{action.decrypted_name}</Td>
                                     <Td>{action.decrypted_action}</Td>
                                     <Td>{formatDate(action.date) + ' ' + formatTime(action.date)}</Td>
                                 </Tr>
