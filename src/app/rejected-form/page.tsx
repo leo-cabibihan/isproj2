@@ -260,7 +260,7 @@ export default async function Page() {
                             ))}
                         </div>
 
-                        <ImageUpload folderName="onboarding" charityID={charity_id} recordID={charity_id} />
+                        <ImageUpload folderName="onboarding" charityID={charity_id} recordID={charity_id} labelText="Upload Certifying Documents" />
 
                     </div>
                     <div className="mt-6 flex flex-col items-center justify-end gap-x-6 mb-4">

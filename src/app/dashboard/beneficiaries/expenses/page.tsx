@@ -196,7 +196,7 @@ export default async function Expenses() {
                                                 </SelectField>
 
 
-                                                <ImageUpload folderName="expenses" charityID={charity_id} recordID={expense_id![0] + 1} />
+                                                <ImageUpload folderName="expenses" charityID={charity_id} recordID={expense_id![0] + 1} labelText="Upload Receipt/s" />
 
                                                 <div className="mt-6 col-span-full">
                                                     <div className="col-span-full">
@@ -301,7 +301,7 @@ export default async function Expenses() {
                                                                         ))}
                                                                     </SelectField>
 
-                                                                    <ImageUpload folderName="expenses" charityID={charity_id![0]} recordID={expense.id} />
+                                                                    <ImageUpload folderName="expenses" charityID={charity_id![0]} recordID={expense.id} labelText="Upload Receipt/s" />
 
 
                                                                     <div className="mt-6 flex items-center justify-start gap-x-6">

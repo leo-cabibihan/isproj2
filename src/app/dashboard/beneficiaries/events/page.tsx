@@ -214,7 +214,8 @@ export default async function Page() {
                                 type="datetime-local"
                                 required
                             />
-                            <ImageUpload folderName="event" charityID={charity_id![0]} recordID={event_id![0] + 1} />
+                            <ImageUpload folderName="event" charityID={charity_id![0]} recordID={event_id![0] + 1} labelText="Upload Event Images" />
+                            <ImageUpload folderName="event" charityID={charity_id![0]} recordID={event_id![0] + 1} labelText="Upload Project Document/s" />
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">

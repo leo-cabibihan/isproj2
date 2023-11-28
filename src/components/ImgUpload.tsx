@@ -12,7 +12,7 @@ export var CDNURL = ""
 
 var existingImg
 
-export function ImageUpload({ folderName, charityID, recordID }: any) {
+export function ImageUpload({ folderName, charityID, recordID, labelText }: any) {
 
 
     const [images, setImages]: any[] = useState([])
@@ -68,7 +68,7 @@ export function ImageUpload({ folderName, charityID, recordID }: any) {
         <>
             <div className="col-span-full">
                 <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-                    Upload File/s
+                    {labelText}
                 </label>
                 <div className="space-y-5">
                     <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">

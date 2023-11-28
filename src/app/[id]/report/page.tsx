@@ -118,9 +118,10 @@ export default async function Report({ params }: any) {
               </div>
 
               <ImageUpload
-                folderName="campaign_post"
+                folderName="donor_complaints"
                 charityID={orgID}
                 recordID={complaint_id![0] + 1}
+                labelText="Upload Proof"
               />
 
               <div className="col-span-full">

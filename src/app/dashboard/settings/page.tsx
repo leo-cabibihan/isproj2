@@ -288,6 +288,7 @@ export default async function Settings() {
                           folderName="icons"
                           charityID={charity_id}
                           recordID={charity_id}
+                          labelText="Upload Image"
                         />
                       </div>
 

@@ -147,7 +147,7 @@ export default async function Page() {
                                 </div>
                             </div>
 
-                            <ImageUpload folderName="campaign_post" charityID={charityId} recordID={post_id![0] + 1} />
+                            <ImageUpload folderName="campaign_post" charityID={charityId} recordID={post_id![0] + 1} labelText="Upload Image" />
 
                             <div className="col-span-full">
                                 <Button type="submit" variant="solid" color="blue" className="w-full">
