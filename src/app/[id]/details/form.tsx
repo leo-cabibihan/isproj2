@@ -75,6 +75,7 @@ export function GoodsForm({ ID, UserID }: any) {
 
   const handleFormChange = (event: any, index: any) => {
     let data = [...formFields]
+
     data[index][event.target.name] = event.target.value
     setFormFields(data)
   }
@@ -83,7 +84,7 @@ export function GoodsForm({ ID, UserID }: any) {
     e.preventDefault()
 
     const rawResponse = await fetch(
-      `https://givemore.vercel.app/${ID}/details/post`,
+      `https://isproj2.vercel.app/${ID}/details/post`,
       {
         method: 'POST',
         headers: {
@@ -124,6 +125,20 @@ export function GoodsForm({ ID, UserID }: any) {
     setFormFields(data)
   }
 
+  const getMinExpiryDate = () => {
+    const today = new Date()
+    today.setDate(today.getDate() + 1) // Set minimum date to tomorrow
+
+    const minDate = today.toISOString().split('T')[0]
+    return minDate
+  }
+
+  const handlePerishableChange = (event, index) => {
+    const updatedFormFields = [...formFields]
+    updatedFormFields[index].perishable = parseInt(event.target.value)
+    setFormFields(updatedFormFields)
+  }
+
   return (
     <div className="App">
       <form className="space-y-6" onSubmit={submit}>
@@ -138,6 +153,7 @@ export function GoodsForm({ ID, UserID }: any) {
               <div className="space-y-7">
                 <div>
                   {formFields.map((form, index) => {
+                    console.log('I am perishable', form.perishable === 1)
                     return (
                       <div key={index} className="space-y-4">
                         <div className="mt-3">
@@ -188,26 +204,37 @@ export function GoodsForm({ ID, UserID }: any) {
                             required
                           />
                           <br />
-                          <TextField
-                            label="Expiry Date"
-                            name="expiry"
-                            type="date"
-                            placeholder=""
-                            onChange={(event) => handleFormChange(event, index)}
-                            value={form.expiry}
-                            required
-                          />
-                          <br />
                           <SelectField
                             label="Perishable?"
                             name="perishable"
-                            placeholder="yes"
-                            onChange={(event) => handleFormChange(event, index)}
+                            placeholder="no"
+                            onChange={(event) =>
+                              handlePerishableChange(event, index)
+                            }
                             required
                           >
-                            <option value={1}>yes</option>
                             <option value={0}>no</option>
+
+                            <option value={1}>yes</option>
                           </SelectField>
+
+                          {form.perishable === 1 && (
+                            <>
+                              <br />
+                              <TextField
+                                label="Expiry Date"
+                                name="expiry"
+                                type="date"
+                                placeholder=""
+                                onChange={(event) =>
+                                  handleFormChange(event, index)
+                                }
+                                value={form.expiry}
+                                required //THIS IS AN ISSUE, Need to set it to expiry textfield 'required' if the perishable is set to yes
+                                min={getMinExpiryDate()}
+                              />
+                            </>
+                          )}
                         </div>
 
                         <div className="col-span-full">
@@ -259,6 +286,7 @@ export function GoodsForm({ ID, UserID }: any) {
                   autoComplete="text"
                   placeholder="123 Bonifacio Street"
                   onChange={(e) => setStreet(e.target.value)}
+                  required
                 />
                 <br />
                 <TextField
@@ -299,6 +327,7 @@ export function GoodsForm({ ID, UserID }: any) {
                   autoComplete="text"
                   placeholder="Manila"
                   onChange={(e) => setCity(e.target.value)}
+                  required
                 />
                 <br />
                 <TextField
@@ -308,6 +337,7 @@ export function GoodsForm({ ID, UserID }: any) {
                   autoComplete="text"
                   placeholder="NCR"
                   onChange={(e) => setProvince(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -345,8 +375,7 @@ export function CashForm({ ID, UserID }: any) {
         .select('*')
         .eq('charity_id', ID)
         .eq('is_ongoing', true)
-        eq('approval_status', 'APPROVED')
-        .order('id', { ascending: true })
+      eq('approval_status', 'APPROVED').order('id', { ascending: true })
       setEventsList(data!)
 
       setEventsList(data!)
@@ -358,7 +387,7 @@ export function CashForm({ ID, UserID }: any) {
   const submit = async (e: any) => {
     e.preventDefault()
     const rawResponse = await fetch(
-      `https://givemore.vercel.app/${ID}/details/cash`,
+      `https://isproj2.vercel.app/${ID}/details/cash`,
       {
         method: 'POST',
         headers: {
@@ -403,6 +432,7 @@ export function CashForm({ ID, UserID }: any) {
             label="Choose Event to Donate to"
             name="event_id"
             onChange={(e) => setEventID(e.target.value)}
+            required
           >
             {eventslist?.map((form: any) => (
               <option key={form.id} value={form.id}>

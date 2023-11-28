@@ -220,9 +220,9 @@ export default function DashboardLayout({
                   </Transition.Child>
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
-                      <Link href="/" aria-label="Home">
-                        <Logo className="h-10 w-auto" />
-                      </Link>
+                  <Link href="/" aria-label="Home">
+                      <LogoMobile />
+                    </Link>
                     <Nav pathname={pathname}/>
                   </div>
                 </Dialog.Panel>
