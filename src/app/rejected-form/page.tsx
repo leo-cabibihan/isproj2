@@ -78,7 +78,7 @@ export default async function Page() {
             charity_phone: formData.get('phone'),
             charity_verified: false,
             is_rejected: false,
-            address_id: address_id,
+            address_id: parseInt(address_id),
             email_address: formData.get('email')
         }
 
