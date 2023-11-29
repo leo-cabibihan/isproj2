@@ -574,7 +574,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
 
         <TextField label="Donor's Name" name="donor" type="text" defaultValue={formFields?.decrypted_donor?.decrypted_name} readOnly />
 
-        {/* <br />
+        <br />
         <div className="relative">
           <div
             className="absolute inset-0 flex items-center"
@@ -590,25 +590,22 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
         </div>
         <br />
 
-        {formFields?.address?.map((address: any) => {
-          <div key={address.id}>
-            <TextField label="House Number" name="house_number" type="text" defaultValue={address.house_number} readOnly />
-            <br />
-            <TextField label="Street Name" name="street_name" type="text" defaultValue={address.street_name} readOnly />
-            <br />
-            <TextField label="Village Name" name="village_name" type="text" defaultValue={address.village_name} readOnly />
-            <br />
-            <TextField label="Barangay" name="barangay" type="text" defaultValue={address.barangay} readOnly />
-            <br />
-            <TextField label="City" name="city" type="text" defaultValue={address.city} readOnly />
-            <br />
-            <TextField label="Province/Region" name="province" type="text" defaultValue={address.province} readOnly />
-            <br />
-            <TextField label="ZIP Code" name="zipcode" type="text" defaultValue={address.zipcode} readOnly />
-            <br />
-          </div>
-        })} */}
+        <TextField label="House Number" name="house_number" type="text" defaultValue={formFields?.address.house_number} readOnly />
         <br />
+        <TextField label="Street Name" name="street_name" type="text" defaultValue={formFields?.address.street_name} readOnly />
+        <br />
+        <TextField label="Village Name" name="village_name" type="text" defaultValue={formFields?.address.village_name} readOnly />
+        <br />
+        <TextField label="Barangay" name="barangay" type="text" defaultValue={formFields?.address.barangay} readOnly />
+        <br />
+        <TextField label="City" name="city" type="text" defaultValue={formFields?.address.city} readOnly />
+        <br />
+        <TextField label="Province/Region" name="province" type="text" defaultValue={formFields?.address.province} readOnly />
+        <br />
+        <TextField label="ZIP Code" name="zipcode" type="text" defaultValue={formFields?.address.zipcode} readOnly />
+        <br />
+        <br />
+        
         {formFields?.inventory_item?.map((form: any) => {
           return (
             <div key={form.id}>
