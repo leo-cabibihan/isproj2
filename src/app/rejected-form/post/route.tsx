@@ -64,7 +64,7 @@ export async function PUT(request: Request) {
     console.log('CONGRATULATIONS! THE OPERATION WAS A SUCCESS!')
     redirect('/pending')
 
-    return NextResponse.redirect(`${requestUrl.origin}/email-pending`, {
+    return NextResponse.redirect(`${requestUrl.origin}/pending`, {
         status: 301,
     })
 
