@@ -15,41 +15,46 @@ export const revalidate = 0;
 
 export default async function Page() {
 
+    console.log("CHECKPOINT. WELCOME TO THE REJECTED FORM!")
+    console.log("OPERATION START!")
+    console.log("======================================================================")
     //THIS GETS THE CHARITY ID AND LOGS ERRORS
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase
         .from('decrypted_charity_member')
         .select('*, charity ( id, name )')
         .eq('user_uuid', uid)
-
+    console.log("CHECKPOINT 1 - PASSED!")
     //THIS IS USED TO STORE THE CHARITY ID FOR LATER AND CHECK IF IT'S RETRIEVED
     const charity_id = charity_member?.map((member) => member.charity?.id)
-    if (charity_id) {
-        console.log("THE CHARITY'S ID IS: " + charity_id)
-    }
 
-    if (error_2) {
-        console.log("ERROR RETRIEVING THE CHARITY MEMBER. DETAILS ARE BELOW: \n" + error_2)
-    }
+    console.log("CHARITY OBJECT EXISTS: ", charity_member)
+    console.log("THE CHARITY'S ID IS: ", charity_id)
+    console.log("ERROR RETRIEVING THE CHARITY MEMBER. DETAILS ARE BELOW: \n", error_2)
 
+    console.log("CHECKPOINT 2 - PASSED!")
     //THIS JUST GETS THE CHARITY DETAILS BASED ON THE ORG ID AND LOGS ANY ERRORS
     const { data: org, error: error_4 } = await supabase
         .from('charity')
         .select('*, address ( * )')
         .eq('id', charity_id)
 
-    if (error_4) {
-        console.log("ERROR RETRIEVING THE CHARITY. DETAILS ARE BELOW: \n" + error_4)
-    }
+    console.log("ORG OBJECT IS: ", org)
+    console.log("ERROR RETRIEVING THE CHARITY. DETAILS ARE BELOW: \n" + error_4)
+
+    console.log("CHECKPOINT 3 - PASSED!")
 
     //THIS IS HERE TO STORE THE ADDRESS DETAILS FOR LATER AND CHECKS IF IT'S RETRIEVED
     const address_id = org?.map((org) => org.address?.id)
-    if (address_id) {
-        console.log("THE ORG'S ADDRESS ID IS: " + address_id)
-    }
+    console.log("THE ORG'S ADDRESS ID IS: " + address_id)
+
+    console.log("CHECKPOINT 4 - PASSED!")
 
     //THIS HANDLES THE UPDATING OF THE ORG APPLICATION DETAILS
     const handleSubmit = async (formData: FormData) => {
+
+        console.log("PSA: SUBMIT OPERATION HAS STARTED!")
+
         'use server'
         const address = {
             house_number: formData.get("house_number"),
@@ -61,10 +66,13 @@ export default async function Page() {
             province: formData.get("province")
         }
 
-        const { error: address_error } = await supabase.from('address').update(address).eq('id', address_id);
-        if (address_error) {
-            console.log("ERROR UPDATING THE ADDRESS. DETAILS ARE BELOW: \n" + address_error)
-        }
+        console.log("CHECKPOINT 4 - PASSED!")
+
+        const { data: address_data, error: address_error } = await supabase.from('address').update(address).eq('id', address_id).select();
+        console.log("ADDRESS OBJECT: ", address_data)
+        console.log("ERROR UPDATING THE ADDRESS. DETAILS ARE BELOW: ", address_error)
+
+        console.log("CHECKPOINT 5 - PASSED!")
 
         const charity_details = {
             name: formData.get('org_name'),
@@ -76,12 +84,18 @@ export default async function Page() {
             email_address: formData.get('email')
         }
 
-        const { error: charity_error } = await supabase.from('charity').update(charity_details).eq('id', charity_id);
-        if (charity_error) {
-            console.log("ERROR UPDATING THE CHARITY. DETAILS ARE BELOW: \n" + charity_error)
-        }
+        console.log("CHECKPOINT 6 - PASSED!")
+
+        const { data: charity_data, error: charity_error } = await supabase.from('charity').update(charity_details).eq('id', charity_id).select();
+        console.log("CHARITY DATA: ", charity_data)
+        console.log("ERROR UPDATING THE CHARITY. DETAILS ARE BELOW: ", charity_error)
+
+        console.log("CHECKPOINT 7 - PASSED!")
 
         revalidatePath('/');
+        console.log("===================================================================")
+        console.log("OPERATION ENDED!")
+        console.log('CONGRATULATIONS! THE OPERATION WAS A SUCCESS!')
         redirect('/pending')
     }
 
