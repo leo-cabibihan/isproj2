@@ -132,7 +132,7 @@ export default async function Page() {
                                                     label="Complainant"
                                                     name="donor"
                                                     type="text"
-                                                    defaultValue={complaint.donor?.name as string}
+                                                    defaultValue={complaint.decrypted_donor?.decrypted_name as string}
                                                     readOnly
                                                 />
 
