@@ -572,13 +572,11 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
         {console.log("DONOR DETAILS: ", formFields?.decrypted_donor)}
         {console.log("ADDRESS DETAILS: ", formFields?.address)}
 
-        {formFields?.decrypted_donor?.map((donor: any) => {
-          <div key={donor.id}>
-            <TextField label="Donor's Name" name="donor" type="text" defaultValue={donor.decrypted_name} readOnly />
-          </div>
-        })}
+        <div key={donor.id}>
+          <TextField label="Donor's Name" name="donor" type="text" defaultValue={formFields?.decrypted_donor?.decrypted_name} readOnly />
+        </div>
 
-        <br />
+        {/* <br />
         <div className="relative">
           <div
             className="absolute inset-0 flex items-center"
@@ -611,7 +609,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
             <TextField label="ZIP Code" name="zipcode" type="text" defaultValue={address.zipcode} readOnly />
             <br />
           </div>
-        })}
+        })} */}
         <br />
         {formFields?.inventory_item?.map((form: any) => {
           return (
