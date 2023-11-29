@@ -118,7 +118,7 @@ export function PickupForm({ id }: { id: number }) {
 
         <TextField label="Donor's Name" name="donor" type="text" defaultValue={formFields?.decrypted_donor?.decrypted_name} readOnly />
 
-        <br />
+        {/* <br />
         <div className="relative">
           <div
             className="absolute inset-0 flex items-center"
@@ -147,7 +147,7 @@ export function PickupForm({ id }: { id: number }) {
         <TextField label="Province/Region" name="province" type="text" defaultValue={formFields?.address.province} readOnly />
         <br />
         <TextField label="ZIP Code" name="zipcode" type="text" defaultValue={formFields?.address.zipcode} readOnly />
-        <br />
+        <br /> */}
         <br />
 
         <div className="col-span-full">

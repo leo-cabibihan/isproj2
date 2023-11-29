@@ -574,7 +574,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
 
         <TextField label="Donor's Name" name="donor" type="text" defaultValue={formFields?.decrypted_donor?.decrypted_name} readOnly />
 
-        <br />
+        {/* <br />
         <div className="relative">
           <div
             className="absolute inset-0 flex items-center"
@@ -603,9 +603,9 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
         <TextField label="Province/Region" name="province" type="text" defaultValue={formFields?.address.province} readOnly />
         <br />
         <TextField label="ZIP Code" name="zipcode" type="text" defaultValue={formFields?.address.zipcode} readOnly />
+        <br /> */}
         <br />
-        <br />
-        
+
         {formFields?.inventory_item?.map((form: any) => {
           return (
             <div key={form.id}>
