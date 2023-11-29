@@ -36,11 +36,11 @@ export async function PUT(request: Request) {
     
     console.log("CHECKPOINT - USER EMAIL IS " + transactions![0].donor_id)
 
-    const { data, error: email_error } = await supabase.from('users').select('email').eq('id', transactions![0].donor_id as string)
+    const { data, error: email_error } = await supabase.from('decrypted_users').select('decrypted_email').eq('id', transactions![0].donor_id as string)
 
-    console.log("EMAIL CHECKPOINT ", data![0].email, email_error)
+    console.log("EMAIL CHECKPOINT ", data![0].decrypted_email, email_error)
 
-    const email = data![0].email
+    const email = data![0].decrypted_email
 
     const items = transaction.inventory_item.map((item: any) => ({ ...item, perishable: Boolean(item.perishable), donation_id: transaction_id }))
 

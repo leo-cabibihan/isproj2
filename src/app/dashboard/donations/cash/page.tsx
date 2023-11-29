@@ -104,7 +104,7 @@ export default async function ExternalTable() {
     const emailReceipt = async (formData: FormData) => {
         'use server'
 
-        const { data, error: email_error } = await supabase.from('users').select('email').eq('id', formData.get("donor_id"))
+        const { data, error: email_error } = await supabase.from('decrypted_users').select('decrypted_email').eq('id', formData.get("donor_id"))
 
         const details = {
             amount: formData.get("amount"),
@@ -118,7 +118,7 @@ export default async function ExternalTable() {
             content={details} />);
 
         const success = await plunk.emails.send({
-            to: data![0].email as string,
+            to: data![0].decrypted_email as string,
             subject: "THANK YOU!",
             body,
         })

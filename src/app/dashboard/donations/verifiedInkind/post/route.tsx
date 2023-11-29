@@ -78,13 +78,13 @@ export async function POST(request: Request) {
 
     console.log("DONOR ID IS: ", donor_id)
 
-    const { data, error: email_error } = await supabase.from('users').select('email').eq('id', donor_id)
+    const { data, error: email_error } = await supabase.from('decrypted_users').select('decrypted_email').eq('id', donor_id)
 
     console.log("EMAIL RETREIVAL ERROR: ", email_error, data)
 
-    console.log("EMAIL CHECKPOINT ", data![0].email, email_error)
+    console.log("EMAIL CHECKPOINT ", data![0].decrypted_email, email_error)
 
-    const email = data![0].email
+    const email = data![0].decrypted_email
 
     console.log("ADDRESS_ID " + address_id)
 
