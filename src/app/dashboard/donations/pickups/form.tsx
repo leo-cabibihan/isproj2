@@ -113,7 +113,7 @@ export function PickupForm({ id }: { id: number }) {
         </div>
         <br />
 
-        {formFields?.decrypted_donor?.map(donor => {
+        {formFields?.decrypted_donor?.map((donor: any) => {
           <div key={donor.id}>
             <TextField label="Donor's Name" name="donor" type="text" defaultValue={donor.decrypted_name} readOnly />
           </div>
@@ -135,7 +135,7 @@ export function PickupForm({ id }: { id: number }) {
         </div>
         <br />
 
-        {formFields?.address?.map(address => {
+        {formFields?.address?.map((address: any) => {
           <div key={address.id}>
             <TextField label="House Number" name="house_number" type="text" defaultValue={address.house_number} readOnly />
             <br />
