@@ -361,7 +361,7 @@ export function CashForm({ ID, UserID }: any) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('event')
         .select('*')
         .eq('charity_id', ID)
@@ -370,6 +370,8 @@ export function CashForm({ ID, UserID }: any) {
       setEventsList(data!)
 
       setEventsList(data!)
+
+      console.log("DEBUG RESULTS FOR THE CASH FORM: ", data + ". ERROR IS: ", error)
     }
 
     fetchData()
