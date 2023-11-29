@@ -52,10 +52,8 @@ export default async function Page() {
 
     //THIS HANDLES THE UPDATING OF THE ORG APPLICATION DETAILS
     const handleSubmit = async (formData: FormData) => {
-
-        console.log("PSA: SUBMIT OPERATION HAS STARTED!")
-
         'use server'
+        console.log("PSA: SUBMIT OPERATION HAS STARTED!")
         const address = {
             house_number: formData.get("house_number"),
             street_name: formData.get("street_name"),
