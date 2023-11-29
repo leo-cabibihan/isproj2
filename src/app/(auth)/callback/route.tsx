@@ -13,7 +13,7 @@ export async function GET(request: Request) {
 
     const uid = token.data.session?.user.id
 
-    const { data: donor, error: error_1 } = await supabase.from('donor').select('*').eq('id', uid)
+    const { data: donor, error: error_1 } = await supabase.from('decrypted_donor').select('*').eq('id', uid)
     
     if (donor?.length == 1) {
       return Response.redirect(`${requestUrl.origin}/settings`)

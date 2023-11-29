@@ -28,7 +28,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
         const date = new Date(timestamp);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     };
-    const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name, email_address ), donor ( id, name )')
+    const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name, email_address ), decrypted_donor ( id, decrypted_name )')
     .order('created_at', {ascending: false})
 
     const notifyOrg = async (formData: FormData) => {
@@ -75,7 +75,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
                         <Tbody>
                             {complaints?.map(complaint =>
                                 <Tr key={complaint.id} >
-                                    <Td>{complaint.donor?.name}</Td>
+                                    <Td>{complaint.decrypted_donor?.decrypted_name}</Td>
                                     <Td>{complaint.charity?.name}</Td>
                                     <Td>{formatDate(complaint.created_at) + ' ' + formatTime(complaint.created_at)}</Td>
                                     <Td>
@@ -103,7 +103,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
                                                     name="donor"
                                                     type="text"
                                                     readOnly
-                                                    defaultValue={complaint.donor?.name as string}
+                                                    defaultValue={complaint.decrypted_donor?.decrypted_name as string}
                                                 />
 
                                                 <TextField

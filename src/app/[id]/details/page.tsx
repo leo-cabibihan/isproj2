@@ -21,7 +21,7 @@ export default async function Organization({ params }: any) {
   const donorID = await GetUID()
 
   const { data: donor, error: error_1 } = await supabase
-    .from('donor')
+    .from('decrypted_donor')
     .select('*')
     .eq('id', donorID)
 

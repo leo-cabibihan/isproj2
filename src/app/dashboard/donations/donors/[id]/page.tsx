@@ -63,7 +63,7 @@ export default async function DonorHistory({params} : any) {
             <TableContainer>
                 {donors?.map(donor =>
                 <>
-                <TableHeader key={donor.donor_id} header={donor.name + "'s History"} />
+                <TableHeader key={donor.donor_id} header={donor.decrypted_name + "'s History"} />
                     <TableContent>
                         <Table>
                             <Thead>

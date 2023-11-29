@@ -49,7 +49,7 @@ export function MultilayeredForm(ID: any) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase.from('donor').select(`*`)
+      const { data, error } = await supabase.from('decrypted_donor').select(`*`)
 
       const { data: address, error: address_error } = await supabase
         .from('address')
@@ -207,7 +207,7 @@ export function MultilayeredForm(ID: any) {
           >
             {donorslist?.map((form: any) => (
               <option key={form.id} value={form.id}>
-                {form.name}
+                {form.decrypted_name}
               </option>
             ))}
           </SelectField>
@@ -472,7 +472,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
     const fetchData = async () => {
       const { data, error } = await supabase
         .from('items_donation_transaction')
-        .select(`*, inventory_item ( * ), donor ( id, name ), address ( * )`)
+        .select(`*, inventory_item ( * ), decrypted_donor ( id, decrypted_name ), address ( * )`)
         .eq('id', id)
         .single()
 

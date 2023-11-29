@@ -33,7 +33,7 @@ export default async function Page() {
     const charity_id = charity_member?.map(member => member.charity?.id)
 
     const { data: complaints } = await supabase.from('donor_complaints')
-    .select('*, charity ( id, name ), donor ( id, name )')
+    .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name )')
     .eq('charity_id', charity_id)
     .order('created_at', {ascending: false})
 
@@ -82,7 +82,7 @@ export default async function Page() {
                             {complaints?.map(complaint =>
 
                                 <Tr key={complaint.id}>
-                                    <Td>{complaint.donor?.name}</Td>
+                                    <Td>{complaint.decrypted_donor?.decrypted_name}</Td>
                                     <Td>{complaint.charity?.name}</Td>
                                     <Td>{formatDate(complaint.created_at) + ' ' + formatTime(complaint.created_at)}</Td>
                                     <Td>

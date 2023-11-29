@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 
   // //Checks if current user is a charity member or donor (It works)
   const { data: donor, error: error_1 } = await supabase
-    .from('donor')
+    .from('decrypted_donor')
     .select('*')
     .eq('id', user_id)
   const { data: charity_member, error: error_2 } = await supabase
@@ -85,7 +85,7 @@ export async function POST(request: Request) {
 
   // //Checks if current user is a charity member or donor (It works)
   const { data: donor, error: error_1 } = await supabase
-    .from('donor')
+    .from('decrypted_donor')
     .select('*')
     .eq('id', user_id)
   const { data: charity_member, error: error_2 } = await supabase

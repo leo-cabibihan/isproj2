@@ -35,14 +35,14 @@ export default async function Organization({ params }: any) {
 
     const { data: complaints, error } = await supabase
         .from('donor_complaints')
-        .select('*, charity ( id, name, email_address ), donor ( id, name )')
+        .select('*, charity ( id, name, email_address ), decrypted_donor ( id, decrypted_name )')
         .eq('charity_id', orgID)
         .order('created_at', {ascending: false})
     console.log(complaints ? "IT WORK" : "DONT WORK")
 
     const { data: appeals, error: appeals_error } = await supabase
         .from('charity_appeals')
-        .select('*, charity ( id, name ), decrypted_charity_member ( user_uuid, decrypted_member_name ), donor_complaints ( id, donor ( id, name ) )')
+        .select('*, charity ( id, name ), decrypted_charity_member ( user_uuid, decrypted_member_name ), donor_complaints ( id, decrypted_donor ( id, decrypted_name ) )')
         .eq('charity_id', orgID)
         .order('created_at', {ascending: false})
 
@@ -171,7 +171,7 @@ export default async function Organization({ params }: any) {
                         <Tbody>
                             {complaints?.map(complaint => (
                                 <Tr key={complaint.id}>
-                                    <Td>{complaint.donor?.name}</Td>
+                                    <Td>{complaint.decrypted_donor?.decrypted_name}</Td>
                                     <Td>{complaint.charity?.name}</Td>
                                     <Td>{formatDate(complaint.created_at) + ' ' + formatTime(complaint.created_at)}</Td>
                                     <Td>
@@ -198,7 +198,7 @@ export default async function Organization({ params }: any) {
                                                     name="donor"
                                                     type="text"
                                                     readOnly
-                                                    defaultValue={complaint.donor?.name as string}
+                                                    defaultValue={complaint.decrypted_donor?.decrypted_name as string}
                                                 />
 
                                                 <TextField
@@ -291,7 +291,7 @@ export default async function Organization({ params }: any) {
                                                     name="complainant"
                                                     type="text"
                                                     readOnly
-                                                    defaultValue={appeal.donor_complaints?.donor?.name as string}
+                                                    defaultValue={appeal.donor_complaints?.decrypted_donor?.decrypted_name as string}
                                                 />
                                                 <TextField
                                                     label="Appeal Filed at"

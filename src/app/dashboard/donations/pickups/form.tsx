@@ -16,7 +16,7 @@ export function PickupForm({ id }: { id: number }) {
     const fetchData = async () => {
       const { data, error } = await supabase
         .from('items_donation_transaction')
-        .select(`*, inventory_item ( * ), donor ( id, name ), address ( * )`)
+        .select(`*, inventory_item ( * ), decrypted_donor ( id, decrypted_name ), address ( * )`)
         .eq('id', id)
         .single()
 

@@ -59,13 +59,13 @@ export default async function donationHistory() {
 
   const uid = await GetUID()
   const {data: donor, error: donorsError2} = await supabase
-  .from("donor")
+  .from("decrypted_donor")
   .select("*")
   .eq("id", uid)
   const currentDonor = donor?.map(donor => (donor.id))
 
   const {data: donors, error: donorsError} = await supabase
-  .from("donor")
+  .from("decrypted_donor")
   .select("*")
   .eq("id", currentDonor)
   .limit(1)
@@ -88,8 +88,8 @@ export default async function donationHistory() {
                     <div className="sm:flex sm:items-center">
                       <div className="sm:flex-auto">
                         {donors?.map(donor =>(
-                          <h1 className="text-base font-semibold leading-6 text-gray-900" key={donor.name}>
-                            {donor.name + "'s Donation History"}                 
+                          <h1 className="text-base font-semibold leading-6 text-gray-900" key={donor.decrypted_name}>
+                            {donor.decrypted_name + "'s Donation History"}                 
                           </h1>
                          ))}
                         <p className="mt-2 text-sm text-gray-700">

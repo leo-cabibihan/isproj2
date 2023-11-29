@@ -53,7 +53,7 @@ export async function middleware(req: NextRequest) {
   }
   else if (originalUrl.includes('/settings')) {
     const { data: donor, error: error_1 } = await supabase
-      .from('donor')
+      .from('decrypted_donor')
       .select('*')
       .eq('id', uid)
 

@@ -48,7 +48,7 @@ export default async function ExternalTable() {
         .order("id", { ascending: true })
 
     const { data: cash, error: cash_error } = await supabase.from('cash')
-        .select('*, charity ( id, name ), donor ( id, name ), event( id, name )')
+        .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
         .eq('charity_id', charityId)
         .order("id", { ascending: true })
 
@@ -202,7 +202,7 @@ export default async function ExternalTable() {
                                     {cash.is_external ? (
                                         <Td>EXTERNAL</Td>
                                     ) : (
-                                        <Td>{cash.donor?.name}</Td>
+                                        <Td>{cash.decrypted_donor?.decrypted_name}</Td>
                                     )}
                                     <Td>{cash.amount}</Td>
                                     <Td>{formatDate(cash.date) + ' ' + formatTime(cash.date)}</Td>
@@ -281,7 +281,7 @@ export default async function ExternalTable() {
                                                                             label=""
                                                                             name="donor_id"
                                                                             type="hidden"
-                                                                            defaultValue={cash.donor?.id}
+                                                                            defaultValue={cash.decrypted_donor?.id}
                                                                             readOnly
                                                                         />
 
@@ -289,7 +289,7 @@ export default async function ExternalTable() {
                                                                             label="Donated By"
                                                                             name="donor"
                                                                             type="text"
-                                                                            defaultValue={cash.donor?.name as string}
+                                                                            defaultValue={cash.decrypted_donor?.decrypted_name as string}
                                                                             readOnly
                                                                         />
                                                                         <br/>

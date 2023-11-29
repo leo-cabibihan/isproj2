@@ -38,11 +38,11 @@ export default async function Page() {
     const charity_id = charity_member?.map(member => member.charity?.id)  
 
     const { data: items, error } = await supabase.from('items_donation_transaction')
-    .select('*, charity ( id, name ), address ( * ), donor ( id, name )')
+    .select('*, charity ( id, name ), address ( * ), decrypted_donor ( id, decrypted_name )')
     .eq('verify', false).eq('charity_id', charity_id)
     .order('date', {ascending: false})
 
-    const { data: inventory, error: error_2 } = await supabase.from('inventory_item').select('*, items_donation_transaction ( *, charity ( id, name ), address ( * ), donor ( id, name ) )')
+    const { data: inventory, error: error_2 } = await supabase.from('inventory_item').select('*, items_donation_transaction ( *, charity ( id, name ), address ( * ), decrypted_donor ( id, decrypted_name ) )')
  
     return (
         <>
@@ -68,7 +68,7 @@ export default async function Page() {
                                 <Tr key={item.id}>
                                     <>
                                         {item.donor_id ?
-                                            (<Td>{item.donor?.name}</Td>) :
+                                            (<Td>{item.decrypted_donor?.decrypted_name}</Td>) :
                                             (<Td>{item.donor_name}</Td>)}
                                     </>
                                     <>
