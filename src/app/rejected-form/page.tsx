@@ -100,7 +100,7 @@ export default async function Page() {
     return (
         <>
             <DefaultLayout>
-                <form className="space-y-6 py-8" action={'/post'} method="PUT">
+                <form className="space-y-6 py-8" action={'/rejected-form/post'} method="PUT">
                     <div className="container mx-auto px-20 mt-16 mb-16 space-y-24">
                         <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
                             <div>
