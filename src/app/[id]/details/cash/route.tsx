@@ -23,6 +23,8 @@ export async function POST(request: Request) {
 
     const { data, error } = await supabase.from('cash').insert(cash).select();
 
+    console.log("POST REQUEST DETAILS ARE: DATA - ", data + ". ERROR - ", error)
+
     const recordID = data![0].id
 
     return NextResponse.redirect(`${requestUrl.origin}/${orgID}/details/cash/${orgID}/${recordID}`)
