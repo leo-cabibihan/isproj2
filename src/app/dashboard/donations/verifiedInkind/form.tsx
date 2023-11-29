@@ -572,9 +572,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
         {console.log("DONOR DETAILS: ", formFields?.decrypted_donor)}
         {console.log("ADDRESS DETAILS: ", formFields?.address)}
 
-        <div key={donor.id}>
-          <TextField label="Donor's Name" name="donor" type="text" defaultValue={formFields?.decrypted_donor?.decrypted_name} readOnly />
-        </div>
+        <TextField label="Donor's Name" name="donor" type="text" defaultValue={formFields?.decrypted_donor?.decrypted_name} readOnly />
 
         {/* <br />
         <div className="relative">
