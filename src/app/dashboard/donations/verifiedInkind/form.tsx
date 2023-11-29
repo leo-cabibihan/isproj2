@@ -554,7 +554,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
     <div className="App">
       <form className="space-y-6" onSubmit={submit}>
 
-        <div className="relative">
+        {/* <div className="relative">
           <div
             className="absolute inset-0 flex items-center"
             aria-hidden="true"
@@ -609,7 +609,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
             <br />
           </div>
         })}
-        <br />
+        <br /> */}
         {formFields?.inventory_item?.map((form: any) => {
           return (
             <div key={form.id}>
