@@ -98,7 +98,7 @@ export function PickupForm({ id }: { id: number }) {
     <div className="App">
       <form className="space-y-6" onSubmit={submit}>
 
-        {/* <div className="relative">
+        <div className="relative">
           <div
             className="absolute inset-0 flex items-center"
             aria-hidden="true"
@@ -112,6 +112,9 @@ export function PickupForm({ id }: { id: number }) {
           </div>
         </div>
         <br />
+
+        {console.log("DONOR DETAILS: ", formFields?.decrypted_donor)}
+        {console.log("ADDRESS DETAILS: ", formFields?.address)}
 
         {formFields?.decrypted_donor?.map((donor: any) => {
           <div key={donor.id}>
@@ -153,7 +156,7 @@ export function PickupForm({ id }: { id: number }) {
             <br />
           </div>
         })}
-        <br /> */}
+        <br />
 
         <div className="col-span-full">
           <Button
