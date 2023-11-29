@@ -51,56 +51,56 @@ export default async function Page() {
     console.log("CHECKPOINT 4 - PASSED!")
 
     //THIS HANDLES THE UPDATING OF THE ORG APPLICATION DETAILS
-    // const handleSubmit = async (formData: FormData) => {
-    //     'use server'
-    //     console.log("PSA: SUBMIT OPERATION HAS STARTED!")
-    //     const address = {
-    //         house_number: formData.get("house_number"),
-    //         street_name: formData.get("street_name"),
-    //         village_name: formData.get("village_name"),
-    //         barangay: formData.get("barangay"),
-    //         zipcode: formData.get("zipcode"),
-    //         city: formData.get("city"),
-    //         province: formData.get("province")
-    //     }
+    const handleSubmit = async (formData: FormData) => {
+        'use server'
+        console.log("PSA: SUBMIT OPERATION HAS STARTED!")
+        const address = {
+            house_number: formData.get("house_number"),
+            street_name: formData.get("street_name"),
+            village_name: formData.get("village_name"),
+            barangay: formData.get("barangay"),
+            zipcode: formData.get("zipcode"),
+            city: formData.get("city"),
+            province: formData.get("province")
+        }
 
-    //     console.log("CHECKPOINT 4 - PASSED!")
+        console.log("CHECKPOINT 4 - PASSED!")
 
-    //     const { data: address_data, error: address_error } = await supabase.from('address').update(address).eq('id', address_id).select();
-    //     console.log("ADDRESS OBJECT: ", address_data)
-    //     console.log("ERROR UPDATING THE ADDRESS. DETAILS ARE BELOW: ", address_error)
+        const { data: address_data, error: address_error } = await supabase.from('address').update(address).eq('id', address_id).select();
+        console.log("ADDRESS OBJECT: ", address_data)
+        console.log("ERROR UPDATING THE ADDRESS. DETAILS ARE BELOW: ", address_error)
 
-    //     console.log("CHECKPOINT 5 - PASSED!")
+        console.log("CHECKPOINT 5 - PASSED!")
 
-    //     const charity_details = {
-    //         name: formData.get('org_name'),
-    //         about: formData.get('description'),
-    //         charity_phone: formData.get('phone'),
-    //         charity_verified: false,
-    //         is_rejected: false,
-    //         address_id: address_id,
-    //         email_address: formData.get('email')
-    //     }
+        const charity_details = {
+            name: formData.get('org_name'),
+            about: formData.get('description'),
+            charity_phone: formData.get('phone'),
+            charity_verified: false,
+            is_rejected: false,
+            address_id: address_id,
+            email_address: formData.get('email')
+        }
 
-    //     console.log("CHECKPOINT 6 - PASSED!")
+        console.log("CHECKPOINT 6 - PASSED!")
 
-    //     const { data: charity_data, error: charity_error } = await supabase.from('charity').update(charity_details).eq('id', charity_id).select();
-    //     console.log("CHARITY DATA: ", charity_data)
-    //     console.log("ERROR UPDATING THE CHARITY. DETAILS ARE BELOW: ", charity_error)
+        const { data: charity_data, error: charity_error } = await supabase.from('charity').update(charity_details).eq('id', charity_id).select();
+        console.log("CHARITY DATA: ", charity_data)
+        console.log("ERROR UPDATING THE CHARITY. DETAILS ARE BELOW: ", charity_error)
 
-    //     console.log("CHECKPOINT 7 - PASSED!")
+        console.log("CHECKPOINT 7 - PASSED!")
 
-    //     revalidatePath('/');
-    //     console.log("===================================================================")
-    //     console.log("OPERATION ENDED!")
-    //     console.log('CONGRATULATIONS! THE OPERATION WAS A SUCCESS!')
-    //     redirect('/pending')
-    // }
+        revalidatePath('/');
+        console.log("===================================================================")
+        console.log("OPERATION ENDED!")
+        console.log('CONGRATULATIONS! THE OPERATION WAS A SUCCESS!')
+        redirect('/pending')
+    }
 
     return (
         <>
             <DefaultLayout>
-                <form className="space-y-6 py-8" action={'/rejected-form/post'} method="PUT">
+                <form className="space-y-6 py-8" action={handleSubmit} method="PUT">
                     <div className="container mx-auto px-20 mt-16 mb-16 space-y-24">
                         <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
                             <div>
