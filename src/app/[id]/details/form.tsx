@@ -438,9 +438,7 @@ export function CashForm({ ID, UserID }: any) {
         </div>
       </div>
       <div>
-        <PayPalScriptProvider options={{ clientId: process.env.PAYPAL_CLIENT_ID!}}>
-          <PayPalButtons/>
-        </PayPalScriptProvider>
+        {/* PAYPAL STUFF GOES HERE */}
       </div>
     </form>
   )
