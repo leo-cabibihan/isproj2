@@ -597,8 +597,8 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
         </div>
         <br />
 
-        <TextField label="House Number" name="house_number" type="text" defaultValue={formFields?.address.house_number} readOnly />
-        <br />
+        {/* <TextField label="House Number" name="house_number" type="text" defaultValue={formFields?.address.house_number} readOnly />
+        <br /> */}
         {/* <TextField label="Street Name" name="street_name" type="text" defaultValue={formFields?.address.street_name} readOnly />
         <br />
         <TextField label="Village Name" name="village_name" type="text" defaultValue={formFields?.address.village_name} readOnly />
