@@ -1,4 +1,4 @@
-// @ts-nocheck 
+
 'use client'
 
 import supabase from '@/app/utils/supabase'
@@ -7,7 +7,7 @@ import { ShowImg } from '@/components/DisplayImg'
 import { TextField, SelectField } from '@/components/Fields'
 import { useEffect, useState } from 'react'
 import { getURL } from '@/app/utils/url'
-import { PayPalButton } from "react-paypal-button-v2"
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 export function FormComponent({ ID, DonorID }: any) {
   const [cash, showCash] = useState(false)
@@ -400,24 +400,6 @@ export function CashForm({ ID, UserID }: any) {
     )
   }
 
-  const addPayPalScript = () => {
-    if (window.paypal) {
-      setScriptLoaded(true)
-      return
-    }
-    const script = document.createElement("script");
-    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.PAYPAL_CLIENT_ID!}`;
-
-    script.type = "text/javascript";
-    script.async = true;
-    script.onload = () => setScriptLoaded(true);
-    document.body.appendChild(script);
-  };
-
-  useEffect(() => {
-    addPayPalScript()
-  }, [])
-
   return (
     <form className="mt-10 grid grid-cols-1 gap-y-8">
       <div className="space-y-12"></div>
@@ -456,19 +438,9 @@ export function CashForm({ ID, UserID }: any) {
         </div>
       </div>
       <div>
-
-        {
-          scriptLoaded ?
-            <PayPalButton
-              amount={amount}
-              onSuccess={(details, data) => {
-                console.log(details)
-              }}
-            />
-            :
-            <span>Loading PayPal</span>
-        }
-
+        <PayPalScriptProvider options={{ clientId: process.env.PAYPAL_CLIENT_ID!}}>
+          <PayPalButtons/>
+        </PayPalScriptProvider>
       </div>
     </form>
   )
