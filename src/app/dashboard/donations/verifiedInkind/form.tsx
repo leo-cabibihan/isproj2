@@ -573,7 +573,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
         {console.log("DONOR DETAILS: ", formFields?.address)} */}
 
         {
-          Object.entries(formFields?.address).forEach((entry) => {
+          Object.entries(formFields?.decrypted_donor).forEach((entry) => {
             const [key, value] = entry;
             console.log(`OBJECT ITEM ${key}: ${value}`);
           })
