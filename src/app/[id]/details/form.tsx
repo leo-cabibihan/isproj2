@@ -1,4 +1,4 @@
-// @ts-nocheck
+// @ts-nocheck 
 'use client'
 
 import supabase from '@/app/utils/supabase'
@@ -7,7 +7,7 @@ import { ShowImg } from '@/components/DisplayImg'
 import { TextField, SelectField } from '@/components/Fields'
 import { useEffect, useState } from 'react'
 import { getURL } from '@/app/utils/url'
-import { PayPalButton } from "react-paypal-button-v2";
+import { PayPalButton } from "react-paypal-button-v2"
 
 export function FormComponent({ ID, DonorID }: any) {
   const [cash, showCash] = useState(false)

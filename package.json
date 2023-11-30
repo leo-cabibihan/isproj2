@@ -41,6 +41,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.47.0",
     "react-paypal-button-v2": "^2.6.3",
+    "react-paypal-button-v3": "^3.0.2",
     "recharts": "^2.9.2",
     "resend": "^1.1.0",
     "supabase": "^1.100.1",
