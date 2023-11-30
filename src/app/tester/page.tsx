@@ -1,15 +1,21 @@
-// @ts-nocheck 
+//@ts-nocheck
 'use client'
 
 import { ImageUpload } from "@/components/ImgUpload";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import supabase from "../utils/supabase";
+import { SelectField, TextField } from "@/components/Fields";
 
 function Message({ content }) {
     return <p>{content}</p>;
 }
 
 export default function TestPage() {
+
+    const [eventslist, setEventsList] = useState<any>([])
+    const [eventID, setEventID] = useState('')
+    const [amount, setAmount] = useState('')
 
     const initialOptions = {
         "client-id": "Acdo2IOJiiihwISa_-GfchSLPkA4rdf9JrtbWWHyG6y_dKJOg-8Zh7zNp9DGLIX9eRAyxcTx9DFe_gqu",
@@ -20,8 +26,84 @@ export default function TestPage() {
 
     const [message, setMessage] = useState("");
 
+    useEffect(() => {
+        const fetchData = async () => {
+            const { data, error } = await supabase
+                .from('event')
+                .select('*')
+                .eq('charity_id', 3)
+                .eq('is_ongoing', true)
+                .eq('approval_status', 'APPROVED').order('id', { ascending: true })
+            setEventsList(data!)
+
+            setEventsList(data!)
+
+            console.log("DEBUG RESULTS FOR THE CASH FORM: ", data + ". ERROR IS: ", error)
+        }
+
+        fetchData()
+    }, [])
+
+    const submit = async (e: any) => {
+        e.preventDefault()
+        const rawResponse = await fetch(
+            `https://isproj2.vercel.app/3/details/cash`,
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    amount: 500,
+                    charity_id: 3,
+                    donor_id: "kekblekek",
+                    is_external: false,
+                    event_id: 12,
+                }),
+            },
+        )
+    }
+
     return (
         <>
+            <form className="mt-10 grid grid-cols-1 gap-y-8">
+                <div className="space-y-12"></div>
+                <div className="border-b border-gray-900/10 pb-12"></div>
+                <h2 className="text-base font-semibold leading-7 text-gray-900">
+                    Donate Cash
+                </h2>
+                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                    <div className="sm:col-span-4">
+                        <TextField
+                            label="Amount"
+                            name="amount"
+                            type="number"
+                            autoComplete="number"
+                            step="0.01"
+                            min="100"
+                            max="100000"
+                            placeholder="0.00"
+                            required
+                            onChange={(e) => setAmount(e.target.value)}
+                        />
+
+                        <SelectField
+                            className="col-span-full py-5"
+                            label="Choose Event to Donate to"
+                            name="event_id"
+                            onChange={(e) => setEventID(e.target.value)}
+                            required
+                        >
+                            {eventslist?.map((form: any) => (
+                                <option key={form.id} value={form.id}>
+                                    {form.name}
+                                </option>
+                            ))}
+                        </SelectField>
+                    </div>
+                </div>
+            </form>
             <PayPalScriptProvider options={initialOptions}>
                 <PayPalButtons
                     style={{

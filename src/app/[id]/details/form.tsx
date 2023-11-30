@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { getURL } from '@/app/utils/url'
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import { PayPal } from '@/components/paypal/CashForm'
+import TestPage from '@/app/tester/page'
 
 // Renders errors or successfull transactions on the screen.
 function Message({ content }) {
@@ -51,7 +52,7 @@ export function FormComponent({ ID, DonorID }: any) {
 
         <>
           {cash ? (
-            <PayPal/>
+            <TestPage/>
           ) : (
             <GoodsForm ID={ID} UserID={DonorID} />
           )}
