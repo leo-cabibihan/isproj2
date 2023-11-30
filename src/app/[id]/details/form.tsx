@@ -52,7 +52,7 @@ export function FormComponent({ ID, DonorID }: any) {
 
         <>
           {cash ? (
-            <TestPage/>
+            <TestPage ID={ID} UserID={DonorID} />
           ) : (
             <GoodsForm ID={ID} UserID={DonorID} />
           )}
