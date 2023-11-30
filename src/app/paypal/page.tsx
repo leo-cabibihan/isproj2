@@ -7,7 +7,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import supabase from "../utils/supabase";
 import { SelectField, TextField } from "@/components/Fields";
 
-function Message({ content }) {
+function Message({ content }: any) {
     return <p>{content}</p>;
 }
 
