@@ -570,6 +570,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
         <br />
 
         {console.log("DONOR DETAILS: ", formFields?.decrypted_donor)}
+        {console.log("DONOR DETAILS: ", formFields?.address)}
 
         {
           Object.entries(formFields?.address).forEach((entry) => {
