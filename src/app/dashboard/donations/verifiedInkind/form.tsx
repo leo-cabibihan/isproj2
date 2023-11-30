@@ -569,15 +569,15 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
         </div>
         <br />
 
-        {console.log("DONOR DETAILS: ", formFields?.decrypted_donor)}
-        {console.log("DONOR DETAILS: ", formFields?.address)}
+        {/* {console.log("DONOR DETAILS: ", formFields?.decrypted_donor)}
+        {console.log("DONOR DETAILS: ", formFields?.address)} */}
 
-        {/* {
+        {
           Object.entries(formFields?.address).forEach((entry) => {
             const [key, value] = entry;
-            console.log(`${key}: ${value}`);
+            console.log(`OBJECT ITEM ${key}: ${value}`);
           })
-        }; */}
+        };
 
         <TextField label="Donor's Name" name="donor" type="text" defaultValue={formFields?.decrypted_donor?.decrypted_name} readOnly />
 
