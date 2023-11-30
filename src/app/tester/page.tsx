@@ -11,7 +11,7 @@ function Message({ content }) {
     return <p>{content}</p>;
 }
 
-export default function TestPage() {
+export default function TestPage({ ID, UserID }: any) {
 
     const [eventslist, setEventsList] = useState<any>([])
     const [eventID, setEventID] = useState('')
@@ -31,7 +31,7 @@ export default function TestPage() {
             const { data, error } = await supabase
                 .from('event')
                 .select('*')
-                .eq('charity_id', 3)
+                .eq('charity_id', ID)
                 .eq('is_ongoing', true)
                 .eq('approval_status', 'APPROVED').order('id', { ascending: true })
             setEventsList(data!)
@@ -47,7 +47,7 @@ export default function TestPage() {
     const submit = async (e: any) => {
         e.preventDefault()
         const rawResponse = await fetch(
-            `https://isproj2.vercel.app/3/details/cash`,
+            `https://isproj2.vercel.app/${ID}/details/cash`,
             {
                 method: 'POST',
                 headers: {
@@ -55,11 +55,11 @@ export default function TestPage() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    amount: 500,
-                    charity_id: 3,
-                    donor_id: "kekblekek",
+                    amount: amount,
+                    charity_id: ID,
+                    donor_id: UserID,
                     is_external: false,
-                    event_id: 12,
+                    event_id: eventID,
                 }),
             },
         )
