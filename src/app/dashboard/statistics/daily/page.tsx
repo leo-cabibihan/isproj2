@@ -10,44 +10,44 @@ import { Button } from '@/components/Button'
 export const revalidate = 0
 
 export default async function Page() {
-  //By default what's displayed first is the pre-filtered Monthly Data
+  //This is for pre-filtered Daily Data
   const uid = await GetUID()
   const { data: charity_member, error: error_2 } = await supabase
-    .from('decrypted_charity_member')
+    .from('charity_member')
     .select('*, charity ( id, name )')
     .eq('user_uuid', uid)
   const charity_id = charity_member?.map((member) => member.charity?.id)
 
+
   //Total Cash Donations Received Query (INCOME)
   const { data: totalCashDonations, error: totalCashDonationsError } =
     await supabase
-      .from('monthly_total_cash_donations_received')
+      .from('daily_total_cash_donations_received')
       .select('*')
       .eq('charity_id', charity_id)
       .order('date', { ascending: false })
-      .limit(12)
+      .limit(7)
   const sortedtotalCashData = totalCashDonations?.reverse() || []
   const totalCashData =
     sortedtotalCashData?.flatMap((totalCash) => [
       {
-        name: totalCash.month,
+        name: totalCash.day,
         totalCashDonations: totalCash.total_cash_donations_received,
       },
     ]) || []
-    console.log(sortedtotalCashData)
   //Total In-Kind Transactions Received Query (INCOME)
   const { data: totalInKindTransactions, error: totalInKindTransactionsError } =
     await supabase
-      .from('monthly_total_inkind_donation_transactions')
+      .from('daily_total_inkind_donation_transactions')
       .select('*')
       .eq('charity_id', charity_id)
       .order('date', { ascending: false })
-      .limit(12)
+      .limit(7)
   const sortedtotalInKindTransactions = totalInKindTransactions?.reverse() || []
   const totalInKindData =
     sortedtotalInKindTransactions?.flatMap((totalInKind) => [
       {
-        name: totalInKind.month,
+        name: totalInKind.day,
         totalInKindTransactions: totalInKind.total_inkind_donation_transactions,
       },
     ]) || []
@@ -56,32 +56,32 @@ export default async function Page() {
     data: totalCashDonationsDonated,
     error: totalCashDonationsDonatedError,
   } = await supabase
-    .from('monthly_total_cash_donations_donated')
+    .from('daily_total_cash_donations_donated')
     .select('*')
     .eq('charity_id', charity_id)
     .order('date', { ascending: false })
-    .limit(12)
+    .limit(7)
   const sortedtotalCashDonated = totalCashDonationsDonated?.reverse() || []
   const totalCashDonatedData =
     sortedtotalCashDonated?.flatMap((CashDonated) => [
       {
-        name: CashDonated.month,
+        name: CashDonated.day,
         totalCashDonated: CashDonated.total_amount,
       },
     ]) || []
   //Total In-Kind Donations Donated Query (OUTCOME)
   const { data: totalInKindDonated, error: totalInKindDonatedError } =
     await supabase
-      .from('monthly_total_inkind_donations_donated')
+      .from('daily_total_inkind_donations_donated')
       .select('*')
       .eq('charity_id', charity_id)
       .order('date', { ascending: false })
-      .limit(12)
+      .limit(7)
   const sortedtotalInKindDonated = totalInKindDonated?.reverse() || []
   const totalInKindDonatedData =
     sortedtotalInKindDonated?.flatMap((InKindDonated) => [
       {
-        name: InKindDonated.month,
+        name: InKindDonated.day,
         totalInKindDonated: InKindDonated.total_quantity,
       },
     ]) || []
@@ -96,11 +96,11 @@ export default async function Page() {
               key={index}
               className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"
             >
-              {charity.charity?.name}&apos;s <span className="text-3xl font-bold tracking-tight text-amber-500 sm:text-4xl inline">Monthly</span> Donation Statistics
+              {charity.charity?.name}&apos;s <span className="text-3xl font-bold tracking-tight text-blue-600 sm:text-4xl inline">Daily</span> Donation Statistics
             </h2>
           ))}
           <p className="italic text-gray-600">
-            What&apos;s displayed here is based on the most recent 12 months of
+            What&apos;s displayed here is based on the most recent 7 days
             data.
           </p>
         </div>
@@ -109,10 +109,10 @@ export default async function Page() {
           <Button href="/dashboard/statistics/yearly" variant="outline" color="green">
               Yearly
           </Button>
-          <Button href="/dashboard/statistics" variant="solid" color="yellow">
+          <Button href="/dashboard/statistics" variant="outline" color="yellow">
               Monthly
           </Button>
-          <Button href="/dashboard/statistics/daily" variant="outline" color="blue">
+          <Button href="/dashboard/statistics/daily" variant="solid" color="blue">
               Daily
           </Button>
           <Button href="/dashboard/statistics/custom" variant="outline" color="slate">
@@ -129,7 +129,7 @@ export default async function Page() {
       </h2>
       <p className="mt-2 text-base leading-8 text-gray-600">
         How much cash donations and in-kind donation transactions are received
-        per month.
+        per day.
       </p>
       <br />
       <div className="flex flex-col md:flex-row md:gap-10">
@@ -145,7 +145,7 @@ export default async function Page() {
         Total Cash and In-Kind Donated
       </h2>
       <p className="mt-2 text-base leading-8 text-gray-600">
-        How much cash donations and how many in-kind are donated per month.
+        How much cash donations and how many in-kind are donated per day.
       </p>
       <br />
       <div className="flex flex-col md:flex-row md:gap-10">

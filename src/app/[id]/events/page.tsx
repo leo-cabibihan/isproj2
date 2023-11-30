@@ -12,7 +12,7 @@ export default async function Example({ params }: any) {
   const { data: events, error: events_error } = await supabase.from('event').select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name, contact )').eq('id', eventID)
   const { data: expenses, error: expenses_error } = await supabase.from('expenses').select('*').eq('event_id', eventID)
   const { data: items, error: item_error } = await supabase.from('beneficiary_items').select('*, inventory_item ( id, name, unit_of_measurement )').eq('event_id', eventID)
-
+  const { data: event_summary, error: event_summary_error} = await supabase.from('event_summary').select('*').eq('event_id', eventID)
   const charityID = events?.map(event => event.charity?.id);
   const { data: images, error } = await supabase
     .storage
@@ -53,17 +53,24 @@ export default async function Example({ params }: any) {
                   <p className="mt-6 text-lg leading-8 text-gray-600">
                     {event.description}
                   </p>
+                  <br/>
+                  <div className="sm:flex-auto">
+                    {event_summary?.map(eventsummary =>(
+                      <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl">Total Cash Received: 
+                      <p className="text-3xl font-bold tracking-tight text-emerald-600 sm:text-3xl">PHP {eventsummary.total_cash_received.toLocaleString()}</p></h2>
+                    ))}
+                  </div>
                   <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">
                     <div className="relative pl-9">
                       <dt className="inline font-semibold text-gray-900">
-                        <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                        <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-green-600" aria-hidden="true" />
                         Name:
                       </dt>{' '}
                       <dd className="inline">{event.name}</dd>
                     </div>
                     <div className="relative pl-9">
                       <dt className="inline font-semibold text-gray-900">
-                        <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                        <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-green-600" aria-hidden="true" />
                         Event Status:
                       </dt>{' '}
                       <dd className="inline">{
@@ -78,7 +85,7 @@ export default async function Example({ params }: any) {
                         (
                           <div className="relative pl-9">
                             <dt className="inline font-semibold text-gray-900">
-                              <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                              <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-green-600" aria-hidden="true" />
                               Start Date:
                             </dt>{formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
                             <dd className="inline">{event.name}</dd>
@@ -87,7 +94,7 @@ export default async function Example({ params }: any) {
                           <>
                             <div className="relative pl-9">
                               <dt className="inline font-semibold text-gray-900">
-                                <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                                <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-green-600" aria-hidden="true" />
                                 Start Date:
                               </dt>{formatDate(event.start_date as string) + ' ' + formatTime(event.start_date as string)}
                               <dd className="inline">{event.name}</dd>
@@ -95,7 +102,7 @@ export default async function Example({ params }: any) {
 
                             <div className="relative pl-9">
                               <dt className="inline font-semibold text-gray-900">
-                                <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                                <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-green-600" aria-hidden="true" />
                                 End Date:
                               </dt>{formatDate(event.end_date as string) + ' ' + formatTime(event.end_date as string)}
                               <dd className="inline">{event.name}</dd>
@@ -106,7 +113,7 @@ export default async function Example({ params }: any) {
                     {expenses?.map(expense => (
                       <div className="relative pl-9" key={expense.id}>
                         <dt className="inline font-semibold text-gray-900">
-                          <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                          <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-green-600" aria-hidden="true" />
                           Expenses Amount:
                         </dt>{' '}
                         <dd className="inline">{expense.amount}</dd>
@@ -116,14 +123,14 @@ export default async function Example({ params }: any) {
                       <div key={item.id} className='space-y-8'>
                         <div className="relative pl-9">
                           <dt className="inline font-semibold text-gray-900">
-                            <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                            <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-green-600" aria-hidden="true" />
                             Beneficiary Item:
                           </dt>{' '}
                           <dd className="inline">{item.inventory_item?.name}</dd>
                         </div>
                         <div className="relative pl-9">
                           <dt className="inline font-semibold text-gray-900">
-                            <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                            <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-green-600" aria-hidden="true" />
                             Quantity:
                           </dt>{' '}
                           <dd className="inline">{item.quantity} {item.inventory_item?.unit_of_measurement}</dd>
@@ -132,14 +139,14 @@ export default async function Example({ params }: any) {
                     ))}
                     <div className="relative pl-9">
                       <dt className="inline font-semibold text-gray-900">
-                        <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                        <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-green-600" aria-hidden="true" />
                         Beneficiary:
                       </dt>{' '}
                       <dd className="inline">{event.beneficiaries?.beneficiary_name}</dd>
                     </div>
                     <div className="relative pl-9">
                       <dt className="inline font-semibold text-gray-900">
-                        <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-indigo-600" aria-hidden="true" />
+                        <LightBulbIcon className="absolute left-1 top-1 h-5 w-5 text-green-600" aria-hidden="true" />
                         Contact No.:
                       </dt>{' '}
                       <dd className="inline">{event.beneficiaries?.contact}</dd>
@@ -160,7 +167,7 @@ export default async function Example({ params }: any) {
 
                         <img src={CDNURL + image.name} />
                         <div
-                          className="absolute top-0 left-0 w-full h-0 flex flex-col justify-center items-center bg-indigo-700 opacity-0 group-hover:h-full group-hover:opacity-100 duration-500">
+                          className="absolute top-0 left-0 w-full h-0 flex flex-col justify-center items-center bg-green-700 opacity-0 group-hover:h-full group-hover:opacity-100 duration-500">
                           <h1 className="text-2xl text-white">Fiction T-Shirt Store</h1>
                           <a className="mt-5 px-8 py-3 rounded-full bg-amber-400 hover:bg-amber-600 duration-300" href="#">Continue Shopping</a>
                         </div>

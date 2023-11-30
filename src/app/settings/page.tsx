@@ -1,33 +1,17 @@
 // @ts-nocheck
-'use client'
-import { Fragment } from 'react'
-import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
-import { DefaultLayout } from '@/components/layouts/Default'
-import clsx from 'clsx'
-import { TextField } from '@/components/Fields'
-import Link from 'next/link'
-import { Logo } from '@/components/Logo'
-import { Button } from '@/components/Button'
+'use client';
+import { useEffect, useState } from 'react';
+import { TextField } from '@/components/Fields';
+import { Button } from '@/components/Button';
 
-// const user = {
-//   name: 'Tom Cook',
-//   email: 'tom@example.com',
-//   imageUrl:
-//     'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-// }
-const navigation = [
-  { name: 'History', href: '/settings/donationHistory', current: false },
-  { name: 'Settings', href: '/settings', current: true },
-  { name: 'Causes', href: '/causes', current: false },
-]
 
-function classNames(...classes: String[]) {
-  return classes.filter(Boolean).join(' ')
-}
+export default function Settings() {
+  const [isClient, setIsClient] = useState(false);
 
-export default function settings() {
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <>
       <div className="min-h-full">
@@ -41,7 +25,7 @@ export default function settings() {
           </header>
           <main>
             <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-              {
+              {isClient && (
                 <form>
                   <div className="space-y-12">
                     <div className="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
@@ -151,11 +135,11 @@ export default function settings() {
                     </form>
                   </div>
                 </form>
-              }
+              )}
             </div>
           </main>
         </div>
       </div>
     </>
-  )
+  );
 }

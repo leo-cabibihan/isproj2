@@ -36,7 +36,7 @@ export default async function Organization({ params }: any) {
         <ContentLeft id={orgID} />
         <ContentRight id={orgID} />
         <GraphTemp id={orgID}/>
-        <div className="bg-white px-6 py-32 lg:px-8">
+        <div className="bg-white px-6 py-10 lg:px-8">
           <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
             <div className="mt-16 max-w-2xl space-y-20">
               <div>
@@ -60,7 +60,7 @@ export default async function Organization({ params }: any) {
                     <FormComponent ID={orgID} DonorID={donorID} />
                   </>
                 ) : (
-                  <h1 className="text-2xl font-bold tracking-tight text-gray-900">Please <a className="text-blue-600" href={"/login"}>log in</a> in order to donate.</h1>
+                  <h1 className="text-2xl font-bold tracking-tight text-gray-900">Please <a className="text-blue-600 hover:text-green-700 : hover:underline" href={"/login"}>Log In</a> as a donor in order to donate.</h1>
                 )
               }
 
