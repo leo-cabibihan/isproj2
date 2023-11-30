@@ -466,8 +466,6 @@ export function MultilayeredForm(ID: any) {
 export function EditForm({ id, orgID }: { id: number; orgID: any }) {
   const [formFields, setFormFields] = useState<any>({})
 
-  // const [addressFields, setAddressFields] = useState<any>({})
-
   const [toDelete, setToDelete] = useState<number[]>([])
 
   useEffect(() => {
@@ -480,7 +478,6 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
 
       if (data) {
         setFormFields(data!)
-        // setAddressFields(data!.address)
       }
     }
 
@@ -604,18 +601,18 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
 
         <TextField label="House Number" name="house_number" type="text" defaultValue={formFields?.address?.house_number} readOnly />
         <br />
-        {/* <TextField label="Street Name" name="street_name" type="text" defaultValue={formFields?.address.street_name} readOnly />
+        <TextField label="Street Name" name="street_name" type="text" defaultValue={formFields?.address?.street_name} readOnly />
         <br />
-        <TextField label="Village Name" name="village_name" type="text" defaultValue={formFields?.address.village_name} readOnly />
+        <TextField label="Village Name" name="village_name" type="text" defaultValue={formFields?.address?.village_name} readOnly />
         <br />
-        <TextField label="Barangay" name="barangay" type="text" defaultValue={formFields?.address.barangay} readOnly />
+        <TextField label="Barangay" name="barangay" type="text" defaultValue={formFields?.address?.barangay} readOnly />
         <br />
-        <TextField label="City" name="city" type="text" defaultValue={formFields?.address.city} readOnly />
+        <TextField label="City" name="city" type="text" defaultValue={formFields?.address?.city} readOnly />
         <br />
-        <TextField label="Province/Region" name="province" type="text" defaultValue={formFields?.address.province} readOnly />
+        <TextField label="Province/Region" name="province" type="text" defaultValue={formFields?.address?.province} readOnly />
         <br />
-        <TextField label="ZIP Code" name="zipcode" type="text" defaultValue={formFields?.address.zipcode} readOnly />
-        <br /> */}
+        <TextField label="ZIP Code" name="zipcode" type="text" defaultValue={formFields?.address?.zipcode} readOnly />
+        <br />
         <br />
 
         {formFields?.inventory_item?.map((form: any) => {
