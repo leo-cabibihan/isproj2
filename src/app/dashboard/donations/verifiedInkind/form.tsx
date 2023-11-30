@@ -602,7 +602,7 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
         </div>
         <br />
 
-        <TextField label="House Number" name="house_number" type="text" defaultValue={formFields!.address!.house_number} readOnly />
+        <TextField label="House Number" name="house_number" type="text" defaultValue={formFields?.address?.house_number} readOnly />
         <br />
         {/* <TextField label="Street Name" name="street_name" type="text" defaultValue={formFields?.address.street_name} readOnly />
         <br />
