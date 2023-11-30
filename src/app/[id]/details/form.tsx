@@ -51,7 +51,7 @@ export function FormComponent({ ID, DonorID }: any) {
 
         <>
           {cash ? (
-            <CashForm ID={ID} UserID={DonorID} />
+            <PayPal/>
           ) : (
             <GoodsForm ID={ID} UserID={DonorID} />
           )}
