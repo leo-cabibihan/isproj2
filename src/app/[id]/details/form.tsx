@@ -7,6 +7,7 @@ import { ShowImg } from '@/components/DisplayImg'
 import { TextField, SelectField } from '@/components/Fields'
 import { useEffect, useState } from 'react'
 import { getURL } from '@/app/utils/url'
+import { PayPalButton } from "react-paypal-button-v2";
 
 export function FormComponent({ ID, DonorID }: any) {
   const [cash, showCash] = useState(false)
@@ -358,6 +359,7 @@ export function CashForm({ ID, UserID }: any) {
   const [amount, setAmount] = useState('')
   const [eventID, setEventID] = useState('')
   const [eventslist, setEventsList] = useState<any>([])
+  const [scriptLoaded, setScriptLoaded] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -398,8 +400,26 @@ export function CashForm({ ID, UserID }: any) {
     )
   }
 
+  const addPayPalScript = () => {
+    if (window.paypal) {
+      setScriptLoaded(true)
+      return
+    }
+    const script = document.createElement("script");
+    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.PAYPAL_CLIENT_ID!}`;
+
+    script.type = "text/javascript";
+    script.async = true;
+    script.onload = () => setScriptLoaded(true);
+    document.body.appendChild(script);
+  };
+
+  useEffect(() => {
+    addPayPalScript()
+  }, [])
+
   return (
-    <form className="mt-10 grid grid-cols-1 gap-y-8" onSubmit={submit}>
+    <form className="mt-10 grid grid-cols-1 gap-y-8">
       <div className="space-y-12"></div>
       <div className="border-b border-gray-900/10 pb-12"></div>
       <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -436,18 +456,19 @@ export function CashForm({ ID, UserID }: any) {
         </div>
       </div>
       <div>
-        <div className="pt-6">
-          <Button
-            type="submit"
-            variant="solid"
-            color="green"
-            className="w-full md:w-1/5"
-          >
-            <span className="block md:inline">
-              Donate <span aria-hidden="true">&rarr;</span>
-            </span>
-          </Button>
-        </div>
+
+        {
+          scriptLoaded ?
+            <PayPalButton
+              amount={amount}
+              onSuccess={(details, data) => {
+                console.log(details)
+              }}
+            />
+            :
+            <span>Loading PayPal</span>
+        }
+
       </div>
     </form>
   )
