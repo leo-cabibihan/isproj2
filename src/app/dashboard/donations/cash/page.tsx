@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 import { CharityLog } from '@/app/admin/audit-log/function';
 import supabase from '@/app/utils/supabase';
 import { GetUID } from '@/app/utils/user_id';
@@ -18,6 +18,10 @@ const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 export const revalidate = 0;
 
 export default async function ExternalTable() {
+
+    var orderBy = "id"
+    var isAscending = true
+
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -50,7 +54,7 @@ export default async function ExternalTable() {
     const { data: cash, error: cash_error } = await supabase.from('cash')
         .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
         .eq('charity_id', charityId)
-        .order("id", { ascending: true })
+        .order(orderBy, { ascending: isAscending })
 
     const { data, error } = await supabase.from('cash')
         .select('*')
@@ -125,7 +129,7 @@ export default async function ExternalTable() {
 
         console.log("SUCCESS??? ", success)
     }
- 
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -150,7 +154,7 @@ export default async function ExternalTable() {
                                                 autoComplete="number"
                                                 required
                                             />
-                                            <br/>
+                                            <br />
                                             <div className="sm:col-span-4">
                                                 <TextField
                                                     label="Date Donated"
@@ -160,7 +164,7 @@ export default async function ExternalTable() {
                                                     required
                                                     max={new Date().toISOString().split('T')[0]}
                                                 />
-                                             <br/>
+                                                <br />
                                                 <SelectField
                                                     label='Assign to Event'
                                                     name="event"
@@ -170,11 +174,11 @@ export default async function ExternalTable() {
                                                         <option key={event.id} value={event.id}>{event.name}</option>
                                                     ))}
                                                 </SelectField>
-                                                <br/>
+                                                <br />
                                                 <div className="col-span-full">
                                                     <ImageUpload folderName="cash" charityID={charityId} recordID={cash_id![0] + 1} labelText="Upload Receipt/s" />
                                                 </div>
-                                                <br/>
+                                                <br />
                                                 <div className="flex justify-center">
                                                     <Button type='submit' variant='solid' color='blue' style={{ width: '80%' }} className="mx-auto">Submit</Button>
                                                 </div>
@@ -187,6 +191,14 @@ export default async function ExternalTable() {
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
+                    <div className="flex gap-x-2">
+                        <Button onClick={isAscending = true} variant="outline" color="green">
+                            Sort Ascending
+                        </Button>
+                        <Button onClick={isAscending = false} variant="solid" color="blue">
+                            Sort Descending
+                        </Button>
+                    </div>
                     <Table>
                         <Thead>
                             <Tr>
@@ -223,7 +235,7 @@ export default async function ExternalTable() {
                                                                             defaultValue={cash.id}
                                                                             required
                                                                         />
-                                                                        <br/>
+                                                                        <br />
                                                                         <TextField
                                                                             label="Amount"
                                                                             name="amount"
@@ -240,7 +252,7 @@ export default async function ExternalTable() {
                                                                                 required
                                                                                 max={new Date().toISOString().split('T')[0]}
                                                                             />
-                                                                        <br/>
+                                                                            <br />
                                                                             <SelectField
                                                                                 label='Assign to Event'
                                                                                 name="event"
@@ -250,7 +262,7 @@ export default async function ExternalTable() {
                                                                                     <option key={event.id} value={event.id}>{event.name}</option>
                                                                                 ))}
                                                                             </SelectField>
-                                                                            <br/>
+                                                                            <br />
                                                                             <div className="col-span-full">
                                                                                 <ImageUpload folderName="cash" charityID={charityId} recordID={cash.id} labelText="Upload Receipt/s" />
                                                                             </div>
@@ -292,7 +304,7 @@ export default async function ExternalTable() {
                                                                             defaultValue={cash.decrypted_donor?.decrypted_name as string}
                                                                             readOnly
                                                                         />
-                                                                        <br/>
+                                                                        <br />
                                                                         <TextField
                                                                             label="Amount"
                                                                             name="amount"
@@ -300,7 +312,7 @@ export default async function ExternalTable() {
                                                                             defaultValue={cash.amount}
                                                                             readOnly
                                                                         />
-                                                                        <br/>
+                                                                        <br />
                                                                         <TextField
                                                                             label="Donated on"
                                                                             name="date"
@@ -308,7 +320,7 @@ export default async function ExternalTable() {
                                                                             defaultValue={formatDate(cash.date) + ' ' + formatTime(cash.date)}
                                                                             readOnly
                                                                         />
-                                                                        <br/>
+                                                                        <br />
                                                                         <TextField
                                                                             label="Donated on"
                                                                             name="charity"
@@ -316,7 +328,7 @@ export default async function ExternalTable() {
                                                                             defaultValue={cash.charity?.name}
                                                                             readOnly
                                                                         />
-                                                                        <br/>
+                                                                        <br />
                                                                         <TextField
                                                                             label="Event Donated to"
                                                                             name="event"
@@ -325,12 +337,12 @@ export default async function ExternalTable() {
                                                                             readOnly
                                                                         />
                                                                         <div className="col-span-full">
-                                                                            </div>
-                                                                            <div className="mt-6 flex items-center justify-start gap-x-6">
-                                                                                <Button type='submit' variant='solid' color='blue' className="w-full">Email Receipt</Button>
-                                                                            </div>
-                                                                            <div className="mt-6 flex items-center justify-start gap-x-6">
-                                                                                <Button type="submit" variant="solid" color="red" className="w-full" formAction={deletePost}>Delete</Button>
+                                                                        </div>
+                                                                        <div className="mt-6 flex items-center justify-start gap-x-6">
+                                                                            <Button type='submit' variant='solid' color='blue' className="w-full">Email Receipt</Button>
+                                                                        </div>
+                                                                        <div className="mt-6 flex items-center justify-start gap-x-6">
+                                                                            <Button type="submit" variant="solid" color="red" className="w-full" formAction={deletePost}>Delete</Button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
