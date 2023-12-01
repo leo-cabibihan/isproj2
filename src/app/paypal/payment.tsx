@@ -119,17 +119,17 @@ export default function TestPage({ ID, UserID }: any) {
                                 },
                                 // use the "body" param to optionally pass additional order information
                                 // like product ids and quantities
-                                // body: JSON.stringify({
-                                //     cart: [
-                                //         {
-                                //             amount: 500,
-                                //             charity_id: ID,
-                                //             donor_id: UserID,
-                                //             is_external: false,
+                                body: JSON.stringify({
+                                    cart: [
+                                        {
+                                            amount: 500,
+                                            charity_id: ID,
+                                            donor_id: UserID,
+                                            is_external: false,
                                             
-                                //         },
-                                //     ],
-                                // }),
+                                        },
+                                    ],
+                                }),
                             });
 
                             const orderData = await response.json();
@@ -152,7 +152,7 @@ export default function TestPage({ ID, UserID }: any) {
                     onApprove={async (data, actions) => {
                         try {
                             const response = await fetch(
-                                `/orders/capture`,
+                                `/paypal/orders/capture`,
                                 {
                                     method: "POST",
                                     headers: {
