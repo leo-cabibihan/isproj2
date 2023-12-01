@@ -170,7 +170,7 @@ export default async function Page() {
                             <div className="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
                                 {posts?.map((post) => (
 
-                                    < article key={post.id} className="relative isolate flex flex-col gap-8 lg:flex-row" >
+                                    < article key={post.id} className="relative isolate flex flex-col gap-8 lg:flex-row">
                                         <ShowImg folder1={"campaign_post"} charityID={charityId} recordID={post.id}/>
                                         <div>
                                             <div className="flex items-center gap-x-4 text-xs">

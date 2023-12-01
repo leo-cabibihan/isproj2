@@ -312,7 +312,7 @@ export default async function Settings() {
                             '/change-qr'
                           }
                         >
-                          <h2 className="text-base font-semibold leading-7 text-blue-600">
+                          <h2 className="text-base font-semibold leading-7 text-blue-600 hover:text-green-700 hover:underline">
                             Upload QR Code for Cash Donations
                           </h2>
                         </a>

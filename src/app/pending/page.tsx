@@ -15,15 +15,15 @@ export default function Pending() {
     <>
       <DefaultLayout>
         <div className="bg-white px-6 py-24 sm:py-32 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <p className="text-base font-semibold leading-7 text-[#01794A]">Verification Pending</p>
-            <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Pending</h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Your Charity&apos;s Application is still pending. Check your email for updates.
-            </p>
-            <div className="mt-10">
-              <a href="/" className="text-sm font-semibold leading-7 text-blue-600">
-                <span aria-hidden="true">&larr;</span> Back to home
+        <div className="mx-auto max-w-2xl text-center">
+          <p className="text-base font-semibold leading-7 text-[#01794A]">Verification Pending</p>
+          <h2 className="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Pending</h2>
+          <p className="mt-6 text-lg leading-8 text-gray-600">
+            Your Charity&apos;s Application is still pending. Check your email for updates.
+          </p>
+          <div className="mt-10">
+              <a href="/" className="text-sm font-semibold leading-7 text-blue-600 hover:text-green-700 hover:underline">
+                <span aria-hidden="true">&larr;</span> Back to homepage
               </a>
             </div>
           </div>

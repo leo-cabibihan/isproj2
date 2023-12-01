@@ -21,8 +21,8 @@ export default function Pending() {
             Please check your Email to Confirm your Sign-up.
           </p>
           <div className="mt-10">
-              <a href="/" className="text-sm font-semibold leading-7 text-blue-500">
-                <span aria-hidden="true">&larr;</span> Back to home
+              <a href="/" className="text-sm font-semibold leading-7 text-blue-600 hover:text-green-700 hover:underline">
+                <span aria-hidden="true">&larr;</span> Back to homepage
               </a>
             </div>
         </div>

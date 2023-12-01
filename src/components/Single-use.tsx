@@ -459,44 +459,135 @@ export async function ContentRight({ id }: any) {
 }
 
 export async function GraphTemp({ id }: any) {
-  //Total Cash Donations Received Query (INCOME)
-  const { data: totalCashDonations, error: totalCashDonationsError } =
+  const { data: charity_summary, error: charity_summary_error } = 
+  await supabase
+  .from('charity_summary')
+  .select('*')
+  .eq('charity_id', id)
+  //Total Cash Donations Received Query (INCOME) YEARLY
+  const { data: yearlytotalCashDonations, error: yearlytotalCashDonationsError } =
     await supabase
-      .from('total_cash_donations_received')
-      .select('total_cash_donations_received, month')
+      .from('yearly_total_cash_donations_received')
+      .select('total_cash_donations_received, year')
       .eq('charity_id', id)
+      .order('year', { ascending: false })
+      .limit(5)
+  const yearlysortedtotalCashData = yearlytotalCashDonations?.reverse() || []
+  const yearlytotalCashData =
+    yearlysortedtotalCashData?.flatMap((totalCash) => [
+      {
+        name: totalCash.year,
+        totalCashDonations: totalCash.total_cash_donations_received,
+      },
+    ]) || []
+  //Total In-Kind Transactions Received Query (INCOME) YEARLY
+  const { data: yearlytotalInKindTransactions, error: yearlytotalInKindTransactionsError } =
+    await supabase
+      .from('yearly_total_inkind_donation_transactions')
+      .select('total_inkind_donation_transactions, year')
+      .eq('charity_id', id)
+      .order('year', { ascending: false })
+      .limit(5)
+  const yearlysortedtotalInKindTransactions = yearlytotalInKindTransactions?.reverse() || []
+  const yearlytotalInKindData =
+    yearlysortedtotalInKindTransactions?.flatMap((totalInKind) => [
+      {
+        name: totalInKind.year,
+        totalInKindTransactions: totalInKind.total_inkind_donation_transactions,
+      },
+    ]) || []
+
+
+  //Total Cash Donations Received Query (INCOME) MONTHLY
+  const { data: monthlytotalCashDonations, error: monthlytotalCashDonationsError } =
+    await supabase
+      .from('monthly_total_cash_donations_received')
+      .select('*')
+      .eq('charity_id', id)
+      .order('date', { ascending: false })
       .limit(12)
-  const totalCashData =
-    totalCashDonations?.flatMap((totalCash) => [
+  const monthlysortedtotalCashData = monthlytotalCashDonations?.reverse() || []
+  const monthlytotalCashData =
+    monthlysortedtotalCashData?.flatMap((totalCash) => [
       {
         name: totalCash.month,
         totalCashDonations: totalCash.total_cash_donations_received,
       },
     ]) || []
+  //Total In-Kind Transactions Received Query (INCOME) MONTHLY
+  const { data: monthlytotalInKindTransactions, error: monthlytotalInKindTransactionsError } =
+  await supabase
+    .from('monthly_total_inkind_donation_transactions')
+    .select('*')
+    .eq('charity_id', id)
+    .order('date', { ascending: false })
+    .limit(12)
+  const monthlysortedtotalInKindTransactions = monthlytotalInKindTransactions?.reverse() || []
+  const monthlytotalInKindData =
+  monthlysortedtotalInKindTransactions?.flatMap((totalInKind) => [
+    {
+      name: totalInKind.month,
+      totalInKindTransactions: totalInKind.total_inkind_donation_transactions,
+    },
+  ]) || []
 
-  //Total In-Kind Transactions Received Query (INCOME)
-  const { data: totalInKindTransactions, error: totalInKindTransactionsError } =
+  //Total Cash Donations Received Query (INCOME) DAILY
+  const { data: dailytotalCashDonations, error: dailytotalCashDonationsError } =
     await supabase
-      .from('total_inkind_donation_transactions')
-      .select('total_inkind_donation_transactions, month')
+      .from('daily_total_cash_donations_received')
+      .select('*')
       .eq('charity_id', id)
-      .limit(12)
-  const totalInKindData =
-    totalInKindTransactions?.flatMap((totalInKind) => [
+      .order('date', { ascending: false })
+      .limit(7)
+  const dailysortedtotalCashData = dailytotalCashDonations?.reverse() || []
+  const dailytotalCashData =
+    dailysortedtotalCashData?.flatMap((totalCash) => [
       {
-        name: totalInKind.month,
+        name: totalCash.day,
+        totalCashDonations: totalCash.total_cash_donations_received,
+      },
+    ]) || []
+  //Total In-Kind Transactions Received Query (INCOME) DAILY
+  const { data: dailytotalInKindTransactions, error: dailytotalInKindTransactionsError } =
+    await supabase
+      .from('daily_total_inkind_donation_transactions')
+      .select('*')
+      .eq('charity_id', id)
+      .order('date', { ascending: false })
+      .limit(7)
+  const dailysortedtotalInKindTransactions = dailytotalInKindTransactions?.reverse() || []
+  const dailytotalInKindData =
+    dailysortedtotalInKindTransactions?.flatMap((totalInKind) => [
+      {
+        name: totalInKind.day,
         totalInKindTransactions: totalInKind.total_inkind_donation_transactions,
       },
     ]) || []
+
+
   return (
-    <div className="bg-white py-24 sm:py-32">
+    <div className="bg-white py-24 sm:py-10">
+      <div className="mx-auto max-w-full text-center">
+        {charity_summary?.map(charitysummary => (
+          <>
+          <h2 className="mt-6 text-lg leading-7 text-gray-600">
+            As of {charitysummary.formatted_date}
+          </h2>
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            This Charity has accumulated cash donations amounting to 
+          </h2>
+          <p className="text-3xl font-bold tracking-tight text-emerald-600 sm:text-4xl inline"> PHP {charitysummary.total_cash_donations_received.toLocaleString()}</p>
+          </>
+        ))}
+      </div>
+      <br/>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Organization Statistics
           </h2>
           <p className="mt-6 text-base italic leading-7 text-gray-600">
-            The information presented here is derived from the latest 12 months
+            The information presented here is derived from the most recent 5 years, 12 months, and 7 days
             of this charity statistics.
           </p>
           <br />
@@ -505,13 +596,35 @@ export async function GraphTemp({ id }: any) {
           </h2>
           <p className="mt-2 text-base leading-8 text-gray-600">
             How much cash donations and in-kind donation transactions are
-            received per month.
+            received per year, per month, and per day respectively.
           </p>
           <br />
         </div>
+        <h2 className="sm:text-4x1 text-2xl font-bold tracking-tight text-emerald-600">
+            Yearly
+        </h2>
+        <br/>
         <div className="flex flex-col md:flex-row md:gap-10">
-          <TotalCashDonationsChart CashData={totalCashData} />
-          <TotalInKindTransactionsChart InKindData={totalInKindData} />
+          <TotalCashDonationsChart CashData={yearlytotalCashData} />
+          <TotalInKindTransactionsChart InKindData={yearlytotalInKindData} />
+        </div>
+        <br/>
+        <h2 className="sm:text-4x1 text-2xl font-bold tracking-tight text-amber-500">
+            Monthly
+        </h2>
+        <br/>
+        <div className="flex flex-col md:flex-row md:gap-10">
+          <TotalCashDonationsChart CashData={monthlytotalCashData} />
+          <TotalInKindTransactionsChart InKindData={monthlytotalInKindData} />
+        </div>
+        <br/>
+        <h2 className="sm:text-4x1 text-2xl font-bold tracking-tight text-blue-600">
+            Daily
+        </h2>
+        <br/>
+        <div className="flex flex-col md:flex-row md:gap-10">
+          <TotalCashDonationsChart CashData={dailytotalCashData} />
+          <TotalInKindTransactionsChart InKindData={dailytotalInKindData} />
         </div>
       </div>
     </div>
