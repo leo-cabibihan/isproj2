@@ -126,7 +126,7 @@ export default function TestPage({ ID, UserID }: any) {
                                             {
                                                 "amount": {
                                                     "currency_code": "USD",
-                                                    "value": amount.toString()
+                                                    "value": "100"
                                                 }
                                             }],
                                     })
