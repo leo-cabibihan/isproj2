@@ -18,7 +18,7 @@ export default function TestPage({ ID, UserID }: any) {
     const [amount, setAmount] = useState('')
 
     const initialOptions = {
-        "client-id": "Acdo2IOJiiihwISa_-GfchSLPkA4rdf9JrtbWWHyG6y_dKJOg-8Zh7zNp9DGLIX9eRAyxcTx9DFe_gqu",
+        "client-id": process.env.PAYPAL_CLIENT_ID,
         "enable-funding": "paylater,venmo,card",
         "disable-funding": "",
         "data-sdk-integration-source": "integrationbuilder_sc",
