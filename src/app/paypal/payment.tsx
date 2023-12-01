@@ -112,7 +112,7 @@ export default function TestPage({ ID, UserID }: any) {
                     }}
                     createOrder={async () => {
                         try {
-                            const response = await fetch("/api/orders", {
+                            const response = await fetch("/orders", {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
@@ -122,8 +122,11 @@ export default function TestPage({ ID, UserID }: any) {
                                 body: JSON.stringify({
                                     cart: [
                                         {
-                                            id: "YOUR_PRODUCT_ID",
-                                            quantity: "YOUR_PRODUCT_QUANTITY",
+                                            amount: amount,
+                                            charity_id: ID,
+                                            donor_id: UserID,
+                                            is_external: false,
+                                            event_id: eventID,
                                         },
                                     ],
                                 }),
@@ -149,12 +152,15 @@ export default function TestPage({ ID, UserID }: any) {
                     onApprove={async (data, actions) => {
                         try {
                             const response = await fetch(
-                                `/api/orders/${data.orderID}/capture`,
+                                `/orders/capture`,
                                 {
                                     method: "POST",
                                     headers: {
                                         "Content-Type": "application/json",
                                     },
+                                    body: JSON.stringify({
+                                        ID: data.orderID
+                                    })
                                 },
                             );
 

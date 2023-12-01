@@ -33,3 +33,16 @@ export async function getAccessToken() {
         console.error("Failed to generate Access Token:", error);
     }
 }
+
+export async function handleResponse(response: any) {
+    try {
+        const jsonResponse = await response.json();
+        return {
+            jsonResponse,
+            httpStatusCode: response.status,
+        };
+    } catch (err) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage);
+    }
+}
