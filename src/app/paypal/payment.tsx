@@ -17,6 +17,8 @@ export default function TestPage({ ID, UserID }: any) {
     const [eventID, setEventID] = useState('')
     const [amount, setAmount] = useState('')
 
+    console.log(`AMOUNT BEING PASSED IN IS - USD ${amount}`)
+
     const initialOptions = {
         "client-id": "Acdo2IOJiiihwISa_-GfchSLPkA4rdf9JrtbWWHyG6y_dKJOg-8Zh7zNp9DGLIX9eRAyxcTx9DFe_gqu",
         "enable-funding": "paylater,venmo,card",
