@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 
 import supabase from '@/app/utils/supabase'
 import { NoURLMail, ReceiptEmail } from '@/components/email-template'
