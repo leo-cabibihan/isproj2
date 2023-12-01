@@ -17,7 +17,7 @@ export default function TestPage({ ID, UserID }: any) {
     const [eventID, setEventID] = useState('')
     const [amount, setAmount] = useState('')
 
-    console.log(`AMOUNT BEING PASSED IN IS - USD ${amount}`)
+
 
     const initialOptions = {
         "client-id": "Acdo2IOJiiihwISa_-GfchSLPkA4rdf9JrtbWWHyG6y_dKJOg-8Zh7zNp9DGLIX9eRAyxcTx9DFe_gqu",
@@ -116,28 +116,43 @@ export default function TestPage({ ID, UserID }: any) {
                         try {
 
                             console.log(JSON.stringify(
-                                    {
-                                        "intent": "CAPTURE",
-                                        "purchase_units": [
-                                            {
-                                                "amount": {
-                                                    "currency_code": "USD",
-                                                    "value": `${amount}`
-                                                }
-                                            }],
-                                    }))
+                                {
+                                    "intent": "CAPTURE",
+                                    "purchase_units": [
+                                        {
+                                            "amount": {
+                                                "currency_code": "USD",
+                                                "value": `${amount}`
+                                            }
+                                        }],
+                                }))
 
-                                 console.log(JSON.stringify(
+                            console.log(JSON.stringify(
+                                {
+                                    "intent": "CAPTURE",
+                                    "purchase_units": [
+                                        {
+                                            "amount": {
+                                                "currency_code": "USD",
+                                                "value": "100"
+                                            }
+                                        }],
+                                }))
+
+                            const payload = {
+                                "intent": "CAPTURE",
+                                "purchase_units": [
                                     {
-                                        "intent": "CAPTURE",
-                                        "purchase_units": [
-                                            {
-                                                "amount": {
-                                                    "currency_code": "USD",
-                                                    "value": "100"
-                                                }
-                                            }],
-                                    }))
+                                        "amount": {
+                                            "currency_code": "USD",
+                                            "value": `${amount}`
+                                        }
+                                    }],
+                            }
+
+                            console.log(payload)
+                            console.log(`AMOUNT BEING PASSED IN IS - USD ${amount}`)
+
                             const response = await fetch("/paypal/orders", {
                                 method: "POST",
                                 headers: {
@@ -145,17 +160,7 @@ export default function TestPage({ ID, UserID }: any) {
                                 },
                                 // use the "body" param to optionally pass additional order information
                                 // like product ids and quantities
-                                body: JSON.stringify(
-                                    {
-                                        "intent": "CAPTURE",
-                                        "purchase_units": [
-                                            {
-                                                "amount": {
-                                                    "currency_code": "USD",
-                                                    "value": `${amount}`
-                                                }
-                                            }],
-                                    })
+                                body: JSON.stringify(payload)
                             });
 
                             const orderData = await response.json();
