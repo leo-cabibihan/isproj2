@@ -16,6 +16,7 @@ export default function TestPage({ ID, UserID }: any) {
     const [eventslist, setEventsList] = useState<any>([])
     const [eventID, setEventID] = useState('')
     const [amount, setAmount] = useState('')
+    var moneh = amount
 
 
 
@@ -122,7 +123,7 @@ export default function TestPage({ ID, UserID }: any) {
                                         {
                                             "amount": {
                                                 "currency_code": "USD",
-                                                "value": `${amount}`
+                                                "value": `${moneh}`
                                             }
                                         }],
                                 }))
@@ -145,13 +146,13 @@ export default function TestPage({ ID, UserID }: any) {
                                     {
                                         "amount": {
                                             "currency_code": "USD",
-                                            "value": `${amount}`
+                                            "value": `${moneh}`
                                         }
                                     }],
                             }
 
                             console.log(payload)
-                            console.log(`AMOUNT BEING PASSED IN IS - USD ${amount}`)
+                            console.log(`AMOUNT BEING PASSED IN IS - USD ${moneh}`)
 
                             const response = await fetch("/paypal/orders", {
                                 method: "POST",
