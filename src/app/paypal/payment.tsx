@@ -119,17 +119,44 @@ export default function TestPage({ ID, UserID }: any) {
                                 },
                                 // use the "body" param to optionally pass additional order information
                                 // like product ids and quantities
-                                // body: JSON.stringify({
-                                //     cart: [
-                                //         {
-                                //             amount: 500,
-                                //             charity_id: ID,
-                                //             donor_id: UserID,
-                                //             is_external: false,
-                                            
-                                //         },
-                                //     ],
-                                // }),
+                                body: JSON.stringify({
+                                    purchase_units: [
+                                        {
+                                          "amount": {
+                                            "currency": "USD",
+                                            "details": {"subtotal": "1.09", "shipping": "0.02", "tax": "0.33"},
+                                            "total": amount
+                                          },
+                                          "items": [
+                                            {
+                                              "name": "NeoPhone",
+                                              "sku": "sku03",
+                                              "price": "0.54",
+                                              "currency": "EUR",
+                                              "quantity": "1"
+                                            },
+                                            {
+                                              "name": "Fitness Watch",
+                                              "sku": "sku04",
+                                              "price": "0.55",
+                                              "currency": "EUR",
+                                              "quantity": "1"
+                                            }
+                                          ],
+                                          "shipping_address": {
+                                            "line1": "2211 N First Street",
+                                            "line2": "Building 17",
+                                            "city": "San Jose",
+                                            "country_code": "US",
+                                            "postal_code": "95131",
+                                            "state": "CA",
+                                            "phone": "(123) 456-7890"
+                                          },
+                                          "shipping_method": "United Postal Service",
+                                          "invoice_number": "invoice_number_2388",
+                                        }
+                                      ]
+                                }),
                             });
 
                             const orderData = await response.json();
