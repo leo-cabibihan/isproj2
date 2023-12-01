@@ -8,11 +8,11 @@ const client_id = process.env.PAYPAL_CLIENT_ID
 const client_secret = process.env.PAYPAL_CLIENT_SECRET
 const base = "https://api-m.sandbox.paypal.com";
 
-const createOrder = async (cart: any) => {
-  console.log(
-    "shopping cart information passed from the frontend createOrder() callback:",
-    cart,
-  );
+const createOrder = async () => {
+  // console.log(
+  //   "shopping cart information passed from the frontend createOrder() callback:",
+  //   cart,
+  // );
 
   const accessToken = await getAccessToken();
   const url = `${base}/v2/checkout/orders`;
@@ -22,7 +22,7 @@ const createOrder = async (cart: any) => {
       {
         amount: {
           currency_code: "USD",
-          value: cart.amount,
+          value: "100.00",
         },
       },
     ],
@@ -64,9 +64,9 @@ export async function POST(req: Request) {
   
   try {
     // use the cart information passed from the front-end to calculate the order amount detals
-    const requestData = await req.json();
-    const cart = requestData.cart
-    const { jsonResponse, httpStatusCode } = await createOrder(cart);
+    // const requestData = await req.json();
+    // const cart = requestData.cart
+    const { jsonResponse, httpStatusCode } = await createOrder();
     return NextResponse.json(jsonResponse, {status: httpStatusCode})
     // return res.status(httpStatusCode).json(jsonResponse);
   } catch (error) {
