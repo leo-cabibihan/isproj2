@@ -112,7 +112,7 @@ export default function TestPage({ ID, UserID }: any) {
                     }}
                     createOrder={async () => {
                         try {
-                            const response = await fetch("/orders", {
+                            const response = await fetch("/paypal/orders", {
                                 method: "POST",
                                 headers: {
                                     "Content-Type": "application/json",
