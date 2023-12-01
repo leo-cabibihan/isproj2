@@ -122,11 +122,11 @@ export default function TestPage({ ID, UserID }: any) {
                                 body: JSON.stringify({
                                     cart: [
                                         {
-                                            amount: amount,
+                                            amount: 500,
                                             charity_id: ID,
                                             donor_id: UserID,
                                             is_external: false,
-                                            event_id: eventID,
+                                            
                                         },
                                     ],
                                 }),
