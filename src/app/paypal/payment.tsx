@@ -17,6 +17,7 @@ export default function TestPage({ ID, UserID }: any) {
     const [eventID, setEventID] = useState('')
     const [amount, setAmount] = useState(0)
     const moneh = amount
+    console.log(amount, moneh)
 
 
 
