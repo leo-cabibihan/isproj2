@@ -16,7 +16,7 @@ export default function TestPage({ ID, UserID }: any) {
     const [eventslist, setEventsList] = useState<any>([])
     const [eventID, setEventID] = useState('')
     const [amount, setAmount] = useState(0)
-    const moneh = "100.00"
+    const moneh = amount
 
 
 
