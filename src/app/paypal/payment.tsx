@@ -114,6 +114,30 @@ export default function TestPage({ ID, UserID }: any) {
                     }}
                     createOrder={async () => {
                         try {
+
+                            console.log(JSON.stringify(
+                                    {
+                                        "intent": "CAPTURE",
+                                        "purchase_units": [
+                                            {
+                                                "amount": {
+                                                    "currency_code": "USD",
+                                                    "value": `${amount}`
+                                                }
+                                            }],
+                                    }))
+
+                                 console.log(JSON.stringify(
+                                    {
+                                        "intent": "CAPTURE",
+                                        "purchase_units": [
+                                            {
+                                                "amount": {
+                                                    "currency_code": "USD",
+                                                    "value": "100"
+                                                }
+                                            }],
+                                    }))
                             const response = await fetch("/paypal/orders", {
                                 method: "POST",
                                 headers: {
