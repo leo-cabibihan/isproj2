@@ -20,7 +20,7 @@ export const revalidate = 0;
 export default async function ExternalTable({ searchParams = {column: 'id'} }: any) {
 
     console.log("DO SEARCHPARAMS WORK? ", searchParams)
-    console.log(`PARAMS SIZE IS ${searchParams.keys.length}`)
+    console.log(`PARAMS SIZE IS ${Object.keys(searchParams).length}`)
 
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
