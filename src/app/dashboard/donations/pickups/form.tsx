@@ -296,7 +296,7 @@ export function PickupForm({ id }: { id: number }) {
         <br />
 
         {
-          complete ?
+          !complete ?
             (
               <div className="col-span-full">
                 <label

@@ -456,7 +456,7 @@ export function MultilayeredForm(ID: any) {
         <br />
 
         {
-          withRemarks ?
+          !withRemarks ?
             (
               <div className="col-span-full">
                 <label
