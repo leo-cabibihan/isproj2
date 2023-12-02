@@ -23,6 +23,8 @@ export async function PUT(request: Request) {
     const cookieStore = cookies()
     const supabaseAuth = createRouteHandlerClient({ cookies: () => cookieStore })
 
+    console.log("REMARKS ARE: ", remarks)
+
     //GETS THE DATA INSERTED INTO TRANSACTION DETAILS FORM
     const newTransaction = {
         donor_name: transaction.name,
