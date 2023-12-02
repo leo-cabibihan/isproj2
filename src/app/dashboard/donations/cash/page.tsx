@@ -17,7 +17,7 @@ const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export const revalidate = 0;
 
-export default async function ExternalTable({ searchParams }: any) {
+export default async function ExternalTable({ searchParams = {column: 'id'} }: any) {
 
     console.log("DO SEARCHPARAMS WORK? ", searchParams)
 
