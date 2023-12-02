@@ -57,7 +57,10 @@ export default async function Example({ params }: any) {
                   <div className="sm:flex-auto">
                     {event_summary?.map(eventsummary =>(
                       <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl">Total Cash Received: 
-                      <p className="text-3xl font-bold tracking-tight text-emerald-600 sm:text-3xl">PHP {eventsummary.total_cash_received.toLocaleString()}</p></h2>
+                      <p className="text-3xl font-bold tracking-tight text-emerald-600 sm:text-3xl">
+                      <span className="font-normal text-emerald-600"> &#8369; </span>{eventsummary.total_cash_received.toLocaleString()}
+                      </p>
+                      </h2>
                     ))}
                   </div>
                   <dl className="mt-10 max-w-xl space-y-8 text-base leading-7 text-gray-600 lg:max-w-none">

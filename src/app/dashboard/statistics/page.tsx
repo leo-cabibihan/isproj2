@@ -34,7 +34,6 @@ export default async function Page() {
         totalCashDonations: totalCash.total_cash_donations_received,
       },
     ]) || []
-    console.log(sortedtotalCashData)
   //Total In-Kind Transactions Received Query (INCOME)
   const { data: totalInKindTransactions, error: totalInKindTransactionsError } =
     await supabase

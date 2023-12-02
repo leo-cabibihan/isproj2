@@ -576,7 +576,10 @@ export async function GraphTemp({ id }: any) {
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             This Charity has accumulated cash donations amounting to 
           </h2>
-          <p className="text-3xl font-bold tracking-tight text-emerald-600 sm:text-4xl inline"> PHP {charitysummary.total_cash_donations_received.toLocaleString()}</p>
+          <p className="text-3xl font-bold tracking-tight text-emerald-600 sm:text-4xl inline"> 
+          <span className="font-normal text-emerald-600"> &#8369; </span> 
+          {charitysummary.total_cash_donations_received.toLocaleString()}
+          </p>
           </>
         ))}
       </div>
