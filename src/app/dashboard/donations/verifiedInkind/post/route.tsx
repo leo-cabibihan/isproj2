@@ -94,7 +94,8 @@ export async function POST(request: Request) {
         donor_id: donor_id,
         donor_address_id: address_id,
         verify: true,
-        charity_id: formData.charity_id
+        charity_id: formData.charity_id,
+        remarks: formData.remarks,
     }
 
     //INSERTS TRANSACTION DETAILS INTO TRANSACTION TABLE AND GETS THE ID OF NEW RECORD

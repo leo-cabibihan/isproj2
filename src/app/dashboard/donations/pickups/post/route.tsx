@@ -19,6 +19,7 @@ export async function PUT(request: Request) {
     const formData = await request.json()
     console.log("FoRMDATA: ", formData.transaction.inventory_item)
     const transaction = formData?.transaction
+    const remarks = formData?.remarks
     const cookieStore = cookies()
     const supabaseAuth = createRouteHandlerClient({ cookies: () => cookieStore })
 
@@ -26,7 +27,8 @@ export async function PUT(request: Request) {
     const newTransaction = {
         donor_name: transaction.name,
         address: transaction.address,
-        verify: true
+        verify: true,
+        remarks: remarks
     }
 
     //INSERTS TRANSACTION DETAILS INTO TRANSACTION TABLE AND GETS THE ID OF NEW RECORD

@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 'use client'
 
 import supabase from '@/app/utils/supabase'
@@ -44,6 +44,9 @@ export function MultilayeredForm(ID: any) {
 
   const [donorslist, setDonorslist] = useState<any>([])
   const [addresslist, setAddresslist] = useState<any>([])
+
+  const [remarks, setRemarks] = useState("")
+  const [withRemarks, setWithRemarks] = useState(false)
 
   console.log('ORG ID IS', org_id[0])
 
@@ -102,6 +105,7 @@ export function MultilayeredForm(ID: any) {
           donor_id: donor_id,
           address_id: address_id,
           charity_id: org_id[0],
+          remarks: remarks,
           items: formFields,
         }),
       },
@@ -426,6 +430,68 @@ export function MultilayeredForm(ID: any) {
             </div>
           )
         })}
+        <br />
+
+        <Switch.Group as="div" className="flex items-center">
+          <Switch
+            checked={withRemarks}
+            onChange={setWithRemarks}
+            className={classNames(
+              newDonor ? 'bg-indigo-600' : 'bg-gray-200',
+              'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2',
+            )}
+          >
+            <span
+              aria-hidden="true"
+              className={classNames(
+                newDonor ? 'translate-x-5' : 'translate-x-0',
+                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+              )}
+            />
+          </Switch>
+          <Switch.Label as="span" className="ml-3 text-sm">
+            <span className="font-medium text-gray-900">Items Complete</span>{' '}
+          </Switch.Label>
+        </Switch.Group>
+        <br />
+
+        {
+          withRemarks ?
+            (
+              <div className="col-span-full">
+                <label
+                  htmlFor="details"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Remarks
+                </label>
+                <div className="mt-2">
+                  <textarea
+                    id="details"
+                    name="details"
+                    rows={3}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={(e) => setRemarks(e.target.value)}
+                    placeholder='Lorem Ipsum Dolor...'
+                    required
+                  />
+                </div>
+              </div>
+            )
+            :
+            (
+              <div className="relative">
+                <div className="relative flex justify-center">
+                  <span className="bg-white px-3 text-base font-semibold leading-6 text-green-500">
+                    Transaction marked as complete
+                  </span>
+                </div>
+              </div>
+            )
+        }
+
+        <br />
+        <br />
 
         <div className="relative">
           <div
@@ -688,6 +754,41 @@ export function EditForm({ id, orgID }: { id: number; orgID: any }) {
             </div>
           )
         })}
+
+        {
+          formFields?.remarks && formFields?.remarks.length >= 1 ?
+            (
+              <div className="col-span-full">
+                <label
+                  htmlFor="details"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Remarks
+                </label>
+                <div className="mt-2">
+                  <textarea
+                    id="details"
+                    name="details"
+                    rows={3}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    defaultValue={formFields?.remarks}
+                    placeholder='Lorem Ipsum Dolor...'
+                    required
+                  />
+                </div>
+              </div>
+            )
+            :
+            (
+              <div className="relative">
+                <div className="relative flex justify-center">
+                  <span className="bg-white px-3 text-base font-semibold leading-6 text-green-500">
+                    This transaction has no Remarks
+                  </span>
+                </div>
+              </div>
+            )
+        }
 
         <div className="relative">
           <div

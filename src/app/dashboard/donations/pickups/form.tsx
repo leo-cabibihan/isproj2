@@ -6,11 +6,17 @@ import { Button } from '@/components/Button'
 import { TextField, SelectField } from '@/components/Fields'
 import { getURL } from '@/app/utils/url'
 import { SetStateAction, useEffect, useState } from 'react'
+import { Switch } from '@headlessui/react'
+
+function classNames(...classes: any[]) {
+  return classes.filter(Boolean).join(' ')
+}
 
 export function PickupForm({ id }: { id: number }) {
   const [formFields, setFormFields] = useState<any>({})
-
   const [toDelete, setToDelete] = useState<number[]>([])
+  const [remarks, setRemarks] = useState("")
+  const [complete, setComplete] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +54,7 @@ export function PickupForm({ id }: { id: number }) {
         body: JSON.stringify({
           toDelete: toDelete,
           transaction: formFields,
+          remmarks: remarks,
         }),
       },
     )
@@ -187,7 +194,7 @@ export function PickupForm({ id }: { id: number }) {
                 placeholder={form.name}
                 onChange={(event) => handleFormChange(event, form.id)}
                 value={form.name}
-                required
+                readOnly
               />
               <br />
               <TextField
@@ -199,7 +206,7 @@ export function PickupForm({ id }: { id: number }) {
                 max={10000}
                 onChange={(event) => handleFormChange(event, form.id)}
                 value={form.quantity}
-                required
+                readOnly
               />
               <br />
               <TextField
@@ -209,19 +216,33 @@ export function PickupForm({ id }: { id: number }) {
                 placeholder={form.unit_of_measurement}
                 onChange={(event) => handleFormChange(event, form.id)}
                 value={form.unit_of_measurement}
-                required
+                readOnly
               />
               <br />
-              <SelectField
-                label="Perishable?"
-                name="perishable"
-                placeholder="Yes"
-                onChange={(event) => handleFormChange(event, form.id)}
-                required
-              >
-                <option value={'true'}>Yes</option>
-                <option value={'false'}>No</option>
-              </SelectField>
+              {
+                form.perishable ?
+                  (
+                    <TextField
+                      label="Perishable?"
+                      name="perishable"
+                      type="text"
+                      onChange={(event) => handleFormChange(event, form.id)}
+                      value="YES"
+                      readOnly
+                    />
+                  )
+                  :
+                  (
+                    <TextField
+                      label="Perishable?"
+                      name="perishable"
+                      type="text"
+                      onChange={(event) => handleFormChange(event, form.id)}
+                      value="NO"
+                      readOnly
+                    />
+                  )
+              }
               <br />
               <TextField
                 label="Expiry Date (if perishable)"
@@ -231,6 +252,7 @@ export function PickupForm({ id }: { id: number }) {
                 onChange={(event) => handleFormChange(event, form.id)}
                 value={form.expiry}
                 min={getMinExpiryDate()}
+                readOnly
               />
               <br />
               <div className="col-span-full">
@@ -248,6 +270,67 @@ export function PickupForm({ id }: { id: number }) {
             </div>
           )
         })}
+        <br />
+
+        <Switch.Group as="div" className="flex items-center">
+          <Switch
+            checked={complete}
+            onChange={setComplete}
+            className={classNames(
+              newDonor ? 'bg-indigo-600' : 'bg-gray-200',
+              'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2',
+            )}
+          >
+            <span
+              aria-hidden="true"
+              className={classNames(
+                newDonor ? 'translate-x-5' : 'translate-x-0',
+                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+              )}
+            />
+          </Switch>
+          <Switch.Label as="span" className="ml-3 text-sm">
+            <span className="font-medium text-gray-900">Items Complete</span>{' '}
+          </Switch.Label>
+        </Switch.Group>
+        <br />
+
+        {
+          complete ?
+            (
+              <div className="col-span-full">
+                <label
+                  htmlFor="details"
+                  className="block text-sm font-medium leading-6 text-gray-900"
+                >
+                  Remarks
+                </label>
+                <div className="mt-2">
+                  <textarea
+                    id="details"
+                    name="details"
+                    rows={3}
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                    onChange={(e) => setRemarks(e.target.value)}
+                    placeholder='Lorem Ipsum Dolor...'
+                    required
+                  />
+                </div>
+              </div>
+            )
+            :
+            (
+              <div className="relative">
+                <div className="relative flex justify-center">
+                  <span className="bg-white px-3 text-base font-semibold leading-6 text-green-500">
+                    Transaction marked as complete
+                  </span>
+                </div>
+              </div>
+            )
+        }
+        <br />
+        <br />
 
         <div className="relative">
           <div
