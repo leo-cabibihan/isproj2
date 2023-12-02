@@ -60,6 +60,7 @@ export function PickupForm({ id }: { id: number }) {
         }),
       },
     )
+    console.log("REMARKS BEING SUBMITTED: ", remarks)
   }
 
   const addFields = async () => {
