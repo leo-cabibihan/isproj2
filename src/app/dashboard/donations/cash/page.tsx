@@ -17,10 +17,32 @@ const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export const revalidate = 0;
 
-export default async function ExternalTable({ searchParams = {column: 'id'} }: any) {
+async function getCashData(column: any, order: any, charity_id: number) {
+    var data
+    if (column && order) {
+        const { data: cash, error: cash_error } = await supabase.from('cash')
+            .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
+            .eq('charity_id', charity_id)
+            .order(column, { ascending: Boolean(order) })
+        data = cash
+    }
+    else {
+        const { data: cash, error: cash_error } = await supabase.from('cash')
+            .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
+            .eq('charity_id', charity_id)
+            .order("id", { ascending: true })
+        data = cash
+    }
+
+    return data
+}
+
+export default async function ExternalTable({ searchParams }: any) {
 
     console.log("DO SEARCHPARAMS WORK? ", searchParams)
     console.log(`PARAMS SIZE IS ${Object.keys(searchParams).length}`)
+
+    const paramSize = Object.keys(searchParams).length
 
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
@@ -37,28 +59,23 @@ export default async function ExternalTable({ searchParams = {column: 'id'} }: a
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     };
 
-    const filterFunction = (orderBy: string, isAscending: string) => {
-        sessionStorage.setItem("orderBy", orderBy)
-        sessionStorage.setItem("isAscending", isAscending)
-    }
-
-
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
 
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
+    const column = searchParams?.column
+    const order = searchParams?.order
+
     const charityId = charity_id![0]
+
+    const cash = await getCashData(column, order, charityId)
+
     const { data: event } = await supabase
         .from('event')
         .select('*')
         .eq('charity_id', charityId).eq('is_ongoing', true).eq('approval_status', 'APPROVED')
-        .order("id", { ascending: true })
-
-    const { data: cash, error: cash_error } = await supabase.from('cash')
-        .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
-        .eq('charity_id', charityId)
         .order("id", { ascending: true })
 
     const { data, error } = await supabase.from('cash')
@@ -197,7 +214,7 @@ export default async function ExternalTable({ searchParams = {column: 'id'} }: a
                 </TableHeaderButton>
                 <TableContent>
                     <div className="flex gap-x-2">
-                        <form className='space-y-6' action="/dashboard/donations/cash" method="GET">
+                        <form className='flex gap-x-2 space-y-6' action="/dashboard/donations/cash" method="GET">
                             <SelectField
                                 label='Sort by:'
                                 name="column"
@@ -206,6 +223,14 @@ export default async function ExternalTable({ searchParams = {column: 'id'} }: a
                                 <option value={"id"}>id</option>
                                 <option value={"amount"}>amount</option>
                                 <option value={"date"}>date</option>
+                            </SelectField>
+                            <SelectField
+                                label='Order by:'
+                                name="order"
+                                required
+                            >
+                                <option value={1}>ascending</option>
+                                <option value={0}>descending</option>
                             </SelectField>
                             <div className='flex flex-col items-center'>
                                 <Button type='submit' variant='solid' color='green' className='w-64 mt-2'>
