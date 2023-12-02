@@ -30,7 +30,7 @@ export async function PUT(request: Request) {
         donor_name: transaction.name,
         address: transaction.address,
         verify: true,
-        remarks: "test"
+        remarks: transaction.remarks,
     }
 
     //INSERTS TRANSACTION DETAILS INTO TRANSACTION TABLE AND GETS THE ID OF NEW RECORD

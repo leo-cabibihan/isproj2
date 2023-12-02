@@ -56,7 +56,6 @@ export function PickupForm({ id }: { id: number }) {
         body: JSON.stringify({
           toDelete: toDelete,
           transaction: formFields,
-          remmarks: remarks,
         }),
       },
     )
@@ -314,7 +313,7 @@ export function PickupForm({ id }: { id: number }) {
                     name="details"
                     rows={3}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    onChange={(e) => setRemarks(e.target.value)}
+                    onChange={e => setFormFields({...formFields, remarks: e.target.value})}
                     placeholder='Lorem Ipsum Dolor...'
                     required
                   />
