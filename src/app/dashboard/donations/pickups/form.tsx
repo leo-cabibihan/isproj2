@@ -18,6 +18,8 @@ export function PickupForm({ id }: { id: number }) {
   const [remarks, setRemarks] = useState("")
   const [complete, setComplete] = useState(false)
 
+  console.log(remarks)
+
   useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase
