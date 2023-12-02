@@ -17,15 +17,9 @@ const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export const revalidate = 0;
 
-export default async function ExternalTable() {
+export default async function ExternalTable({ searchParams }: any) {
 
-    sessionStorage.setItem("orderBy", "id")
-    sessionStorage.setItem("isAscending", "1")
-    const orderBy = sessionStorage.getItem("orderBy")
-    const isAscending = Boolean(Number(sessionStorage.getItem("isAscending")))
-
-    console.log("DOES SESSION STORAGE WORK? WE'LL SEE: ", orderBy, isAscending)
-    
+    console.log("DO SEARCHPARAMS WORK? ", searchParams)
 
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
@@ -64,7 +58,7 @@ export default async function ExternalTable() {
     const { data: cash, error: cash_error } = await supabase.from('cash')
         .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
         .eq('charity_id', charityId)
-        .order("id", { ascending: isAscending })
+        .order("id", { ascending: true })
 
     const { data, error } = await supabase.from('cash')
         .select('*')
@@ -202,12 +196,24 @@ export default async function ExternalTable() {
                 </TableHeaderButton>
                 <TableContent>
                     <div className="flex gap-x-2">
-                        <Button variant="outline" color="green">
-                            Sort Ascending
-                        </Button>
-                        <Button variant="solid" color="blue">
-                            Sort Descending
-                        </Button>
+                        <form className='space-y-6' action="/dashboard/donations/cash" method="GET">
+                            <SelectField
+                                label='Sort by:'
+                                name="column"
+                                required
+                            >
+                                <option value={"id"}>id</option>
+                                <option value={"amount"}>amount</option>
+                                <option value={"date"}>date</option>
+                            </SelectField>
+                            <div className='flex flex-col items-center'>
+                                <Button type='submit' variant='solid' color='green' className='w-64 mt-2'>
+                                    <span>
+                                        Set Data <span aria-hidden="true">&rarr;</span>
+                                    </span>
+                                </Button>
+                            </div>
+                        </form>
                     </div>
                     <Table>
                         <Thead>
