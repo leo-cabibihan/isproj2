@@ -19,8 +19,13 @@ export const revalidate = 0;
 
 export default async function ExternalTable() {
 
-    var orderBy = "id"
-    var isAscending = true
+    sessionStorage.setItem("orderBy", "id")
+    sessionStorage.setItem("isAscending", "1")
+    const orderBy = sessionStorage.getItem("orderBy")
+    const isAscending = Boolean(Number(sessionStorage.getItem("isAscending")))
+
+    console.log("DOES SESSION STORAGE WORK? WE'LL SEE: ", orderBy, isAscending)
+    
 
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
@@ -36,6 +41,11 @@ export default async function ExternalTable() {
         const date = new Date(timestamp);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     };
+
+    const filterFunction = (orderBy: string, isAscending: string) => {
+        sessionStorage.setItem("orderBy", orderBy)
+        sessionStorage.setItem("isAscending", isAscending)
+    }
 
 
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
@@ -54,7 +64,7 @@ export default async function ExternalTable() {
     const { data: cash, error: cash_error } = await supabase.from('cash')
         .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
         .eq('charity_id', charityId)
-        .order(orderBy, { ascending: isAscending })
+        .order("id", { ascending: isAscending })
 
     const { data, error } = await supabase.from('cash')
         .select('*')
@@ -192,10 +202,10 @@ export default async function ExternalTable() {
                 </TableHeaderButton>
                 <TableContent>
                     <div className="flex gap-x-2">
-                        <Button onClick={isAscending = true} variant="outline" color="green">
+                        <Button variant="outline" color="green">
                             Sort Ascending
                         </Button>
-                        <Button onClick={isAscending = false} variant="solid" color="blue">
+                        <Button variant="solid" color="blue">
                             Sort Descending
                         </Button>
                     </div>
