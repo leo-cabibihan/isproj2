@@ -229,8 +229,8 @@ export default async function ExternalTable({ searchParams }: any) {
                             </SelectField>
                             {/* PUT RADIO BELOW THIS */}
                             <label className="text-base font-semibold text-gray-900">Order as:</label>
-                            <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
-                                <div className="flex items-center">
+                            <div className="space-y-4">
+                                <div className="items-center">
                                     <input
                                         id="option1"
                                         name="order"
