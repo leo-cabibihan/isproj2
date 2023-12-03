@@ -19,12 +19,12 @@ export const revalidate = 0;
 
 async function getCashData(column: any, order: any, charity_id: number) {
     var data
-    console.log(`RESULTS ARE SORTED BY ${column}, ORDERED BY ${Boolean(order)}, FROM CHARITY NUMBER ${charity_id}`)
+    console.log(`RESULTS ARE SORTED BY ${column}, ORDERED BY ${order}, FROM CHARITY NUMBER ${charity_id}`)
     if (column && order) {
         const { data: cash, error: cash_error } = await supabase.from('cash')
             .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
             .eq('charity_id', charity_id)
-            .order(column, { ascending: Boolean(order) })
+            .order(column, { ascending: order })
         data = cash
     }
     else {
@@ -227,14 +227,34 @@ export default async function ExternalTable({ searchParams }: any) {
                                 <option value={"amount"}>amount</option>
                                 <option value={"date"}>date</option>
                             </SelectField>
-                            <SelectField
-                                label='Order by:'
-                                name="order"
-                                required
-                            >
-                                <option value={1}>ascending</option>
-                                <option value={0}>descending</option>
-                            </SelectField>
+                            {/* PUT RADIO BELOW THIS */}
+                            <label className="text-base font-semibold text-gray-900">Order as:</label>
+                            <div className="space-y-4 sm:flex sm:items-center sm:space-x-10 sm:space-y-0">
+                                <div className="flex items-center">
+                                    <input
+                                        id="option1"
+                                        name="order"
+                                        type="radio"
+                                        value={true}
+                                        checked
+                                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    />
+                                    <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                        Ascending
+                                    </label>
+                                    <input
+                                        id="option2"
+                                        name="order"
+                                        type="radio"
+                                        value={false}
+                                        className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                                    />
+                                    <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                        Descending
+                                    </label>
+                                </div>
+                            </div>
+                            {/* PUT RADIO ABOVE THIS */}
                             <div className='flex flex-col items-center'>
                                 <Button type='submit' variant='solid' color='green' className='w-64 mt-2'>
                                     <span>
