@@ -20,18 +20,11 @@ export const revalidate = 0;
 async function getCashData(column: any, order: any, charity_id: number) {
     var data
     console.log(`RESULTS ARE SORTED BY ${column}, ORDERED BY ${order}, FROM CHARITY NUMBER ${charity_id}`)
-    if (column && order == true) {
+    if (column && order) {
         const { data: cash, error: cash_error } = await supabase.from('cash')
             .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
             .eq('charity_id', charity_id)
-            .order(column, { ascending: true })
-        data = cash
-    }
-    else if (column && order == false) {
-        const { data: cash, error: cash_error } = await supabase.from('cash')
-            .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
-            .eq('charity_id', charity_id)
-            .order(column, { ascending: false })
+            .order(column, { ascending: order })
         data = cash
     }
     else {
