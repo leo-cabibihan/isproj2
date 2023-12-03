@@ -24,7 +24,7 @@ async function getCashData(column: any, order: any, charity_id: number) {
         const { data: cash, error: cash_error } = await supabase.from('cash')
             .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name ), event( id, name )')
             .eq('charity_id', charity_id)
-            .order(column, { ascending: order })
+            .order(column, { ascending: Boolean(order) })
         data = cash
     }
     else {
