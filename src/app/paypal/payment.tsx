@@ -24,36 +24,12 @@ export default function TestPage({ ID, UserID }: any) {
 
                     console.log(amount, moneh)
 
-                    console.log(JSON.stringify(
-                        {
-                            "intent": "CAPTURE",
-                            "purchase_units": [
-                                {
-                                    "amount": {
-                                        "currency_code": "USD",
-                                        "value": `${moneh}`
-                                    }
-                                }],
-                        }))
-
-                    console.log(JSON.stringify(
-                        {
-                            "intent": "CAPTURE",
-                            "purchase_units": [
-                                {
-                                    "amount": {
-                                        "currency_code": "USD",
-                                        "value": "100"
-                                    }
-                                }],
-                        }))
-
                     const payload = {
                         "intent": "CAPTURE",
                         "purchase_units": [
                             {
                                 "amount": {
-                                    "currency_code": "USD",
+                                    "currency_code": "PHP",
                                     "value": `${moneh}`
                                 }
                             }],
