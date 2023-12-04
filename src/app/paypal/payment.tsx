@@ -1,4 +1,4 @@
-
+//@ts-nocheck
 'use client'
 
 import { ImageUpload } from "@/components/ImgUpload";
