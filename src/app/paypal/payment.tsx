@@ -52,6 +52,9 @@ export default function TestPage({ ID, UserID }: any) {
             }
 
             console.log(payload)
+
+            const event = sessionStorage.getItem("eventID")
+            console.log(`EVENT IS ${event}`)
             console.log(`AMOUNT BEING PASSED IN IS - USD ${moneh}`)
 
             const response = await fetch("/paypal/orders", {
