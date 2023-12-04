@@ -221,7 +221,8 @@ export default function TestPage({ ID, UserID }: any) {
                                     orderData,
                                     JSON.stringify(orderData, null, 2),
                                 );
-                                console.log(`WILL THIS WORK? MAYBE. THE AMOUNT IS: ${orderData!.purchase_units[0]!.payments!.captures[0]!.amount!.value}`)
+                                const amount_paid = Number(orderData!.purchase_units[0]!.payments!.captures[0]!.amount!.value)
+                                console.log(`WILL THIS WORK? MAYBE. THE AMOUNT IS: ${amount_paid}`)
                             }
                         } catch (error) {
                             console.error(error);
