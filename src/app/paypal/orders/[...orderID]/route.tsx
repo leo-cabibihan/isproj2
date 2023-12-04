@@ -35,10 +35,9 @@ const captureOrder = async (orderID: any) => {
 //   }
 // });
 
-export async function POST(req: Request) {
+export async function POST(order_id: any) {
     try {
-        const requestData = await req.json();
-        const { orderID } = requestData.ID;
+        const { orderID } = order_id;
         const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
         return NextResponse.json(jsonResponse, {status: httpStatusCode});
     } catch (error) {
