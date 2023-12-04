@@ -22,10 +22,11 @@ export default function TestPage({ ID, UserID }: any) {
 
     }
 
-    const handle = async () => {
+    const handle = async (amount: any) => {
         try {
 
-            console.log(amount, moneh)
+            const actual_amount = amount
+            console.log(amount, moneh, actual_amount)
 
             const payload = {
                 "intent": "CAPTURE",
@@ -33,7 +34,7 @@ export default function TestPage({ ID, UserID }: any) {
                     {
                         "amount": {
                             "currency_code": "PHP",
-                            "value": `${moneh}`
+                            "value": `${actual_amount}`
                         }
                     }],
             }
