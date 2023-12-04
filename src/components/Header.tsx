@@ -124,7 +124,7 @@ export function Header({ session }) {
             </div>
           </div>
 
-          <form className="ml-4 flex-grow md:ml-8">
+          <form className="ml-4 flex-grow md:ml-8" action="/searchtest" method="GET">
             <label
               htmlFor="default-search"
               className="sr-only mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -152,6 +152,7 @@ export function Header({ session }) {
               <input
                 type="search"
                 id="default-search"
+                name="keyword"
                 className="bg-gray-10 dark:text-gray block w-full rounded-lg border border-gray-100 p-4 ps-10 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-200 dark:bg-gray-300 dark:placeholder-gray-100 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 placeholder="Search..."
               />

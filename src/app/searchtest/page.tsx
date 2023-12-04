@@ -56,26 +56,6 @@ export default async function SearchTest({ searchParams }: any) {
         <>
             <DefaultLayout>
                 <main>
-
-                    <div className="flex gap-x-2">
-                        <form className='flex gap-x-2 space-y-6' action="/searchtest" method="GET">
-                            <TextField
-                                label="Enter Keyword"
-                                name="keyword"
-                                type="text"
-                                required
-                            />
-                            {/* PUT RADIO ABOVE THIS */}
-                            <div className='flex flex-col items-center'>
-                                <Button type='submit' variant='solid' color='green' className='w-64 mt-2'>
-                                    <span>
-                                        Search <span aria-hidden="true">&rarr;</span>
-                                    </span>
-                                </Button>
-                            </div>
-                        </form>
-                    </div>
-
                     {charity!.length >= 1 ?
                         (
                             <div className="bg-white py-24 sm:py-32" id="causes">
@@ -83,7 +63,7 @@ export default async function SearchTest({ searchParams }: any) {
                                     <div className="mx-auto max-w-2xl text-center">
                                         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Results in Charities</h2>
                                         <p className="mt-2 text-lg leading-8 text-gray-600">
-                                            Search results for {keyword}:
+                                            Search results for &quot;{keyword}&quot;:
                                         </p>
                                     </div>
                                     <div className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
@@ -130,7 +110,7 @@ export default async function SearchTest({ searchParams }: any) {
                                                 Results in News
                                             </h2>
                                             <p className="mt-2 text-lg leading-8 text-gray-600">
-                                                Search results for {keyword}:
+                                                Search results for &quot;{keyword}&quot;:
                                             </p>
                                         </div>
                                         <div className="lg:mx-0]1 mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:max-w-none lg:grid-cols-3">
