@@ -45,7 +45,7 @@ export default function TestPage({ ID, UserID }: any) {
                         },
                         // use the "body" param to optionally pass additional order information
                         // like product ids and quantities
-                        body: JSON.stringify(payload)
+                        // body: JSON.stringify(payload)
                     });
 
                     const orderData = await response.json();
@@ -164,7 +164,7 @@ export default function TestPage({ ID, UserID }: any) {
                         shape: "pill",
                         layout: "vertical",
                     }}
-                    createOrder={}
+                    createOrder={handle}
                     onApprove={async (data, actions) => {
                         try {
                             const response = await fetch(
