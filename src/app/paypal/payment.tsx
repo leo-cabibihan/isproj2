@@ -11,12 +11,18 @@ function Message({ content }: any) {
     return <p>{content}</p>;
 }
 
+function schizoAmount({ amount }: any) {
+    const funds = amount
+
+    return funds
+}
+
 export default function TestPage({ ID, UserID }: any) {
 
     const [eventslist, setEventsList] = useState<any>([])
     const [eventID, setEventID] = useState('')
     const [amount, setAmount] = useState(0)
-    const moneh = amount
+    const moneh = schizoAmount(amount)
     const test_amount = 500.00
     const createHandle = (amount: any) => {
         console.log("curry", amount)
