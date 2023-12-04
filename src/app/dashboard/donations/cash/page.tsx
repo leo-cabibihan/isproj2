@@ -11,10 +11,7 @@ import { CashReceiptEmail } from '@/components/email-template';
 import Plunk from '@plunk/node';
 import { render } from '@react-email/render';
 import { revalidatePath } from 'next/cache';
-import { CSVLink } from "react-csv";
 import React from 'react';
-import { headers } from 'next/headers';
-
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export const revalidate = 0;
@@ -293,11 +290,6 @@ export default async function ExternalTable({ searchParams }: any) {
                                             Apply Changes <span aria-hidden="true">&rarr;</span>
                                         </span>
                                     </Button>
-                                </div>
-                                <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
-                                    <CSVLink data={cash} headers={headers} filename='DATA.csv'>
-                                        Export to CSV
-                                    </CSVLink>
                                 </div>
                             </form>
                         </div>
