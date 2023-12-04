@@ -28,6 +28,8 @@ export default function TestPage({ ID, UserID }: any) {
         console.log("curry", amount)
 
     }
+    
+    console.log("DOES THE SCHIZO WAY WORK? ", moneh)
 
     const handle = async () => {
         try {
