@@ -104,7 +104,7 @@ function MobileNavigation({ session }) {
     </Popover>
   )
 }
- 
+
 export function Header({ session }) {
   console.log('i am header', session)
 
@@ -123,6 +123,7 @@ export function Header({ session }) {
               <NavLink href="/#causes">Causes</NavLink>
             </div>
           </div>
+          
           <div className="flex items-center gap-x-5 md:gap-x-8">
             {isLoggedIn ? (
               <Button
