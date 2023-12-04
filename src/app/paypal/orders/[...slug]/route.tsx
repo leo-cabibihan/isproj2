@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 import { getAccessToken } from "@/app/utils/paypal";
 import { handleResponse } from "@/app/utils/paypal";
 import { NextApiRequest } from "next";
@@ -41,7 +41,7 @@ const captureOrder = async (orderID: any) => {
 export async function POST(req: Request, {params}: { params: { slug: string} }) {
     try {
         const slug = params.slug
-        const { orderID } = slug;
+        const orderID  = slug;
         console.log(`RESOURCE ID???????? ${slug}`)
         console.log(`ORDER ID??????? ${orderID}`)
         const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
