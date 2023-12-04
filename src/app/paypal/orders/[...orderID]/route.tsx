@@ -1,5 +1,6 @@
 import { getAccessToken } from "@/app/utils/paypal";
 import { handleResponse } from "@/app/utils/paypal";
+import { NextApiRequest } from "next";
 import { NextResponse } from "next/server";
 const base = "https://api-m.sandbox.paypal.com";
 
@@ -36,14 +37,14 @@ const captureOrder = async (orderID: any) => {
 //   }
 // });
 
-export async function POST(order_id: any) {
+export async function POST(req: NextApiRequest) {
     try {
-        const { orderID } = order_id;
+        const { orderID } = req.query;
         const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
         return NextResponse.json(jsonResponse, {status: httpStatusCode});
     } catch (error) {
         console.error("Failed to create order:", error);
-        console.log(`THE RESOURCE ID BEING PASSED IS ${order_id}`)
+        console.log(`THE RESOURCE ID BEING PASSED IS ${req.query}`)
         return NextResponse.json({ error: "Failed to capture order." }, {status: 500})
     }
 }
