@@ -11,7 +11,9 @@ import { CashReceiptEmail } from '@/components/email-template';
 import Plunk from '@plunk/node';
 import { render } from '@react-email/render';
 import { revalidatePath } from 'next/cache';
+import { CSVLink } from "react-csv";
 import React from 'react';
+import { headers } from 'next/headers';
 
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
@@ -77,11 +79,25 @@ export default async function ExternalTable({ searchParams }: any) {
 
     console.log("CASH DATA LOOKS LIKE THIS: ", cash)
 
+    const headers = [
+        { label: "ID", key: "id" },
+        { label: "AMOUNT", key: "amount" },
+        { label: "DATE DONATED", key: "date" },
+        { label: "CHARITY ID", key: "charity_id"},
+        { label: "SOURCE", key: "is_external" },
+        { label: "IMAGE EVIDENCE", key: "image_evidence" },
+        { label: "DONOR ID", key: "donor_id" },
+        { label: "EVENT ID", key: "event_id"},
+        { label: "CHARIY", key: "charity.name"},
+        { label: "DONOR NAME", key: "decrypted_donor.decrypted_name" },
+        { label: "EVENT NAME", key: "event.name" }
+    ];
+
     var orderby = "" //checks if order is true or false, then returns a string of ascending and descending respectively
-    if(order === 'true'){
+    if (order === 'true') {
         orderby = "ascending"
     }
-    else{
+    else {
         orderby = "descending"
     }
 
@@ -226,72 +242,77 @@ export default async function ExternalTable({ searchParams }: any) {
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
-                <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
-                <div className="flex-col">
-                    <form className='flex flex-col w-full gap-y-6' action="/dashboard/donations/cash" method="GET">
-                    <div className="flex flex-col"> {/* Flex container for the first column */}
-                        <label className="block text-sm font-medium text-gray-700">Sort by:</label>
-                        <br/>
-                        <SelectField
-                        name="column"
-                        required
-                        >
-                        <option value={"id"}>id</option>
-                        <option value={"amount"}>amount</option>
-                        <option value={"date"}>date</option>
-                        </SelectField>
-                    </div>
-                    <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
-                        <label className="block text-sm font-medium text-gray-700">Order as:</label>
-                        <div className="flex gap-x-4 items-center">
-                        <div className="flex items-center">
-                            <input
-                            id="option1"
-                            name="order"
-                            type="radio"
-                            value={true}
-                            checked
-                            className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
-                            />
-                            <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                            Ascending
-                            </label>
+                    <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
+                        <div className="flex-col">
+                            <form className='flex flex-col w-full gap-y-6' action="/dashboard/donations/cash" method="GET">
+                                <div className="flex flex-col"> {/* Flex container for the first column */}
+                                    <label className="block text-sm font-medium text-gray-700">Sort by:</label>
+                                    <br />
+                                    <SelectField
+                                        name="column"
+                                        required
+                                    >
+                                        <option value={"id"}>id</option>
+                                        <option value={"amount"}>amount</option>
+                                        <option value={"date"}>date</option>
+                                    </SelectField>
+                                </div>
+                                <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
+                                    <label className="block text-sm font-medium text-gray-700">Order as:</label>
+                                    <div className="flex gap-x-4 items-center">
+                                        <div className="flex items-center">
+                                            <input
+                                                id="option1"
+                                                name="order"
+                                                type="radio"
+                                                value={true}
+                                                checked
+                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                            />
+                                            <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                Ascending
+                                            </label>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <input
+                                                id="option2"
+                                                name="order"
+                                                type="radio"
+                                                value={false}
+                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                            />
+                                            <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                Descending
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                                    <Button type='submit' variant='solid' color='green' className='w-64'>
+                                        <span>
+                                            Apply Changes <span aria-hidden="true">&rarr;</span>
+                                        </span>
+                                    </Button>
+                                </div>
+                                <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                                    <CSVLink data={cash} headers={headers} filename='DATA.csv'>
+                                        Export to CSV
+                                    </CSVLink>
+                                </div>
+                            </form>
                         </div>
-                        <div className="flex items-center">
-                            <input
-                            id="option2"
-                            name="order"
-                            type="radio"
-                            value={false}
-                            className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
-                            />
-                            <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                            Descending
-                            </label>
-                        </div>
-                        </div>
+                    </SlideOver>
+                    {/*Displays current filters set*/}
+                    <div className="font-bold mt-4 mb-4">
+                        {column && order ? (
+                            <>
+                                <p className="text-green-700 inline">Current Filters: </p>
+                                <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
+                            </>
+                        ) : (
+                            <p className="text-gray-600 italic">No filters currently active</p>
+                        )}
                     </div>
-                    <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
-                        <Button type='submit' variant='solid' color='green' className='w-64'>
-                        <span>
-                            Apply Changes <span aria-hidden="true">&rarr;</span>
-                        </span>
-                        </Button>
-                    </div>
-                    </form>
-                </div>
-                </SlideOver>
-                {/*Displays current filters set*/}
-                <div className="font-bold mt-4 mb-4">
-                    {column && order ? (
-                    <>
-                        <p className="text-green-700 inline">Current Filters: </p>
-                        <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
-                    </>
-                    ) : (
-                    <p className="text-gray-600 italic">No filters currently active</p>
-                    )}
-                </div>
                     <Table>
                         <Thead>
                             <Tr>
