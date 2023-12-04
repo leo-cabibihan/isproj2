@@ -17,16 +17,16 @@ export default function TestPage({ ID, UserID }: any) {
     const [eventID, setEventID] = useState('')
     const [amount, setAmount] = useState(0)
     const moneh = amount
+    const test_amount = 500.00
     const createHandle = (amount: any) => {
         console.log("curry", amount)
 
     }
 
-    const handle = async (amount: any) => {
+    const handle = async () => {
         try {
 
-            const actual_amount = amount
-            console.log(amount, moneh, actual_amount)
+            console.log(`ACTUAL AMOUNT: ${moneh}. TEST AMOUNT: ${test_amount}`)
 
             const payload = {
                 "intent": "CAPTURE",
@@ -34,13 +34,13 @@ export default function TestPage({ ID, UserID }: any) {
                     {
                         "amount": {
                             "currency_code": "PHP",
-                            "value": `${actual_amount}`
+                            "value": "500.00"
                         }
                     }],
             }
 
             console.log(payload)
-            console.log(`AMOUNT BEING PASSED IN IS - USD ${actual_amount}`)
+            console.log(`AMOUNT BEING PASSED IN IS - USD ${moneh}`)
 
             const response = await fetch("/paypal/orders", {
                 method: "POST",
@@ -70,7 +70,7 @@ export default function TestPage({ ID, UserID }: any) {
         }
     }
 
-    const handler = handle(amount)
+    const handler = handle
 
 
     const initialOptions = {
