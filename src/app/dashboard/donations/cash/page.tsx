@@ -39,7 +39,7 @@ async function getCashData(column: any, order: any, charity_id: number) {
 
     return data
 }
-
+//e
 export default async function ExternalTable({ searchParams }: any) {
 
     console.log("DO SEARCHPARAMS WORK? ", searchParams)
