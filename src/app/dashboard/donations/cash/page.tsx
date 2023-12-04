@@ -74,6 +74,9 @@ export default async function ExternalTable({ searchParams }: any) {
     const charityId = charity_id![0]
 
     const cash = await getCashData(column, order, charityId)
+
+    console.log("CASH DATA LOOKS LIKE THIS: ", cash)
+
     var orderby = "" //checks if order is true or false, then returns a string of ascending and descending respectively
     if(order === 'true'){
         orderby = "ascending"
