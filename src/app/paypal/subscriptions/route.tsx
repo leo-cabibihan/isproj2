@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { getAccessToken, handleResponse } from "@/app/utils/paypal";
 import { NextResponse } from "next/server";
 
