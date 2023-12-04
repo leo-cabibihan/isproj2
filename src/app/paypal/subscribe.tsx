@@ -11,7 +11,7 @@ function Message({ content }: any) {
     return <p>{content}</p>;
 }
 
-export default function SubscribeButton({ ID, UserID }: any) {
+export default function SubscribeButton() {
 
     const initialOptions = {
         "client-id": "Acdo2IOJiiihwISa_-GfchSLPkA4rdf9JrtbWWHyG6y_dKJOg-8Zh7zNp9DGLIX9eRAyxcTx9DFe_gqu",
