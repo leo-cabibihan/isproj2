@@ -33,7 +33,7 @@ export default function TestPage({ ID, UserID }: any) {
                 "purchase_units": [
                     {
                         "amount": {
-                            "currency_code": "PHP",
+                            "currency_code": "USD",
                             "value": "500.00"
                         }
                     }],
