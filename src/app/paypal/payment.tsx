@@ -32,7 +32,7 @@ export default function TestPage({ ID, UserID }: any) {
 
     sessionStorage.setItem("eventID", `${eventID}`)
 
-    console.log("DOES THE SCHIZO WAY WORK? ", moneh, amount)
+    console.log("DOES THE SCHIZO WAY WORK? ", moneh, amount, eventID)
 
     const handle = async () => {
         try {
