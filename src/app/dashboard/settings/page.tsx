@@ -351,7 +351,12 @@ export default async function Settings() {
                   ))}
 
                 </form>
-
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
                 <div>
                   <h2 className="text-base font-semibold leading-7 text-gray-900">
                     Subscribe to GiveMore
