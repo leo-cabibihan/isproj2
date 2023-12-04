@@ -40,7 +40,7 @@ export default function TestPage({ ID, UserID }: any) {
             }
 
             console.log(payload)
-            console.log(`AMOUNT BEING PASSED IN IS - USD ${moneh}`)
+            console.log(`AMOUNT BEING PASSED IN IS - USD ${actual_amount}`)
 
             const response = await fetch("/paypal/orders", {
                 method: "POST",
@@ -70,7 +70,7 @@ export default function TestPage({ ID, UserID }: any) {
         }
     }
 
-    const handler = handle
+    const handler = handle(amount)
 
 
     const initialOptions = {
