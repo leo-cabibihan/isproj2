@@ -13,7 +13,7 @@ function Message({ content }: any) {
 
 function schizoAmount( amount : any) {
     const funds = amount
-    console.log("YEAH???", funds, amount.string())
+    console.log("YEAH???", funds, `${amount}`)
     sessionStorage.setItem("amount", amount)
     console.log("DOES SESSION STORAGE WORK? ", sessionStorage.getItem("amount"))
     return funds
