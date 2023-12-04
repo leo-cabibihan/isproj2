@@ -13,7 +13,7 @@ function Message({ content }: any) {
 
 function schizoAmount({ amount }: any) {
     const funds = amount
-
+    console.log("YEAH???", funds, amount)
     return funds
 }
 
@@ -29,7 +29,7 @@ export default function TestPage({ ID, UserID }: any) {
 
     }
     
-    console.log("DOES THE SCHIZO WAY WORK? ", moneh)
+    console.log("DOES THE SCHIZO WAY WORK? ", moneh, amount)
 
     const handle = async () => {
         try {
