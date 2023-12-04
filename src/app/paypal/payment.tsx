@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 'use client'
 
 import { ImageUpload } from "@/components/ImgUpload";
@@ -17,58 +17,59 @@ export default function TestPage({ ID, UserID }: any) {
     const [eventID, setEventID] = useState('')
     const [amount, setAmount] = useState(0)
     const moneh = amount
-    const createHandle = (amount) => {
+    const createHandle = (amount: any) => {
         console.log("curry", amount)
-        const handle = async () => {
-                try {
 
-                    console.log(amount, moneh)
-
-                    const payload = {
-                        "intent": "CAPTURE",
-                        "purchase_units": [
-                            {
-                                "amount": {
-                                    "currency_code": "PHP",
-                                    "value": `${moneh}`
-                                }
-                            }],
-                    }
-
-                    console.log(payload)
-                    console.log(`AMOUNT BEING PASSED IN IS - USD ${moneh}`)
-
-                    const response = await fetch("/paypal/orders", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        // use the "body" param to optionally pass additional order information
-                        // like product ids and quantities
-                        body: JSON.stringify(payload)
-                    });
-
-                    const orderData = await response.json();
-
-                    if (orderData.id) {
-                        return orderData.id;
-                    } else {
-                        const errorDetail = orderData?.details?.[0];
-                        const errorMessage = errorDetail
-                            ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-                            : JSON.stringify(orderData);
-
-                        throw new Error(errorMessage);
-                    }
-                } catch (error) {
-                    console.error(error);
-                    setMessage(`Could not initiate PayPal Checkout...${error}`);
-                }
-                return handle
-            }
     }
-    const handle = createHandle(amount)
-    
+
+    const handle = async () => {
+        try {
+
+            console.log(amount, moneh)
+
+            const payload = {
+                "intent": "CAPTURE",
+                "purchase_units": [
+                    {
+                        "amount": {
+                            "currency_code": "PHP",
+                            "value": `${moneh}`
+                        }
+                    }],
+            }
+
+            console.log(payload)
+            console.log(`AMOUNT BEING PASSED IN IS - USD ${moneh}`)
+
+            const response = await fetch("/paypal/orders", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                // use the "body" param to optionally pass additional order information
+                // like product ids and quantities
+                body: JSON.stringify(payload)
+            });
+
+            const orderData = await response.json();
+
+            if (orderData.id) {
+                return orderData.id;
+            } else {
+                const errorDetail = orderData?.details?.[0];
+                const errorMessage = errorDetail
+                    ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+                    : JSON.stringify(orderData);
+
+                throw new Error(errorMessage);
+            }
+        } catch (error) {
+            console.error(error);
+            setMessage(`Could not initiate PayPal Checkout...${error}`);
+        }
+    }
+
+    const handler = handle
 
 
     const initialOptions = {
@@ -164,7 +165,7 @@ export default function TestPage({ ID, UserID }: any) {
                         shape: "pill",
                         layout: "vertical",
                     }}
-                    createOrder={handle}
+                    createOrder={handler}
                     onApprove={async (data, actions) => {
                         try {
                             const response = await fetch(
