@@ -192,12 +192,15 @@ export default function TestPage({ ID, UserID }: any) {
                     onApprove={async (data, actions) => {
                         try {
                             const response = await fetch(
-                                `/paypal/orders/${data.orderID}`,
+                                `/paypal/orders/captureOrder`,
                                 {
                                     method: "POST",
                                     headers: {
                                         "Content-Type": "application/json",
                                     },
+                                    body: JSON.stringify({
+                                        order_id: data.orderID
+                                    })
                                 },
                             );
 
