@@ -7,13 +7,17 @@ import { ShowImg } from '@/components/DisplayImg'
 import { TextField, SelectField } from '@/components/Fields'
 import React, { useEffect, useState } from 'react'
 import { getURL } from '@/app/utils/url'
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { raw } from 'body-parser'
+import Alert from '@/components/Alert'
+import { redirect } from 'next/navigation'
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { PayPal } from '@/components/paypal/CashForm'
 import TestPage from '@/app/paypal/payment'
+import { useRouter } from 'next/navigation'
 
 // Renders errors or successfull transactions on the screen.
 function Message({ content }) {
-  return <p>{content}</p>;
+  return <p>{content}</p>
 }
 
 export function FormComponent({ ID, DonorID }: any) {
@@ -72,6 +76,9 @@ export function GoodsForm({ ID, UserID }: any) {
       unit_of_measurement: '',
     },
   ])
+  const router = useRouter()
+
+  const [error, setError] = useState(null)
 
   const [house_no, setHouse_no] = useState('')
   const [street, setStreet] = useState('')
@@ -90,29 +97,36 @@ export function GoodsForm({ ID, UserID }: any) {
 
   const submit = async (e: any) => {
     e.preventDefault()
-
-    const rawResponse = await fetch(
-      `https://isproj2.vercel.app/${ID}/details/post`,
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+    try {
+      const rawResponse = await fetch(
+        `${window.location.origin}/${ID}/details/post`,
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            orgID: ID,
+            donorID: UserID,
+            house_no: house_no,
+            street: street,
+            village: village,
+            brgy: brgy,
+            zip_code: zip_code,
+            city: city,
+            province: province,
+            items: formFields,
+          }),
         },
-        body: JSON.stringify({
-          orgID: ID,
-          donorID: UserID,
-          house_no: house_no,
-          street: street,
-          village: village,
-          brgy: brgy,
-          zip_code: zip_code,
-          city: city,
-          province: province,
-          items: formFields,
-        }),
-      },
-    )
+      )
+      console.log('plz redirect')
+      setError(null)
+      router.push('/thankyou')
+    } catch (error) {
+      console.log(error.message)
+      setError(error.message)
+    }
   }
 
   const addFields = () => {
@@ -150,6 +164,9 @@ export function GoodsForm({ ID, UserID }: any) {
   return (
     <div className="App">
       <form className="space-y-6" onSubmit={submit}>
+        {error && (
+          <Alert message={'there is an issue with your inputs'}></Alert>
+        )}
         <div className="space-y-12"></div>
         <div className="border-b border-gray-900/10 pb-12"></div>
         <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -161,7 +178,6 @@ export function GoodsForm({ ID, UserID }: any) {
               <div className="space-y-7">
                 <div>
                   {formFields.map((form, index) => {
-                    console.log('I am perishable', form.perishable === 1)
                     return (
                       <div key={index} className="space-y-4">
                         <div className="mt-3">
@@ -367,14 +383,15 @@ export function CashForm({ ID, UserID }: any) {
   const [eventID, setEventID] = useState('')
   const [eventslist, setEventsList] = useState<any>([])
   const [scriptLoaded, setScriptLoaded] = useState(false)
-  const [message, setMessage] = useState("")
+  const [message, setMessage] = useState('')
 
   const initialOptions = {
-    "client-id": process.env.PAYPAL_CLIENT_ID!,
-    "enable-funding": "paylater,venmo,card",
-    "disable-funding": "",
-    "data-sdk-integration-source": "integrationbuilder_sc",
-  };
+    'client-id': process.env.PAYPAL_CLIENT_ID!,
+    'enable-funding': 'paylater,venmo,card',
+    'disable-funding': '',
+    'data-sdk-integration-source': 'integrationbuilder_sc',
+  }
+  const [formResponse, setFormResponse] = useState<any>('')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -383,12 +400,17 @@ export function CashForm({ ID, UserID }: any) {
         .select('*')
         .eq('charity_id', ID)
         .eq('is_ongoing', true)
-        .eq('approval_status', 'APPROVED').order('id', { ascending: true })
+        .eq('approval_status', 'APPROVED')
+        .order('id', { ascending: true })
       setEventsList(data!)
 
       setEventsList(data!)
 
-      console.log("DEBUG RESULTS FOR THE CASH FORM: ", data + ". ERROR IS: ", error)
+      console.log(
+        'DEBUG RESULTS FOR THE CASH FORM: ',
+        data + '. ERROR IS: ',
+        error,
+      )
     }
 
     fetchData()
@@ -397,7 +419,7 @@ export function CashForm({ ID, UserID }: any) {
   const submit = async (e: any) => {
     e.preventDefault()
     const rawResponse = await fetch(
-      `https://isproj2.vercel.app/${ID}/details/cash`,
+      `${window.location.href}/${ID}/details/cash`,
       {
         method: 'POST',
         headers: {
@@ -413,6 +435,7 @@ export function CashForm({ ID, UserID }: any) {
         }),
       },
     )
+    console.log('see me', rawResponse.json())
   }
 
   return (
