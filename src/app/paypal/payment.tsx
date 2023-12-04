@@ -11,7 +11,7 @@ function Message({ content }: any) {
     return <p>{content}</p>;
 }
 
-function schizoAmount({ amount }: any) {
+function schizoAmount( amount : any) {
     const funds = amount
     console.log("YEAH???", funds, amount)
     return funds
