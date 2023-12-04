@@ -34,7 +34,7 @@ export default function TestPage({ ID, UserID }: any) {
                     {
                         "amount": {
                             "currency_code": "USD",
-                            "value": "500.00"
+                            "value": test_amount
                         }
                     }],
             }
