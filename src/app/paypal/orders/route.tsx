@@ -19,13 +19,13 @@ const createOrder = async (purchase_units: any, intent: any) => {
   const url = `${base}/v2/checkout/orders`;
   const payload = {
     intent: intent,
-    // purchase_units: [
-    //   {
-    //     amount: {
-    //       currency_code: "PHP",
-    //       value: "100.00"
-    //     }
-    //   }],
+    purchase_units: [
+      {
+        amount: {
+          currency_code: "PHP",
+          value: "100.00"
+        }
+      }],
   };
 
   const response = await fetch(url, {

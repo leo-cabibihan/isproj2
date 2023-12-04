@@ -164,7 +164,7 @@ export default function TestPage({ ID, UserID }: any) {
                         shape: "pill",
                         layout: "vertical",
                     }}
-                    createOrder={handle}
+                    createOrder={}
                     onApprove={async (data, actions) => {
                         try {
                             const response = await fetch(
