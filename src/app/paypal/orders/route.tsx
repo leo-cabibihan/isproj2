@@ -19,7 +19,13 @@ const createOrder = async (purchase_units: any, intent: any) => {
   const url = `${base}/v2/checkout/orders`;
   const payload = {
     intent: intent,
-    purchase_units: purchase_units,
+    purchase_units: [
+      {
+        amount: {
+          currency_code: "PHP",
+          value: "100.00"
+        }
+      }],
   };
 
   const response = await fetch(url, {
@@ -55,7 +61,7 @@ const createOrder = async (purchase_units: any, intent: any) => {
 
 export async function POST(req: Request) {
 
-  
+
   try {
     // use the cart information passed from the front-end to calculate the order amount detals
     const requestData = await req.json();
@@ -63,11 +69,11 @@ export async function POST(req: Request) {
     const intent = requestData.intent
     console.log(`PURCHASE UNITS ${purchase_units}`)
     const { jsonResponse, httpStatusCode } = await createOrder(purchase_units, intent);
-    return NextResponse.json(jsonResponse, {status: httpStatusCode})
+    return NextResponse.json(jsonResponse, { status: httpStatusCode })
     // return res.status(httpStatusCode).json(jsonResponse);
   } catch (error) {
     console.error("Failed to create order:", error);
-    return NextResponse.json({ error: "Failed to create order." }, {status: 500})
+    return NextResponse.json({ error: "Failed to create order." }, { status: 500 })
 
     // return res.status(500).json({ error: "Failed to create order." });
   }
