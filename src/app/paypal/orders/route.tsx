@@ -1,4 +1,4 @@
-
+//@ts-nocheck
 import fetch, { Response } from "node-fetch";
 import path from "path";
 import { getAccessToken } from "@/app/utils/paypal";

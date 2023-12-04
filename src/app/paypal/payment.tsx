@@ -11,7 +11,7 @@ function Message({ content }: any) {
     return <p>{content}</p>;
 }
 
-function schizoAmount( amount : any) {
+function schizoAmount(amount: any) {
     const funds = amount
     console.log("YEAH???", funds, `${amount}`)
     sessionStorage.setItem("amount", `${amount}`)
@@ -31,7 +31,7 @@ export default function TestPage({ ID, UserID }: any) {
     }
 
     sessionStorage.setItem("eventID", `${eventID}`)
-    
+
     console.log("DOES THE SCHIZO WAY WORK? ", moneh, amount)
 
     const handle = async () => {
@@ -82,8 +82,24 @@ export default function TestPage({ ID, UserID }: any) {
         }
     }
 
-    const handler = handle
+    const invoice = async () => {
+        const funds = sessionStorage.getItem("amount")
 
+        const response = await fetch("/paypal/invoice", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // use the "body" param to optionally pass additional order information
+            // like product ids and quantities
+            body: JSON.stringify({
+                amount: funds
+            })
+        });
+    }
+
+    const handler = handle
+    const invoicer = invoice
 
     const initialOptions = {
         "client-id": "Acdo2IOJiiihwISa_-GfchSLPkA4rdf9JrtbWWHyG6y_dKJOg-8Zh7zNp9DGLIX9eRAyxcTx9DFe_gqu",
@@ -223,7 +239,8 @@ export default function TestPage({ ID, UserID }: any) {
                                 );
                                 const amount_paid = Number(orderData!.purchase_units[0]!.payments!.captures[0]!.amount!.value)
                                 console.log(`WILL THIS WORK? MAYBE. THE AMOUNT IS: ${amount_paid}`)
-                                submit(amount_paid)
+                                submit(amount_paid);
+                                invoicer
                             }
                         } catch (error) {
                             console.error(error);
