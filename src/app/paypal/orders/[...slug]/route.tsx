@@ -37,14 +37,14 @@ const captureOrder = async (orderID: any) => {
 //   }
 // });
 
-export async function POST(req: NextApiRequest) {
+export async function POST(req: Request, {params}: any) {
     try {
-        const { orderID } = req.query;
+        const { orderID } = params.slug[0];
         const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
         return NextResponse.json(jsonResponse, {status: httpStatusCode});
     } catch (error) {
         console.error("Failed to create order:", error);
-        console.log(`THE RESOURCE ID BEING PASSED IS ${req.query}`)
+        console.log(`THE RESOURCE ID BEING PASSED IS ${params.slug[0]}`)
         return NextResponse.json({ error: "Failed to capture order." }, {status: 500})
     }
 }
