@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 const base = "https://api-m.sandbox.paypal.com";
 
 const captureOrder = async (orderID: any) => {
+    console.log(`THE ORDER ID BEING PASSED IS ${orderID}`)
     const accessToken = await getAccessToken();
     const url = `${base}/v2/checkout/orders/${orderID}/capture`;
 
@@ -42,6 +43,7 @@ export async function POST(order_id: any) {
         return NextResponse.json(jsonResponse, {status: httpStatusCode});
     } catch (error) {
         console.error("Failed to create order:", error);
+        console.log(`THE RESOURCE ID BEING PASSED IS ${order_id}`)
         return NextResponse.json({ error: "Failed to capture order." }, {status: 500})
     }
 }
