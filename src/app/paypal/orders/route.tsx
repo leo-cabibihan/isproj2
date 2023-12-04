@@ -61,6 +61,7 @@ export async function POST(req: Request) {
     const requestData = await req.json();
     const purchase_units = requestData.purchase_units
     const intent = requestData.intent
+    console.log(`PURCHASE UNITS ${purchase_units}`)
     const { jsonResponse, httpStatusCode } = await createOrder(purchase_units, intent);
     return NextResponse.json(jsonResponse, {status: httpStatusCode})
     // return res.status(httpStatusCode).json(jsonResponse);
