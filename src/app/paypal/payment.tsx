@@ -13,7 +13,9 @@ function Message({ content }: any) {
 
 function schizoAmount( amount : any) {
     const funds = amount
-    console.log("YEAH???", funds, amount)
+    console.log("YEAH???", funds, amount.string())
+    sessionStorage.setItem("amount", amount)
+    console.log("DOES SESSION STORAGE WORK? ", sessionStorage.getItem("amount"))
     return funds
 }
 
@@ -35,6 +37,7 @@ export default function TestPage({ ID, UserID }: any) {
         try {
 
             console.log(`ACTUAL AMOUNT: ${moneh}. TEST AMOUNT: ${test_amount}`)
+            console.log("DOES SESSION STORAGE WORK? ", sessionStorage.getItem("amount"))
 
             const payload = {
                 "intent": "CAPTURE",
