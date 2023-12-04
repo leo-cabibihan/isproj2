@@ -36,18 +36,14 @@ const captureOrder = async (orderID: any) => {
 //   }
 // });
 
-export async function POST(req: Request) {
+export async function POST(order_id: any) {
     try {
-        const requestData = await req.json();
-        const order_id = requestData.order_id;
-        var log_msg =order_id
         const { orderID } = order_id;
         const { jsonResponse, httpStatusCode } = await captureOrder(orderID);
-        return NextResponse.json(jsonResponse, { status: httpStatusCode });
+        return NextResponse.json(jsonResponse, {status: httpStatusCode});
     } catch (error) {
-        console.log("THE ERROR IS IN CAPTURE ORDER")
         console.error("Failed to create order:", error);
-        console.log(`THE RESOURCE ID BEING PASSED IS ${log_msg}`)
-        return NextResponse.json({ error: "Failed to capture order." }, { status: 500 })
+        console.log(`THE RESOURCE ID BEING PASSED IS ${order_id}`)
+        return NextResponse.json({ error: "Failed to capture order." }, {status: 500})
     }
 }
