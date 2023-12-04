@@ -29,6 +29,8 @@ export default function TestPage({ ID, UserID }: any) {
         console.log("curry", amount)
 
     }
+
+    sessionStorage.setItem("eventID", `${eventID}`)
     
     console.log("DOES THE SCHIZO WAY WORK? ", moneh, amount)
 
@@ -110,8 +112,8 @@ export default function TestPage({ ID, UserID }: any) {
         fetchData()
     }, [])
 
-    const submit = async (e: any) => {
-        e.preventDefault()
+    const submit = async (amount: any) => {
+        const event_id = sessionStorage.getItem("eventID")
         const rawResponse = await fetch(
             `https://isproj2.vercel.app/${ID}/details/cash`,
             {
@@ -125,7 +127,7 @@ export default function TestPage({ ID, UserID }: any) {
                     charity_id: ID,
                     donor_id: UserID,
                     is_external: false,
-                    event_id: eventID,
+                    event_id: event_id,
                 }),
             },
         )
@@ -219,6 +221,7 @@ export default function TestPage({ ID, UserID }: any) {
                                     orderData,
                                     JSON.stringify(orderData, null, 2),
                                 );
+                                console.log(`WILL THIS WORK? MAYBE. THE AMOUNT IS: ${orderData!.purchase_units[0]!.payments!.captures[0]!.amount!.value}`)
                             }
                         } catch (error) {
                             console.error(error);
