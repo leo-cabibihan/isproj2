@@ -191,7 +191,7 @@ export default async function Page({searchParams}: any) {
             <Button href="/dashboard/statistics/custom" variant="solid" color="slate">
                 Custom
             </Button>
-              <SlideOver title="Set Custom Data" buttontext="Set Data" variant="solid" color="slate">
+              <SlideOver title="Set a Custom Date Range" buttontext="Set Data" variant="solid" color="slate">
                 <form className="space-y-6" action="/dashboard/statistics/custom" method="GET">
                 <TextField
                 label="Start Date"
