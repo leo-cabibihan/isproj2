@@ -296,7 +296,7 @@ export default async function ExternalTable({ searchParams }: any) {
                         </div>
                     </SlideOver>
                     {/* BUTTON TO EXPORT FILE */}
-                    <Button variant="solid" color="green" onClick={handleTableExport(rows, "cash")} >Export Table Data</Button>
+                    {/* <Button variant="solid" color="green" onClick={handleTableExport(rows, "cash")} >Export Table Data</Button> */}
                     {/*Displays current filters set*/}
                     <div className="font-bold mt-4 mb-4">
                         {column && order ? (
