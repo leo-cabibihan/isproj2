@@ -15,6 +15,19 @@ import {
 } from '@react-email/components';
 import * as React from 'react';
 
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${month}/${day}/${year}`;
+}
+
+function formatTime(timestamp) {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
 export function Email(props: any) {
     const { url } = props;
     const previewText = "You've been Invited!"
@@ -220,7 +233,7 @@ export function CashReceiptEmail(props: any) {
                         <ol>
                             <li>Donation Amount: {content.amount}</li>
                             <li>Donor Name: {content.donor}</li>
-                            <li>Donated on: {content.date}</li>
+                            <li>Donated on: {formatDate(content.date) + ' ' + formatTime(content.date)}</li>
                             <li>Donated to: {content.charity}</li>
                             <li>Target Event: {content.event}</li>
                         </ol>
