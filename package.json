@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "install": "npm i --save file:vendor/xlsx-0.20.0.tgz"
   },
   "browserslist": "defaults, not ie <= 11",
   "dependencies": {
