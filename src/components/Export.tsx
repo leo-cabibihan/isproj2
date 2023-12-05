@@ -1,7 +1,8 @@
 //@ts-nocheck
+"use client"
 import { Button } from "./Button"
 
-export default function ExportButton({ variant, color, data, filename }: { variant: VariantKey, color: ColorKey, data: any, filename: String }) {
+export function ExportButton({ variant, color, data, filename }: { variant: VariantKey, color: ColorKey, data: any, filename: String }) {
 
     console.log("IDK ANYMORE ", data, filename)
     console.log("IS IT STRINGIFY??? ", JSON.stringify({ rows: data }))
@@ -19,7 +20,7 @@ export default function ExportButton({ variant, color, data, filename }: { varia
           },
           body: JSON.stringify({
             rows: data,
-            file_name: `${filename}.xlsx`
+            file_name: filename
           }),
         },
       )
