@@ -100,5 +100,11 @@ export async function POST(request: Request) {
     body,
   })
 
-  return NextResponse.redirect(`https://isproj2.vercel.app/thankyou`)
+  if ([error, item_error, address_error].some((err) => err !== null)) {
+    console.log('errors', error, item_error, address_error)
+    return NextResponse.json({ error: error?.message }, { status: 400 })
+  } else {
+    console.log()
+    return NextResponse.json({ success: true }, { status: 200 })
+  }
 }
