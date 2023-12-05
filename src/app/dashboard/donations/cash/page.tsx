@@ -4,7 +4,7 @@ import supabase from '@/app/utils/supabase';
 import { GetUID } from '@/app/utils/user_id';
 import { handleTableExport } from '@/app/utils/xlsx';
 import { Button } from '@/components/Button';
-import ExportButton from '@/components/Export';
+import { ExportButton } from '@/components/Export';
 import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
 import SlideOver, { ExportTest } from '@/components/SlideOverButton';
@@ -14,6 +14,7 @@ import Plunk from '@plunk/node';
 import { render } from '@react-email/render';
 import { revalidatePath } from 'next/cache';
 import React from 'react';
+import { CSVLink } from "react-csv";
 
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
@@ -198,6 +199,18 @@ export default async function ExternalTable({ searchParams }: any) {
         )
     }
 
+    const headers = [
+        { label: "First Name", key: "firstname" },
+        { label: "Last Name", key: "lastname" },
+        { label: "Email", key: "email" }
+    ];
+
+    const content = [
+        { firstname: "Ahmed", lastname: "Tomi", email: "ah@smthing.co.com" },
+        { firstname: "Raed", lastname: "Labes", email: "rl@smthing.co.com" },
+        { firstname: "Yezzi", lastname: "Min l3b", email: "ymin@cocococo.com" }
+    ];
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -315,7 +328,9 @@ export default async function ExternalTable({ searchParams }: any) {
                         </div>
                     </SlideOver>
                     {/* BUTTON TO EXPORT FILE */}
-                    {/* <ExportTest /> */}
+                    <CSVLink data={data} headers={headers}>
+                        Download me
+                    </CSVLink>;
                     {/*Displays current filters set*/}
                     <div className="font-bold mt-4 mb-4">
                         {column && order ? (
