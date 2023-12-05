@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 import { CharityLog } from '@/app/admin/audit-log/function';
 import supabase from '@/app/utils/supabase';
 import { GetUID } from '@/app/utils/user_id';
@@ -315,7 +315,7 @@ export default async function ExternalTable({ searchParams }: any) {
                     </SlideOver>
                     {/* BUTTON TO EXPORT FILE */}
 
-                    <form action={handleExport(rows, "CASH")} method='POST'>
+                    <form action={handleTableExport(rows, "CASH")} method='POST'>
                         <Button type='submit' variant="solid" color="green">Export Table Data</Button>
                     </form>
                     {/*Displays current filters set*/}
