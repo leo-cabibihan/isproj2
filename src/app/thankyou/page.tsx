@@ -1,4 +1,5 @@
 // @ts-nocheck 
+'use client'
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
