@@ -1,4 +1,6 @@
 //@ts-nocheck
+"use client"
+
 import { Button } from "./Button"
 import * as XLSX from 'xlsx';
 import * as fs from 'fs';
