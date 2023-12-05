@@ -13,6 +13,7 @@ export async function POST(req: Request) {
     const rows = requestData.rows;
     const file_name = requestData.file_name;
 
+    console.log(`REQUESTDATA: ${requestData}`)
     console.log("ROWS AAAHHH: "+ rows + " ", file_name)
 
     //THIS GENERATES AN EXCEL WORKSHEET
