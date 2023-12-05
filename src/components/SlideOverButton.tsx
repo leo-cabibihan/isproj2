@@ -1,12 +1,13 @@
-// @ts-nocheck 
+//@ts-nocheck
 "use client"
 
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Button, VariantKey, ColorKey } from './Button'
+import { handleTableExport } from '@/app/utils/xlsx'
 
-export default function SlideOver({ buttontext, children, variant, color, title }: { buttontext: String, children: React.ReactNode, variant: VariantKey, color: ColorKey, title: String }) {
+export function SlideOver({ buttontext, children, variant, color, title }: { buttontext: String, children: React.ReactNode, variant: VariantKey, color: ColorKey, title: String }) {
   const [open, setOpen] = useState(false)
  
   return (
@@ -61,3 +62,14 @@ export default function SlideOver({ buttontext, children, variant, color, title 
 
   )
 }
+
+export function ExportButton({ variant, color, data, filename }: { variant: VariantKey, color: ColorKey, data: any, filename: String }) {
+  
+  return (
+    <>
+      <Button variant={variant} color={color} onClick={() => handleTableExport(data, filename)}>Download Data</Button>
+    </>
+
+  )
+}
+
