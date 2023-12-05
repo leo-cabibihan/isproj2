@@ -13,10 +13,11 @@ import { BannerImg, ShowImg } from "@/components/DisplayImg"
 
 export const revalidate = 0;
 
-export default async function Organization({ params }: any) {
-
+export default async function Organization({ params, searchParams }: any) {
   //THIS JUST GETS THE ORG ID FROM THE ROUTE. US  E THIS TO FILTER TO THE SPECIFIC ORG.
   const orgID = params.id
+
+  const searchParamsResult = { start_date: searchParams.start_date, end_date: searchParams.end_date };
 
   const donorID = await GetUID()
 
@@ -35,7 +36,7 @@ export default async function Organization({ params }: any) {
       <DefaultLayout>
         <ContentLeft id={orgID} />
         <ContentRight id={orgID} />
-        <GraphTemp id={orgID}/>
+        <GraphTemp id={orgID} searchParams={searchParamsResult}/>
         <div className="bg-white px-6 py-10 lg:px-8">
           <div className="mx-auto max-w-3xl text-base leading-7 text-gray-700">
             <div className="mt-16 max-w-2xl space-y-20">

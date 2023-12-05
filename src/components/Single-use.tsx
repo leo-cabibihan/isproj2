@@ -6,6 +6,9 @@ import { BannerImg } from './DisplayImg'
 import { LightBulbIcon } from '@heroicons/react/24/solid'
 import TotalCashDonationsChart from './TotalCashDonationChart'
 import TotalInKindTransactionsChart from './TotalInKindTransactionsChart'
+import Alert from './Alert'
+import SlideOver from './SlideOverButton'
+import { TextField } from './Fields'
 
 export function Cards() {
   return (
@@ -202,7 +205,7 @@ export async function Causes({ id }: any) {
     .eq('charity_id', id).eq('is_ongoing', true).eq('approval_status', 'APPROVED')
     .order('start_date', {ascending: false})
   console.log(id + '!!!!!')
-  console.log(events)
+  //console.log(events)
 
   return (
     <div className="bg-white py-24 sm:py-32">
@@ -275,7 +278,7 @@ export async function PastEvents({ id }: any) {
     .eq('charity_id', id).eq('is_ongoing', false).eq('approval_status', 'APPROVED')
     .order('start_date', {ascending: false})
   console.log(id + '!!!!!')
-  console.log(events)
+  //console.log(events)
 
   return (
     <div className="bg-white py-24 sm:py-32">
@@ -458,7 +461,90 @@ export async function ContentRight({ id }: any) {
   )
 }
 
-export async function GraphTemp({ id }: any) {
+export async function GraphTemp({ id, searchParams }: any) {
+  //start and end date parameters obtained from the form
+  const startDate = searchParams.start_date
+  const endDate = searchParams.end_date
+  console.log("Start Date: " + startDate);
+  console.log("End Date: " + endDate)
+
+  //This is formatted to the following: (nameofmonth dd, yyyy)
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
+    
+  //checks if start and end date are valid, otherwise returns an error message for custom statistics
+  const fetchData = async () => {
+    if(startDate <= endDate && endDate >= startDate){
+      //Total Cash Donations Received Query (INCOME)
+      const { data: totalCashDonations, error: totalCashDonationsError } =
+      await supabase
+        .from('daily_total_cash_donations_received')
+        .select('*')
+        .eq('charity_id', id)
+        .gte('date', startDate)
+        .lte('date', endDate)
+        .order('date', {ascending: false})
+      const sortedtotalCashData = totalCashDonations?.reverse() || []
+      const totalCashData =
+      sortedtotalCashData?.flatMap((totalCash) => [
+        {
+          name: totalCash.formatted_date,
+          totalCashDonations: totalCash.total_cash_donations_received,
+        },
+      ]) || []
+      //Total In-Kind Transactions Received Query (INCOME)
+      const { data: totalInKindTransactions, error: totalInKindTransactionsError } =
+      await supabase
+        .from('daily_total_inkind_donation_transactions')
+        .select('*')
+        .eq('charity_id', id)
+        .gte('date', startDate)
+        .lte('date', endDate)
+        .order('date', { ascending: false })     
+      const sortedtotalInKindTransactions = totalInKindTransactions?.reverse() || []
+      const totalInKindData =
+      sortedtotalInKindTransactions?.flatMap((totalInKind) => [
+        {
+          name: totalInKind.formatted_date,
+          totalInKindTransactions: totalInKind.total_inkind_donation_transactions,
+        },
+      ]) || []
+      const filteredData = {
+        totalCashData,
+        totalInKindData
+      }
+      const allArraysEmpty = (
+        JSON.stringify(filteredData.totalCashData) === '[]' &&
+        JSON.stringify(filteredData.totalInKindData) === '[]'
+      );
+      if(allArraysEmpty){      
+          console.log("Date range specified does not exist on the server.")
+          const alertMessage = 'Date range specified does not exist on the server.'
+          return {alertMessage};
+      }
+      else{
+        //console.log(filteredData)
+        return {totalCashData, totalInKindData, id}
+      }
+    }
+    else if(startDate == null && endDate == null){
+      console.log("No data input detected")
+      return {id}
+    }
+    else {
+      console.log("Invalid start or end date specified, make sure that start date is before end date, and vice versa.")
+      const alertMessage =
+      'Invalid start or end date specified. Please make sure that the start date is before the end date, and vice versa.';
+      return {alertMessage, id}
+    }
+  }
+
+  const setData = await fetchData() //This is called in order to begin rendering the data in the actual page.
+
+  //Total Cash Donations Received by the charity
   const { data: charity_summary, error: charity_summary_error } = 
   await supabase
   .from('charity_summary')
@@ -590,16 +676,16 @@ export async function GraphTemp({ id }: any) {
             Organization Statistics
           </h2>
           <p className="mt-6 text-base italic leading-7 text-gray-600">
-            The information presented here is derived from the most recent 5 years, 12 months, and 7 days
-            of this charity statistics.
+            The information presented here is derived from the most recent 5 years, 12 months, and 7 days, 
+            as well as from the user-specified start and end dates for custom statistics on this charity.
           </p>
           <br />
           <h2 className="sm:text-4x1 text-2xl font-bold tracking-tight text-gray-900">
             Total Cash and In-Kind Donations
           </h2>
           <p className="mt-2 text-base leading-8 text-gray-600">
-            How much cash donations and in-kind donation transactions are
-            received per year, per month, and per day respectively.
+            How much cash donations and in-kind donation transactions are received, categorized by year, month, and day, 
+            as well as for the user-specified start and end dates for custom statistics.
           </p>
           <br />
         </div>
@@ -628,6 +714,54 @@ export async function GraphTemp({ id }: any) {
         <div className="flex flex-col md:flex-row md:gap-10">
           <TotalCashDonationsChart CashData={dailytotalCashData} />
           <TotalInKindTransactionsChart InKindData={dailytotalInKindData} />
+        </div>
+        <br/>
+        <h2 className="sm:text-4x1 text-2xl font-bold tracking-tight text-slate-500">
+            Custom
+        </h2>
+        <br/>
+        <SlideOver title="Set a Custom Date Range" buttontext="Set Data" variant="solid" color="yellow">
+          <form className="space-y-6" action={'/' + id + '/details'} method="GET">
+            <TextField
+            label="Start Date"
+            name="start_date"
+            type="date"
+            required
+            />
+            <TextField
+            label="End Date"
+            name="end_date"
+            type="date"
+            required
+            />
+            <div className="flex flex-col items-center">
+              <Button type="submit" variant="solid" color="green" className="w-64 mt-2">
+                  <span>
+                  Set Data <span aria-hidden="true">&rarr;</span>
+                  </span>
+              </Button>
+            </div>
+          </form>
+        </SlideOver>
+        <br/>
+        <br/>
+          <div className="font-bold">
+            {startDate && endDate ? (
+              <>
+                <p className="text-green-700 inline">Current Data: </p>
+                <span>{formatDate(startDate)} - {formatDate(endDate)}</span>
+              </>
+            ) : (
+              <p className="text-gray-600 italic">No data currently present</p>
+            )}
+          </div>
+          <div className="max-w-screen-sm mt-4">
+          {setData.alertMessage && <Alert message={setData.alertMessage} />}
+          </div>
+        <br/>
+        <div className="flex flex-col md:flex-row md:gap-10">
+          <TotalCashDonationsChart CashData={setData?.totalCashData} />
+          <TotalInKindTransactionsChart InKindData={setData?.totalInKindData} />
         </div>
       </div>
     </div>
