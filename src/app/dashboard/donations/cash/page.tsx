@@ -12,6 +12,8 @@ import Plunk from '@plunk/node';
 import { render } from '@react-email/render';
 import { revalidatePath } from 'next/cache';
 import React from 'react';
+import * as XLSX from 'xlsx';
+
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export const revalidate = 0;
@@ -72,9 +74,21 @@ export default async function ExternalTable({ searchParams }: any) {
 
     const charityId = charity_id![0]
 
+    //CASH DATA, RETURNED AS RAW JSON.
     const cash = await getCashData(column, order, charityId)
 
+    const rows = cash?.map(row => ({
+        id: row.id,
+        amount: row.amount,
+        date: formatDate(row.date) + ' ' + formatTime(row.date),
+        charity: row.charity?.name,
+        is_external: row.is_external,
+        donor: row.decrypted_donor?.decrypted_name,
+        event: row.event?.name
+    }))
+
     console.log("CASH DATA LOOKS LIKE THIS: ", cash)
+    console.log("MEANWHILE, FORMATTED DATA LOOKS LIKE THIS: ", rows)
 
     const headers = [
         { label: "ID", key: "id" },
