@@ -1,6 +1,6 @@
 // @ts-nocheck
 // components/EmailMessage.tsx
- 
+
 import {
     Body,
     Container,
@@ -214,23 +214,16 @@ export function CashReceiptEmail(props: any) {
                         <Text className='text-[#000000] text-[20px]'>
                             TRANSACTION DETAILS:
                         </Text>
-                        <>
-                            {content?.map(item => (
-                                <>
-                                    <Text className='text-[#000000] text-[20px]'>
-                                        DONATION DETAILS:
-                                    </Text>
-                                    <ol>
-                                        <li>Donation Amount: {item.amount}</li>
-                                        <li>Donor Name: {item.donor}</li>
-                                        <li>Donated on: {item.date}</li>
-                                        <li>Donated to: {item.charity}</li>
-                                        <li>Target Event: {item.event}</li>
-                                    </ol>
-                                </>
-                            ))}
-                        </>
-
+                        <Text className='text-[#000000] text-[20px]'>
+                            DONATION DETAILS:
+                        </Text>
+                        <ol>
+                            <li>Donation Amount: {content.amount}</li>
+                            <li>Donor Name: {content.donor}</li>
+                            <li>Donated on: {content.date}</li>
+                            <li>Donated to: {content.charity}</li>
+                            <li>Target Event: {content.event}</li>
+                        </ol>
                         <Hr className='my-[16px] mx-0 w-full' />
                         <Text className='text-[#666666] text-[12px]'>
                             In a world where every email matters, Resend empowers you to send emails that captivate, engage, and convert. Its more than just an email platform; its a catalyst for modernizing your email communication.
