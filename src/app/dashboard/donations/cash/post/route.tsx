@@ -2,15 +2,20 @@ import * as XLSX from 'xlsx';
 import * as fs from 'fs';
 import { Readable } from 'stream';
 import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs';
+import * as http from 'http';
+import * as path from 'path';
+import { NextResponse } from 'next/server';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-export async function POST(req: Request) {
+
+export async function POST(req: NextApiRequest, res: NextApiResponse) {
     XLSX.set_fs(fs);
     XLSX.stream.set_readable(Readable);
     XLSX.set_cptable(cpexcel);
 
 
-    const requestData = await req.json();
-    const rows = requestData.rows;
+    const requestData = await req.body;
+    const rows = requestData.rows;  
     const file_name = requestData.file_name;
 
     console.log("REQUESTDATA: ", requestData)
@@ -23,8 +28,7 @@ export async function POST(req: Request) {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Exported Data")
 
-    //THIS WRITES THE EXPORTED FILE
-    XLSX.writeFile(workbook, `D:/Documents/Benilde stuff/4th Year/IPROJ2/${file_name}.xlsx`, { compression: true })
-    
+    const buf = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+
     console.log("IT WORK???")
 }
