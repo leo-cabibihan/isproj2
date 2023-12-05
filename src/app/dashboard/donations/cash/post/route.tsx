@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Exported Data")
 
     //THIS WRITES THE EXPORTED FILE
-    const { data, error } = XLSX.writeFile(workbook, `${file_name}.xlsx`, { compression: true })
+    const { data, error } = XLSX.writeFile(workbook, `/tmp/${file_name}.xlsx`, { compression: true })
 
     const DETAILS = `DATA IS ${data}, ERROR IS ${error}.`
 
