@@ -1,5 +1,5 @@
 //@ts-nocheck
-"use client"
+"use-client"
 import { Button } from "./Button"
 
 export function ExportButton({ variant, color, data, filename }: { variant: VariantKey, color: ColorKey, data: any, filename: String }) {
