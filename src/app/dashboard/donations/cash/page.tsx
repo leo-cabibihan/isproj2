@@ -2,6 +2,7 @@
 import { CharityLog } from '@/app/admin/audit-log/function';
 import supabase from '@/app/utils/supabase';
 import { GetUID } from '@/app/utils/user_id';
+import { handleTableExport } from '@/app/utils/xlsx';
 import { Button } from '@/components/Button';
 import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
@@ -12,7 +13,6 @@ import Plunk from '@plunk/node';
 import { render } from '@react-email/render';
 import { revalidatePath } from 'next/cache';
 import React from 'react';
-import * as XLSX from 'xlsx';
 
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
@@ -77,32 +77,19 @@ export default async function ExternalTable({ searchParams }: any) {
     //CASH DATA, RETURNED AS RAW JSON.
     const cash = await getCashData(column, order, charityId)
 
+    //CASH DATA, FORMATTED FOR EXPORTING
     const rows = cash?.map(row => ({
-        id: row.id,
-        amount: row.amount,
-        date: formatDate(row.date) + ' ' + formatTime(row.date),
-        charity: row.charity?.name,
-        is_external: row.is_external,
-        donor: row.decrypted_donor?.decrypted_name,
-        event: row.event?.name
+        RECORD_ID: row.id,
+        CASH_AMOUNT: row.amount,
+        TRANSACTION_DATE: formatDate(row.date) + ' ' + formatTime(row.date),
+        CHARITY_DONATED_TO: row.charity?.name,
+        SOURCE: row.is_external ? "EXTERAL SOURCE" : "DONATIONS",
+        DONATED_BY: row.decrypted_donor?.decrypted_name,
+        EVENT_DONATED_TO: row.event?.name
     }))
 
     console.log("CASH DATA LOOKS LIKE THIS: ", cash)
     console.log("MEANWHILE, FORMATTED DATA LOOKS LIKE THIS: ", rows)
-
-    const headers = [
-        { label: "ID", key: "id" },
-        { label: "AMOUNT", key: "amount" },
-        { label: "DATE DONATED", key: "date" },
-        { label: "CHARITY ID", key: "charity_id"},
-        { label: "SOURCE", key: "is_external" },
-        { label: "IMAGE EVIDENCE", key: "image_evidence" },
-        { label: "DONOR ID", key: "donor_id" },
-        { label: "EVENT ID", key: "event_id"},
-        { label: "CHARIY", key: "charity.name"},
-        { label: "DONOR NAME", key: "decrypted_donor.decrypted_name" },
-        { label: "EVENT NAME", key: "event.name" }
-    ];
 
     var orderby = "" //checks if order is true or false, then returns a string of ascending and descending respectively
     if (order === 'true') {
@@ -308,6 +295,8 @@ export default async function ExternalTable({ searchParams }: any) {
                             </form>
                         </div>
                     </SlideOver>
+                    {/* BUTTON TO EXPORT FILE */}
+                    <Button variant="solid" color="green" onClick={handleTableExport(rows, "cash")} >Export Table Data</Button>
                     {/*Displays current filters set*/}
                     <div className="font-bold mt-4 mb-4">
                         {column && order ? (
