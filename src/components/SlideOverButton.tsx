@@ -7,7 +7,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { Button, VariantKey, ColorKey } from './Button'
 import { handleTableExport } from '@/app/utils/xlsx'
 
-export function SlideOver({ buttontext, children, variant, color, title }: { buttontext: String, children: React.ReactNode, variant: VariantKey, color: ColorKey, title: String }) {
+export default function SlideOver({ buttontext, children, variant, color, title }: { buttontext: String, children: React.ReactNode, variant: VariantKey, color: ColorKey, title: String }) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -58,38 +58,6 @@ export function SlideOver({ buttontext, children, variant, color, title }: { but
           </div>
         </Dialog>
       </Transition.Root>
-    </>
-
-  )
-}
-
-export function ExportButton({ variant, color, data, filename }: { variant: VariantKey, color: ColorKey, data: any, filename: String }) {
-
-  console.log("IDK ANYMORE ", data, filename)
-  console.log("IS IT STRINGIFY??? ", JSON.stringify({ rows: data }))
-  console.log("THIS IS IN NON-OBJECT ", JSON.stringify(data))
-
-  const handleExport = async (e: any) => {
-    e.preventDefault()
-    const rawResponse = await fetch(
-      `https://isproj2.vercel.app/dashboard/donations/cash/post`,
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          rows: data,
-          file_name: filename
-        }),
-      },
-    )
-  }
-
-  return (
-    <>
-      <Button variant={variant} color={color} onClick={handleExport}>Download Data</Button>
     </>
 
   )

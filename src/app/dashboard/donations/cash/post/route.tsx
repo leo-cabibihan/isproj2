@@ -8,13 +8,13 @@ import { NextResponse } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
+export async function POST(req: Request) {
     XLSX.set_fs(fs);
     XLSX.stream.set_readable(Readable);
     XLSX.set_cptable(cpexcel);
 
 
-    const requestData = await req.body;
+    const requestData = await req.json();
     const rows = requestData.rows;  
     const file_name = requestData.file_name;
 
@@ -28,7 +28,7 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Exported Data")
 
-    const buf = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
+    XLSX.writeFile(workbook, "Presidents.xlsx", { compression: true });
 
     console.log("IT WORK???")
 }

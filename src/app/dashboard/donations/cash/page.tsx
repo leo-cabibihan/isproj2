@@ -4,9 +4,10 @@ import supabase from '@/app/utils/supabase';
 import { GetUID } from '@/app/utils/user_id';
 import { handleTableExport } from '@/app/utils/xlsx';
 import { Button } from '@/components/Button';
+import ExportButton from '@/components/Export';
 import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
-import { SlideOver, ExportButton } from '@/components/SlideOverButton';
+import SlideOver from '@/components/SlideOverButton';
 import { TableContainer, TableHeaderButton, TableContent, Table, Thead, Tr, Th, Tbody, Td } from '@/components/Table';
 import { CashReceiptEmail } from '@/components/email-template';
 import Plunk from '@plunk/node';
