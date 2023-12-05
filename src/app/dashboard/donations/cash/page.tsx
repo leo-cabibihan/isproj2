@@ -7,7 +7,7 @@ import { Button } from '@/components/Button';
 import ExportButton from '@/components/Export';
 import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
-import SlideOver from '@/components/SlideOverButton';
+import SlideOver, { ExportTest } from '@/components/SlideOverButton';
 import { TableContainer, TableHeaderButton, TableContent, Table, Thead, Tr, Th, Tbody, Td } from '@/components/Table';
 import { CashReceiptEmail } from '@/components/email-template';
 import Plunk from '@plunk/node';
@@ -315,7 +315,7 @@ export default async function ExternalTable({ searchParams }: any) {
                         </div>
                     </SlideOver>
                     {/* BUTTON TO EXPORT FILE */}
-                    {/* <ExportButton variant='solid' color="green" data={rows} filename={"CASH"} /> */}
+                    <ExportTest />
                     {/*Displays current filters set*/}
                     <div className="font-bold mt-4 mb-4">
                         {column && order ? (

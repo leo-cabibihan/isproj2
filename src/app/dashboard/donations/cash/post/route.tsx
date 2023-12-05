@@ -15,9 +15,9 @@ export async function POST(req: Request) {
         }
       });
 
-    const requestData = await req.json();
-    const rows = requestData.rows;  
-    const file_name = requestData.file_name;
+    // const requestData = await req.json();
+    // const rows = requestData.rows;  
+    // const file_name = requestData.file_name;
 
     const MyDocument = () => (
         <Document>
