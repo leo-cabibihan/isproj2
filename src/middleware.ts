@@ -116,9 +116,9 @@ export async function middleware(req: NextRequest) {
       return Response.redirect(`${requestUrl.origin}/pending`)
     }
   }
-  // else if (originalUrl.includes('/thankyou')) {
-  //   return Response.redirect(`${requestUrl.origin}/thankyou`)
-  // }
+  else if (originalUrl.includes('/thankyou')) {
+    return Response.redirect(`${requestUrl.origin}/thankyou`)
+  }
 
   return res
 }
