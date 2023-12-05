@@ -114,7 +114,7 @@ export default function TestPage({ ID, UserID }: any) {
         fetchData()
     }, [])
 
-    const submit = async (amount: any) => {
+    const submit = async (amount: any, receipt: any) => {
         const event_id = sessionStorage.getItem("eventID")
         const rawResponse = await fetch(
             `https://isproj2.vercel.app/${ID}/details/cash`,
@@ -130,6 +130,7 @@ export default function TestPage({ ID, UserID }: any) {
                     donor_id: UserID,
                     is_external: false,
                     event_id: event_id,
+                    receipt_data: receipt
                 }),
             },
         )
@@ -226,7 +227,7 @@ export default function TestPage({ ID, UserID }: any) {
                                 );
                                 const amount_paid = Number(orderData!.purchase_units[0]!.payments!.captures[0]!.amount!.value)
                                 console.log(`WILL THIS WORK? MAYBE. THE AMOUNT IS: ${amount_paid}`)
-                                submit(amount_paid);
+                                submit(amount_paid, orderData);
 
                             }
                         } catch (error) {
