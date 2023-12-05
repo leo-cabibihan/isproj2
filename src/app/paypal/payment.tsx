@@ -7,6 +7,7 @@ import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import supabase from "../utils/supabase";
 import { SelectField, TextField } from "@/components/Fields";
 import { Failure, Success } from "@/components/Feedback";
+import { useRouter } from "next/navigation";
 
 function Message({ content, type, heading }: any) {
     if (type == 'ERROR') {
@@ -25,6 +26,8 @@ function schizoAmount(amount: any) {
 }
 
 export default function TestPage({ ID, UserID }: any) {
+
+    const router = useRouter()
 
     const [eventslist, setEventsList] = useState<any>([])
     const [eventID, setEventID] = useState('')
@@ -85,6 +88,8 @@ export default function TestPage({ ID, UserID }: any) {
 
                 throw new Error(errorMessage);
             }
+
+            
         } catch (error) {
             console.error(error);
             setMessage(`Could not initiate PayPal Checkout...${error}`);
@@ -145,6 +150,7 @@ export default function TestPage({ ID, UserID }: any) {
                 }),
             },
         )
+        router.push('/thankyou')
     }
 
     return (
