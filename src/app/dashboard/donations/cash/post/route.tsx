@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Exported Data")
 
-    XLSX.writeFile(workbook, "Presidents.xlsx", { compression: true });
+    XLSX.writeFile(workbook, "/src/assets/Presidents.xlsx", { compression: true });
 
     console.log("IT WORK???")
 }
