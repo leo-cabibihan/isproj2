@@ -18,6 +18,7 @@ export async function POST(request: Request) {
 
     const orgID = formData.charity_id
     const donor_id = formData.donor_id
+    const transaction_id = formData.transaction_id
 
     const cash = {
         amount: parseInt(formData.amount),
@@ -25,7 +26,8 @@ export async function POST(request: Request) {
         donor_id: formData.donor_id,
         is_external: formData.is_external,
         event_id: parseInt(formData.event_id),
-        receipt_data: formData.receipt_data
+        receipt_data: formData.receipt_data,
+        paypal_transaction_id: formData.transaction_id
     }
 
     const { data, error } = await supabase.from('cash').insert(cash).select();
@@ -51,6 +53,7 @@ export async function POST(request: Request) {
         date: raw_response.date,
         charity: org_name,
         event: "filler",
+        transaction_id: transaction_id
     }
 
     const body = render(

@@ -231,6 +231,7 @@ export function CashReceiptEmail(props: any) {
                             DONATION DETAILS:
                         </Text>
                         <ol>
+                            <li>PayPal Transaction ID: {content.transaction_id}</li>
                             <li>Donation Amount: {'$ ' + (content.amount).toLocaleString(undefined, {maximumFractionDigits:2})}</li>
                             <li>Donor Name: {content.donor}</li>
                             <li>Donated on: {formatDate(content.date) + ' ' + formatTime(content.date)}</li>
