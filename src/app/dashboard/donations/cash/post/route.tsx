@@ -1,6 +1,14 @@
 import * as XLSX from 'xlsx';
+import * as fs from 'fs';
+import { Readable } from 'stream';
+import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs';
 
 export async function POST(req: Request) {
+    XLSX.set_fs(fs);
+    XLSX.stream.set_readable(Readable);
+    XLSX.set_cptable(cpexcel);
+
+
     const requestData = await req.json();
     const rows = requestData.rows;
     const file_name = requestData.file_name;
