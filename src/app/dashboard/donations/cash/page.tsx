@@ -315,9 +315,9 @@ export default async function ExternalTable({ searchParams }: any) {
                     </SlideOver>
                     {/* BUTTON TO EXPORT FILE */}
 
-                    <form action={handleTableExport(rows, "CASH")} method='POST'>
+                    {/* <form action={handleTableExport(rows, "CASH")} method='POST'>
                         <Button type='submit' variant="solid" color="green">Export Table Data</Button>
-                    </form>
+                    </form> */}
                     {/*Displays current filters set*/}
                     <div className="font-bold mt-4 mb-4">
                         {column && order ? (
