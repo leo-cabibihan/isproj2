@@ -63,3 +63,31 @@ export default function SlideOver({ buttontext, children, variant, color, title 
   )
 }
 
+export function ExportTest({ buttontext, children, variant, color, title }: { buttontext: String, children: React.ReactNode, variant: VariantKey, color: ColorKey, title: String }) {
+
+  const handleExport = async (e: any) => {
+    e.preventDefault()
+    const rawResponse = await fetch(
+      `https://isproj2.vercel.app/dashboard/donations/cash/post`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          rows: data,
+          file_name: filename
+        }),
+      },
+    )
+  }
+
+  return (
+    <>
+      <Button variant={variant} color={color} onClick={handleExport}>{buttontext}</Button>
+    </>
+
+  )
+}
+

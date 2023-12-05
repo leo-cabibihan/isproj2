@@ -21,6 +21,7 @@
     "@plunk/node": "^3.0.0",
     "@react-email/components": "^0.0.7",
     "@react-email/render": "^0.0.7",
+    "@react-pdf/renderer": "^3.1.14",
     "@supabase/auth-helpers-nextjs": "^0.8.1",
     "@supabase/supabase-js": "^2.37.0",
     "@tailwindcss/aspect-ratio": "^0.4.2",
@@ -52,9 +53,7 @@
     "uuid": "^9.0.1",
     "xlsx": "file:vendor/xlsx-0.20.0.tgz"
   },
-  "browser": {
-    
-  },
+  "browser": {},
   "devDependencies": {
     "@types/react-csv": "^1.1.9",
     "@types/uuid": "^9.0.4",

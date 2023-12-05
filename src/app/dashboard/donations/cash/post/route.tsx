@@ -1,34 +1,37 @@
-import * as XLSX from 'xlsx';
-import * as fs from 'fs';
-import { Readable } from 'stream';
-import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs';
-import * as http from 'http';
-import * as path from 'path';
-import { NextResponse } from 'next/server';
-import { NextApiRequest, NextApiResponse } from 'next';
-
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import ReactPDF from '@react-pdf/renderer';
 
 export async function POST(req: Request) {
-    XLSX.set_fs(fs);
-    XLSX.stream.set_readable(Readable);
-    XLSX.set_cptable(cpexcel);
 
+    const styles = StyleSheet.create({
+        page: {
+          flexDirection: 'row',
+          backgroundColor: '#E4E4E4'
+        },
+        section: {
+          margin: 10,
+          padding: 10,
+          flexGrow: 1
+        }
+      });
 
     const requestData = await req.json();
     const rows = requestData.rows;  
     const file_name = requestData.file_name;
 
-    console.log("REQUESTDATA: ", requestData)
-    console.log("ROWS AAAHHH: ", rows[0] + " ", requestData.file_name)
+    const MyDocument = () => (
+        <Document>
+          <Page size="A4" style={styles.page}>
+            <View style={styles.section}>
+              <Text>Section #1</Text>
+            </View>
+            <View style={styles.section}>
+              <Text>Section #2</Text>
+            </View>
+          </Page>
+        </Document>
+      );
 
-    //THIS GENERATES AN EXCEL WORKSHEET
-    const worksheet = XLSX.utils.json_to_sheet(rows);
-
-    //THIS GENERATES AN EXCEL WORKBOOK
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Exported Data")
-
-    XLSX.writeFile(workbook, "/src/assets/Presidents.xlsx", { compression: true });
-
+      ReactPDF.render(<MyDocument />, `${__dirname}/example.pdf`);
     console.log("IT WORK???")
 }
