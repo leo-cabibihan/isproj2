@@ -116,6 +116,9 @@ export async function middleware(req: NextRequest) {
       return Response.redirect(`${requestUrl.origin}/pending`)
     }
   }
+  else if (originalUrl.includes('/thankyou')) {
+    return Response.redirect('https://youtu.be/dQw4w9WgXcQ?si=W0v1z7sI1IhXPXDD')
+  }
 
   return res
 }
