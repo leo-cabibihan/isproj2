@@ -81,7 +81,7 @@ export function ExportTest() {
 
   return (
     <>
-      <Button variant={variant} color={color} onClick={handleExport}>TEST</Button>
+      <Button variant='solid' color='green' onClick={handleExport}>TEST</Button>
     </>
 
   )
