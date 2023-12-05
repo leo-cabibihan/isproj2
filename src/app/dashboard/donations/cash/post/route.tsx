@@ -1,23 +1,23 @@
 import * as XLSX from 'xlsx';
 
-const handleTableExport = async (data: any, filename: any) => {
+export async function POST(req: Request) {
+    const requestData = await req.json();
+    const rows = requestData.rows;
+    const file_name = requestData.file_name;
+
     //THIS GENERATES AN EXCEL WORKSHEET
-    const worksheet = XLSX.utils.json_to_sheet(data);
+    const worksheet = XLSX.utils.json_to_sheet(rows);
 
     //THIS GENERATES AN EXCEL WORKBOOK
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Exported Data")
 
     //THIS WRITES THE EXPORTED FILE
-    XLSX.writeFile(workbook, `${filename}.xlsx`, { compression: true })
+    const { data, error } = XLSX.writeFile(workbook, `${file_name}.xlsx`, { compression: true })
 
-    return console.log("FILE EXPORTED SUCCESSFULLY!")
-}
+    const DETAILS = `DATA IS ${data}, ERROR IS ${error}.`
 
-export async function POST(req: Request) {
-    const requestData = await req.json();
-    const rows = requestData.rows;
-    const file_name = requestData.file_name;
-
-    handleTableExport(rows, file_name)
+    console.log(DETAILS)
+    
+    return DETAILS
 }

@@ -9,7 +9,7 @@ import { handleTableExport } from '@/app/utils/xlsx'
 
 export function SlideOver({ buttontext, children, variant, color, title }: { buttontext: String, children: React.ReactNode, variant: VariantKey, color: ColorKey, title: String }) {
   const [open, setOpen] = useState(false)
- 
+
   return (
     <>
       <Button variant={variant} color={color} onClick={() => setOpen(true)}>{buttontext}</Button>
@@ -64,10 +64,28 @@ export function SlideOver({ buttontext, children, variant, color, title }: { but
 }
 
 export function ExportButton({ variant, color, data, filename }: { variant: VariantKey, color: ColorKey, data: any, filename: String }) {
-  
+
+  const handleExport = async (e: any) => {
+    e.preventDefault()
+    const rawResponse = await fetch(
+      `https://isproj2.vercel.app/dashboard/donations/cash/post`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          rows: data,
+          file_name: filename
+        }),
+      },
+    )
+  }
+
   return (
     <>
-      <Button variant={variant} color={color} onClick={() => handleTableExport(data, filename)}>Download Data</Button>
+      <Button variant={variant} color={color} onClick={handleExport}>Download Data</Button>
     </>
 
   )
