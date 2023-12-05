@@ -6,7 +6,7 @@ import { handleTableExport } from '@/app/utils/xlsx';
 import { Button } from '@/components/Button';
 import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
-import SlideOver, { ExportButton } from '@/components/SlideOverButton';
+import { SlideOver, ExportButton } from '@/components/SlideOverButton';
 import { TableContainer, TableHeaderButton, TableContent, Table, Thead, Tr, Th, Tbody, Td } from '@/components/Table';
 import { CashReceiptEmail } from '@/components/email-template';
 import Plunk from '@plunk/node';
