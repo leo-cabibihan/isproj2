@@ -1,4 +1,4 @@
-// @ts-nocheck 
+
 import supabase from "@/app/utils/supabase"
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs"
 import { cookies } from "next/headers"
@@ -26,7 +26,25 @@ export async function POST(request: Request) {
     console.log("POST REQUEST DETAILS ARE: DATA - ", data + ". ERROR - ", error)
 
     const recordID = data![0].id
+    const raw_response = data![0]
 
-    return NextResponse.redirect(`${requestUrl.origin}/${orgID}/details/cash/${orgID}/${recordID}`)
- 
+    console.log("RAW RESPONSE: ", raw_response)
+
+    // const invoice = async () => {
+
+    //     const response = await fetch("/paypal/invoice", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         // use the "body" param to optionally pass additional order information
+    //         // like product ids and quantities
+    //         body: JSON.stringify({
+    //             data: raw_response 
+    //         })
+    //     });
+    // }
+
+    // return invoice
+
 }

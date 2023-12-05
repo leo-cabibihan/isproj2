@@ -243,7 +243,7 @@ export default function TestPage({ ID, UserID }: any) {
                                 const amount_paid = Number(orderData!.purchase_units[0]!.payments!.captures[0]!.amount!.value)
                                 console.log(`WILL THIS WORK? MAYBE. THE AMOUNT IS: ${amount_paid}`)
                                 submit(amount_paid);
-                                invoicer
+                                
                             }
                         } catch (error) {
                             console.error(error);
