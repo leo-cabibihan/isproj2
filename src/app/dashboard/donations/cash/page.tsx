@@ -179,6 +179,10 @@ export default async function ExternalTable({ searchParams }: any) {
         console.log("SUCCESS??? ", success)
     }
 
+    const handleExport =async (rows: any, fileName: any) => {
+        await handleTableExport(rows, fileName)
+    }
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -296,7 +300,7 @@ export default async function ExternalTable({ searchParams }: any) {
                         </div>
                     </SlideOver>
                     {/* BUTTON TO EXPORT FILE */}
-                    {/* <Button variant="solid" color="green" onClick={handleTableExport(rows, "cash")} >Export Table Data</Button> */}
+                    <Button variant="solid" color="green" onClick={(e:any) => handleExport(rows, "CASH")} >Export Table Data</Button>
                     {/*Displays current filters set*/}
                     <div className="font-bold mt-4 mb-4">
                         {column && order ? (
