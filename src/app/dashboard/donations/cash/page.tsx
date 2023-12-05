@@ -179,8 +179,22 @@ export default async function ExternalTable({ searchParams }: any) {
         console.log("SUCCESS??? ", success)
     }
 
-    const handleExport =async (rows: any, fileName: any) => {
-        await handleTableExport(rows, fileName)
+    const handleExport = async (rows: any, fileName: any) => {
+
+        const rawResponse = await fetch(
+            `https://isproj2.vercel.app/dashboard/donations/cash/post`,
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    rows: rows,
+                    file_name: fileName
+                }),
+            },
+        )
     }
 
     return (
@@ -300,7 +314,10 @@ export default async function ExternalTable({ searchParams }: any) {
                         </div>
                     </SlideOver>
                     {/* BUTTON TO EXPORT FILE */}
-                    <Button variant="solid" color="green" onClick={(e:any) => handleExport(rows, "CASH")} >Export Table Data</Button>
+
+                    <form action={handleExport(rows, "CASH")} method='POST'>
+                        <Button type='submit' variant="solid" color="green">Export Table Data</Button>
+                    </form>
                     {/*Displays current filters set*/}
                     <div className="font-bold mt-4 mb-4">
                         {column && order ? (
