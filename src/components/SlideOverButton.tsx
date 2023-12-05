@@ -66,6 +66,8 @@ export function SlideOver({ buttontext, children, variant, color, title }: { but
 export function ExportButton({ variant, color, data, filename }: { variant: VariantKey, color: ColorKey, data: any, filename: String }) {
 
   console.log("IDK ANYMORE ", data, filename)
+  console.log("IS IT STRINGIFY??? ", JSON.stringify({ rows: data }))
+  console.log("THIS IS IN NON-OBJECT ", JSON.stringify(data))
 
   const handleExport = async (e: any) => {
     e.preventDefault()
