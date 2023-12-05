@@ -165,6 +165,7 @@ export default function TestPage({ ID, UserID }: any) {
                             onChange={(e) => setEventID(e.target.value)}
                             required
                         >
+                            <option value={null}>Select an Event</option>
                             {eventslist?.map((form: any) => (
                                 <option key={form.id} value={form.id}>
                                     {form.name}
@@ -226,7 +227,7 @@ export default function TestPage({ ID, UserID }: any) {
                                 const amount_paid = Number(orderData!.purchase_units[0]!.payments!.captures[0]!.amount!.value)
                                 console.log(`WILL THIS WORK? MAYBE. THE AMOUNT IS: ${amount_paid}`)
                                 submit(amount_paid);
-                                
+
                             }
                         } catch (error) {
                             console.error(error);
