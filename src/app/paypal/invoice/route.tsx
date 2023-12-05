@@ -15,10 +15,6 @@ const plunk = new Plunk('sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db')
 
 const createInvoice = async (data: any) => {
     const raw_data = data
-    const formatted_data = {
-        amount: raw_data?.amount,
-        charity_id: raw_data?.charity_id
-    }
     const body = render(
         <CashReceiptEmail
             heading={"YOUR DONATION RECEIPT"}

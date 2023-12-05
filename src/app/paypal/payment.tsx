@@ -85,24 +85,7 @@ export default function TestPage({ ID, UserID }: any) {
         }
     }
 
-    const invoice = async () => {
-        const funds = sessionStorage.getItem("amount")
-
-        const response = await fetch("/paypal/invoice", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            // use the "body" param to optionally pass additional order information
-            // like product ids and quantities
-            body: JSON.stringify({
-                amount: funds
-            })
-        });
-    }
-
     const handler = handle
-    const invoicer = invoice
 
     const initialOptions = {
         "client-id": "Acdo2IOJiiihwISa_-GfchSLPkA4rdf9JrtbWWHyG6y_dKJOg-8Zh7zNp9DGLIX9eRAyxcTx9DFe_gqu",
