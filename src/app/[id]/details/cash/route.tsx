@@ -71,4 +71,8 @@ export async function POST(request: Request) {
 
     console.log("SUCCESS??? ", success)
 
+    return NextResponse.redirect(`${requestUrl.origin}/thankyou`, {
+        status: 301,
+      })
+
 }
