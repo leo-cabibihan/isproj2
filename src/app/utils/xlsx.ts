@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx';
-import * as fs from 'fs';
+import * as fs from 'fs'
 import { Readable } from 'stream';
 import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs';
 
