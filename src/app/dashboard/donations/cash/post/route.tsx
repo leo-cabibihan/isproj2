@@ -15,6 +15,7 @@ export async function POST(req: Request) {
 
     console.log(`REQUESTDATA: ${requestData}`)
     console.log("ROWS AAAHHH: "+ rows + " ", file_name)
+    console.log(`PARSED JSON: ${JSON.parse(rows)}`)
 
     //THIS GENERATES AN EXCEL WORKSHEET
     const worksheet = XLSX.utils.json_to_sheet(rows);
