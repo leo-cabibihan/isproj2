@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const file_name = requestData.file_name;
 
     console.log("REQUESTDATA: ", requestData)
-    console.log("ROWS AAAHHH: ", requestData.rows + " ", requestData.file_name)
+    console.log("ROWS AAAHHH: ", rows[0] + " ", requestData.file_name)
 
     //THIS GENERATES AN EXCEL WORKSHEET
     const worksheet = XLSX.utils.json_to_sheet(rows);
