@@ -60,6 +60,13 @@ const formatTime = (timestamp) => {
                         written by {post.decrypted_charity_member?.decrypted_member_name}
                       </p>
                       <p className="text-gray-600">{post.charity?.name}</p>
+                      <div className="mt-2 flex items-center gap-x-4 text-xs">
+                      <time className="text-gray-500">
+                        {formatDate(post.date_posted) +
+                          ' ' +
+                          formatTime(post.date_posted)}
+                      </time>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -77,10 +84,6 @@ const formatTime = (timestamp) => {
                       src={CDNURL + "/" + image.name}
                       alt=""
                     />
-                    <figcaption className="mt-4 flex gap-x-2 text-sm leading-6 text-gray-500">
-                      <InformationCircleIcon className="mt-0.5 h-5 w-5 flex-none text-gray-300" aria-hidden="true" />
-                      A picture says a thousand words.
-                    </figcaption>
                   </figure>
                 )
               })}
