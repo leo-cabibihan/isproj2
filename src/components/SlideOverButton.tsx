@@ -65,6 +65,8 @@ export function SlideOver({ buttontext, children, variant, color, title }: { but
 
 export function ExportButton({ variant, color, data, filename }: { variant: VariantKey, color: ColorKey, data: any, filename: String }) {
 
+  console.log("IDK ANYMORE ", data, filename)
+
   const handleExport = async (e: any) => {
     e.preventDefault()
     const rawResponse = await fetch(
