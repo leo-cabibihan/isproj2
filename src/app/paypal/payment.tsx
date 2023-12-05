@@ -6,9 +6,15 @@ import React, { useEffect, useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import supabase from "../utils/supabase";
 import { SelectField, TextField } from "@/components/Fields";
+import { Failure, Success } from "@/components/Feedback";
 
-function Message({ content }: any) {
-    return <p>{content}</p>;
+function Message({ content, type, heading }: any) {
+    if (type == 'ERROR') {
+        return <Failure heading={heading} content={content} />;
+    }
+    else if (type == 'SUCCESS') {
+        return <Success heading={heading} content={content} />;
+    }
 }
 
 function schizoAmount(amount: any) {
@@ -82,6 +88,8 @@ export default function TestPage({ ID, UserID }: any) {
         } catch (error) {
             console.error(error);
             setMessage(`Could not initiate PayPal Checkout...${error}`);
+            setMessageType('ERROR');
+            setHeading('Transaction Failed');
         }
     }
 
@@ -95,6 +103,8 @@ export default function TestPage({ ID, UserID }: any) {
     };
 
     const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
+    const [heading, setHeading] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -219,8 +229,10 @@ export default function TestPage({ ID, UserID }: any) {
                                 const transaction =
                                     orderData.purchase_units[0].payments.captures[0];
                                 setMessage(
-                                    `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`,
+                                    `Thank you for your donation! Please check your email inbox for the transaction receipt.`,
                                 );
+                                setMessageType('SUCCESS');
+                                setHeading('Transaction Successful!')
                                 console.log(
                                     "Capture result",
                                     orderData,
@@ -237,11 +249,13 @@ export default function TestPage({ ID, UserID }: any) {
                             setMessage(
                                 `Sorry, your transaction could not be processed...${error}`,
                             );
+                            setMessageType('ERROR');
+                            setHeading('Transaction Failed.');
                         }
                     }}
                 />
             </PayPalScriptProvider>
-            <Message content={message} />
+            <Message content={message} type={messageType} heading={heading} />
         </>
     )
 
