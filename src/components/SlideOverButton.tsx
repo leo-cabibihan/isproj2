@@ -67,7 +67,7 @@ export default function SlideOver({ buttontext, children, variant, color, title 
   )
 }
 
-export function ExportTest(rows: Array) {
+export function ExportTest(rows: any[]) {
 
   XLSX.stream.set_readable(Readable);
   XLSX.set_cptable(cpexcel);
