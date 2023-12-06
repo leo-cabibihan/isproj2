@@ -13,11 +13,32 @@ import { CharityLog } from "@/app/admin/audit-log/function";
 import Alert from "@/components/Alert";
 import { Message } from "@/components/Feedback";
 
-
-
 export const revalidate = 0;
 
-export default async function beneficiaryitem({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+async function getGivenItemsData(column: any, order: any, charity_id: number) {
+    var data
+    console.log(`RESULTS ARE SORTED BY ${column}, ORDERED BY ${order}, FROM CHARITY NUMBER ${charity_id}`)
+    if ((column != null || column != undefined) || (order != null || order != undefined)) {
+        const { data: beneficiary_items, error: ben_error } = await supabase
+            .from('beneficiary_items')
+            .select('*, inventory_item ( id, name ), charity ( id, name ), event (id, name)')
+            .eq('charity_id', charity_id)
+            .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+        data = beneficiary_items
+    }
+    else {
+        const { data: beneficiary_items, error: ben_error } = await supabase
+            .from('beneficiary_items')
+            .select('*, inventory_item ( id, name ), charity ( id, name ), event (id, name)')
+            .eq('charity_id', charity_id)
+            .order('id', { ascending: true }) //if order is true, then true, otherwise false.
+        data = beneficiary_items
+    }
+
+    return data
+}
+
+export default async function beneficiaryitem({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
 
     var message = ""
     var messageType = ""
@@ -57,13 +78,14 @@ export default async function beneficiaryitem({ searchParams }: { searchParams: 
         .eq('items_donation_transaction.charity_id', charity_id)
         .order('expiry', { ascending: false })
 
-    const { data: beneficiary_items, error: ben_error } = await supabase
-        .from('beneficiary_items')
-        .select('*, inventory_item ( id, name ), charity ( id, name ), event (id, name)')
-        .eq('charity_id', charity_id)
-        .order('date', { ascending: false })
+    const column = searchParams?.column
+    const order = searchParams?.order
 
-    //CASH DATA, FORMATTED FOR EXPORTING
+    console.log(`HERE ARE THE ORDERING SETTINGS: ${column} & ${order}`)
+
+    const charityId = charity_id![0]
+    const beneficiary_items = await getGivenItemsData(column, order, charityId)
+
     const rows = beneficiary_items?.map(row => ({
         ID: row.id,
         ITEM_NAME: row.inventory_item?.name,
@@ -73,7 +95,14 @@ export default async function beneficiaryitem({ searchParams }: { searchParams: 
         DATE: formatDate(row.date) + ' ' + formatTime(row.date)
     }))
 
-    console.log("hello I am in pain. ", ben_error)
+    var orderby = "" //checks if order is true or false, then returns a string of ascending and descending respectively
+    if (order === 'true') {
+        orderby = "ascending"
+    }
+    else {
+        orderby = "descending"
+    }
+    //console.log("hello I am in pain. ", ben_error)
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
@@ -203,6 +232,71 @@ export default async function beneficiaryitem({ searchParams }: { searchParams: 
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
+                    <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
+                        <div className="flex-col">
+                            <form className='flex flex-col w-full gap-y-6' action="/dashboard/beneficiaries/given-items" method="GET">
+                                <div className="flex flex-col"> {/* Flex container for the first column */}
+                                    <label className="block text-sm font-medium text-gray-700">Sort by:</label>
+                                    <br />
+                                    <SelectField
+                                        name="column"
+                                        required
+                                    >
+                                        <option value={"id"}>id</option>
+                                        <option value={"quantity"}>quantity</option>
+                                        <option value={"date"}>date</option>
+                                    </SelectField>
+                                </div>
+                                <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
+                                    <label className="block text-sm font-medium text-gray-700">Order as:</label>
+                                    <div className="flex gap-x-4 items-center">
+                                        <div className="flex items-center">
+                                            <input
+                                                id="option1"
+                                                name="order"
+                                                type="radio"
+                                                value={true}
+                                                checked
+                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                            />
+                                            <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                Ascending
+                                            </label>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <input
+                                                id="option2"
+                                                name="order"
+                                                type="radio"
+                                                value={false}
+                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                            />
+                                            <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                Descending
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                                    <Button type='submit' variant='solid' color='green' className='w-64'>
+                                        <span>
+                                            Apply Changes <span aria-hidden="true">&rarr;</span>
+                                        </span>
+                                    </Button>
+                                </div>
+                            </form>
+                        </div>
+                    </SlideOver>
+                    <div className="font-bold mt-4 mb-4">
+                        {column && order ? (
+                            <>
+                                <p className="text-green-700 inline">Current Filters: </p>
+                                <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
+                            </>
+                        ) : (
+                            <p className="text-gray-600 italic">No filters currently active</p>
+                        )}
+                    </div>
                     <ExportTest rows={rows} fileName={`GIVEN ITEMS`} sheetName={"ITEMS"} />
                     <Table>
                         <Thead>

@@ -367,8 +367,6 @@ export default async function ExternalTable({ searchParams }: any) {
                         </div>
                     </SlideOver>
                     <br />
-                    {/* BUTTON TO EXPORT FILE */}
-                    <ExportTest rows={rows} fileName={"CASH"} sheetName={"CASH DONATIONS"} />
                     {/*Displays current filters set*/}
                     <div className="font-bold mt-4 mb-4">
                         {column && order ? (
@@ -380,6 +378,8 @@ export default async function ExternalTable({ searchParams }: any) {
                             <p className="text-gray-600 italic">No filters currently active</p>
                         )}
                     </div>
+                     {/* BUTTON TO EXPORT FILE */}
+                     <ExportTest rows={rows} fileName={"CASH"} sheetName={"CASH DONATIONS"} />
                     <Table>
                         <Thead>
                             <Tr>

@@ -16,11 +16,45 @@ import { DisplayImage } from "@/app/utils/display_image";
 import { ShowImg } from "@/components/DisplayImg";
 import { CharityLog } from "@/app/admin/audit-log/function";
 import { GetUID } from "@/app/utils/user_id";
+import { Column } from "@react-email/components";
+import { SelectField } from "@/components/Fields";
 import { Message } from "@/components/Feedback";
 
 export const revalidate = 0;
 
-export default async function Page() {
+async function getPostData(column: any, order: any, charity_id: number) {
+    var data
+    console.log(`RESULTS ARE SORTED BY ${column}, ORDERED BY ${order}, FROM CHARITY NUMBER ${charity_id}`)
+    if ((column != null || column != undefined) || (order != null || order != undefined)) {
+        const { data: posts, error } = await supabase
+            .from('campaign_post')
+            .select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )')
+            .eq('charity_id', charity_id)
+            .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+        if(column === 'date posted'){
+            const { data: posts, error } = await supabase
+                .from('campaign_post')
+                .select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )')
+                .eq('charity_id', charity_id)
+                .order('date_posted', { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+            data = posts
+            return data
+        }
+        data = posts
+    }
+    else {
+        const { data: posts, error } = await supabase
+            .from('campaign_post')
+            .select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )')
+            .eq('charity_id', charity_id)
+            .order('date_posted', { ascending: false })
+         data = posts
+    }
+
+    return data
+}
+
+export default async function Page({ searchParams }: any) {
 
     var message = ""
     var messageType = ""
@@ -47,18 +81,26 @@ export default async function Page() {
     const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
 
-    const charityId = charity_id![0]
+    const column = searchParams?.column
+    const order = searchParams?.order
 
-    const { data: posts, error } = await supabase
-        .from('campaign_post')
-        .select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )')
-        .eq('charity_id', charity_id)
-        .order('date_posted', { ascending: false })
+    console.log(`HERE ARE THE ORDERING SETTINGS: ${column} & ${order}`)
+
+    const charityId = charity_id![0]
 
     const { data: last_post, error: post_error } = await supabase
         .from('campaign_post')
         .select('*')
         .order('id', { ascending: false }).limit(1)
+
+    const posts = await getPostData(column, order, charityId)
+    var orderby = "" //checks if order is true or false, then returns a string of ascending and descending respectively
+    if (order === 'true') {
+        orderby = "ascending"
+    }
+    else {
+        orderby = "descending"
+    }
 
     const post_id = last_post?.map(post => post.id)
     console.log("LAST EVENT'S ID IS: " + (post_id![0] + 1))
@@ -203,6 +245,72 @@ export default async function Page() {
                         </SlideOver>
                     </TableHeaderButton>
                 ))}
+                <br/>
+                    <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
+                        <div className="flex-col">
+                            <form className='flex flex-col w-full gap-y-6' action="/dashboard/posts" method="GET">
+                                <div className="flex flex-col"> {/* Flex container for the first column */}
+                                    <label className="block text-sm font-medium text-gray-700">Sort by:</label>
+                                    <br />
+                                    <SelectField
+                                        name="column"
+                                        required
+                                    >
+                                        <option value={"id"}>id</option>
+                                        <option value={"title"}>title</option>
+                                        <option value={"date posted"}>date posted</option>
+                                    </SelectField>
+                                </div>
+                                <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
+                                    <label className="block text-sm font-medium text-gray-700">Order as:</label>
+                                    <div className="flex gap-x-4 items-center">
+                                        <div className="flex items-center">
+                                            <input
+                                                id="option1"
+                                                name="order"
+                                                type="radio"
+                                                value={true}
+                                                checked
+                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                            />
+                                            <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                Ascending
+                                            </label>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <input
+                                                id="option2"
+                                                name="order"
+                                                type="radio"
+                                                value={false}
+                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                            />
+                                            <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                Descending
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                                    <Button type='submit' variant='solid' color='green' className='w-64'>
+                                        <span>
+                                            Apply Changes <span aria-hidden="true">&rarr;</span>
+                                        </span>
+                                    </Button>
+                                </div>
+                            </form>
+                        </div>
+                    </SlideOver>
+                    <div className="font-bold mt-4 mb-4">
+                        {column && order ? (
+                            <>
+                                <p className="text-green-700 inline">Current Filters: </p>
+                                <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
+                            </>
+                        ) : (
+                            <p className="text-gray-600 italic">No filters currently active</p>
+                        )}
+                    </div>
                 <div className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:max-w-4xl">

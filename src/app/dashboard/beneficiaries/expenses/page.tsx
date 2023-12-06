@@ -8,20 +8,48 @@ import { Button } from '@/components/Button';
 import { Message } from '@/components/Feedback';
 import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
-
-import SlideOver, { ExportTest } from "@/components/SlideOverButton"
+import SlideOver from "@/components/SlideOverButton"
 import { TableContainer, Table, TableContent, TableHeaderButton, Tbody, Td, Thead, Tr, Th } from '@/components/Table';
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
+import { ExportTest } from '@/components/SlideOverButton';
 
 export const revalidate = 0;
 
-const header = "Expenses";
-const subheader = "A table list of expenses";
-const columns = ["Description", "Amount", "Date"];
+async function getExpenseData(column: any, order: any, charity_id: number) {
+    var data
+    console.log(`RESULTS ARE SORTED BY ${column}, ORDERED BY ${order}, FROM CHARITY NUMBER ${charity_id}`)
+    if ((column != null || column != undefined) || (order != null || order != undefined)) {
+        const { data: expenses, error } = await supabase
+            .from('expenses')
+            .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
+            .eq('charity_id', charity_id)
+            .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+        if(column === 'beneficiary name'){
+            const { data: expenses, error } = await supabase
+                .from('expenses')
+                .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
+                .eq('charity_id', charity_id)
+                .order('beneficiaries( beneficiary_name )', { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+            data = expenses
+            return data
+        }
+        data = expenses
+    }
+    else {
+        const { data: expenses, error } = await supabase
+            .from('expenses')
+            .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
+            .eq('charity_id', charity_id)
+            .order('id', { ascending: true })
+        data = expenses
+    }
 
-export default async function Expenses() {
+    return data
+}
+
+export default async function Expenses({ searchParams }: any) {
 
     var message = ""
     var messageType = ""
@@ -52,13 +80,15 @@ export default async function Expenses() {
 
     console.log("CHARITY ID IN EXPENSES IS" + charity_id)
 
-    const { data: expenses, error } = await supabase
-        .from('expenses')
-        .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
-        .eq('charity_id', charity_id)
-        .order('date', { ascending: false })
+    const column = searchParams?.column
+    const order = searchParams?.order
 
-    //CASH DATA, FORMATTED FOR EXPORTING
+    console.log(`HERE ARE THE ORDERING SETTINGS: ${column} & ${order}`)
+
+    const charityId = charity_id![0]
+    //console.log("UH OH", expenses)
+    const expenses = await getExpenseData(column, order, charityId)
+
     const rows = expenses?.map(row => ({
         EXPENSE_ID: row.id,
         EVENT: row.event?.name,
@@ -68,7 +98,13 @@ export default async function Expenses() {
         DATE: formatDate(row.date) + ' ' + formatTime(row.date)
     }))
 
-    console.log("UH OH", expenses)
+    var orderby = "" //checks if order is true or false, then returns a string of ascending and descending respectively
+    if (order === 'true') {
+        orderby = "ascending"
+    }
+    else {
+        orderby = "descending"
+    }
 
     const { data: beneficiaries, error: beneficiaries_error } = await supabase
         .from('beneficiaries')
@@ -273,6 +309,72 @@ export default async function Expenses() {
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
+                <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
+                        <div className="flex-col">
+                            <form className='flex flex-col w-full gap-y-6' action="/dashboard/beneficiaries/expenses" method="GET">
+                                <div className="flex flex-col"> {/* Flex container for the first column */}
+                                    <label className="block text-sm font-medium text-gray-700">Sort by:</label>
+                                    <br />
+                                    <SelectField
+                                        name="column"
+                                        required
+                                    >
+                                        <option value={"id"}>id</option>
+                                        <option value={"amount"}>amount</option>
+                                        <option value={"date"}>date</option>
+                                        <option value={"beneficiary name"}>beneficiary name</option>
+                                    </SelectField>
+                                </div>
+                                <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
+                                    <label className="block text-sm font-medium text-gray-700">Order as:</label>
+                                    <div className="flex gap-x-4 items-center">
+                                        <div className="flex items-center">
+                                            <input
+                                                id="option1"
+                                                name="order"
+                                                type="radio"
+                                                value={true}
+                                                checked
+                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                            />
+                                            <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                Ascending
+                                            </label>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <input
+                                                id="option2"
+                                                name="order"
+                                                type="radio"
+                                                value={false}
+                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                            />
+                                            <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                Descending
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                                    <Button type='submit' variant='solid' color='green' className='w-64'>
+                                        <span>
+                                            Apply Changes <span aria-hidden="true">&rarr;</span>
+                                        </span>
+                                    </Button>
+                                </div>
+                            </form>
+                        </div>
+                    </SlideOver>
+                    <div className="font-bold mt-4 mb-4">
+                        {column && order ? (
+                            <>
+                                <p className="text-green-700 inline">Current Filters: </p>
+                                <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
+                            </>
+                        ) : (
+                            <p className="text-gray-600 italic">No filters currently active</p>
+                        )}
+                    </div>
                     <ExportTest rows={rows} fileName={`EXPENSES`} sheetName={"LIST OF EXPENSES"} />
                     <Table>
                         <Thead>
