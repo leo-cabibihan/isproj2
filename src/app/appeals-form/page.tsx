@@ -22,11 +22,11 @@ export const metadata: Metadata = {
   title: 'Sign In',
 }
 
-export default async function Appeals({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+var message = ""
+var messageType = ""
+var heading = ""
 
-  var message = ""
-  var messageType = ""
-  var heading = ""
+export default async function Appeals({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
   console.log("DOES IT WORK???? MAYBE: " + await GetUID())
   const uid = await GetUID()

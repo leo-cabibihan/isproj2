@@ -13,11 +13,11 @@ import { Message } from '@/components/Feedback';
 
 export const revalidate = 0;
 
-export default async function Organization({ params }: any) {
+var message = ""
+var messageType = ""
+var heading = ""
 
-    var message = ""
-    var messageType = ""
-    var heading = ""
+export default async function Organization({ params }: any) {
 
     const generic_error = "Unable to Process request. Please check your data and try again."
     // Function to format the timestamp as 'mm/dd/yyy'

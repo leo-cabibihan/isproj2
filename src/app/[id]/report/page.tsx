@@ -20,15 +20,15 @@ export const revalidate = 0
 
 const plunk = new Plunk('sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db')
 
+var message = ""
+var messageType = ""
+var heading = ""
+
 export default async function Report({ params }: any) {
   const orgID = params.id
 
   const donorID = await GetUID()
   const email = await GetEmail()
-
-  var message = ""
-  var messageType = ""
-  var heading = ""
 
   const { data: orgs } = await supabase
     .from('charity')

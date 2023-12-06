@@ -38,11 +38,11 @@ async function getGivenItemsData(column: any, order: any, charity_id: number) {
     return data
 }
 
-export default async function beneficiaryitem({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
+var message = ""
+var messageType = ""
+var heading = ""
 
-    var message = ""
-    var messageType = ""
-    var heading = ""
+export default async function beneficiaryitem({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
 
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {

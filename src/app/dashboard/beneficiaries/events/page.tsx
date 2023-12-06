@@ -23,7 +23,7 @@ async function getEventData(column: any, order: any, charity_id: number) {
             .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
             .eq('charity_id', charity_id).eq('approval_status', 'APPROVED')
             .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
-        if(column === 'start date'){
+        if (column === 'start date') {
             const { data: events, error } = await supabase
                 .from('event')
                 .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
@@ -32,7 +32,7 @@ async function getEventData(column: any, order: any, charity_id: number) {
             data = events
             return data
         }
-        else if(column === 'end date'){
+        else if (column === 'end date') {
             const { data: events, error } = await supabase
                 .from('event')
                 .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
@@ -41,7 +41,7 @@ async function getEventData(column: any, order: any, charity_id: number) {
             data = events
             return data
         }
-        else if(column === 'event name'){
+        else if (column === 'event name') {
             const { data: events, error } = await supabase
                 .from('event')
                 .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
@@ -57,7 +57,7 @@ async function getEventData(column: any, order: any, charity_id: number) {
             .from('event')
             .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
             .eq('charity_id', charity_id).eq('approval_status', 'APPROVED')
-            .order('id', {ascending: false})
+            .order('id', { ascending: false })
         data = events
     }
 
@@ -73,7 +73,7 @@ async function getPendingEventData(column: any, order: any, charity_id: number) 
             .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
             .eq('charity_id', charity_id).eq('approval_status', 'ON-HOLD')
             .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
-        if(column === 'start date'){
+        if (column === 'start date') {
             const { data: pending_events, error: pending_error } = await supabase
                 .from('event')
                 .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
@@ -82,7 +82,7 @@ async function getPendingEventData(column: any, order: any, charity_id: number) 
             data = pending_events
             return data
         }
-        else if(column === 'end date'){
+        else if (column === 'end date') {
             const { data: pending_events, error: pending_error } = await supabase
                 .from('event')
                 .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
@@ -90,8 +90,8 @@ async function getPendingEventData(column: any, order: any, charity_id: number) 
                 .order('end_date', { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
             data = pending_events
             return data
-        }   
-        else if(column === 'event name'){
+        }
+        else if (column === 'event name') {
             const { data: pending_events, error: pending_error } = await supabase
                 .from('event')
                 .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
@@ -107,7 +107,7 @@ async function getPendingEventData(column: any, order: any, charity_id: number) 
             .from('event')
             .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
             .eq('charity_id', charity_id).eq('approval_status', 'ON-HOLD')
-            .order('id', {ascending: false})
+            .order('id', { ascending: false })
         data = pending_events
     }
     return data
@@ -122,7 +122,7 @@ async function getRejectedEventData(column: any, order: any, charity_id: number)
             .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
             .eq('charity_id', charity_id).eq('approval_status', 'REJECTED')
             .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
-        if(column === 'start date'){
+        if (column === 'start date') {
             const { data: rejected_events, error: rejected_error } = await supabase
                 .from('event')
                 .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
@@ -131,7 +131,7 @@ async function getRejectedEventData(column: any, order: any, charity_id: number)
             data = rejected_events
             return data
         }
-        else if(column === 'end date'){
+        else if (column === 'end date') {
             const { data: rejected_events, error: rejected_error } = await supabase
                 .from('event')
                 .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
@@ -140,7 +140,7 @@ async function getRejectedEventData(column: any, order: any, charity_id: number)
             data = rejected_events
             return data
         }
-        else if(column === 'event name'){
+        else if (column === 'event name') {
             const { data: rejected_events, error: rejected_error } = await supabase
                 .from('event')
                 .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
@@ -156,18 +156,17 @@ async function getRejectedEventData(column: any, order: any, charity_id: number)
             .from('event')
             .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
             .eq('charity_id', charity_id).eq('approval_status', 'REJECTED')
-            .order('start_date', {ascending: false})
+            .order('start_date', { ascending: false })
         data = rejected_events
     }
     return data
 }
 
+var message = ""
+var messageType = ""
+var heading = ""
 
 export default async function Page({ searchParams }: any) {
-
-    var message = ""
-    var messageType = ""
-    var heading = ""
 
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
@@ -415,73 +414,73 @@ export default async function Page({ searchParams }: any) {
                 </div>
             </div>
             <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
-                        <div className="flex-col">
-                            <form className='flex flex-col w-full gap-y-6' action="/dashboard/beneficiaries/events" method="GET">
-                                <div className="flex flex-col"> {/* Flex container for the first column */}
-                                    <label className="block text-sm font-medium text-gray-700">Sort by:</label>
-                                    <br />
-                                    <SelectField
-                                        name="column"
-                                        required
-                                    >
-                                        <option value={"id"}>id</option>
-                                        <option value={"event name"}>event name</option>
-                                        <option value={"start date"}>start date</option>
-                                        <option value={"end date"}>end date</option>
-                                    </SelectField>
-                                </div>
-                                <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
-                                    <label className="block text-sm font-medium text-gray-700">Order as:</label>
-                                    <div className="flex gap-x-4 items-center">
-                                        <div className="flex items-center">
-                                            <input
-                                                id="option1"
-                                                name="order"
-                                                type="radio"
-                                                value={true}
-                                                checked
-                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
-                                            />
-                                            <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                                                Ascending
-                                            </label>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <input
-                                                id="option2"
-                                                name="order"
-                                                type="radio"
-                                                value={false}
-                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
-                                            />
-                                            <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                                                Descending
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
-                                    <Button type='submit' variant='solid' color='green' className='w-64'>
-                                        <span>
-                                            Apply Changes <span aria-hidden="true">&rarr;</span>
-                                        </span>
-                                    </Button>
-                                </div>
-                            </form>
+                <div className="flex-col">
+                    <form className='flex flex-col w-full gap-y-6' action="/dashboard/beneficiaries/events" method="GET">
+                        <div className="flex flex-col"> {/* Flex container for the first column */}
+                            <label className="block text-sm font-medium text-gray-700">Sort by:</label>
+                            <br />
+                            <SelectField
+                                name="column"
+                                required
+                            >
+                                <option value={"id"}>id</option>
+                                <option value={"event name"}>event name</option>
+                                <option value={"start date"}>start date</option>
+                                <option value={"end date"}>end date</option>
+                            </SelectField>
                         </div>
-                    </SlideOver>
-                    <div className="font-bold mt-4 mb-4">
-                        {column && order ? (
-                            <>
-                                <p className="text-green-700 inline">Current Filters: </p>
-                                <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
-                            </>
-                        ) : (
-                            <p className="text-gray-600 italic">No filters currently active</p>
-                        )}
-                    </div>
+                        <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
+                            <label className="block text-sm font-medium text-gray-700">Order as:</label>
+                            <div className="flex gap-x-4 items-center">
+                                <div className="flex items-center">
+                                    <input
+                                        id="option1"
+                                        name="order"
+                                        type="radio"
+                                        value={true}
+                                        checked
+                                        className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                    />
+                                    <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                        Ascending
+                                    </label>
+                                </div>
+                                <div className="flex items-center">
+                                    <input
+                                        id="option2"
+                                        name="order"
+                                        type="radio"
+                                        value={false}
+                                        className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                    />
+                                    <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                        Descending
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                            <Button type='submit' variant='solid' color='green' className='w-64'>
+                                <span>
+                                    Apply Changes <span aria-hidden="true">&rarr;</span>
+                                </span>
+                            </Button>
+                        </div>
+                    </form>
+                </div>
+            </SlideOver>
+            <div className="font-bold mt-4 mb-4">
+                {column && order ? (
+                    <>
+                        <p className="text-green-700 inline">Current Filters: </p>
+                        <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
+                    </>
+                ) : (
+                    <p className="text-gray-600 italic">No filters currently active</p>
+                )}
+            </div>
             <TableContainer>
-                <TableHeaderButton header="Pending Events">                    
+                <TableHeaderButton header="Pending Events">
                     <SlideOver title="Add Event Details" buttontext="Add Event" variant="solid" color="blue">
                         <form className="space-y-6" action={handleSubmit} method="POST">
                             <TextField

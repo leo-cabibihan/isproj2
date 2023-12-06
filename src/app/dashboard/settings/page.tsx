@@ -33,11 +33,11 @@ import { revalidatePath } from 'next/cache'
 
 export const revalidate = 0
 
-export default async function Settings() {
+var message = ""
+var messageType = ""
+var heading = ""
 
-  var message = ""
-  var messageType = ""
-  var heading = ""
+export default async function Settings() {
 
   const uid = await GetUID()
   const { data: charity_member, error: error_2 } = await supabase

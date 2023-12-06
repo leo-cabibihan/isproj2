@@ -37,11 +37,12 @@ async function getInventoryData(column: any, order: any, charity_id: number) {
   return data
 }
 
+var message = ""
+var messageType = ""
+var heading = ""
+
 export default async function Page({ searchParams }: any) {
 
-  var message = ""
-  var messageType = ""
-  var heading = ""
   // Function to format the timestamp as 'mm/dd/yyy'
   const formatDate = (timestamp) => {
       const date = new Date(timestamp);

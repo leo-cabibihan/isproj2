@@ -42,11 +42,11 @@ async function getComplaintsData(column: any, order: any, charity_id: number) {
     return data
 }
 
-export default async function Page({ searchParams }: any) {
+var message = ""
+var messageType = ""
+var heading = ""
 
-    var message = ""
-    var messageType = ""
-    var heading = ""
+export default async function Page({ searchParams }: any) {
 
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {

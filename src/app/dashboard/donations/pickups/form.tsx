@@ -12,15 +12,15 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+var message = ""
+var messageType = ""
+var heading = ""
+
 export function PickupForm({ id }: { id: number }) {
   const [formFields, setFormFields] = useState<any>({})
   const [toDelete, setToDelete] = useState<number[]>([])
   const [remarks, setRemarks] = useState("")
   const [complete, setComplete] = useState(false)
-
-  var message = ""
-  var messageType = ""
-  var heading = ""
 
   console.log(remarks)
 
