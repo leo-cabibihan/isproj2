@@ -30,6 +30,8 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
 
     const [images, setImages]: any[] = useState([])
 
+    console.log("WHY OBJECT?", charityID)
+
     const charity_id = charityID.charityID
 
     async function getImages() {
