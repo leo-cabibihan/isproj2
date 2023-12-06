@@ -5,32 +5,45 @@ import supabase from '@/app/utils/supabase'
 import { GetUID } from '@/app/utils/user_id'
 import { Button } from '@/components/Button'
 import { TextField, SelectField } from '@/components/Fields'
-import SlideOver, { ExportTest } from '@/components/SlideOverButton'
-import {
-  TableContainer,
-  TableHeaderButton,
-  TableContent,
-  Table,
-  Thead,
-  Tr,
-  Td,
-  Tbody,
-  TableHeader,
-  Th,
-} from '@/components/Table'
+import SlideOver from '@/components/SlideOverButton'
+import { TableContainer, TableHeaderButton, TableContent, Table, Thead, Tr, Td, Tbody, TableHeader, Th, } from '@/components/Table'
 import { revalidatePath } from 'next/cache'
+import { ExportTest } from '@/components/SlideOverButton'
 
 export const revalidate = 0
 
-export default async function Page() {
 
+async function getInventoryData(column: any, order: any, charity_id: number) {
+  var data
+  console.log(`RESULTS ARE SORTED BY ${column}, ORDERED BY ${order}, FROM CHARITY NUMBER ${charity_id}`)
+  if ((column != null || column != undefined) || (order != null || order != undefined)) {
+      const { data: inventory, error: error_2 } = await supabase
+          .from('inventory_item')
+          .select('*, items_donation_transaction!inner(*) ')
+          .eq('items_donation_transaction.charity_id', charity_id)
+          .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+      data = inventory
+  }
+  else {
+      const { data: inventory, error: error_2 } = await supabase
+          .from('inventory_item')
+          .select('*, items_donation_transaction!inner(*) ')
+          .eq('items_donation_transaction.charity_id', charity_id)
+          .order("id", { ascending: true })
+      data = inventory
+  }
+
+  return data
+}
+
+export default async function Page({ searchParams }: any) {
   // Function to format the timestamp as 'mm/dd/yyy'
   const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${month}/${day}/${year}`;
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${month}/${day}/${year}`;
   };
 
   console.log('DOES IT WORK???? MAYBE: ' + (await GetUID()))
@@ -40,14 +53,19 @@ export default async function Page() {
     .select('*, charity ( id, name )')
     .eq('user_uuid', uid)
   const charity_id = charity_member?.map((member) => member.charity?.id)
+  const charityId = charity_id![0]
 
-  const { data: inventory, error: error_2 } = await supabase
-    .from('inventory_item')
-    .select('*, items_donation_transaction!inner(*) ')
-    .eq('items_donation_transaction.charity_id', charity_id)
-    .order('expiry', { ascending: false })
+  const column = searchParams?.column
+  const order = searchParams?.order
+  var orderby = "" //checks if order is true or false, then returns a string of ascending and descending respectively
+  if (order === 'true') {
+      orderby = "ascending"
+  }
+  else {
+      orderby = "descending"
+  }
+  const inventory = await getInventoryData(column, order, charityId)
 
-  //CASH DATA, FORMATTED FOR EXPORTING
   const rows = inventory?.map(row => ({
     RECORD_ID: row.id,
     ITEM_NAME: row.name,
@@ -106,8 +124,75 @@ export default async function Page() {
 
       <TableContainer>
         <TableHeader header={'Inventory'} />
-        <TableContent>
+        <br/>
+         <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
+           <div className="flex-col">
+               <form className='flex flex-col w-full gap-y-6' action="/dashboard/donations/inventory" method="GET">
+                   <div className="flex flex-col"> {/* Flex container for the first column */}
+                       <label className="block text-sm font-medium text-gray-700">Sort by:</label>
+                       <br />
+                       <SelectField
+                           name="column"
+                           required
+                       >
+                           <option value={"id"}>id</option>
+                           <option value={"name"}>name</option>
+                           <option value={"quantity"}>quantity</option>
+                           <option value={"expiry"}>expiry date</option>
+                       </SelectField>
+                   </div>
+                   <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
+                       <label className="block text-sm font-medium text-gray-700">Order as:</label>
+                       <div className="flex gap-x-4 items-center">
+                           <div className="flex items-center">
+                               <input
+                                   id="option1"
+                                   name="order"
+                                   type="radio"
+                                   value={true}
+                                   checked
+                                   className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                               />
+                               <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                   Ascending
+                               </label>
+                           </div>
+                           <div className="flex items-center">
+                               <input
+                                   id="option2"
+                                   name="order"
+                                   type="radio"
+                                   value={false}
+                                   className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                               />
+                               <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                   Descending
+                               </label>
+                           </div>
+                       </div>
+                   </div>
+                   <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                       <Button type='submit' variant='solid' color='green' className='w-64'>
+                           <span>
+                               Apply Changes <span aria-hidden="true">&rarr;</span>
+                           </span>
+                       </Button>
+                   </div>
+               </form>
+           </div>
+        </SlideOver>
+        <div className="font-bold mt-4 mb-4">
+          {column && order ? (
+                <>
+                    <p className="text-green-700 inline">Current Filters: </p>
+                    <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
+                </>
+            ) : (
+                <p className="text-gray-600 italic">No filters currently active</p>
+           )}
+        </div>
         <ExportTest rows={rows} fileName={"INVENTORY"} sheetName={"INVENTORY"} />
+        <TableContent>
           <Table>
             <Thead>
               <Tr>
@@ -115,6 +200,7 @@ export default async function Page() {
                 <Th>Quantity</Th>
                 <Th>Unit of Measurement</Th>
                 <Th>Perishable?</Th>
+                <Th>Expiry Date</Th>
                 <Th>Actions</Th>
               </Tr>
             </Thead>
@@ -125,6 +211,7 @@ export default async function Page() {
                   <Td>{item.quantity}</Td>
                   <Td>{item.unit_of_measurement}</Td>
                   <>{item.perishable ? <Td>Yes</Td> : <Td>No</Td>}</>
+                  <>{item.perishable ? <Td>{formatDate(item.expiry)}</Td> : <Td>N/A</Td>}</>
                   <Td>
                     <SlideOver
                       title="Item Details"

@@ -3,20 +3,57 @@ import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
 import SlideOver from "@/components/SlideOverButton";
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
-import { useParams, useRouter } from "next/navigation";
+import { SelectField } from "@/components/Fields";
+import { Button } from "@/components/Button";
+import { ExportTest } from "@/components/SlideOverButton";
 
 
+async function getDonorHistoryData(column: any, order: any, charity_id: number, donorID: number) {
+    var data
+    console.log(`RESULTS ARE SORTED BY ${column}, ORDERED BY ${order}, FROM CHARITY NUMBER ${charity_id}`)
+    if ((column != null || column != undefined) || (order != null || order != undefined)) {
+        const {data: donor_history, error: donor_historyError} = await supabase
+            .from("donor_transaction_history")
+            .select("*")
+            .eq("donor_id", donorID)
+            .eq("charity_id", charity_id)
+            .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+        if(column === 'donation date'){
+            const {data: donor_history, error: donor_historyError} = await supabase
+                .from("donor_transaction_history")
+                .select("*")
+                .eq("donor_id", donorID)
+                .eq("charity_id", charity_id)
+                .order('donation_date', { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+            data = donor_history
+            return data
+        }
+        if(column === 'event name'){
+            const {data: donor_history, error: donor_historyError} = await supabase
+                .from("donor_transaction_history")
+                .select("*")
+                .eq("donor_id", donorID)
+                .eq("charity_id", charity_id)
+                .order('event_name', { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+            data = donor_history
+            return data
+        }
+        data = donor_history
+    }
+    else {        
+        const {data: donor_history, error: donor_historyError} = await supabase
+            .from("donor_transaction_history")
+            .select("*")
+            .eq("donor_id", donorID)
+            .eq("charity_id", charity_id)
+            .order('donation_date', { ascending: true })
+        data = donor_history
+    }
 
+    return data
+}
 
-const people = [
-    { EventName: 'Yolanda', DonationType: 'InKind Donation', Date: 'January 20,2030' },
-    { EventName: 'Yolanda', DonationType: 'Cash Donation', Date: 'January 20,2030' },
-
-    // More people...
-];
-
-
-export default async function DonorHistory({params} : any) {
+export default async function DonorHistory({params, searchParams} : any) {
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -37,19 +74,34 @@ export default async function DonorHistory({params} : any) {
     const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity_id)
     //const { data: charity_member, error: error_2 } = await supabase.from('charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
+    const column = searchParams?.column
+    const order = searchParams?.order
+
+    console.log(`HERE ARE THE ORDERING SETTINGS: ${column} & ${order}`)
+
+    const charityId = charity_id![0]
+    const donor_history = await getDonorHistoryData(column, order, charityId, donorID)
+
+    const rows = donor_history?.map(row => ({
+        DONOR_ID: row.donor_id,
+        EVENT_NAME: row.event_name,
+        DONATION_TYPE: row.donation_type,
+        DATE_DONATED: formatDate(row.donation_date) + ' ' + formatTime(row.donation_date)
+    }))
+    
+    var orderby = "" //checks if order is true or false, then returns a string of ascending and descending respectively
+    if (order === 'true') {
+        orderby = "ascending"
+    }
+    else {
+        orderby = "descending"
+    }
 
     const {data: donors, error} = await supabase
     .from("donor_summary")
     .select("*")
     .eq("donor_id", donorID)
     .limit(1)
-
-    const {data: donor_history, error: donor_historyError} = await supabase
-    .from("donor_transaction_history")
-    .select("*")
-    .eq("donor_id", donorID)
-    .eq("charity_id", charity_id)
-    
  
     console.log("donor_id is: " + donorID)
     
@@ -65,6 +117,72 @@ export default async function DonorHistory({params} : any) {
                 <>
                 <TableHeader key={donor.donor_id} header={donor.decrypted_name + "'s History"} />
                     <TableContent>
+                    <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
+                        <div className="flex-col">
+                            <form className='flex flex-col w-full gap-y-6' action={"/dashboard/donations/donors/" + donor.donor_id} method="GET">
+                                <div className="flex flex-col"> {/* Flex container for the first column */}
+                                    <label className="block text-sm font-medium text-gray-700">Sort by:</label>
+                                    <br />
+                                    <SelectField
+                                        name="column"
+                                        required
+                                    >
+                                        <option value={"event name"}>event name</option>
+                                        <option value={"donation date"}>donation date</option>
+                                    </SelectField>
+                                </div>
+                                <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
+                                    <label className="block text-sm font-medium text-gray-700">Order as:</label>
+                                    <div className="flex gap-x-4 items-center">
+                                        <div className="flex items-center">
+                                            <input
+                                                id="option1"
+                                                name="order"
+                                                type="radio"
+                                                value={true}
+                                                checked
+                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                            />
+                                            <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                Ascending
+                                            </label>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <input
+                                                id="option2"
+                                                name="order"
+                                                type="radio"
+                                                value={false}
+                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                            />
+                                            <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                Descending
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                                    <Button type='submit' variant='solid' color='green' className='w-64'>
+                                        <span>
+                                            Apply Changes <span aria-hidden="true">&rarr;</span>
+                                        </span>
+                                    </Button>
+                                </div>
+                            </form>
+                        </div>
+                    </SlideOver>
+                    {/*Displays current filters set*/}
+                    <div className="font-bold mt-4 mb-4">
+                        {column && order ? (
+                            <>
+                                <p className="text-green-700 inline">Current Filters: </p>
+                                <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
+                            </>
+                        ) : (
+                            <p className="text-gray-600 italic">No filters currently active</p>
+                        )}
+                    </div>
+                    <ExportTest rows={rows} fileName={`${donor.decrypted_name}'s DONATION HISTORY`} sheetName={"DONORS"} />
                         <Table>
                             <Thead>
                                 <Tr>

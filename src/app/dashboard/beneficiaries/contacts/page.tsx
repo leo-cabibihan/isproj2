@@ -11,36 +11,73 @@ import { DisplayError } from "@/app/(auth)/error-handling/function"
 import { CharityLog } from "@/app/admin/audit-log/function"
 import { GetUID } from "@/app/utils/user_id"
 import { getURL } from '@/app/utils/url'
+import { SelectField } from "@/components/Fields"
 
 export const revalidate = 0;
 
-export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+async function getContactsData(column: any, order: any, charity_id: number) {
+  var data
+  console.log(`RESULTS ARE SORTED BY ${column}, ORDERED BY ${order}, FROM CHARITY NUMBER ${charity_id}`)
+  if ((column != null || column != undefined) || (order != null || order != undefined)) {
+      const { data: contacts } = await supabase.from('beneficiaries')
+        .select("*")
+        .eq('charity_id', charity_id)
+        .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+      if(column === 'beneficiary name'){
+        const { data: contacts } = await supabase.from('beneficiaries')
+          .select("*")
+          .eq('charity_id', charity_id)
+          .order('beneficiary_name', { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+        data = contacts
+        return data
+      }
+      data = contacts
+  }
+  else {        
+      const { data: contacts } = await supabase.from('beneficiaries')
+        .select("*")
+        .eq('charity_id', charity_id)
+        .order('id', { ascending: true })
+      data = contacts
+  }
 
+  return data
+}
+
+export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined }}) {
   // Function to format the timestamp as 'mm/dd/yyy'
-  const formatDate = (timestamp) => {
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${month}/${day}/${year}`;
-  };
-
+    const formatDate = (timestamp) => {
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${month}/${day}/${year}`;
+  }
   // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
   const formatTime = (timestamp) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
   };
-
+    
   const uid = await GetUID()
   const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid).single()
   const charity_id = charity_member?.charity?.id
   const charity_name = charity_member?.charity?.name
+  const column = searchParams?.column
+  const order = searchParams?.order
 
-  const generic_error = "Transaction error. Please check your data and try again."
+  console.log(`HERE ARE THE ORDERING SETTINGS: ${column} & ${order}`)
 
-  const { data: contacts } = await supabase.from('beneficiaries').select("*").order("id", { ascending: true }).eq('charity_id', charity_id).order('date', { ascending: false })
+  const charityId = charity_id
+  const contacts = await getContactsData(column, order, charityId)
 
-  //CASH DATA, FORMATTED FOR EXPORTING
+  var orderby = "" //checks if order is true or false, then returns a string of ascending and descending respectively
+  if (order === 'true') {
+      orderby = "ascending"
+  }
+  else {
+      orderby = "descending"
+  }
   const rows = contacts?.map(row => ({
     BENEFICIARY_ID: row.id,
     BENEFICIARY_NAME: row.beneficiary_name,
@@ -48,6 +85,9 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     CONTACT_NUMBER: row.contact,
     DATE_ADDED: formatDate(row.date) + ' ' + formatTime(row.date)
   }))
+
+  const generic_error = "Transaction error. Please check your data and try again."
+
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
@@ -154,6 +194,72 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
         </TableHeaderButton>
         <TableContent>
+            <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
+              <div className="flex-col">
+                  <form className='flex flex-col w-full gap-y-6' action="/dashboard/beneficiaries/contacts" method="GET">
+                      <div className="flex flex-col"> {/* Flex container for the first column */}
+                          <label className="block text-sm font-medium text-gray-700">Sort by:</label>
+                          <br />
+                          <SelectField
+                              name="column"
+                              required
+                          >
+                              <option value={"id"}>id</option>
+                              <option value={"beneficiary name"}>beneficiary name</option>
+                              <option value={"date"}>date</option>
+                          </SelectField>
+                      </div>
+                      <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
+                          <label className="block text-sm font-medium text-gray-700">Order as:</label>
+                          <div className="flex gap-x-4 items-center">
+                              <div className="flex items-center">
+                                  <input
+                                      id="option1"
+                                      name="order"
+                                      type="radio"
+                                      value={true}
+                                      checked
+                                      className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                  />
+                                  <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                      Ascending
+                                  </label>
+                              </div>
+                              <div className="flex items-center">
+                                  <input
+                                      id="option2"
+                                      name="order"
+                                      type="radio"
+                                      value={false}
+                                      className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                  />
+                                  <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                      Descending
+                                  </label>
+                              </div>
+                          </div>
+                      </div>
+                      <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                          <Button type='submit' variant='solid' color='green' className='w-64'>
+                              <span>
+                                  Apply Changes <span aria-hidden="true">&rarr;</span>
+                              </span>
+                          </Button>
+                      </div>
+                  </form>
+              </div>
+          </SlideOver>
+          {/*Displays current filters set*/}
+          <div className="font-bold mt-4 mb-4">
+              {column && order ? (
+                  <>
+                      <p className="text-green-700 inline">Current Filters: </p>
+                      <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
+                  </>
+              ) : (
+                  <p className="text-gray-600 italic">No filters currently active</p>
+              )}
+          </div>
           <ExportTest rows={rows} fileName={`${charity_name}'s BENEFICIARIES`} sheetName={"BENEFICIARIES"} />
           <Table>
             <Thead>
@@ -161,6 +267,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                 <Th>Name</Th>
                 <Th>Contact Number</Th>
                 <Th>Address</Th>
+                <Th>Date Added</Th>
                 <Th>Actions</Th>
               </Tr>
             </Thead>
@@ -170,6 +277,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                   <Td>{contact.beneficiary_name}</Td>
                   <Td>{contact.contact}</Td>
                   <Td>{contact.address}</Td>
+                  <Td>{formatDate(contact.date) + ' ' + formatTime(contact.date)}</Td>
                   <Td>
                     {/* This is the EDIT CONTACT form */}
                     <SlideOver title="Edit Contact Details" buttontext="View Details" variant="solid" color="blue">

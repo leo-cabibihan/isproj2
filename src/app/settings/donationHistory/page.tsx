@@ -11,6 +11,9 @@ import { Logo } from '@/components/Logo'
 import { GetUID } from '@/app/utils/user_id'
 import supabase from '@/app/utils/supabase'
 import { ExportTest } from '@/components/SlideOverButton'
+import SlideOver from '@/components/SlideOverButton'
+import { SelectField } from '@/components/Fields'
+import { Button } from '@/components/Button'
 
 const user = {
   name: 'Tom Cook',
@@ -42,7 +45,49 @@ function classNames(...classes: String[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default async function donationHistory() {
+export const revalidate = 0
+
+async function getDonationHistoryData(column: any, order: any, currentDonor: any) {
+  var data
+  if ((column != null || column != undefined) || (order != null || order != undefined)) {
+    const { data: donor_history, error: donor_historyError } = await supabase
+      .from("donor_transaction_history")
+      .select("*")
+      .eq("donor_id", currentDonor)
+      .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+      if(column === 'donation date'){
+        const { data: donor_history, error: donor_historyError } = await supabase
+          .from("donor_transaction_history")
+          .select("*")
+          .eq("donor_id", currentDonor)
+          .order('donation_date', { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+        data = donor_history
+        return data
+      }
+      if(column === 'event name'){
+        const { data: donor_history, error: donor_historyError } = await supabase
+          .from("donor_transaction_history")
+          .select("*")
+          .eq("donor_id", currentDonor)
+          .order('event_name', { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
+        data = donor_history
+        return data
+      }
+      data = donor_history
+  }
+  else {        
+    const { data: donor_history, error: donor_historyError } = await supabase
+      .from("donor_transaction_history")
+      .select("*")
+      .eq("donor_id", currentDonor)
+      .order('donation_date', { ascending: false })
+    data = donor_history
+  }
+
+  return data
+}
+
+export default async function donationHistory({ searchParams }: any) {
   // Function to format the timestamp as 'mm/dd/yyy'
   const formatDate = (timestamp) => {
     const date = new Date(timestamp);
@@ -57,6 +102,8 @@ export default async function donationHistory() {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
   };
+  const column = searchParams?.column
+  const order = searchParams?.order
 
   const uid = await GetUID()
   const { data: donor, error: donorsError2 } = await supabase
@@ -65,18 +112,22 @@ export default async function donationHistory() {
     .eq("id", uid)
   const currentDonor = donor?.map(donor => (donor.id))
 
+  const donor_history = await getDonationHistoryData(column, order, currentDonor)
+
+  var orderby = "" //checks if order is true or false, then returns a string of ascending and descending respectively
+  if (order === 'true') {
+      orderby = "ascending"
+  }
+  else {
+      orderby = "descending"
+  }
+
   const { data: donors, error: donorsError } = await supabase
     .from("decrypted_donor")
     .select("*")
     .eq("id", currentDonor)
     .limit(1)
 
-  const { data: donor_history, error: donor_historyError } = await supabase
-    .from("donor_transaction_history")
-    .select("*")
-    .eq("donor_id", currentDonor)
-
-  //CASH DATA, FORMATTED FOR EXPORTING
   const rows = donor_history?.map(row => ({
     DONOR_NAME: row.name,
     DONATION_TYPE: row.donation_type,
@@ -109,6 +160,71 @@ export default async function donationHistory() {
                   <div className="mt-8 flow-root">
                     <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                       <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                        <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
+                          <div className="flex-col">
+                              <form className='flex flex-col w-full gap-y-6' action={"/settings/donationHistory"} method="GET">
+                                  <div className="flex flex-col"> {/* Flex container for the first column */}
+                                      <label className="block text-sm font-medium text-gray-700">Sort by:</label>
+                                      <br />
+                                      <SelectField
+                                          name="column"
+                                          required
+                                      >
+                                          <option value={"event name"}>event name</option>
+                                          <option value={"donation date"}>donation date</option>
+                                      </SelectField>
+                                  </div>
+                                  <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
+                                      <label className="block text-sm font-medium text-gray-700">Order as:</label>
+                                      <div className="flex gap-x-4 items-center">
+                                          <div className="flex items-center">
+                                              <input
+                                                  id="option1"
+                                                  name="order"
+                                                  type="radio"
+                                                  value={true}
+                                                  checked
+                                                  className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                              />
+                                              <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                  Ascending
+                                              </label>
+                                          </div>
+                                          <div className="flex items-center">
+                                              <input
+                                                  id="option2"
+                                                  name="order"
+                                                  type="radio"
+                                                  value={false}
+                                                  className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                              />
+                                              <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                                  Descending
+                                              </label>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                                      <Button type='submit' variant='solid' color='green' className='w-64'>
+                                          <span>
+                                              Apply Changes <span aria-hidden="true">&rarr;</span>
+                                          </span>
+                                      </Button>
+                                  </div>
+                              </form>
+                          </div>
+                        </SlideOver>
+                        {/*Displays current filters set*/}
+                        <div className="font-bold mt-4 mb-4">
+                            {column && order ? (
+                                <>
+                                    <p className="text-green-700 inline">Current Filters: </p>
+                                    <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
+                                </>
+                            ) : (
+                                <p className="text-gray-600 italic">No filters currently active</p>
+                            )}
+                        </div>
                         <ExportTest rows={rows} fileName={`YOUR DONATION HISTORY`} sheetName={"DONATION HISTORY"} />
                         <table className="min-w-full divide-y divide-gray-300">
                           <thead>
