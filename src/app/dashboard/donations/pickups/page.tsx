@@ -1,7 +1,7 @@
-// @ts-nocheck 
+//@ts-nocheck
 import { Button } from "@/components/Button";
 import { SelectField, TextField } from "@/components/Fields";
-import SlideOver from "@/components/SlideOverButton";
+import SlideOver, { ExportTest } from "@/components/SlideOverButton";
 import { TableContainer, TableHeader, TableContent, Table, Thead, Tr, Td, Tbody, TableHeaderButton, Th } from "@/components/Table";
 import { PickupForm } from "./form";
 import supabase from "@/app/utils/supabase";
@@ -35,15 +35,24 @@ export default async function Page() {
     console.log("DOES IT WORK???? MAYBE: " + await GetUID())
     const uid = await GetUID()
     const { data: charity_member, error: idk } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
-    const charity_id = charity_member?.map(member => member.charity?.id)  
+    const charity_id = charity_member?.map(member => member.charity?.id)
 
     const { data: items, error } = await supabase.from('items_donation_transaction')
-    .select('*, charity ( id, name ), address ( * ), decrypted_donor ( id, decrypted_name )')
-    .eq('verify', false).eq('charity_id', charity_id)
-    .order('date', {ascending: false})
+        .select(`*, inventory_item ( * ), charity ( id, name ), address ( * ), decrypted_donor ( id, decrypted_name )`)
+        .eq('verify', false).eq('charity_id', charity_id)
+        .order('date', { ascending: false })
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows = items?.map(row => ({
+        RECORD_ID: row.id,
+        DONATED_BY: row.decrypted_donor?.decrypted_name,
+        DONOR_ID: row.donor_id,
+        DONATION_DATE: formatDate(row.date) + ' ' + formatTime(row.date),
+        DONATION_ITEMS: JSON.stringify(row.inventory_item)
+    }))
 
     const { data: inventory, error: error_2 } = await supabase.from('inventory_item').select('*, items_donation_transaction ( *, charity ( id, name ), address ( * ), decrypted_donor ( id, decrypted_name ) )')
- 
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -52,8 +61,9 @@ export default async function Page() {
             </div>
 
             <TableContainer>
-                <TableHeader header={"Pick-up Items"}/>
+                <TableHeader header={"Pick-up Items"} />
                 <TableContent>
+                    <ExportTest rows={rows} fileName={"VERIFIED DONATIONS"} sheetName={"VERIFIED"} />
                     <Table>
                         <Thead>
                             <Tr>
