@@ -1,4 +1,4 @@
-// @ts-nocheck 
+//@ts-nocheck
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { SelectField, TextField } from '@/components/Fields'
 import { Table, TableContainer, TableContent, TableHeaderButton, Tbody, Td, Th, Thead, Tr } from '@/components/Table';
@@ -34,9 +34,20 @@ export default async function VerifiedTable() {
   const charity_id = charity_member?.map(member => member.charity?.id)
 
   const { data: items, error } = await supabase.from('items_donation_transaction')
-  .select('*, charity ( id, name ), address ( * ), decrypted_donor ( id, decrypted_name )')
+  .select(`*, inventory_item ( * ), charity ( id, name ), address ( * ), decrypted_donor ( id, decrypted_name )`)
   .eq('verify', true).eq('charity_id', charity_id)
   .order('date', {ascending: false})
+
+  //CASH DATA, FORMATTED FOR EXPORTING
+  const rows = items?.map(row => ({
+    RECORD_ID: row.id,
+    DONATED_BY: row.decrypted_donor?.decrypted_name,
+    DONOR_ID: row.donor_id,
+    DONATION_DATE: formatDate(row.date) + ' ' + formatTime(row.date),
+    DONATION_ITEMS: row.inventory_item
+  }))
+
+  console.log("HOW DOES THIS LOOK LIKE? ", rows)
   
   const { data: inventory, error: error_2 } = await supabase.from('inventory_item').select('*, items_donation_transaction ( *, charity ( id, name ), address ( * ), decrypted_donor ( id, decrypted_name ) )')
 
