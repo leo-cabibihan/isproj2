@@ -40,12 +40,12 @@ async function getCashData(column: any, order: any, charity_id: number) {
 
     return data
 }
-//e
-export default async function ExternalTable({ searchParams }: any) {
 
-    var message = ""
-    var messageType = ""
-    var heading = ""
+var message = ""
+var messageType = ""
+var heading = ""
+
+export default async function ExternalTable({ searchParams }: any) {
 
     console.log("DO SEARCHPARAMS WORK? ", searchParams)
     console.log(`PARAMS SIZE IS ${Object.keys(searchParams).length}`)
@@ -378,8 +378,8 @@ export default async function ExternalTable({ searchParams }: any) {
                             <p className="text-gray-600 italic">No filters currently active</p>
                         )}
                     </div>
-                     {/* BUTTON TO EXPORT FILE */}
-                     <ExportTest rows={rows} fileName={"CASH"} sheetName={"CASH DONATIONS"} />
+                    {/* BUTTON TO EXPORT FILE */}
+                    <ExportTest rows={rows} fileName={"CASH"} sheetName={"CASH DONATIONS"} />
                     <Table>
                         <Thead>
                             <Tr>
