@@ -14,10 +14,15 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { PayPal } from '@/components/paypal/CashForm'
 import TestPage from '@/app/paypal/payment'
 import { useRouter } from 'next/navigation'
+import { Failure, Success } from '@/components/Feedback'
 
-// Renders errors or successfull transactions on the screen.
-function Message({ content }) {
-  return <p>{content}</p>
+function Message({ content, type, heading }: any) {
+  if (type == 'ERROR') {
+    return <Failure heading={heading} content={content} />;
+  }
+  else if (type == 'SUCCESS') {
+    return <Success heading={heading} content={content} />;
+  }
 }
 
 export function FormComponent({ ID, DonorID }: any) {
@@ -67,6 +72,11 @@ export function FormComponent({ ID, DonorID }: any) {
 }
 
 export function GoodsForm({ ID, UserID }: any) {
+
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [heading, setHeading] = useState("");
+
   const [formFields, setFormFields] = useState([
     {
       name: '',
@@ -120,10 +130,20 @@ export function GoodsForm({ ID, UserID }: any) {
           }),
         },
       )
+
+      setMessage("Donation Successful");
+      setMessageType('SUCCESS');
+      setHeading('Donation Complete!')
+
       console.log('plz redirect')
       setError(null)
       router.push('/thankyou')
     } catch (error) {
+      console.log("Error Donating. See Details: \n", error)
+      const temp_message = "Error Donating. See Donation Details and try again."
+      setMessage(temp_message);
+      setMessageType('ERROR');
+      setHeading('Donation Error!')
       console.log(error.message)
       setError(error.message)
     }
@@ -374,6 +394,7 @@ export function GoodsForm({ ID, UserID }: any) {
           </div>
         </div>
       </form>
+      <Message content={message} type={messageType} heading={heading} />
     </div>
   )
 }
