@@ -67,7 +67,7 @@ export default function SlideOver({ buttontext, children, variant, color, title 
   )
 }
 
-export function ExportTest({rows, fileName} : {rows: any[], fileName: String}) {
+export function ExportTest({rows, fileName, sheetName} : {rows: any[], fileName: String, sheetName: String}) {
 
   XLSX.stream.set_readable(Readable);
   XLSX.set_cptable(cpexcel);
@@ -76,6 +76,7 @@ export function ExportTest({rows, fileName} : {rows: any[], fileName: String}) {
   const destructured_rows = rows
   const destructure_file_name = fileName
   const file_name = `${destructure_file_name}.xlsx`
+  const sheet_name = sheetName
 
   return (
     <>
@@ -105,19 +106,20 @@ export function ExportTest({rows, fileName} : {rows: any[], fileName: String}) {
           console.log("HOW DOES THE EXAMPLE DATA LOOK LIKE? " + old_rows)
           console.log("IS THE ACTUAL DATA AN ARRAY THO?? " + Array.isArray(destructured_rows) ? "YES":"NO")
           console.log("FILENAME IS: " + file_name)
+          console.log('SHEET NAME IS: ' + sheet_name)
 
 
           /* generate worksheet and workbook */
           const worksheet = XLSX.utils.json_to_sheet(destructured_rows);
           const workbook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(workbook, worksheet, "EXPORTED TABLE");
+          XLSX.utils.book_append_sheet(workbook, worksheet, sheet_name);
 
           // /* calculate column width */
           // const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
           // worksheet["!cols"] = [{ wch: max_width }];
 
           /* create an XLSX file and try to save to Presidents.xlsx */
-          XLSX.writeFile(workbook, "Presidents.xlsx", { compression: true });
+          XLSX.writeFile(workbook, file_name, { compression: true });
         }
       } >TEST</Button>
     </>
