@@ -1,8 +1,8 @@
-// @ts-nocheck
+//@ts-nocheck
 import { Button } from "@/components/Button";
 import { SelectField, TextField } from "@/components/Fields";
 import { CDNURL, ImageUpload, imgPath } from "@/components/ImgUpload";
-import SlideOver from "@/components/SlideOverButton";
+import SlideOver, { ExportTest } from "@/components/SlideOverButton";
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeader, TableContent, TableHeaderButton } from "@/components/Table";
 import { revalidatePath } from "next/cache";
 import { GetUID } from "@/app/utils/user_id";
@@ -43,19 +43,19 @@ export default async function Page() {
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', charity_id).eq('approval_status', 'APPROVED')
-        .order('start_date', {ascending: false})
+        .order('start_date', { ascending: false })
 
     const { data: pending_events, error: pending_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', charity_id).eq('approval_status', 'ON-HOLD')
-        .order('start_date', {ascending: false})
+        .order('start_date', { ascending: false })
 
     const { data: rejected_events, error: rejected_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', charity_id).eq('approval_status', 'REJECTED')
-        .order('start_date', {ascending: false})
+        .order('start_date', { ascending: false })
 
     const { data: last_event, error: event_error } = await supabase
         .from('event')
@@ -64,6 +64,42 @@ export default async function Page() {
 
     const event_id = last_event?.map(event => event.id)
     console.log("LAST EVENT'S ID IS: " + (event_id))
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows_1 = events?.map(row => ({
+        ID: row.id,
+        EVENT_NAME: row.name,
+        DESCRIPTION: row.description,
+        BENEFICIARY: row.beneficiaries?.beneficiary_name,
+        START_DATE: (row.start_date != null || row.start_date != undefined) ? `${formatDate(row.start_date)}, ${formatTime(row.start_date)}` : "N/A",
+        END_DATE: (row.end_date != null || row.end_date != undefined) ? `${formatDate(row.end_date)}, ${formatTime(row.end_date)}` : "N/A",
+        APPROVAL_STATUS: row.approval_status,
+        REJECTION_REASON: (row.rejection_reason != null || row.rejection_reason != undefined) ? row.rejection_reason : "N/A"
+    }))
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows_2 = pending_events?.map(row => ({
+        ID: row.id,
+        EVENT_NAME: row.name,
+        DESCRIPTION: row.description,
+        BENEFICIARY: row.beneficiaries?.beneficiary_name,
+        START_DATE: (row.start_date != null || row.start_date != undefined) ? `${formatDate(row.start_date)}, ${formatTime(row.start_date)}` : "N/A",
+        END_DATE: (row.end_date != null || row.end_date != undefined) ? `${formatDate(row.end_date)}, ${formatTime(row.end_date)}` : "N/A",
+        APPROVAL_STATUS: row.approval_status,
+        REJECTION_REASON: (row.rejection_reason != null || row.rejection_reason != undefined) ? row.rejection_reason : "N/A"
+    }))
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows_3 = rejected_events?.map(row => ({
+        ID: row.id,
+        EVENT_NAME: row.name,
+        DESCRIPTION: row.description,
+        BENEFICIARY: row.beneficiaries?.beneficiary_name,
+        START_DATE: (row.start_date != null || row.start_date != undefined) ? `${formatDate(row.start_date)}, ${formatTime(row.start_date)}` : "N/A",
+        END_DATE: (row.end_date != null || row.end_date != undefined) ? `${formatDate(row.end_date)}, ${formatTime(row.end_date)}` : "N/A",
+        APPROVAL_STATUS: row.approval_status,
+        REJECTION_REASON: (row.rejection_reason != null || row.rejection_reason != undefined) ? row.rejection_reason : "N/A"
+    }))
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
@@ -228,6 +264,7 @@ export default async function Page() {
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
+                    <ExportTest rows={rows_2} fileName={"PENDING EVENTS"} sheetName={"EVENTS"} />
                     <Table>
                         <Thead>
                             <Tr>
@@ -359,6 +396,7 @@ export default async function Page() {
             <TableContainer>
                 <TableHeader header="Approved Events" />
                 <TableContent>
+                    <ExportTest rows={rows_1} fileName={"APPROVED EVENTS"} sheetName={"EVENTS"} />
                     <Table>
                         <Thead>
                             <Tr>
@@ -501,6 +539,7 @@ export default async function Page() {
             <TableContainer>
                 <TableHeader header="Rejected Events" />
                 <TableContent>
+                    <ExportTest rows={rows_3} fileName={"REJECTED EVENTS"} sheetName={"EVENTS"} />
                     <Table>
                         <Thead>
                             <Tr>

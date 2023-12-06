@@ -1,6 +1,6 @@
-// @ts-nocheck
+//@ts-nocheck
 import { Table, TableContainer, TableContent, TableHeaderButton, Tbody, Td, Th, Thead, Tr } from "@/components/Table"
-import SlideOver from "@/components/SlideOverButton"
+import SlideOver, { ExportTest } from "@/components/SlideOverButton"
 import { TextField } from "@/components/Fields"
 import { Button } from "@/components/Button"
 import supabase from "@/app/utils/supabase"
@@ -16,13 +16,38 @@ export const revalidate = 0;
 
 export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
+  // Function to format the timestamp as 'mm/dd/yyy'
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${month}/${day}/${year}`;
+  };
+
+  // Function to format the time as 'h:mm a' (e.g., '2:30 PM')
+  const formatTime = (timestamp) => {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  };
+
   const uid = await GetUID()
   const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid).single()
   const charity_id = charity_member?.charity?.id
+  const charity_name = charity_member?.charity?.name
 
   const generic_error = "Transaction error. Please check your data and try again."
 
-  const { data: contacts } = await supabase.from('beneficiaries').select("*").order("id", { ascending: true }).eq('charity_id', charity_id).order('date', {ascending: false})
+  const { data: contacts } = await supabase.from('beneficiaries').select("*").order("id", { ascending: true }).eq('charity_id', charity_id).order('date', { ascending: false })
+
+  //CASH DATA, FORMATTED FOR EXPORTING
+  const rows = contacts?.map(row => ({
+    BENEFICIARY_ID: row.id,
+    BENEFICIARY_NAME: row.beneficiary_name,
+    ADDRESS: row.address,
+    CONTACT_NUMBER: row.contact,
+    DATE_ADDED: formatDate(row.date) + ' ' + formatTime(row.date)
+  }))
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
@@ -35,14 +60,14 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
     const { data: beneficiary_insert, error: insert_error } = await supabase.from('beneficiaries').insert(beneficiary).select();
     revalidatePath('/');
-    console.log("THE ERROR IS: ", beneficiary_insert, insert_error)    
+    console.log("THE ERROR IS: ", beneficiary_insert, insert_error)
     DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/contacts?err=${generic_error}`, insert_error)
 
     CharityLog("ADDED BENEFICIARY " + beneficiary_insert![0].beneficiary_name + " ON " + beneficiary_insert![0].date + ".", insert_error)
     console.log("ERROR IS ", insert_error)
 
   };
- 
+
   const saveChanges = async (formData: FormData) => {
     'use server'
     const contactId = formData.get("id")
@@ -129,6 +154,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
         </TableHeaderButton>
         <TableContent>
+          <ExportTest rows={rows} fileName={`${charity_name}'s BENEFICIARIES`} sheetName={"BENEFICIARIES"} />
           <Table>
             <Thead>
               <Tr>

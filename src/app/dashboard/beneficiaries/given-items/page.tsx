@@ -1,7 +1,7 @@
-// @ts-nocheck
+//@ts-nocheck
 import { Button } from "@/components/Button";
 import { SelectField, TextField } from "@/components/Fields";
-import SlideOver from "@/components/SlideOverButton";
+import SlideOver, { ExportTest } from "@/components/SlideOverButton";
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeaderButton, TableContent } from "@/components/Table";
 import { TableHeader } from "@/components/table/Table";
 import { DisplayError } from '@/app/(auth)/error-handling/function';
@@ -16,7 +16,7 @@ import Alert from "@/components/Alert";
 
 export const revalidate = 0;
 
-export default async function beneficiaryitem({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
+export default async function beneficiaryitem({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -43,19 +43,29 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', charity_id).eq('is_ongoing', true).eq('approval_status', "APPROVED")
-        .order('start_date', {ascending: false})
+        .order('start_date', { ascending: false })
 
     console.log("EVENTS ERROR", events_error)
 
     const { data: inventory, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ')
-    .eq('items_donation_transaction.charity_id', charity_id)
-    .order('expiry', {ascending: false})
+        .eq('items_donation_transaction.charity_id', charity_id)
+        .order('expiry', { ascending: false })
 
     const { data: beneficiary_items, error: ben_error } = await supabase
         .from('beneficiary_items')
         .select('*, inventory_item ( id, name ), charity ( id, name ), event (id, name)')
         .eq('charity_id', charity_id)
-        .order('date', {ascending: false})
+        .order('date', { ascending: false })
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows = beneficiary_items?.map(row => ({
+        ID: row.id,
+        ITEM_NAME: row.inventory_item?.name,
+        EVENT: row.event?.name,
+        QUANTITY: row.quantity,
+        DESCRIPTION: row.description,
+        DATE: formatDate(row.date) + ' ' + formatTime(row.date)
+    }))
 
     console.log("hello I am in pain. ", ben_error)
 
@@ -65,11 +75,11 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
         const current_item_id = formData.get("item_id")
 
         const { data: item_to_add, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', charity_id).eq("id", current_item_id).single()
-        
+
         const inventoryQuantity = item_to_add?.quantity as number - parseInt(formData.get("amount") as string)
-              
-        const { error: idk } = await supabase.from('inventory_item').update({quantity: inventoryQuantity}).eq("id", current_item_id)
-        
+
+        const { error: idk } = await supabase.from('inventory_item').update({ quantity: inventoryQuantity }).eq("id", current_item_id)
+
         const item = {
             item_id: current_item_id,
             charity_id: parseInt(charity_id),
@@ -87,7 +97,7 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
         console.log("I am tired. ", error_3, idk, error)
 
     };
- 
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -98,7 +108,7 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
                 <TableHeaderButton header="Given Items">
                     <SlideOver title="Add Item Details" buttontext="Add Item" variant="solid" color="blue">
                         <form className="space-y-6" action={handleSubmit} method="POST">
-                            {searchParams.err && <Alert message={searchParams.err as string}/>}
+                            {searchParams.err && <Alert message={searchParams.err as string} />}
 
                             <TextField
                                 label=""
@@ -175,6 +185,7 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
+                    <ExportTest rows={rows} fileName={`GIVEN ITEMS`} sheetName={"ITEMS"} />
                     <Table>
                         <Thead>
                             <Tr>
@@ -195,50 +206,50 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
                                     <Td>{formatDate(item.date) + ' ' + formatTime(item.date)}</Td>
                                     <Td>
                                         <SlideOver title="Item Details" buttontext="View Details" variant="solid" color="blue">
-                                                <TextField
-                                                    label=""
-                                                    name="charity_id"
-                                                    type="hidden"
-                                                    defaultValue={item.id}
-                                                    readOnly
-                                                    required
-                                                />
-                                                <br/>
-                                                <TextField
-                                                    label="Event"
-                                                    name="event_name"
-                                                    type="text"
-                                                    defaultValue={item.event.name}
-                                                    readOnly
-                                                    required
-                                                />
-                                                <br/>
-                                                <TextField
-                                                    label="Item Name"
-                                                    name="name"
-                                                    type="text"
-                                                    defaultValue={item.inventory_item?.name}
-                                                    readOnly
-                                                    required
-                                                />
-                                                <br/>
-                                                 <TextField
-                                                    label="Quantity"
-                                                    name="amount"
-                                                    type="text"
-                                                    defaultValue={item.quantity}
-                                                    readOnly
-                                                    required
-                                                />
-                                                <br/>
-                                                <TextField
-                                                    label="Date"
-                                                    name="date"
-                                                    type="text"
-                                                    defaultValue={formatDate(item.date) + ' ' + formatTime(item.date)}
-                                                    readOnly
-                                                    required
-                                                />
+                                            <TextField
+                                                label=""
+                                                name="charity_id"
+                                                type="hidden"
+                                                defaultValue={item.id}
+                                                readOnly
+                                                required
+                                            />
+                                            <br />
+                                            <TextField
+                                                label="Event"
+                                                name="event_name"
+                                                type="text"
+                                                defaultValue={item.event.name}
+                                                readOnly
+                                                required
+                                            />
+                                            <br />
+                                            <TextField
+                                                label="Item Name"
+                                                name="name"
+                                                type="text"
+                                                defaultValue={item.inventory_item?.name}
+                                                readOnly
+                                                required
+                                            />
+                                            <br />
+                                            <TextField
+                                                label="Quantity"
+                                                name="amount"
+                                                type="text"
+                                                defaultValue={item.quantity}
+                                                readOnly
+                                                required
+                                            />
+                                            <br />
+                                            <TextField
+                                                label="Date"
+                                                name="date"
+                                                type="text"
+                                                defaultValue={formatDate(item.date) + ' ' + formatTime(item.date)}
+                                                readOnly
+                                                required
+                                            />
                                         </SlideOver>
                                     </Td>
                                 </Tr>

@@ -1,11 +1,11 @@
-// @ts-nocheck 
+//@ts-nocheck
 import { CharityLog } from "@/app/admin/audit-log/function";
 import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
 import { TextField } from "@/components/Fields";
 import { ImageUpload } from "@/components/ImgUpload";
-import SlideOver from "@/components/SlideOverButton";
+import SlideOver, { ExportTest } from "@/components/SlideOverButton";
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
 import { revalidatePath } from "next/cache";
 
@@ -31,11 +31,20 @@ export default async function Page() {
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
+    const charity_name = charity_member?.map(member => member.charity?.name)
 
     const { data: complaints } = await supabase.from('donor_complaints')
-    .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name )')
-    .eq('charity_id', charity_id)
-    .order('created_at', {ascending: false})
+        .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name )')
+        .eq('charity_id', charity_id)
+        .order('created_at', { ascending: false })
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows = complaints?.map(row => ({
+        RECORD_ID: row.id,
+        COMPLAINT_DETAILS: row.complaint,
+        DONOR: row.decrypted_donor?.decrypted_name,
+        CREATED_AT: formatDate(row.created_at) + ' ' + formatTime(row.created_at)
+    }))
 
     const { data: last_appeal, error: event_error } = await supabase
         .from('charity_appeals')
@@ -58,7 +67,7 @@ export default async function Page() {
         CharityLog("FILED APPEAL", error)
         console.log("APPEALS ERROR IS: ", error)
         revalidatePath('/');
-    }; 
+    };
 
     return (
         <>
@@ -69,6 +78,7 @@ export default async function Page() {
             <TableContainer>
                 <TableHeader header="Complaints" />
                 <TableContent>
+                    <ExportTest rows={rows} fileName={`COMPLAINTS AGAINST ${charity_name}`} sheetName={"COMPLAINTS"} />
                     <Table>
                         <Thead>
                             <Tr>

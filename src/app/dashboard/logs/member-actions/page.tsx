@@ -1,7 +1,8 @@
-// @ts-nocheck 
+//@ts-nocheck
 import supabase from "@/app/utils/supabase"
 import { GetUID } from "@/app/utils/user_id"
 import { Button } from "@/components/Button"
+import { ExportTest } from "@/components/SlideOverButton"
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from "@/components/Table"
 
 const actions = [
@@ -28,17 +29,26 @@ export default async function Page() {
         const date = new Date(timestamp);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     };
- 
+
 
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity?.id)
+    const charity_name = charity_member?.map(member => member.charity?.name)
 
     const { data: logs, error } = await supabase.from('charity_member_actions')
-    .select('*')
-    .eq('charity_id', charity_id)
-    .order('date', {ascending: false})
-    
+        .select('*')
+        .eq('charity_id', charity_id)
+        .order('date', { ascending: false })
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows = logs?.map(row => ({
+        RECORD_ID: row.id,
+        MEMBER: row.decrypted_member_name,
+        ACTION_TAKEN: row.decrypted_action,
+        DATE: formatDate(row.date) + ' ' + formatTime(row.time)
+    }))
+
     console.log("pain", error, logs)
     return (
         <>
@@ -50,7 +60,8 @@ export default async function Page() {
             <TableContainer>
                 <TableHeader header="Charity Actions" />
                 <TableContent>
-                <Table>
+                    <ExportTest rows={rows} fileName={`${charity_name}'s AUDIT LOG`} sheetName={"LOG"} />
+                    <Table>
                         <Thead>
                             <Tr>
                                 <Th>Charity Member Name</Th>

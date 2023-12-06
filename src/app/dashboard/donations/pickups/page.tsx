@@ -63,7 +63,7 @@ export default async function Page() {
             <TableContainer>
                 <TableHeader header={"Pick-up Items"} />
                 <TableContent>
-                    <ExportTest rows={rows} fileName={"VERIFIED DONATIONS"} sheetName={"VERIFIED"} />
+                    <ExportTest rows={rows} fileName={"PICKUP DONATIONS"} sheetName={"PICKUPS"} />
                     <Table>
                         <Thead>
                             <Tr>

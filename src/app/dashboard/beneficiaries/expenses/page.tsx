@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 import { DisplayError } from '@/app/(auth)/error-handling/function';
 import { CharityLog } from '@/app/admin/audit-log/function';
 import supabase from '@/app/utils/supabase';
@@ -8,7 +8,7 @@ import { Button } from '@/components/Button';
 import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
 
-import SlideOver from "@/components/SlideOverButton"
+import SlideOver, { ExportTest } from "@/components/SlideOverButton"
 import { TableContainer, Table, TableContent, TableHeaderButton, Tbody, Td, Thead, Tr, Th } from '@/components/Table';
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { revalidatePath } from 'next/cache';
@@ -50,14 +50,24 @@ export default async function Expenses() {
         .from('expenses')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
         .eq('charity_id', charity_id)
-        .order('date', {ascending: false})
+        .order('date', { ascending: false })
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows = expenses?.map(row => ({
+        EXPENSE_ID: row.id,
+        EVENT: row.event?.name,
+        BENEFICIARY: row.beneficiaries?.beneficiary_name,
+        DESCRIPTION: row.reason,
+        AMOUNT: `PHP ${row.amount}`,
+        DATE: formatDate(row.date) + ' ' + formatTime(row.date)
+    }))
 
     console.log("UH OH", expenses)
 
     const { data: beneficiaries, error: beneficiaries_error } = await supabase
         .from('beneficiaries')
         .select('*')
-        .order('date', {ascending: false})
+        .order('date', { ascending: false })
 
     const { data: last_expense, error: event_error } = await supabase
         .from('expenses')
@@ -217,6 +227,7 @@ export default async function Expenses() {
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
+                    <ExportTest rows={rows} fileName={`EXPENSES`} sheetName={"LIST OF EXPENSES"} />
                     <Table>
                         <Thead>
                             <Tr>

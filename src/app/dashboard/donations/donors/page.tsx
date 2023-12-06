@@ -1,7 +1,8 @@
-// @ts-nocheck 
+//@ts-nocheck
 import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
+import { ExportTest } from "@/components/SlideOverButton";
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
 
 const people = [
@@ -16,16 +17,24 @@ export default async function ListofDonors() {
     const uid = await GetUID()
     const { data: charity_member, error: error_2 } = await supabase.from('decrypted_charity_member').select('*, charity ( id, name )').eq('user_uuid', uid)
     const charity_id = charity_member?.map(member => member.charity_id)
-    
-    const {data: donors, error} = await supabase
-    .from("donor_summary")
-    .select("*")
-    .eq("charity_id", charity_id)
+
+    const { data: donors, error } = await supabase
+        .from("donor_summary")
+        .select("*")
+        .eq("charity_id", charity_id)
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows = donors?.map(row => ({
+        DONOR_ID: row.donor_id,
+        DONOR_NAME: row.decrypted_name,
+        TOTAL_CASH_DONATED: `PHP ${row.total_cash_donated}`,
+        TOTAL_NUMBER_OF_DONATIONS: `${row.total_number_of_donations} DONATIONS`
+    }))
 
     console.log("CHARITY ID IS: " + charity_id)
-   //const {data: donationCount, error} = await supabase
-   //.from("")
- 
+    //const {data: donationCount, error} = await supabase
+    //.from("")
+
     return (
         <>
             <div className="sm:flex sm:items-center py-9">
@@ -36,6 +45,7 @@ export default async function ListofDonors() {
             <TableContainer>
                 <TableHeader header="List of Donors" />
                 <TableContent>
+                    <ExportTest rows={rows} fileName={"DONORS LIST"} sheetName={"DONORS"} />
                     <Table>
                         <Thead>
                             <Tr>
@@ -51,7 +61,7 @@ export default async function ListofDonors() {
                                     <Td>{donor.decrypted_name}</Td>
                                     <Td>{donor.total_number_of_donations}</Td>
                                     <Td>{donor.total_cash_donated}</Td>
-                                    <Td>    
+                                    <Td>
                                         <Button href={"/dashboard/donations/donors/" + donor.donor_id} variant="solid" color="blue">View Details</Button>
                                     </Td>
                                 </Tr>
