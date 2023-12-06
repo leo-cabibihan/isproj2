@@ -104,7 +104,7 @@ export function ExportTest(rows: any[]) {
           console.log("IS THE ACTUAL DATA AN ARRAY THO?? " + Array.isArray(destructured_rows) ? "YES":"NO")
 
           /* generate worksheet and workbook */
-          const worksheet = XLSX.utils.json_to_sheet(await destructured_rows);
+          const worksheet = XLSX.utils.json_to_sheet(old_rows);
           const workbook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
 
