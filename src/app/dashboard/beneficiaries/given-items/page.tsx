@@ -11,12 +11,18 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { CharityLog } from "@/app/admin/audit-log/function";
 import Alert from "@/components/Alert";
+import { Message } from "@/components/Feedback";
 
 
 
 export const revalidate = 0;
 
 export default async function beneficiaryitem({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+
+    var message = ""
+    var messageType = ""
+    var heading = ""
+
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -88,12 +94,23 @@ export default async function beneficiaryitem({ searchParams }: { searchParams: 
             description: formData.get("desc")
         };
 
-        const { data, error } = await supabase.from('beneficiary_items').insert(item);
+        const { data, error } = await supabase.from('beneficiary_items').insert(item).select();
         const errors = [error_3, idk, error]
 
-        if (errors.some(id => id)) redirect(`/dashboard/beneficiaries/given-items?err=${errors.map(err => err?.message).join()}`)
+        if (error) {
+            message = `Failed to Add Item. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Item not Added."
+        }
+        else {
+            message = "Your Item has been added."
+            messageType = "SUCCESS"
+            heading = "Item Added."
+            CharityLog("ADDED GIVEN-ITEM " + item_to_add?.name + ".", error)
+        }
+
         revalidatePath('/');
-        CharityLog("ADDED GIVEN-ITEM " + item_to_add?.name + ".", error)
+        
         console.log("I am tired. ", error_3, idk, error)
 
     };
@@ -182,6 +199,7 @@ export default async function beneficiaryitem({ searchParams }: { searchParams: 
 
                             </div>
                         </form>
+                        <Message content={message} type={messageType} heading={heading} />
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>

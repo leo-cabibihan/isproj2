@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
 
@@ -15,6 +15,7 @@ export async function AdminLog(action: any) {
 
     const { data, error } = await supabase.from('admin_audit_log').insert(log)
     console.log("ERROR IS: ", error)
+    return error
 }
 
 export async function CharityLog(action: any, crud_error: any) {
@@ -33,6 +34,7 @@ export async function CharityLog(action: any, crud_error: any) {
 
         const { data, error } = await supabase.from('charity_audit_log').insert(log)
         console.log("ERROR IS: ", error)
+        return error
     }
     else if (crud_error) {
         console.log("UH OH.")

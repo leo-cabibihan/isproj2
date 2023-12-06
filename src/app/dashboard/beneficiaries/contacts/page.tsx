@@ -11,10 +11,15 @@ import { DisplayError } from "@/app/(auth)/error-handling/function"
 import { CharityLog } from "@/app/admin/audit-log/function"
 import { GetUID } from "@/app/utils/user_id"
 import { getURL } from '@/app/utils/url'
+import { Message } from "@/components/Feedback"
 
 export const revalidate = 0;
 
 export default async function Page({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+
+  var message = ""
+  var messageType = ""
+  var heading = ""
 
   // Function to format the timestamp as 'mm/dd/yyy'
   const formatDate = (timestamp) => {
@@ -59,11 +64,23 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     };
 
     const { data: beneficiary_insert, error: insert_error } = await supabase.from('beneficiaries').insert(beneficiary).select();
+
+    if (insert_error) {
+      const error = insert_error
+      message = `Failed to add beneficiary. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+      messageType = "ERROR"
+      heading = "Beneficiary not Added."
+    }
+    else {
+      message = "The new Beneficiary has been added."
+      messageType = "SUCCESS"
+      heading = "Sucess."
+      CharityLog("ADDED BENEFICIARY " + beneficiary_insert![0].beneficiary_name + " ON " + beneficiary_insert![0].date + ".", insert_error)
+    }
+
     revalidatePath('/');
     console.log("THE ERROR IS: ", beneficiary_insert, insert_error)
     DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/contacts?err=${generic_error}`, insert_error)
-
-    CharityLog("ADDED BENEFICIARY " + beneficiary_insert![0].beneficiary_name + " ON " + beneficiary_insert![0].date + ".", insert_error)
     console.log("ERROR IS ", insert_error)
 
   };
@@ -78,9 +95,22 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     };
 
     const { data: beneficiaries_update, error: update_error } = await supabase.from('beneficiaries').update(beneficiary).eq("id", contactId).select()
+
+    if (update_error) {
+      const error = update_error
+      message = `Failed to update Beneficiary Details. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+      messageType = "ERROR"
+      heading = "Beneficiary not Updated."
+    }
+    else {
+      message = "The Beeficiary Details have been Updated."
+      messageType = "SUCCESS"
+      heading = "Success."
+      CharityLog("UPDATED BENEFICIARY " + beneficiaries_update![0].beneficiary_name + " ON " + beneficiaries_update![0].date + ".", update_error)
+    }
+
     revalidatePath('/');
-    CharityLog("UPDATED BENEFICIARY " + beneficiaries_update![0].beneficiary_name + " ON " + beneficiaries_update![0].date + ".", update_error)
-    DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/contacts?err=${generic_error?.message}`, update_error)
+    // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/contacts?err=${generic_error?.message}`, update_error)
   };
 
   const deleteContact = async (formData: FormData) => {
@@ -93,9 +123,22 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
     };
 
     const { data: beneficiary_delete, error: delete_error } = await supabase.from('beneficiaries').delete().eq("id", contactId).select()
+
+    if (delete_error) {
+      const error = delete_error
+      message = `Failed to delete Beneficiary. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+      messageType = "ERROR"
+      heading = "Beneficiary not Deleted."
+    }
+    else {
+      message = "The beneficiary has been Removed."
+      messageType = "SUCCESS"
+      heading = "Success."
+      CharityLog("ADDED BENEFICIARY " + beneficiary_delete![0].beneficiary_name + " ON " + beneficiary_delete![0].date + ".", delete_error)
+    }
+
     revalidatePath('/');
-    CharityLog("ADDED BENEFICIARY " + beneficiary_delete![0].beneficiary_name + " ON " + beneficiary_delete![0].date + ".", delete_error)
-    DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/contacts?err=${generic_error?.message}`, delete_error)
+    // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/contacts?err=${generic_error?.message}`, delete_error)
   };
 
   return (
@@ -149,6 +192,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                 </Button>
               </div>
             </form>
+            <Message content={message} type={messageType} heading={heading} />
           </SlideOver>
 
 
@@ -221,6 +265,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                           </Button>
                         </div>
                       </form>
+                      <Message content={message} type={messageType} heading={heading} />
                     </SlideOver>
                   </Td>
                 </Tr>

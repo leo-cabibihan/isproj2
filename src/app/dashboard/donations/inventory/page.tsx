@@ -4,6 +4,7 @@ import { CharityLog } from '@/app/admin/audit-log/function'
 import supabase from '@/app/utils/supabase'
 import { GetUID } from '@/app/utils/user_id'
 import { Button } from '@/components/Button'
+import { Message } from '@/components/Feedback'
 import { TextField, SelectField } from '@/components/Fields'
 import SlideOver, { ExportTest } from '@/components/SlideOverButton'
 import {
@@ -23,6 +24,10 @@ import { revalidatePath } from 'next/cache'
 export const revalidate = 0
 
 export default async function Page() {
+
+  var message = ""
+  var messageType = ""
+  var heading = ""
 
   // Function to format the timestamp as 'mm/dd/yyy'
   const formatDate = (timestamp) => {
@@ -53,8 +58,8 @@ export default async function Page() {
     ITEM_NAME: row.name,
     ITEM_QUANTITY: row.quantity,
     UNIT_OF_MEASUREMENTT: row.unit_of_measurement,
-    ITEM_EXPIRY: (row.expiry != null || row.expiry != undefined) ? formatDate(row.expiry):"N/A",
-    ITEM_PERISHABILITY: row.perishable ? "PERISHABLE":"NON-PERISHABLE"
+    ITEM_EXPIRY: (row.expiry != null || row.expiry != undefined) ? formatDate(row.expiry) : "N/A",
+    ITEM_PERISHABILITY: row.perishable ? "PERISHABLE" : "NON-PERISHABLE"
   }))
 
   const saveChanges = async (formData: FormData) => {
@@ -73,7 +78,20 @@ export default async function Page() {
       .update(item)
       .eq('id', itemId)
       .select()
-    CharityLog('UPDATED INVENTORY ITEM ' + update_item![0].name, update_error)
+
+    if (update_error) {
+      const error = update_error
+      message = `Failed to Update Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+      messageType = "ERROR"
+      heading = "Record not Updated."
+    }
+    else {
+      message = "Record Updated Successfully."
+      messageType = "SUCCESS"
+      heading = "Record Updated."
+      await CharityLog('UPDATED INVENTORY ITEM ' + update_item![0].name, update_error)
+    }
+
     revalidatePath('/')
   }
 
@@ -86,7 +104,20 @@ export default async function Page() {
       .delete()
       .eq('id', itemId)
       .select()
-    CharityLog('DELETED INVENTORY ITEM ' + delete_item![0].name, delete_error)
+
+    if (delete_error) {
+      const error = delete_error
+      message = `Failed to Delete Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+      messageType = "ERROR"
+      heading = "Record not Deleted."
+    }
+    else {
+      message = "Record Deleted Successfully."
+      messageType = "SUCCESS"
+      heading = "Record Deleted."
+      await CharityLog('DELETED INVENTORY ITEM ' + delete_item![0].name, delete_error)
+    }
+
     revalidatePath('/')
   }
 
@@ -107,7 +138,7 @@ export default async function Page() {
       <TableContainer>
         <TableHeader header={'Inventory'} />
         <TableContent>
-        <ExportTest rows={rows} fileName={"INVENTORY"} sheetName={"INVENTORY"} />
+          <ExportTest rows={rows} fileName={"INVENTORY"} sheetName={"INVENTORY"} />
           <Table>
             <Thead>
               <Tr>
@@ -235,6 +266,7 @@ export default async function Page() {
                                                     </Button> */}
                         </div>
                       </form>
+                      <Message content={message} type={messageType} heading={heading} />
                     </SlideOver>
                   </Td>
                 </Tr>

@@ -21,6 +21,7 @@ import { AdminLog } from '../audit-log/function'
 import Plunk from '@plunk/node'
 import { render } from '@react-email/render'
 import { NoURLMail } from '@/components/email-template'
+import { Message } from '@/components/Feedback'
 
 export const revalidate = 0
 
@@ -43,6 +44,11 @@ const requests = [
 const plunk = new Plunk('sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db')
 
 export default async function Applications() {
+
+  var message = ""
+  var messageType = ""
+  var heading = ""
+
   // Function to format the timestamp as 'mm/dd/yyy'
   const formatDate = (timestamp) => {
     const date = new Date(timestamp)
@@ -86,8 +92,19 @@ export default async function Applications() {
       charity_verified: true
     }
 
-    await supabase.from('charity').update(charity).eq('id', charityId)
-    await AdminLog('Approved the application of charity ' + charityName + '.')
+    const {data, error} = await supabase.from('charity').update(charity).eq('id', charityId).select()
+
+    if (error) {
+      message = `Failed to Verify Charity. Details are below: \n${error.details} \n${error.hint} \n${error.message}.`
+      messageType = "ERROR"
+      heading = "Operation Failed."
+    }
+    else {
+      message = "The Charity has been Verified."
+      messageType = "SUCCESS"
+      heading = "Operation Successful."
+      await AdminLog('Approved the application of charity ' + charityName + '.')
+    }
     revalidatePath('/')
   }
 
@@ -105,8 +122,19 @@ export default async function Applications() {
       rejection_reason: reason
     }
 
-    await supabase.from('charity').update(charity).eq('id', charityId)
-    await AdminLog('Rejected the application of charity ' + name + '.')
+    const {data, error} = await supabase.from('charity').update(charity).eq('id', charityId).select()
+
+    if (error) {
+      message = `Failed to Reject Charity. Details are below: \n${error.details} \n${error.hint} \n${error.message}.`
+      messageType = "ERROR"
+      heading = "Operation Failed."
+    }
+    else {
+      message = "The Charity has been Rejected."
+      messageType = "SUCCESS"
+      heading = "Operation Successful."
+      await AdminLog('Rejected the application of charity ' + name + '.')
+    }
 
     const body = render(
       <NoURLMail
@@ -285,6 +313,7 @@ export default async function Applications() {
                           </Button>
                         </div>
                       </form>
+                      <Message content={message} type={messageType} heading={heading} />
                     </SlideOver>
                   </Td>
                 </Tr>

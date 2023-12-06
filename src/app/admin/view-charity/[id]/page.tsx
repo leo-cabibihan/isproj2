@@ -9,10 +9,15 @@ import supabase from '@/app/utils/supabase';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from "next/cache";
 import { AdminLog } from '../../audit-log/function';
+import { Message } from '@/components/Feedback';
 
 export const revalidate = 0;
 
 export default async function Organization({ params }: any) {
+
+    var message = ""
+    var messageType = ""
+    var heading = ""
 
     const generic_error = "Unable to Process request. Please check your data and try again."
     // Function to format the timestamp as 'mm/dd/yyy'
@@ -113,8 +118,19 @@ export default async function Organization({ params }: any) {
             charity_verified: false
         };
 
-        await supabase.from('charity').update(charity).eq("id", charityId)
-        await AdminLog("Froze charity " + charityName + ".")
+        const { data, error } = await supabase.from('charity').update(charity).eq("id", charityId).select()
+
+        if (error) {
+            message = `Failed to freeze org. See Details Below: \n${error.details} \n${error.hint} \n${error.message}.`
+            messageType = "ERROR"
+            heading = "Operation Failed."
+        }
+        else {
+            message = "Charity has been Frozen."
+            messageType = "SUCCESS"
+            heading = "Operation Successful."
+            await AdminLog("Froze charity " + charityName + ".")
+        }
         revalidatePath('/');
     };
 
@@ -125,10 +141,22 @@ export default async function Organization({ params }: any) {
             approval_status: 'ON-HOLD'
         };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+
+        if (update_error) {
+            message = `Failed to Hide Event. See Details Below: \n${update_error.details} \n${update_error.hint} \n${update_error.message}.`
+            messageType = "ERROR"
+            heading = "Operation Failed."
+        }
+        else {
+            message = "Event has been Hidden."
+            messageType = "SUCCESS"
+            heading = "Operation Successful."
+            await AdminLog("HID EVENT " + formData.get("event_name"))
+        }
+
         revalidatePath('/');
-        AdminLog("HID EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const unhideEvent = async (formData: FormData) => {
@@ -138,10 +166,22 @@ export default async function Organization({ params }: any) {
             approval_status: 'APPROVED'
         };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+
+        if (update_error) {
+            message = `Failed to Unhide Event. See Details Below: \n${update_error.details} \n${update_error.hint} \n${update_error.message}.`
+            messageType = "ERROR"
+            heading = "Operation Failed."
+        }
+        else {
+            message = "Event Unhidden."
+            messageType = "SUCCESS"
+            heading = "Operation Successful."
+            await AdminLog("APPROVED EVENT " + formData.get("event_name"))
+        }
+
         revalidatePath('/');
-        AdminLog("APPROVED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const rejectEvent = async (formData: FormData) => {
@@ -152,10 +192,22 @@ export default async function Organization({ params }: any) {
             rejection_reason: formData.get("reason")
         };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+
+        if (update_error) {
+            message = `Failed to Reject Event. See Details Below: \n${update_error.details} \n${update_error.hint} \n${update_error.message}.`
+            messageType = "ERROR"
+            heading = "Operation Failed."
+        }
+        else {
+            message = "Event Rejected."
+            messageType = "SUCCESS"
+            heading = "Operation Successful."
+            AdminLog("REJECTED EVENT " + formData.get("event_name"))
+        }
+
         revalidatePath('/');
-        AdminLog("APPROVED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     return (
@@ -194,6 +246,7 @@ export default async function Organization({ params }: any) {
                             </Button>
                         </div>
                     </form>
+                    <Message content={message} type={messageType} heading={heading} />
                 </>
 
             ))}
@@ -281,6 +334,7 @@ export default async function Organization({ params }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
+                                            <Message content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -487,6 +541,7 @@ export default async function Organization({ params }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
+                                            <Message content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -644,6 +699,7 @@ export default async function Organization({ params }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
+                                            <Message content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>

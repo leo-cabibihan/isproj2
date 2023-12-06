@@ -1,4 +1,4 @@
-// @ts-nocheck 
+//@ts-nocheck
 import Link from 'next/link'
 import { Footer } from '@/components/Footer'
 import { Button } from '@/components/Button'
@@ -15,12 +15,18 @@ import Alert from '@/components/Alert'
 import { ImageUpload } from "@/components/ImgUpload";
 import { GetUID } from "@/app/utils/user_id";
 import { CharityLog } from '../admin/audit-log/function';
+import { revalidatePath } from 'next/cache';
+import { Message } from '@/components/Feedback';
 
 export const metadata: Metadata = {
   title: 'Sign In',
 }
 
 export default async function Appeals({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+
+  var message = ""
+  var messageType = ""
+  var heading = ""
 
   console.log("DOES IT WORK???? MAYBE: " + await GetUID())
   const uid = await GetUID()
@@ -45,9 +51,21 @@ export default async function Appeals({ searchParams }: { searchParams: { [key: 
       complaint_id: formData.get("complaint_id"),
       explanation: formData.get("explanation")
     };
- 
+
     const { data, error } = await supabase.from('charity_appeals').insert(appeals).select()
-    CharityLog("FILED APPEAL", error)
+
+    if (error) {
+      message = `Failed to File Appeal. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+      messageType = "ERROR"
+      heading = "Appeal not Filed."
+    }
+    else {
+      message = "Your Appeal has been Filed. The Admins will be reviewing it as soon as possible."
+      messageType = "SUCCESS"
+      heading = "Appeal has been Filed."
+      CharityLog("FILED APPEAL", error)
+    }
+
     console.log("APPEALS ERROR IS: ", error)
     revalidatePath('/');
   };
@@ -112,7 +130,7 @@ export default async function Appeals({ searchParams }: { searchParams: { [key: 
             </div>
           </div>
 
-          <ImageUpload folderName='charity_appeals' charityID={charity_id} recordID={appeal_id![0] + 1} labelText="donor_complaints"/>
+          <ImageUpload folderName='charity_appeals' charityID={charity_id} recordID={appeal_id![0] + 1} labelText="donor_complaints" />
 
           <div>
             <Button
@@ -127,6 +145,7 @@ export default async function Appeals({ searchParams }: { searchParams: { [key: 
             </Button>
           </div>
         </form>
+        <Message content={message} type={messageType} heading={heading} />
       </SlimLayout>
 
     </>

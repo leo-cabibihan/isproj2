@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 import Link from 'next/link'
 
 import { Button } from '@/components/Button'
@@ -14,6 +14,7 @@ import { ImageUpload } from '@/components/ImgUpload'
 import { render } from '@react-email/render'
 import { NoURLMail, ReceiptEmail } from '@/components/email-template'
 import Plunk from '@plunk/node'
+import { Message } from '@/components/Feedback'
 
 export const revalidate = 0
 
@@ -24,6 +25,10 @@ export default async function Report({ params }: any) {
 
   const donorID = await GetUID()
   const email = await GetEmail()
+
+  var message = ""
+  var messageType = ""
+  var heading = ""
 
   const { data: orgs } = await supabase
     .from('charity')
@@ -51,6 +56,19 @@ export default async function Report({ params }: any) {
       .from('donor_complaints')
       .insert(complaint)
       .select()
+
+    if (error) {
+      const error_msg = `Please see Error Details below and try again. \n${error.details} \n${error.message} \n${error.hint}`
+      message = error_msg
+      messageType = "ERROR"
+      heading = "Failed to Submit Complaint."
+    }
+    else {
+      message = "Your report has been Submitted. We'll take action as soon as possible."
+      messageType = "SUCCESS"
+      heading = "Report Submitted."
+    }
+
     revalidatePath('/')
     const body = render(
       <NoURLMail
@@ -66,7 +84,7 @@ export default async function Report({ params }: any) {
       subject: 'Complaint Received',
       body,
     })
-  } 
+  }
 
   return (
     <>
@@ -138,6 +156,7 @@ export default async function Report({ params }: any) {
                 </Button>
               </div>
             </form>
+            <Message content={message} type={messageType} heading={heading} />
           </div>
         </div>
       </div>

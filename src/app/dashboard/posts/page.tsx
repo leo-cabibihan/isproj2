@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 
 import { Button } from "@/components/Button";
 import { TableContainer, TableHeaderButton } from "@/components/Table";
@@ -16,10 +16,16 @@ import { DisplayImage } from "@/app/utils/display_image";
 import { ShowImg } from "@/components/DisplayImg";
 import { CharityLog } from "@/app/admin/audit-log/function";
 import { GetUID } from "@/app/utils/user_id";
+import { Message } from "@/components/Feedback";
 
 export const revalidate = 0;
 
 export default async function Page() {
+
+    var message = ""
+    var messageType = ""
+    var heading = ""
+
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -47,7 +53,7 @@ export default async function Page() {
         .from('campaign_post')
         .select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )')
         .eq('charity_id', charity_id)
-        .order('date_posted', {ascending: false})
+        .order('date_posted', { ascending: false })
 
     const { data: last_post, error: post_error } = await supabase
         .from('campaign_post')
@@ -68,8 +74,20 @@ export default async function Page() {
             charity_member_id: uid
         };
 
-        const {data, error} = await supabase.from('campaign_post').insert(post).select()
-        CharityLog("CREATED POST " + data![0].title, error)
+        const { data, error } = await supabase.from('campaign_post').insert(post).select()
+
+        if (error) {
+            message = `Failed to Add Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Record not Added."
+        }
+        else {
+            message = "Record Added Successfully."
+            messageType = "SUCCESS"
+            heading = "Record Added."
+            CharityLog("CREATED POST " + data![0].title, error)
+        }
+
         revalidatePath('/');
     };
 
@@ -84,8 +102,20 @@ export default async function Page() {
             charity_member_id: uid
         };
 
-        const {data, error} = await supabase.from('campaign_post').update(post).eq("id", postId).select()
-        CharityLog("UPDATED POST " + data![0].title, error)
+        const { data, error } = await supabase.from('campaign_post').update(post).eq("id", postId).select()
+
+        if (error) {
+            message = `Failed to Update Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Record not Updated."
+        }
+        else {
+            message = "Record Updated Successfully."
+            messageType = "SUCCESS"
+            heading = "Record Updated."
+            CharityLog("UPDATED POST " + data![0].title, error)
+        }
+
         revalidatePath('/');
     };
 
@@ -100,8 +130,20 @@ export default async function Page() {
             charity_member_id: uid
         };
 
-        const {data, error} = await supabase.from('campaign_post').delete().eq("id", postId).select()
-        CharityLog("DELETED POST " + data![0].title, error)
+        const { data, error } = await supabase.from('campaign_post').delete().eq("id", postId).select()
+
+        if (error) {
+            message = `Failed to Delete Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Record not Deleted."
+        }
+        else {
+            message = "Record Deleted Successfully."
+            messageType = "SUCCESS"
+            heading = "Record Deleted."
+            CharityLog("DELETED POST " + data![0].title, error)
+        }
+
         revalidatePath('/');
     };
 
@@ -113,52 +155,53 @@ export default async function Page() {
                 </div>
             </div>
 
-                <TableContainer>
-                {charity_member?.map(member =>(
+            <TableContainer>
+                {charity_member?.map(member => (
                     <TableHeaderButton key={member.charity?.name} header={member.charity.name + "'s Posts"}>
-                    <SlideOver title="Create Post Details" buttontext={"Create Post"} variant="solid" color="blue">
-                        <form className="space-y-6" action={handleSubmit} method="POST">
-                            <TextField
-                                label="Post Title"
-                                name="title"
-                                type="text"
-                                required
-                            />
+                        <SlideOver title="Create Post Details" buttontext={"Create Post"} variant="solid" color="blue">
+                            <form className="space-y-6" action={handleSubmit} method="POST">
+                                <TextField
+                                    label="Post Title"
+                                    name="title"
+                                    type="text"
+                                    required
+                                />
 
-                            <TextField
-                                label="Subtitle"
-                                name="subtitle"
-                                type="text"
-                            />
+                                <TextField
+                                    label="Subtitle"
+                                    name="subtitle"
+                                    type="text"
+                                />
 
-                            <div className="col-span-full">
-                                <label htmlFor="details" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Details
-                                </label>
-                                <div className="mt-2">
-                                    <textarea
-                                        id="details"
-                                        name="details"
-                                        rows={6}
-                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                        defaultValue={''}
-                                        placeholder="A long time ago, in a Galaxy far far away..."
-                                    />
+                                <div className="col-span-full">
+                                    <label htmlFor="details" className="block text-sm font-medium leading-6 text-gray-900">
+                                        Details
+                                    </label>
+                                    <div className="mt-2">
+                                        <textarea
+                                            id="details"
+                                            name="details"
+                                            rows={6}
+                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                            defaultValue={''}
+                                            placeholder="A long time ago, in a Galaxy far far away..."
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <ImageUpload folderName="campaign_post" charityID={charityId} recordID={post_id![0] + 1} labelText="Upload Image" />
+                                <ImageUpload folderName="campaign_post" charityID={charityId} recordID={post_id![0] + 1} labelText="Upload Image" />
 
-                            <div className="col-span-full">
-                                <Button type="submit" variant="solid" color="blue" className="w-full">
-                                    <span>
-                                        Save Post <span aria-hidden="true">&rarr;</span>
-                                    </span>
-                                </Button>
-                            </div>
-                        </form>
-                    </SlideOver>                            
-                </TableHeaderButton>
+                                <div className="col-span-full">
+                                    <Button type="submit" variant="solid" color="blue" className="w-full">
+                                        <span>
+                                            Save Post <span aria-hidden="true">&rarr;</span>
+                                        </span>
+                                    </Button>
+                                </div>
+                            </form>
+                            <Message content={message} type={messageType} heading={heading} />
+                        </SlideOver>
+                    </TableHeaderButton>
                 ))}
                 <div className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -171,7 +214,7 @@ export default async function Page() {
                                 {posts?.map((post) => (
 
                                     < article key={post.id} className="relative isolate flex flex-col gap-8 lg:flex-row">
-                                        <ShowImg folder1={"campaign_post"} charityID={charityId} recordID={post.id}/>
+                                        <ShowImg folder1={"campaign_post"} charityID={charityId} recordID={post.id} />
                                         <div>
                                             <div className="flex items-center gap-x-4 text-xs">
                                                 <time dateTime={post.date_posted} className="text-gray-500">
@@ -263,8 +306,8 @@ export default async function Page() {
                                                                             Update <span aria-hidden="true">&rarr;</span>
                                                                         </span>
                                                                     </Button>
-                                                                    <br/>
-                                                                    <br/>
+                                                                    <br />
+                                                                    <br />
                                                                     <Button type="submit" variant="solid" color="red" className="w-full" formAction={deletePost}>
                                                                         <span>
                                                                             Delete <span aria-hidden="true">&rarr;</span>
@@ -272,6 +315,7 @@ export default async function Page() {
                                                                     </Button>
                                                                 </div>
                                                             </form>
+                                                            <Message content={message} type={messageType} heading={heading} />
                                                         </SlideOver>
                                                     </div>
                                                 </div>

@@ -2,6 +2,7 @@
 import supabase from "@/app/utils/supabase";
 import Alert from "@/components/Alert";
 import { Button } from "@/components/Button";
+import { Message } from "@/components/Feedback";
 import { TextField } from "@/components/Fields";
 import SlideOver, { ExportTest } from "@/components/SlideOverButton";
 import { Table, TableContainer, TableContent, TableHeader, TableHeaderButton, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
@@ -14,6 +15,11 @@ import { redirect } from "next/navigation";
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
 export default async function Complaints({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+
+    var message = ""
+    var messageType = ""
+    var heading = ""
+
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -57,6 +63,17 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
             subject: "ALERT!",
             body,
         })
+
+        if (!success) {
+            message = "FAILED TO SEND EMAIL. PLEASE CHECK THE EMAIL ADDRESS AND TRY AGAIN."
+            messageType = "ERROR"
+            heading = "Failed to Send Email."
+        }
+        else {
+            message = "EMAIL HAS BEEN SENT TO CHARITY."
+            messageType = "SUCCESS"
+            heading = "Email Success."
+        }
 
         console.log("SUCCESS??? ", success)
     }
@@ -148,6 +165,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
                                                     </Button>
                                                 </div>
                                             </form>
+                                            <Message content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>

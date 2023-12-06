@@ -3,6 +3,7 @@ import { CharityLog } from "@/app/admin/audit-log/function";
 import supabase from "@/app/utils/supabase";
 import { GetUID } from "@/app/utils/user_id";
 import { Button } from "@/components/Button";
+import { Message } from "@/components/Feedback";
 import { TextField } from "@/components/Fields";
 import { ImageUpload } from "@/components/ImgUpload";
 import SlideOver, { ExportTest } from "@/components/SlideOverButton";
@@ -12,6 +13,11 @@ import { revalidatePath } from "next/cache";
 export const revalidate = 0;
 
 export default async function Page() {
+
+    var message = ""
+    var messageType = ""
+    var heading = ""
+
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -64,7 +70,19 @@ export default async function Page() {
         };
 
         const { data, error } = await supabase.from('charity_appeals').insert(appeals).select()
-        CharityLog("FILED APPEAL", error)
+
+        if (error) {
+            message = `Failed to File Appeal. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Appeal not Filed."
+        }
+        else {
+            message = "Appeal Filed Successfully."
+            messageType = "SUCCESS"
+            heading = "Appeal Filed."
+            CharityLog("FILED APPEAL", error)
+        }
+
         console.log("APPEALS ERROR IS: ", error)
         revalidatePath('/');
     };
@@ -171,6 +189,7 @@ export default async function Page() {
                                                     </Button>
                                                 </div>
                                             </form>
+                                            <Message content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>

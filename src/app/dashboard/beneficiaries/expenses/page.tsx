@@ -5,6 +5,7 @@ import supabase from '@/app/utils/supabase';
 import { getURL } from '@/app/utils/url'
 import { GetUID } from '@/app/utils/user_id';
 import { Button } from '@/components/Button';
+import { Message } from '@/components/Feedback';
 import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
 
@@ -21,6 +22,11 @@ const subheader = "A table list of expenses";
 const columns = ["Description", "Amount", "Date"];
 
 export default async function Expenses() {
+
+    var message = ""
+    var messageType = ""
+    var heading = ""
+
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -95,10 +101,23 @@ export default async function Expenses() {
             charity_id: formData.get("charity_id")
         };
 
-        const { data, error } = await supabase.from('expenses').insert(expense);
+        const { data, error } = await supabase.from('expenses').insert(expense).select();
+
+        if (error) {
+            message = `Failed to Add Expense. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Expense not Added."
+        }
+        else {
+            message = "Your Expense has been added."
+            messageType = "SUCCESS"
+            heading = "Success."
+            CharityLog("ADDED EXPENSE", error)
+        }
+
         revalidatePath('/');
-        CharityLog("ADDED EXPENSE", error)
-        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+
+        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -111,10 +130,23 @@ export default async function Expenses() {
             beneficiary_id: formData.get("beneficiary_id"),
         };
 
-        const { data, error } = await supabase.from('expenses').update(expense).eq("id", expenseId)
+        const { data, error } = await supabase.from('expenses').update(expense).eq("id", expenseId).select()
+
+        if (error) {
+            message = `Failed to Update Expense. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Expense not Updated."
+        }
+        else {
+            message = "Your Expense has been Updated."
+            messageType = "SUCCESS"
+            heading = "Success."
+            CharityLog("UPDATED EXPENSE" + expenseId + ".", error)
+        }
+
         revalidatePath('/');
-        CharityLog("UPDATED EXPENSE" + expenseId + ".", error)
-        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+
+        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
     const deleteExpense = async (formData: FormData) => {
@@ -127,10 +159,23 @@ export default async function Expenses() {
             beneficiary_id: formData.get("beneficiary_id"),
         };
 
-        const { data, error } = await supabase.from('expenses').delete().eq("id", expenseId)
+        const { data, error } = await supabase.from('expenses').delete().eq("id", expenseId).select()
+
+        if (error) {
+            message = `Failed to Delete Expense. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Expense not Deleted."
+        }
+        else {
+            message = "Your Expense has been Deleted."
+            messageType = "SUCCESS"
+            heading = "Success."
+            CharityLog("DELETED EXPENSE" + expenseId + ".", error)
+        }
+
         revalidatePath('/');
-        CharityLog("DELETE EXPENSE" + expenseId + ".", error)
-        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+
+        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
 
@@ -224,6 +269,7 @@ export default async function Expenses() {
                                 </div>
                             </div>
                         </form>
+                        <Message content={message} type={messageType} heading={heading} />
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
@@ -334,6 +380,7 @@ export default async function Expenses() {
                                                     </div>
                                                 </div>
                                             </form>
+                                            <Message content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>

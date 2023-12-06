@@ -5,6 +5,7 @@ import { GetUID } from '@/app/utils/user_id';
 import { handleTableExport } from '@/app/utils/xlsx';
 import { Button } from '@/components/Button';
 import { ExportButton } from '@/components/Export';
+import { Message } from '@/components/Feedback';
 import { SelectField, TextField } from '@/components/Fields'
 import { ImageUpload } from '@/components/ImgUpload';
 import SlideOver, { ExportTest } from '@/components/SlideOverButton';
@@ -41,6 +42,10 @@ async function getCashData(column: any, order: any, charity_id: number) {
 }
 //e
 export default async function ExternalTable({ searchParams }: any) {
+
+    var message = ""
+    var messageType = ""
+    var heading = ""
 
     console.log("DO SEARCHPARAMS WORK? ", searchParams)
     console.log(`PARAMS SIZE IS ${Object.keys(searchParams).length}`)
@@ -126,7 +131,19 @@ export default async function ExternalTable({ searchParams }: any) {
         }
 
         const { data, error } = await supabase.from('cash').insert(cash).select()
-        CharityLog("ADDED EXTERNAL INCOME WORTH PHP " + data![0].amount, error)
+
+        if (error) {
+            message = `Failed to Add External Income. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Data not Added."
+        }
+        else {
+            message = "External Income has been added to the system."
+            messageType = "SUCCESS"
+            heading = "Record Added."
+            await CharityLog("ADDED EXTERNAL INCOME WORTH PHP " + data![0].amount, error)
+        }
+
         revalidatePath('/');
     };
 
@@ -142,7 +159,19 @@ export default async function ExternalTable({ searchParams }: any) {
         }
 
         const { data, error } = await supabase.from('cash').update(cash).eq("id", cashID).select()
-        CharityLog("EDITED EXTERNAL INCOME WORTH PHP " + data![0].amount, error)
+
+        if (error) {
+            message = `Failed to Update Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Record not Updated."
+        }
+        else {
+            message = "Record Updated Successfully."
+            messageType = "SUCCESS"
+            heading = "Record Updated."
+            await CharityLog("EDITED EXTERNAL INCOME WORTH PHP " + data![0].amount, error)
+        }
+
         revalidatePath('/');
     };
 
@@ -151,7 +180,18 @@ export default async function ExternalTable({ searchParams }: any) {
         const cashID = formData.get("id")
 
         const { data, error } = await supabase.from('cash').delete().eq("id", cashID).select()
-        CharityLog("DELETED EXTERNAL INCOME " + data![0].id, error)
+
+        if (error) {
+            message = `Failed to Delete Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Record not Deleted."
+        }
+        else {
+            message = "Record Deleted Successfully."
+            messageType = "SUCCESS"
+            heading = "Record Deleted."
+            await CharityLog("DELETED EXTERNAL INCOME " + data![0].id, error)
+        }
         revalidatePath('/');
     };
 
@@ -176,6 +216,17 @@ export default async function ExternalTable({ searchParams }: any) {
             subject: "THANK YOU!",
             body,
         })
+
+        if (!success) {
+            message = `Failed to Email Cash Receipt.`
+            messageType = "ERROR"
+            heading = "Receipt not Sent."
+        }
+        else {
+            message = "Receipt Sent Successfully."
+            messageType = "SUCCESS"
+            heading = "Record Sent."
+        }
 
         console.log("SUCCESS??? ", success)
     }
@@ -256,6 +307,7 @@ export default async function ExternalTable({ searchParams }: any) {
                                 </div>
                             </div>
                         </form>
+                        <Message content={message} type={messageType} heading={heading} />
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
@@ -314,7 +366,7 @@ export default async function ExternalTable({ searchParams }: any) {
                             </form>
                         </div>
                     </SlideOver>
-                    <br/>
+                    <br />
                     {/* BUTTON TO EXPORT FILE */}
                     <ExportTest rows={rows} fileName={"CASH"} sheetName={"CASH DONATIONS"} />
                     {/*Displays current filters set*/}
@@ -408,6 +460,7 @@ export default async function ExternalTable({ searchParams }: any) {
                                                             </div>
                                                         </div>
                                                     </form>
+                                                    <Message content={message} type={messageType} heading={heading} />
                                                 </SlideOver>
                                             ) :
                                             (
@@ -479,6 +532,7 @@ export default async function ExternalTable({ searchParams }: any) {
                                                         </div>
 
                                                     </form>
+                                                    <Message content={message} type={messageType} heading={heading} />
                                                 </SlideOver>
                                             )}
                                     </Td>

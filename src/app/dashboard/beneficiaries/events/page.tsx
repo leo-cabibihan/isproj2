@@ -10,10 +10,16 @@ import supabase from "@/app/utils/supabase"
 import { DisplayError } from "@/app/(auth)/error-handling/function";
 import { CharityLog } from "@/app/admin/audit-log/function";
 import { getURL } from '@/app/utils/url'
+import { Message } from "@/components/Feedback";
 
 export const revalidate = 0;
 
 export default async function Page() {
+
+    var message = ""
+    var messageType = ""
+    var heading = ""
+
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
         const date = new Date(timestamp);
@@ -116,9 +122,22 @@ export default async function Page() {
         };
 
         const { data: insert_event, error: insert_error } = await supabase.from('event').insert(event);
+
+        if (insert_error) {
+            const error = insert_error
+            message = `Failed to Add Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Event not Created."
+        }
+        else {
+            message = "Your new event has been added. The Admins will be reviewing it as soon as possible."
+            messageType = "SUCCESS"
+            heading = "Event Added."
+            CharityLog("ADDED NEW EVENT " + formData.get("event_name") + ".", event_error)
+        }
+
         revalidatePath('/');
-        CharityLog("ADDED NEW EVENT " + formData.get("event_name") + ".", event_error)
-        DisplayError(`${getURL}dashboard/beneficiaries/events?err=${generic_error}`, insert_error)
+        // DisplayError(`${getURL}dashboard/beneficiaries/events?err=${generic_error}`, insert_error)
     };
 
     const saveChanges = async (formData: FormData) => {
@@ -132,10 +151,23 @@ export default async function Page() {
             beneficiary_id: formData.get("beneficiary_id")
         };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+
+        if (update_error) {
+            const error = update_error
+            message = `Failed to Update Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Event not Updated."
+        }
+        else {
+            message = "Your event has been updated. The Admins will be reviewing it as soon as possible."
+            messageType = "SUCCESS"
+            heading = "Event Updated."
+            CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
+        }
+
         revalidatePath('/');
-        CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const saveChanges2 = async (formData: FormData) => {
@@ -150,10 +182,23 @@ export default async function Page() {
             approval_status: 'ON-HOLD'
         };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+
+        if (update_error) {
+            const error = update_error
+            message = `Failed to Update Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Event not Updated."
+        }
+        else {
+            message = "Your event has been updated. The Admins will be reviewing it as soon as possible."
+            messageType = "SUCCESS"
+            heading = "Event Updated."
+            CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
+        }
+
         revalidatePath('/');
-        CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const endEvent = async (formData: FormData) => {
@@ -163,10 +208,23 @@ export default async function Page() {
             is_ongoing: false
         };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId)
+        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+
+        if (update_error) {
+            const error = update_error
+            message = `Failed to Close Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Event not Closed."
+        }
+        else {
+            message = "Your event has been updated."
+            messageType = "SUCCESS"
+            heading = "Event Closed."
+            CharityLog("CLOSED EVENT " + formData.get("event_name"), update_error)
+        }
+
         revalidatePath('/');
-        CharityLog("ENDED EVENT " + formData.get("event_name"), update_error)
-        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const deleteEvent = async (formData: FormData) => {
@@ -179,10 +237,24 @@ export default async function Page() {
             end_date: formData.get("end_date"),
         };
 
-        const { data: delete_event, error: delete_error } = await supabase.from('event').delete().eq("id", eventId)
+        const { data: delete_event, error: delete_error } = await supabase.from('event').delete().eq("id", eventId).select()
+
+        if (delete_error) {
+            const error = delete_error
+            message = `Failed to Delete Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+            messageType = "ERROR"
+            heading = "Event not Deleted."
+        }
+        else {
+            message = "Your event has been deleted."
+            messageType = "SUCCESS"
+            heading = "Event Deleted."
+            CharityLog("DELETED EVENT" + formData.get("event_name") + ".", delete_error)
+        }
+
         revalidatePath('/');
-        CharityLog("DELETED EVENT" + formData.get("event_name") + ".", delete_error)
-        DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, delete_error)
+
+        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, delete_error)
     };
 
     return (
@@ -261,6 +333,7 @@ export default async function Page() {
                                 </Button>
                             </div>
                         </form>
+                        <Message content={message} type={messageType} heading={heading} />
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
@@ -377,6 +450,7 @@ export default async function Page() {
                                                     </Button>
                                                 </div>
                                             </form>
+                                            <Message content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -520,6 +594,7 @@ export default async function Page() {
                                                     </Button>
                                                 </div>
                                             </form>
+                                            <Message content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -667,6 +742,7 @@ export default async function Page() {
                                                     </Button>
                                                 </div>
                                             </form>
+                                            <Message content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>

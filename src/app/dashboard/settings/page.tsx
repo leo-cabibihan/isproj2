@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 const navigation = [
   { name: 'Profile', href: '#', current: true },
   { name: 'Settings', href: '#', current: false },
@@ -10,11 +10,13 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
+import { CharityLog } from '@/app/admin/audit-log/function'
 import SubscribeButton from '@/app/paypal/subscribe'
 import supabase from '@/app/utils/supabase'
 import { getURL } from '@/app/utils/url'
 import { GetUID } from '@/app/utils/user_id'
 import { Button } from '@/components/Button'
+import { Message } from '@/components/Feedback'
 import { TextField } from '@/components/Fields'
 import { ImageUpdate, ImageUpload } from '@/components/ImgUpload'
 import { QRUpload } from '@/components/QrUpload'
@@ -32,6 +34,11 @@ import { revalidatePath } from 'next/cache'
 export const revalidate = 0
 
 export default async function Settings() {
+
+  var message = ""
+  var messageType = ""
+  var heading = ""
+
   const uid = await GetUID()
   const { data: charity_member, error: error_2 } = await supabase
     .from('decrypted_charity_member')
@@ -59,7 +66,20 @@ export default async function Settings() {
       charity_id: formData.get('id'),
     }
 
-    const { error } = await supabase.from('drop_off_location').insert(location)
+    const { data, error } = await supabase.from('drop_off_location').insert(location).select()
+
+    if (error) {
+      message = `Failed to Add Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+      messageType = "ERROR"
+      heading = "Record not Added."
+    }
+    else {
+      message = "Record Added Successfully."
+      messageType = "SUCCESS"
+      heading = "Record Added."
+      CharityLog("ADDED ADDRESS", error)
+    }
+
     revalidatePath('/')
     console.log('ADDRESS ERROR ', error)
   }
@@ -75,7 +95,21 @@ export default async function Settings() {
     const { data: delete_address, error: delete_error } = await supabase
       .from('drop_off_location')
       .delete()
-      .eq('id', addressId)
+      .eq('id', addressId).select()
+
+    if (delete_error) {
+      const error = delete_error
+      message = `Failed to Delete Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+      messageType = "ERROR"
+      heading = "Record not Deleted."
+    }
+    else {
+      message = "Record Deleted Successfully."
+      messageType = "SUCCESS"
+      heading = "Record Deleted."
+      CharityLog("REMOVED ADDRESS", error)
+    }
+
     revalidatePath('/')
   }
 
@@ -91,6 +125,21 @@ export default async function Settings() {
       .from('charity')
       .update(details)
       .eq('id', orgId)
+      .select()
+
+      if (update_error) {
+        const error = update_error
+        message = `Failed to Update Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+        messageType = "ERROR"
+        heading = "Record not Updated."
+      }
+      else {
+        message = "Record Updated Successfully."
+        messageType = "SUCCESS"
+        heading = "Record Updated."
+        CharityLog("UPDATED ORG DETAILS", error)
+      }
+
     revalidatePath('/')
   }
 
@@ -304,7 +353,7 @@ export default async function Settings() {
                         />
                       </div>
 
-                      <div>
+                      {/* <div>
                         <a
                           className="text-blue-600"
                           href={
@@ -317,7 +366,7 @@ export default async function Settings() {
                             Upload QR Code for Cash Donations
                           </h2>
                         </a>
-                      </div>
+                      </div> */}
 
                       <div>
                         <h2 className="text-base font-semibold leading-7 text-gray-900">
@@ -351,17 +400,18 @@ export default async function Settings() {
                   ))}
 
                 </form>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
-                <br/>
+                <Message content={message} type={messageType} heading={heading} />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
                 <div>
                   <h2 className="text-base font-semibold leading-7 text-gray-900">
                     Subscribe to GiveMore
                   </h2>
-                  <SubscribeButton/>
+                  <SubscribeButton />
                 </div>
               </div>
             </div>
