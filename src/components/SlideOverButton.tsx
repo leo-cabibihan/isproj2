@@ -73,8 +73,8 @@ export function ExportTest({rows, fileName} : {rows: any[], fileName: String}) {
   XLSX.set_cptable(cpexcel);
   XLSX.set_fs(fs);
 
-  const destructured_rows = rows.rows
-  const destructure_file_name = fileName.fileName
+  const destructured_rows = rows
+  const destructure_file_name = fileName
   const file_name = `${destructure_file_name}.xlsx`
 
   return (
