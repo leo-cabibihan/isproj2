@@ -30,6 +30,8 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
 
     const [images, setImages]: any[] = useState([])
 
+    const charity_id = Number(charityID)
+
     async function getImages() {
         const { data, error } = await supabase
             .storage
@@ -62,7 +64,7 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
         const { data, error } = await supabase
             .storage
             .from('uploads')
-            .upload(folderName + "/" + charityID + "/" + recordID + "/" + "testfile", file)
+            .upload(folderName + "/" + charity_id + "/" + recordID + "/" + "testfile", file)
 
         console.log("DATA RETURNED: " + { data })
 
