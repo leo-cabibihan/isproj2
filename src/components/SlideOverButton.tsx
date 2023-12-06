@@ -108,9 +108,9 @@ export function ExportTest() {
           const workbook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
 
-          /* calculate column width */
-          const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
-          worksheet["!cols"] = [{ wch: max_width }];
+          // /* calculate column width */
+          // const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+          // worksheet["!cols"] = [{ wch: max_width }];
 
           /* create an XLSX file and try to save to Presidents.xlsx */
           XLSX.writeFile(workbook, "Presidents.xlsx", { compression: true });
