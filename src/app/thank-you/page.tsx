@@ -7,7 +7,7 @@ import { Button } from '@/components/Button'
 import { Logo } from '@/components/Logo'
 import { SlimLayout } from '@/components/SlimLayout'
 
-export default function ThankYou() {
+export default function ThankYouPage() {
   return (
     <>
     <div className="grid min-h-full grid-cols-1 grid-rows-[1fr,auto,1fr] bg-white lg:grid-cols-[max(50%,36rem),1fr]">
