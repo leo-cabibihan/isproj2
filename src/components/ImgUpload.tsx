@@ -1,4 +1,4 @@
-// @ts-nocheck 
+//@ts-nocheck
 'use client'
 
 import supabase from "@/app/utils/supabase";
@@ -6,14 +6,27 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "./Button";
+import { Failure, Success } from "./Feedback";
 
 export var imgPath = ""
 export var CDNURL = ""
 
 var existingImg
 
+function Message({ content, type, heading }: any) {
+    if (type == 'ERROR') {
+        return <Failure heading={heading} content={content} />;
+    }
+    else if (type == 'SUCCESS') {
+        return <Success heading={heading} content={content} />;
+    }
+}
+
 export function ImageUpload({ folderName, charityID, recordID, labelText }: any) {
 
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
+    const [heading, setHeading] = useState("");
 
     const [images, setImages]: any[] = useState([])
 
@@ -42,7 +55,7 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
             getImages()
         }
     }, [folderName && charityID && recordID])
- 
+
     async function uploadImage(e: any) {
         let file = e.target.files[0]
 
@@ -55,8 +68,14 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
 
         if (data) {
             getImages()
+            setMessage("File uploaded successfully!");
+            setMessageType('SUCCESS');
+            setHeading('Upload Complete!')
         } else {
             console.log(error)
+            setMessage("Error uploading file. See the details below: \n" + error);
+            setMessageType('ERROR');
+            setHeading('Upload Error!')
         }
         const CDNURL = "https://dkvtrmaiscnbjtfxpurj.supabase.co/storage/v1/object/public/uploads/" + folderName + "/" + charityID + "/"
             + recordID + "/" + data?.path
@@ -90,12 +109,18 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
 
                 </div>
             </div>
+            <Message content={message} type={messageType} heading={heading} />
         </>
 
     )
 }
 
 export function ImageUpdate({ folderName, charityID, recordID }: any) {
+
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("");
+    const [heading, setHeading] = useState("");
+
 
     async function GetImage() {
         const { data: images, error: image_error } = await supabase
@@ -125,7 +150,17 @@ export function ImageUpdate({ folderName, charityID, recordID }: any) {
                 upsert: true
             })
 
-        console.log("FILE ERROR IS: ", error)
+        if (data) {
+            setMessage("File uploaded successfully!");
+            setMessageType('SUCCESS');
+            setHeading('Upload Complete!')
+        } else {
+            console.log(error)
+            setMessage("Error uploading file. See the details below: \n" + error);
+            setMessageType('ERROR');
+            setHeading('Upload Error!')
+        }
+
     }
 
     return (
@@ -154,6 +189,7 @@ export function ImageUpdate({ folderName, charityID, recordID }: any) {
 
                 </div>
             </div>
+            <Message content={message} type={messageType} heading={heading} />
         </>
 
     )
