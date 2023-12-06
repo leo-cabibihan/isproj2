@@ -314,6 +314,7 @@ export default async function ExternalTable({ searchParams }: any) {
                             </form>
                         </div>
                     </SlideOver>
+                    <br/>
                     {/* BUTTON TO EXPORT FILE */}
                     <ExportTest rows={rows} fileName={"CASH"} sheetName={"CASH DONATIONS"} />
                     {/*Displays current filters set*/}
