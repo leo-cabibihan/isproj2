@@ -74,7 +74,8 @@ export function ExportTest(rows: any[], fileName: String) {
   XLSX.set_fs(fs);
 
   const destructured_rows = rows.rows
-  const file_name = `${fileName.toString()}.xlsx`
+  const destructure_file_name = fileName.fileName
+  const file_name = `${destructure_file_name.toString()}.xlsx`
 
   return (
     <>
