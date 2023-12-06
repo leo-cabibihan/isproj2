@@ -44,7 +44,7 @@ export default async function VerifiedTable() {
     DONATED_BY: row.decrypted_donor?.decrypted_name,
     DONOR_ID: row.donor_id,
     DONATION_DATE: formatDate(row.date) + ' ' + formatTime(row.date),
-    DONATION_ITEMS: (row.inventory_item).map()
+    DONATION_ITEMS: JSON.stringify(row.inventory_item)
   }))
 
   console.log("HOW DOES THIS LOOK LIKE? ", rows)
