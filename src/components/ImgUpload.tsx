@@ -30,7 +30,7 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
 
     const [images, setImages]: any[] = useState([])
 
-    const charity_id = Number(charityID)
+    const charity_id = charityID.charityID
 
     async function getImages() {
         const { data, error } = await supabase
