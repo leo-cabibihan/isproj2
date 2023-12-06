@@ -1,9 +1,9 @@
-// @ts-nocheck 
+//@ts-nocheck
 import { Button } from '@/components/Button';
 import React from 'react';
 import { MediaObject } from '@/components/Single-use';
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from '@/components/Table';
-import SlideOver from '@/components/SlideOverButton';
+import SlideOver, { ExportTest } from '@/components/SlideOverButton';
 import { SelectField, TextField } from '@/components/Fields';
 import supabase from '@/app/utils/supabase';
 import { redirect } from 'next/navigation';
@@ -33,30 +33,77 @@ export default async function Organization({ params }: any) {
 
     const { data: orgs } = await supabase.from('charity').select('*').eq('id', orgID)
 
+    const orgname = orgs?.map(org => org.name)
+
     const { data: complaints, error } = await supabase
         .from('donor_complaints')
         .select('*, charity ( id, name, email_address ), decrypted_donor ( id, decrypted_name )')
         .eq('charity_id', orgID)
-        .order('created_at', {ascending: false})
+        .order('created_at', { ascending: false })
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows_1 = complaints?.map(row => ({
+        RECORD_ID: row.id,
+        FILED_AGAINST: row.charity?.name,
+        COMPLAINT_DETAILS: row.complaint,
+        DONOR: row.decrypted_donor?.decrypted_name,
+        CREATED_AT: formatDate(row.created_at) + ' ' + formatTime(row.created_at)
+    }))
+
     console.log(complaints ? "IT WORK" : "DONT WORK")
 
     const { data: appeals, error: appeals_error } = await supabase
         .from('charity_appeals')
         .select('*, charity ( id, name ), decrypted_charity_member ( user_uuid, decrypted_member_name ), donor_complaints ( id, decrypted_donor ( id, decrypted_name ) )')
         .eq('charity_id', orgID)
-        .order('created_at', {ascending: false})
+        .order('created_at', { ascending: false })
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows_2 = appeals?.map(row => ({
+        RECORD_ID: row.id,
+        FILED_BY: row.charity?.name,
+        MEMBER: row.decrypted_charity_member?.decrypted_member_name,
+        COMPLAINT_BY: row.donor_complaints?.decrypted_donor?.decryped_name,
+        COMPLAINT_ID: row.donor_complaints?.id
+    }))
 
     const { data: events, error: events_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', orgID).eq('approval_status', 'APPROVED')
-        .order('start_date', {ascending: false})
+        .order('start_date', { ascending: false })
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows_3 = events?.map(row => ({
+        ID: row.id,
+        EVENT_NAME: row.name,
+        ORGANIZED_BY: row.charity?.name,
+        DESCRIPTION: row.description,
+        BENEFICIARY: row.beneficiaries?.beneficiary_name,
+        START_DATE: (row.start_date != null || row.start_date != undefined) ? `${formatDate(row.start_date)}, ${formatTime(row.start_date)}` : "N/A",
+        END_DATE: (row.end_date != null || row.end_date != undefined) ? `${formatDate(row.end_date)}, ${formatTime(row.end_date)}` : "N/A",
+        APPROVAL_STATUS: row.approval_status,
+        REJECTION_REASON: (row.rejection_reason != null || row.rejection_reason != undefined) ? row.rejection_reason : "N/A"
+    }))
 
     const { data: pending, error: pending_error } = await supabase
         .from('event')
         .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name )')
         .eq('charity_id', orgID).neq('approval_status', 'APPROVED')
-        .order('start_date', {ascending: false})
+        .order('start_date', { ascending: false })
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows_4 = pending?.map(row => ({
+        ID: row.id,
+        EVENT_NAME: row.name,
+        ORGANIZED_BY: row.charity?.name,
+        DESCRIPTION: row.description,
+        BENEFICIARY: row.beneficiaries?.beneficiary_name,
+        START_DATE: (row.start_date != null || row.start_date != undefined) ? `${formatDate(row.start_date)}, ${formatTime(row.start_date)}` : "N/A",
+        END_DATE: (row.end_date != null || row.end_date != undefined) ? `${formatDate(row.end_date)}, ${formatTime(row.end_date)}` : "N/A",
+        APPROVAL_STATUS: row.approval_status,
+        REJECTION_REASON: (row.rejection_reason != null || row.rejection_reason != undefined) ? row.rejection_reason : "N/A"
+    }))
 
     const freezeOrg = async (formData: FormData) => {
         'use server'
@@ -158,6 +205,7 @@ export default async function Organization({ params }: any) {
             <TableContainer>
                 <TableHeader header="View Complaints" />
                 <TableContent>
+                    <ExportTest rows={rows_1} fileName={`${orgname}'s COMPLAINTS`} sheetName={"COMPLAINTS"} />
                     <Table>
                         <Thead>
                             <Tr>
@@ -250,6 +298,7 @@ export default async function Organization({ params }: any) {
             <TableContainer>
                 <TableHeader header="View Appeals" />
                 <TableContent>
+                    <ExportTest rows={rows_2} fileName={`${orgname}'s APPEALS`} sheetName={"APPEALS"} />
                     <Table>
                         <Thead>
                             <Tr>
@@ -334,6 +383,7 @@ export default async function Organization({ params }: any) {
             <TableContainer>
                 <TableHeader header="Approved Events" />
                 <TableContent>
+                    <ExportTest rows={rows_3} fileName={`${orgname}'s APPROVED EVENTS`} sheetName={"APPROVED EVENTS"} />
                     <Table>
                         <Thead>
                             <Tr>
@@ -455,6 +505,7 @@ export default async function Organization({ params }: any) {
             <TableContainer>
                 <TableHeader header="Pending Events" />
                 <TableContent>
+                    <ExportTest rows={rows_4} fileName={`${orgname}'s PENDING EVENTS`} sheetName={"PENDING EVENTS"} />
                     <Table>
                         <Thead>
                             <Tr>

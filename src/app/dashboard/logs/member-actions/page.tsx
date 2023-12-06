@@ -46,7 +46,7 @@ export default async function Page() {
         RECORD_ID: row.id,
         MEMBER: row.decrypted_member_name,
         ACTION_TAKEN: row.decrypted_action,
-        DATE: formatDate(row.date) + ' ' + formatTime(row.time)
+        DATE: formatDate(row.date) + ' ' + formatTime(row.date)
     }))
 
     console.log("pain", error, logs)

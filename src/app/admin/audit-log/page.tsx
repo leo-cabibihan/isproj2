@@ -1,9 +1,9 @@
-// @ts-nocheck 
+//@ts-nocheck
 import { Button } from '@/components/Button';
 import React from 'react';
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from '@/components/Table';
 import { TextField } from '@/components/Fields';
-import SlideOver from '@/components/SlideOverButton';
+import SlideOver, { ExportTest } from '@/components/SlideOverButton';
 import supabase from '@/app/utils/supabase';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from "next/cache";
@@ -24,11 +24,19 @@ export default async function Auditlog() {
     const formatTime = (timestamp) => {
         const date = new Date(timestamp);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-    }; 
+    };
 
 
-    const { data: logs } = await supabase.from('admin_actions').select('*').order('date', {ascending: false})
+    const { data: logs } = await supabase.from('admin_actions').select('*').order('date', { ascending: false })
     //.order('date', {ascending: false}) <-- If you want the most recent log to be on top of the list.
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows = logs?.map(row => ({
+        RECORD_ID: row.id,
+        MEMBER: row.decrypted_name,
+        ACTION_TAKEN: row.decrypted_action,
+        DATE: formatDate(row.date) + ' ' + formatTime(row.date)
+    }))
 
     return (
         <>
@@ -39,6 +47,7 @@ export default async function Auditlog() {
             <TableContainer>
                 <TableHeader header="Audit Logs" />
                 <TableContent>
+                    <ExportTest rows={rows} fileName={"ADMIN AUDIT LOG"} sheetName={"LOGS"} />
                     <Table>
                         <Thead>
                             <Tr>

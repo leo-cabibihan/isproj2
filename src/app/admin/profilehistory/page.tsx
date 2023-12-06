@@ -1,4 +1,4 @@
-// @ts-nocheck 
+//@ts-nocheck
 import supabase from '@/app/utils/supabase';
 import { Button } from '@/components/Button';
 import { TableContainer, Table, Thead, Tr, Th, Tbody, Td, TableHeader, TableContent } from '@/components/Table';
@@ -6,6 +6,7 @@ import React from 'react';
 import { revalidatePath } from "next/cache";
 import { redirect } from 'next/navigation';
 import { GetUID } from '@/app/utils/user_id';
+import { ExportTest } from '@/components/SlideOverButton';
 
 export const revalidate = 0;
 
@@ -24,13 +25,23 @@ export default async function Auditlog() {
         const date = new Date(timestamp);
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     };
- 
+
 
     const uid = await GetUID()
-    
+
     console.log('UID is: ' + uid)
 
-    const { data: actions } = await supabase.from('admin_actions').select('*').eq('id', uid).order('date', {ascending: false})
+    const { data: actions } = await supabase.from('admin_actions').select('*').eq('id', uid).order('date', { ascending: false })
+
+    const name = actions?.map(action => action.decrypted_name)
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows = actions?.map(row => ({
+        RECORD_ID: row.id,
+        MEMBER: row.decrypted_name,
+        ACTION_TAKEN: row.decrypted_action,
+        DATE: formatDate(row.date) + ' ' + formatTime(row.date)
+    }))
 
     return (
         <>
@@ -42,6 +53,7 @@ export default async function Auditlog() {
             <TableContainer>
                 <TableHeader header="Action History" />
                 <TableContent>
+                    <ExportTest rows={rows} fileName={`ADMIN ${name}'s AUDIT LOG`} sheetName={"LOGS"} />
                     <Table>
                         <Thead>
                             <Tr>

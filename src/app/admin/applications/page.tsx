@@ -1,8 +1,8 @@
-// @ts-nocheck
+//@ts-nocheck
 import supabase from '@/app/utils/supabase'
 import { Button } from '@/components/Button'
 import { TextField } from '@/components/Fields'
-import SlideOver from '@/components/SlideOverButton'
+import SlideOver, { ExportTest } from '@/components/SlideOverButton'
 import {
   Table,
   TableContainer,
@@ -62,10 +62,21 @@ export default async function Applications() {
   }
   const { data: requests, error } = await supabase
     .from('charity')
-    .select('*')
+    .select('*, address ( * )')
     .eq('charity_verified', false)
     .eq('is_rejected', false)
-    .order('created_at', {ascending: false})
+    .order('created_at', { ascending: false })
+
+  //CASH DATA, FORMATTED FOR EXPORTING
+  const rows = requests?.map(row => ({
+    CHARITY_ID: row.id,
+    NAME: row.name,
+    ABOUT: row.about,
+    PHONE: row.charity_phone,
+    EMAIL: row.email_address,
+    ADDRESS: JSON.stringify(row.address),
+    DATE_JOINED: formatDate(row.created_at) + ' ' + formatTime(row.created_at)
+  }))
 
   const verifyOrg = async (formData: FormData) => {
     'use server'
@@ -95,7 +106,7 @@ export default async function Applications() {
     }
 
     await supabase.from('charity').update(charity).eq('id', charityId)
-    await AdminLog('Rejected the application of charity ' + charityName + '.')
+    await AdminLog('Rejected the application of charity ' + name + '.')
 
     const body = render(
       <NoURLMail
@@ -126,6 +137,7 @@ export default async function Applications() {
       <TableContainer>
         <TableHeader header="All Charity Approval Requests" />
         <TableContent>
+          <ExportTest rows={rows} fileName={"PENDING CHARITIES"} sheetName={"APPLICATIONS"} />
           <Table>
             <Thead>
               <Tr>

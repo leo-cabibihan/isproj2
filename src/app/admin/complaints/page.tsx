@@ -1,9 +1,9 @@
-// @ts-nocheck 
+//@ts-nocheck
 import supabase from "@/app/utils/supabase";
 import Alert from "@/components/Alert";
 import { Button } from "@/components/Button";
 import { TextField } from "@/components/Fields";
-import SlideOver from "@/components/SlideOverButton";
+import SlideOver, { ExportTest } from "@/components/SlideOverButton";
 import { Table, TableContainer, TableContent, TableHeader, TableHeaderButton, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
 import { AlertEmail, Email, NoURLMail } from "@/components/email-template";
 import Plunk from "@plunk/node";
@@ -29,7 +29,16 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     };
     const { data: complaints } = await supabase.from('donor_complaints').select('*, charity ( id, name, email_address ), decrypted_donor ( id, decrypted_name )')
-    .order('created_at', {ascending: false})
+        .order('created_at', { ascending: false })
+
+    //CASH DATA, FORMATTED FOR EXPORTING
+    const rows = complaints?.map(row => ({
+        RECORD_ID: row.id,
+        FILED_AGAINST: row.charity?.name,
+        COMPLAINT_DETAILS: row.complaint,
+        DONOR: row.decrypted_donor?.decrypted_name,
+        CREATED_AT: formatDate(row.created_at) + ' ' + formatTime(row.created_at)
+    }))
 
     const notifyOrg = async (formData: FormData) => {
         'use server'
@@ -50,7 +59,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
         })
 
         console.log("SUCCESS??? ", success)
-    } 
+    }
 
     return (
         <>
@@ -62,6 +71,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
             <TableContainer>
                 <TableHeader header="Complaints" />
                 <TableContent>
+                    <ExportTest rows={rows} fileName={"ALL COMPLAINTS"} sheetName={"COMPLAINTS"} />
                     <Table>
                         <Thead>
                             <Tr>
