@@ -62,7 +62,7 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
         const { data, error } = await supabase
             .storage
             .from('uploads')
-            .upload(folderName + "/" + charityID + "/" + recordID + "/" + uuidv4(), file)
+            .upload(folderName + "/" + charityID + "/" + recordID + "/" + "testfile", file)
 
         console.log("DATA RETURNED: " + { data })
 
@@ -72,6 +72,7 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
             setMessageType('SUCCESS');
             setHeading('Upload Complete!')
         } else {
+            console.log(`PATH IS: \n${folderName}/${charityID}/${recordID}/ then file.`)
             console.log("Error uploading file. See the details below: \n", error)
             const temp_message = "Error uploading file."
             setMessage(temp_message);
