@@ -94,6 +94,8 @@ export function ExportTest({rows}: {rows: any}) {
           //   birthday: row.bio.birthday
           // }));
 
+          console.log("THE ROWS LOOK LIKE THIS: ", rows)
+
           /* generate worksheet and workbook */
           const worksheet = XLSX.utils.json_to_sheet(rows);
           const workbook = XLSX.utils.book_new();
