@@ -97,6 +97,8 @@ export function ExportTest(rows: any[]) {
           }));
 
           console.log("THE ROWS LOOK LIKE THIS: ", destructured_rows)
+          console.log("MAYBE IT'S NOT AN ARRAY? " + destructured_rows)
+          console.log("DOES IT HAVE INDEXES? " + destructured_rows[0]!)
           console.log("THE TEST DATA LOOKS LIKE THIS: ", old_rows)
 
           /* generate worksheet and workbook */
