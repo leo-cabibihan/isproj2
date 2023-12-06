@@ -114,8 +114,8 @@ export default async function Page() {
             </div>
 
                 <TableContainer>
-                {charity_member?.map(charityId =>(
-                    <TableHeaderButton key={charityId.charity?.name} header={charityId.charity.name + "'s Posts"}>
+                {charity_member?.map(member =>(
+                    <TableHeaderButton key={member.charity?.name} header={member.charity.name + "'s Posts"}>
                     <SlideOver title="Create Post Details" buttontext={"Create Post"} variant="solid" color="blue">
                         <form className="space-y-6" action={handleSubmit} method="POST">
                             <TextField
