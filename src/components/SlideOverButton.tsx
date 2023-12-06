@@ -75,7 +75,7 @@ export function ExportTest(rows: any[], fileName: String) {
 
   const destructured_rows = rows.rows
   const destructure_file_name = fileName.fileName
-  const file_name = `${destructure_file_name.toString()}.xlsx`
+  const file_name = `${destructure_file_name}.xlsx`
 
   return (
     <>
