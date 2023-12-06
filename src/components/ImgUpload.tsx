@@ -72,8 +72,8 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
             setMessageType('SUCCESS');
             setHeading('Upload Complete!')
         } else {
-            console.log(error)
-            const temp_message = "Error uploading file. See the details below: \n", error 
+            console.log("Error uploading file. See the details below: \n", error)
+            const temp_message = "Error uploading file."
             setMessage(temp_message);
             setMessageType('ERROR');
             setHeading('Upload Error!')
@@ -156,8 +156,8 @@ export function ImageUpdate({ folderName, charityID, recordID }: any) {
             setMessageType('SUCCESS');
             setHeading('Upload Complete!')
         } else {
-            console.log(error)
-            const temp_message = "Error uploading file. See the details below: \n", error 
+            console.log("Error uploading file. See the details below: \n", error)
+            const temp_message = "Error uploading file."
             setMessage(temp_message);
             setMessageType('ERROR');
             setHeading('Upload Error!')
