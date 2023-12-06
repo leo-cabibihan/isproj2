@@ -121,7 +121,7 @@ export function ExportTest({rows, fileName, sheetName} : {rows: any[], fileName:
           /* create an XLSX file and try to save to Presidents.xlsx */
           XLSX.writeFile(workbook, file_name, { compression: true });
         }
-      } >TEST</Button>
+      } >Export Table</Button>
     </>
 
   )
