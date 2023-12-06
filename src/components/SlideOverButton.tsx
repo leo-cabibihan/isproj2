@@ -67,13 +67,13 @@ export default function SlideOver({ buttontext, children, variant, color, title 
   )
 }
 
-export function ExportTest() {
+export function ExportTest(rows: any[]) {
 
   XLSX.stream.set_readable(Readable);
   XLSX.set_cptable(cpexcel);
   XLSX.set_fs(fs);
 
-  // const destructured_rows = rows.rows
+  const destructured_rows = rows.rows
 
   return (
     <>
@@ -96,15 +96,15 @@ export function ExportTest() {
             birthday: row.bio.birthday
           }));
 
-          // console.log("THE ROWS LOOK LIKE THIS: ", destructured_rows)
-          // console.log("MAYBE IT'S NOT AN ARRAY? " + destructured_rows)
-          // console.log("DOES IT HAVE INDEXES? " + destructured_rows[0]!)
-          // console.log("THE TEST DATA LOOKS LIKE THIS: ", old_rows)
-          // console.log("HOW DOES THE EXAMPLE DATA LOOK LIKE? " + old_rows)
-          // console.log("IS THE ACTUAL DATA AN ARRAY THO?? " + Array.isArray(destructured_rows) ? "YES":"NO")
+          console.log("THE ROWS LOOK LIKE THIS: ", destructured_rows)
+          console.log("MAYBE IT'S NOT AN ARRAY? " + destructured_rows)
+          console.log("DOES IT HAVE INDEXES? " + destructured_rows[0]!)
+          console.log("THE TEST DATA LOOKS LIKE THIS: ", old_rows)
+          console.log("HOW DOES THE EXAMPLE DATA LOOK LIKE? " + old_rows)
+          console.log("IS THE ACTUAL DATA AN ARRAY THO?? " + Array.isArray(destructured_rows) ? "YES":"NO")
 
           /* generate worksheet and workbook */
-          const worksheet = XLSX.utils.json_to_sheet(old_rows);
+          const worksheet = XLSX.utils.json_to_sheet(destructured_rows);
           const workbook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
 
