@@ -53,7 +53,7 @@ export default async function Auditlog() {
             <TableContainer>
                 <TableHeader header="Action History" />
                 <TableContent>
-                    <ExportTest rows={rows} fileName={`ADMIN ${name}'s AUDIT LOG`} sheetName={"LOGS"} />
+                    <ExportTest rows={rows} fileName={`ADMIN's AUDIT LOG`} sheetName={"LOGS"} />
                     <Table>
                         <Thead>
                             <Tr>
