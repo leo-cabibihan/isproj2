@@ -1,11 +1,11 @@
-// @ts-nocheck
+//@ts-nocheck
 import { DisplayError } from '@/app/(auth)/error-handling/function'
 import { CharityLog } from '@/app/admin/audit-log/function'
 import supabase from '@/app/utils/supabase'
 import { GetUID } from '@/app/utils/user_id'
 import { Button } from '@/components/Button'
 import { TextField, SelectField } from '@/components/Fields'
-import SlideOver from '@/components/SlideOverButton'
+import SlideOver, { ExportTest } from '@/components/SlideOverButton'
 import {
   TableContainer,
   TableHeaderButton,
@@ -23,6 +23,16 @@ import { revalidatePath } from 'next/cache'
 export const revalidate = 0
 
 export default async function Page() {
+
+  // Function to format the timestamp as 'mm/dd/yyy'
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Month is zero-based
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${month}/${day}/${year}`;
+  };
+
   console.log('DOES IT WORK???? MAYBE: ' + (await GetUID()))
   const uid = await GetUID()
   const { data: charity_member, error: idk } = await supabase
@@ -36,6 +46,16 @@ export default async function Page() {
     .select('*, items_donation_transaction!inner(*) ')
     .eq('items_donation_transaction.charity_id', charity_id)
     .order('expiry', { ascending: false })
+
+  //CASH DATA, FORMATTED FOR EXPORTING
+  const rows = inventory?.map(row => ({
+    RECORD_ID: row.id,
+    ITEM_NAME: row.name,
+    ITEM_QUANTITY: row.quantity,
+    UNIT_OF_MEASUREMENTT: row.unit_of_measurement,
+    ITEM_EXPIRY: (row.expiry != null || row.expiry != undefined) ? formatDate(row.expiry):"N/A",
+    ITEM_PERISHABILITY: row.perishable ? "PERISHABLE":"NON-PERISHABLE"
+  }))
 
   const saveChanges = async (formData: FormData) => {
     'use server'
@@ -87,6 +107,7 @@ export default async function Page() {
       <TableContainer>
         <TableHeader header={'Inventory'} />
         <TableContent>
+        <ExportTest rows={rows} fileName={"INVENTORY"} sheetName={"INVENTORY"} />
           <Table>
             <Thead>
               <Tr>
