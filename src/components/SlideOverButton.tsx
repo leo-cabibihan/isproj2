@@ -67,7 +67,7 @@ export default function SlideOver({ buttontext, children, variant, color, title 
   )
 }
 
-export function ExportTest(rows: any[], fileName: String) {
+export function ExportTest({rows, fileName} : {rows: any[], fileName: String}) {
 
   XLSX.stream.set_readable(Readable);
   XLSX.set_cptable(cpexcel);
@@ -110,7 +110,7 @@ export function ExportTest(rows: any[], fileName: String) {
           /* generate worksheet and workbook */
           const worksheet = XLSX.utils.json_to_sheet(destructured_rows);
           const workbook = XLSX.utils.book_new();
-          XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
+          XLSX.utils.book_append_sheet(workbook, worksheet, "EXPORTED TABLE");
 
           // /* calculate column width */
           // const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
