@@ -73,6 +73,8 @@ export function ExportTest(rows: any[]) {
   XLSX.set_cptable(cpexcel);
   XLSX.set_fs(fs);
 
+  const destructured_rows = rows.rows
+
   return (
     <>
       <Button variant='solid' color='green' onClick={
@@ -94,7 +96,7 @@ export function ExportTest(rows: any[]) {
             birthday: row.bio.birthday
           }));
 
-          console.log("THE ROWS LOOK LIKE THIS: ", rows)
+          console.log("THE ROWS LOOK LIKE THIS: ", destructured_rows)
           console.log("THE TEST DATA LOOKS LIKE THIS: ", old_rows)
 
           /* generate worksheet and workbook */
