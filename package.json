@@ -53,7 +53,9 @@
     "uuid": "^9.0.1",
     "xlsx": "file:vendor/xlsx-0.20.0.tgz"
   },
-  "browser": {},
+  "browser": {
+    "fs": false
+  },
   "devDependencies": {
     "@types/react-csv": "^1.1.9",
     "@types/uuid": "^9.0.4",

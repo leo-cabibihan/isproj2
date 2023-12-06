@@ -1,6 +1,10 @@
 //@ts-nocheck
 "use client"
 
+import * as XLSX from 'xlsx';
+import { Readable } from 'stream';
+import * as cpexcel from 'xlsx/dist/cpexcel.full.mjs';
+import * as fs from 'fs';
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -65,23 +69,47 @@ export default function SlideOver({ buttontext, children, variant, color, title 
 
 export function ExportTest() {
 
-  const handleExport = async (e: any) => {
-    e.preventDefault()
-    const rawResponse = await fetch(
-      `https://isproj2.vercel.app/dashboard/donations/cash/post`,
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      },
-    )
-  }
+  XLSX.stream.set_readable(Readable);
+  XLSX.set_cptable(cpexcel);
+  XLSX.set_fs(fs);
+
+  // async () => {
+  //   /* fetch JSON data and parse */
+  //   const url = "https://sheetjs.com/data/executive.json";
+  //   const raw_data = await (await fetch(url)).json();
+  
+  //   /* filter for the Presidents */
+  //   const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
+  
+  //   /* sort by first presidential term */
+  //   prez.forEach(row => row.start = row.terms.find(term => term.type === "prez").start);
+  //   prez.sort((l,r) => l.start.localeCompare(r.start));
+  
+  //   /* flatten objects */
+  //   const rows = prez.map(row => ({
+  //     name: row.name.first + " " + row.name.last,
+  //     birthday: row.bio.birthday
+  //   }));
+  
+  //   /* generate worksheet and workbook */
+  //   const worksheet = XLSX.utils.json_to_sheet(rows);
+  //   const workbook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
+  
+  //   /* fix headers */
+  //   XLSX.utils.sheet_add_aoa(worksheet, [["Name", "Birthday"]], { origin: "A1" });
+  
+  //   /* calculate column width */
+  //   const max_width = rows.reduce((w, r) => Math.max(w, r.name.length), 10);
+  //   worksheet["!cols"] = [ { wch: max_width } ];
+  
+  //   /* create an XLSX file and try to save to Presidents.xlsx */
+  //   XLSX.writeFile(workbook, "Presidents.xlsx", { compression: true });
+  // }
 
   return (
     <>
-      <Button variant='solid' color='green' onClick={handleExport}>TEST</Button>
+      <Button variant='solid' color='green' >TEST</Button>
     </>
 
   )
