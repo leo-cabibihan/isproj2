@@ -67,13 +67,14 @@ export default function SlideOver({ buttontext, children, variant, color, title 
   )
 }
 
-export function ExportTest(rows: any[]) {
+export function ExportTest(rows: any[], fileName: String) {
 
   XLSX.stream.set_readable(Readable);
   XLSX.set_cptable(cpexcel);
   XLSX.set_fs(fs);
 
   const destructured_rows = rows.rows
+  const file_name = `${fileName.toString()}.xlsx`
 
   return (
     <>
@@ -102,6 +103,8 @@ export function ExportTest(rows: any[]) {
           console.log("THE TEST DATA LOOKS LIKE THIS: ", old_rows)
           console.log("HOW DOES THE EXAMPLE DATA LOOK LIKE? " + old_rows)
           console.log("IS THE ACTUAL DATA AN ARRAY THO?? " + Array.isArray(destructured_rows) ? "YES":"NO")
+          console.log("FILENAME IS: " + file_name)
+
 
           /* generate worksheet and workbook */
           const worksheet = XLSX.utils.json_to_sheet(destructured_rows);
