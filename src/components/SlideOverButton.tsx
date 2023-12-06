@@ -67,7 +67,7 @@ export default function SlideOver({ buttontext, children, variant, color, title 
   )
 }
 
-export function ExportTest({rows}: {rows: any}) {
+export function ExportTest(rows: any) {
 
   XLSX.stream.set_readable(Readable);
   XLSX.set_cptable(cpexcel);
@@ -77,24 +77,25 @@ export function ExportTest({rows}: {rows: any}) {
     <>
       <Button variant='solid' color='green' onClick={
         async () => {
-          // /* fetch JSON data and parse */
-          // const url = "https://sheetjs.com/data/executive.json";
-          // const raw_data = await (await fetch(url)).json();
+          /* fetch JSON data and parse */
+          const url = "https://sheetjs.com/data/executive.json";
+          const raw_data = await (await fetch(url)).json();
 
-          // /* filter for the Presidents */
-          // const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
+          /* filter for the Presidents */
+          const prez = raw_data.filter(row => row.terms.some(term => term.type === "prez"));
 
-          // /* sort by first presidential term */
-          // prez.forEach(row => row.start = row.terms.find(term => term.type === "prez").start);
-          // prez.sort((l, r) => l.start.localeCompare(r.start));
+          /* sort by first presidential term */
+          prez.forEach(row => row.start = row.terms.find(term => term.type === "prez").start);
+          prez.sort((l, r) => l.start.localeCompare(r.start));
 
-          // /* flatten objects */
-          // const rows = prez.map(row => ({
-          //   name: row.name.first + " " + row.name.last,
-          //   birthday: row.bio.birthday
-          // }));
+          /* flatten objects */
+          const old_rows = prez.map(row => ({
+            name: row.name.first + " " + row.name.last,
+            birthday: row.bio.birthday
+          }));
 
           console.log("THE ROWS LOOK LIKE THIS: ", rows)
+          console.log("THE TEST DATA LOOKS LIKE THIS: ", old_rows)
 
           /* generate worksheet and workbook */
           const worksheet = XLSX.utils.json_to_sheet(rows);
