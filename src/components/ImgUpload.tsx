@@ -73,7 +73,8 @@ export function ImageUpload({ folderName, charityID, recordID, labelText }: any)
             setHeading('Upload Complete!')
         } else {
             console.log(error)
-            setMessage("Error uploading file. See the details below: \n" + error);
+            const temp_message = "Error uploading file. See the details below: \n", error 
+            setMessage(temp_message);
             setMessageType('ERROR');
             setHeading('Upload Error!')
         }
@@ -156,7 +157,8 @@ export function ImageUpdate({ folderName, charityID, recordID }: any) {
             setHeading('Upload Complete!')
         } else {
             console.log(error)
-            setMessage("Error uploading file. See the details below: \n" + error);
+            const temp_message = "Error uploading file. See the details below: \n", error 
+            setMessage(temp_message);
             setMessageType('ERROR');
             setHeading('Upload Error!')
         }
