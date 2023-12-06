@@ -100,7 +100,7 @@ export function ExportTest(rows: any[]) {
           console.log("THE TEST DATA LOOKS LIKE THIS: ", old_rows)
 
           /* generate worksheet and workbook */
-          const worksheet = XLSX.utils.json_to_sheet(rows);
+          const worksheet = XLSX.utils.json_to_sheet(destructured_rows);
           const workbook = XLSX.utils.book_new();
           XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
 
