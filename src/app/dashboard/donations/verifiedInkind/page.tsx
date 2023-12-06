@@ -3,7 +3,7 @@ import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 import { SelectField, TextField } from '@/components/Fields'
 import { Table, TableContainer, TableContent, TableHeaderButton, Tbody, Td, Th, Thead, Tr } from '@/components/Table';
 import { Button } from '@/components/Button';
-import SlideOver from '@/components/SlideOverButton';
+import SlideOver, { ExportTest } from '@/components/SlideOverButton';
 import supabase from '@/app/utils/supabase';
 import { revalidatePath } from 'next/cache';
 import { EditForm, MultilayeredForm } from './form';
@@ -65,6 +65,7 @@ export default async function VerifiedTable() {
           </SlideOver>
         </TableHeaderButton>
         <TableContent>
+        <ExportTest rows={rows} fileName={"VERIFIED DONATIONS"} sheetName={"VERIFIED"} />
           <Table>
             <Thead>
               <Tr>
