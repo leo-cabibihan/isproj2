@@ -100,6 +100,13 @@ export async function POST(request: Request) {
     body,
   })
 
+  if (success) {
+    console.log("YEAAAAA THE EMAIL WAS SENT B O I")
+  }
+  else {
+    console.log("Supabase is WEEEEIRD.")
+  }
+
   if ([error, item_error, address_error].some((err) => err !== null)) {
     console.log('errors', error, item_error, address_error)
     return NextResponse.json({ error: error?.message }, { status: 400 })
