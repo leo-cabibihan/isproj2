@@ -117,7 +117,7 @@ export async function middleware(req: NextRequest) {
     }
   }
   else if (originalUrl.includes('/thankyou')) {
-    return Response.redirect(`${requestUrl.origin}/thankyou`)
+    return Response.redirect('https://youtu.be/dQw4w9WgXcQ?si=OHW-0Fo5ORsN96dR')
   }
 
   return res
