@@ -13,6 +13,7 @@ import { GetUID } from "@/app/utils/user_id"
 import { getURL } from '@/app/utils/url'
 import { SelectField } from "@/components/Fields"
 import { Message } from "@/components/Feedback"
+import { NoWhiteSpace, NumberValidation } from "@/app/utils/input_validation"
 
 export const revalidate = 0;
 
@@ -97,61 +98,100 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
-    const beneficiary = {
-      beneficiary_name: formData.get("beneficiary"),
-      contact: formData.get("contact_no"),
-      address: formData.get("address"),
-      charity_id: parseInt(charity_id)
-    };
 
-    const { data: beneficiary_insert, error: insert_error } = await supabase.from('beneficiaries').insert(beneficiary).select();
+    const name_input = String(formData.get("beneficiary"))
+    const contact_input = Number(formData.get("contact_no"))
+    const address_input = String(formData.get("address"))
 
-    if (insert_error) {
-      const error = insert_error
-      message = `Failed to add beneficiary. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-      messageType = "ERROR"
-      heading = "Beneficiary not Added."
+    const valid_name = NoWhiteSpace(name_input)
+    const valid_number = NumberValidation(contact_input)
+    const valid_address = NoWhiteSpace(address_input)
+
+    if (valid_name && valid_number && valid_address) {
+
+      const beneficiary = {
+        beneficiary_name: formData.get("beneficiary"),
+        contact: formData.get("contact_no"),
+        address: formData.get("address"),
+        charity_id: parseInt(charity_id)
+      };
+
+      const { data: beneficiary_insert, error: insert_error } = await supabase.from('beneficiaries').insert(beneficiary).select();
+
+      if (insert_error) {
+        const error = insert_error
+        message = `Failed to add beneficiary. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+        messageType = "ERROR"
+        heading = "Beneficiary not Added."
+      }
+      else {
+        message = "The new Beneficiary has been added."
+        messageType = "SUCCESS"
+        heading = "Sucess."
+        CharityLog("ADDED BENEFICIARY " + beneficiary_insert![0].beneficiary_name + " ON " + beneficiary_insert![0].date + ".", insert_error)
+      }
+
+      revalidatePath('/');
+      console.log("THE ERROR IS: ", beneficiary_insert, insert_error)
+      DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/contacts?err=${generic_error}`, insert_error)
+      console.log("ERROR IS ", insert_error)
+
     }
     else {
-      message = "The new Beneficiary has been added."
-      messageType = "SUCCESS"
-      heading = "Sucess."
-      CharityLog("ADDED BENEFICIARY " + beneficiary_insert![0].beneficiary_name + " ON " + beneficiary_insert![0].date + ".", insert_error)
+      const error_msg = "Invalid Inputs. Please check your data and try again."
+      message = error_msg
+      messageType = "ERROR"
+      heading = "Invalid Input."
     }
-
-    revalidatePath('/');
-    console.log("THE ERROR IS: ", beneficiary_insert, insert_error)
-    DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/contacts?err=${generic_error}`, insert_error)
-    console.log("ERROR IS ", insert_error)
 
   };
 
   const saveChanges = async (formData: FormData) => {
     'use server'
-    const contactId = formData.get("id")
-    const beneficiary = {
-      beneficiary_name: formData.get("beneficiary"),
-      contact: formData.get("contact_no"),
-      address: formData.get("address")
-    };
 
-    const { data: beneficiaries_update, error: update_error } = await supabase.from('beneficiaries').update(beneficiary).eq("id", contactId).select()
+    const name_input = String(formData.get("beneficiary"))
+    const contact_input = Number(formData.get("contact_no"))
+    const address_input = String(formData.get("address"))
 
-    if (update_error) {
-      const error = update_error
-      message = `Failed to update Beneficiary Details. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-      messageType = "ERROR"
-      heading = "Beneficiary not Updated."
+    const valid_name = NoWhiteSpace(name_input)
+    const valid_number = NumberValidation(contact_input)
+    const valid_address = NoWhiteSpace(address_input)
+
+    if (valid_name && valid_number && valid_address) {
+
+      const contactId = formData.get("id")
+      const beneficiary = {
+        beneficiary_name: formData.get("beneficiary"),
+        contact: formData.get("contact_no"),
+        address: formData.get("address")
+      };
+
+      const { data: beneficiaries_update, error: update_error } = await supabase.from('beneficiaries').update(beneficiary).eq("id", contactId).select()
+
+      if (update_error) {
+        const error = update_error
+        message = `Failed to update Beneficiary Details. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+        messageType = "ERROR"
+        heading = "Beneficiary not Updated."
+      }
+      else {
+        message = "The Beeficiary Details have been Updated."
+        messageType = "SUCCESS"
+        heading = "Success."
+        CharityLog("UPDATED BENEFICIARY " + beneficiaries_update![0].beneficiary_name + " ON " + beneficiaries_update![0].date + ".", update_error)
+      }
+
+      revalidatePath('/');
+      // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/contacts?err=${generic_error?.message}`, update_error)
+
     }
     else {
-      message = "The Beeficiary Details have been Updated."
-      messageType = "SUCCESS"
-      heading = "Success."
-      CharityLog("UPDATED BENEFICIARY " + beneficiaries_update![0].beneficiary_name + " ON " + beneficiaries_update![0].date + ".", update_error)
+      const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+      message = error_msg
+      messageType = "ERROR"
+      heading = "Invalid Input."
     }
 
-    revalidatePath('/');
-    // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/contacts?err=${generic_error?.message}`, update_error)
   };
 
   const deleteContact = async (formData: FormData) => {

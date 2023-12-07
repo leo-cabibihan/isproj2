@@ -10,6 +10,7 @@ import SlideOver, { ExportTest } from "@/components/SlideOverButton";
 import { Table, TableContainer, TableContent, TableHeader, Tbody, Td, Th, Thead, Tr } from "@/components/Table";
 import { revalidatePath } from "next/cache";
 import { SelectField } from "@/components/Fields";
+import { NoWhiteSpace } from "@/app/utils/input_validation";
 
 export const revalidate = 0;
 
@@ -21,7 +22,7 @@ async function getComplaintsData(column: any, order: any, charity_id: number) {
             .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name )')
             .eq('charity_id', charity_id)
             .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
-        if(column === 'created at'){
+        if (column === 'created at') {
             const { data: complaints } = await supabase.from('donor_complaints')
                 .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name )')
                 .eq('charity_id', charity_id)
@@ -35,7 +36,7 @@ async function getComplaintsData(column: any, order: any, charity_id: number) {
         const { data: complaints } = await supabase.from('donor_complaints')
             .select('*, charity ( id, name ), decrypted_donor ( id, decrypted_name )')
             .eq('charity_id', charity_id)
-            .order('created_at', {ascending: false})
+            .order('created_at', { ascending: false })
         data = complaints
     }
 
@@ -104,29 +105,44 @@ export default async function Page({ searchParams }: any) {
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
-        const appeals = {
-            charity_id: formData.get("charity_id"),
-            charity_worker_id: formData.get("worker_id"),
-            complaint_id: formData.get("complaint_id"),
-            explanation: formData.get("explanation")
-        };
 
-        const { data, error } = await supabase.from('charity_appeals').insert(appeals).select()
+        const explanation_input = String(formData.get("explanation"))
+        const valid_explanation = NoWhiteSpace(explanation_input)
 
-        if (error) {
-            message = `Failed to File Appeal. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Appeal not Filed."
+        if (valid_explanation) {
+
+            const appeals = {
+                charity_id: formData.get("charity_id"),
+                charity_worker_id: formData.get("worker_id"),
+                complaint_id: formData.get("complaint_id"),
+                explanation: formData.get("explanation")
+            };
+
+            const { data, error } = await supabase.from('charity_appeals').insert(appeals).select()
+
+            if (error) {
+                message = `Failed to File Appeal. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Appeal not Filed."
+            }
+            else {
+                message = "Appeal Filed Successfully."
+                messageType = "SUCCESS"
+                heading = "Appeal Filed."
+                CharityLog("FILED APPEAL", error)
+            }
+
+            console.log("APPEALS ERROR IS: ", error)
+            revalidatePath('/');
+
         }
         else {
-            message = "Appeal Filed Successfully."
-            messageType = "SUCCESS"
-            heading = "Appeal Filed."
-            CharityLog("FILED APPEAL", error)
+            const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        console.log("APPEALS ERROR IS: ", error)
-        revalidatePath('/');
     };
 
     return (

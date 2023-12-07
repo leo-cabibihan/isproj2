@@ -1,5 +1,6 @@
 //@ts-nocheck
 import { CharityLog } from '@/app/admin/audit-log/function';
+import { NumberValidation } from '@/app/utils/input_validation';
 import supabase from '@/app/utils/supabase';
 import { GetUID } from '@/app/utils/user_id';
 import { handleTableExport } from '@/app/utils/xlsx';
@@ -121,58 +122,87 @@ export default async function ExternalTable({ searchParams }: any) {
     const handleSubmit = async (formData: FormData) => {
         'use server'
 
-        const cash = {
-            amount: formData.get('amount'),
-            date: formData.get('date'),
-            charity_id: charityId,
-            is_external: true,
-            event_id: formData.get('event')
+        const amount_input = Number(formData.get('amount'))
+        const valid_amount = NumberValidation(amount_input)
 
-        }
+        if (valid_amount) {
 
-        const { data, error } = await supabase.from('cash').insert(cash).select()
+            const cash = {
+                amount: formData.get('amount'),
+                date: formData.get('date'),
+                charity_id: charityId,
+                is_external: true,
+                event_id: formData.get('event')
 
-        if (error) {
-            message = `Failed to Add External Income. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Data not Added."
+            }
+
+            const { data, error } = await supabase.from('cash').insert(cash).select()
+
+            if (error) {
+                message = `Failed to Add External Income. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Data not Added."
+            }
+            else {
+                message = "External Income has been added to the system."
+                messageType = "SUCCESS"
+                heading = "Record Added."
+                await CharityLog("ADDED EXTERNAL INCOME WORTH PHP " + data![0].amount, error)
+            }
+
+            revalidatePath('/');
+
         }
         else {
-            message = "External Income has been added to the system."
-            messageType = "SUCCESS"
-            heading = "Record Added."
-            await CharityLog("ADDED EXTERNAL INCOME WORTH PHP " + data![0].amount, error)
+            const error_msg = "Invalid Inputs. Number must be non-negative."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        revalidatePath('/');
     };
 
     const saveChanges = async (formData: FormData) => {
         'use server'
-        const cashID = formData.get("id")
-        const cash = {
-            amount: formData.get('amount'),
-            date: formData.get('date'),
-            charity_id: charityId,
-            is_external: true,
-            event_id: formData.get('event')
-        }
 
-        const { data, error } = await supabase.from('cash').update(cash).eq("id", cashID).select()
+        const amount_input = Number(formData.get('amount'))
+        const valid_amount = NumberValidation(amount_input)
 
-        if (error) {
-            message = `Failed to Update Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Record not Updated."
+        if (valid_amount) {
+
+            const cashID = formData.get("id")
+            const cash = {
+                amount: formData.get('amount'),
+                date: formData.get('date'),
+                charity_id: charityId,
+                is_external: true,
+                event_id: formData.get('event')
+            }
+
+            const { data, error } = await supabase.from('cash').update(cash).eq("id", cashID).select()
+
+            if (error) {
+                message = `Failed to Update Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Record not Updated."
+            }
+            else {
+                message = "Record Updated Successfully."
+                messageType = "SUCCESS"
+                heading = "Record Updated."
+                await CharityLog("EDITED EXTERNAL INCOME WORTH PHP " + data![0].amount, error)
+            }
+
+            revalidatePath('/');
+
         }
         else {
-            message = "Record Updated Successfully."
-            messageType = "SUCCESS"
-            heading = "Record Updated."
-            await CharityLog("EDITED EXTERNAL INCOME WORTH PHP " + data![0].amount, error)
+            const error_msg = "Invalid Inputs. Number must be non-negative."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        revalidatePath('/');
     };
 
     const deletePost = async (formData: FormData) => {

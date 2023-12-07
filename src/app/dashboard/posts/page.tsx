@@ -19,6 +19,7 @@ import { GetUID } from "@/app/utils/user_id";
 import { Column } from "@react-email/components";
 import { SelectField } from "@/components/Fields";
 import { Message } from "@/components/Feedback";
+import { NoWhiteSpace } from "@/app/utils/input_validation";
 
 export const revalidate = 0;
 
@@ -31,7 +32,7 @@ async function getPostData(column: any, order: any, charity_id: number) {
             .select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )')
             .eq('charity_id', charity_id)
             .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
-        if(column === 'date posted'){
+        if (column === 'date posted') {
             const { data: posts, error } = await supabase
                 .from('campaign_post')
                 .select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )')
@@ -48,7 +49,7 @@ async function getPostData(column: any, order: any, charity_id: number) {
             .select('*, charity ( id, name ), decrypted_charity_member( user_uuid, decrypted_member_name )')
             .eq('charity_id', charity_id)
             .order('date_posted', { ascending: false })
-         data = posts
+        data = posts
     }
 
     return data
@@ -108,57 +109,96 @@ export default async function Page({ searchParams }: any) {
     const handleSubmit = async (formData: FormData) => {
         'use server'
 
-        const post = {
-            title: formData.get("title"),
-            text: formData.get("details"),
-            subheading: formData.get("subtitle"),
-            charity_id: charityId,
-            charity_member_id: uid
-        };
+        const title_input = String(formData.get("title"))
+        const text_input = String(formData.get("details"))
+        const subheading_input = String(formData.get("subtitle"))
 
-        const { data, error } = await supabase.from('campaign_post').insert(post).select()
+        const valid_title = NoWhiteSpace(title_input)
+        const valid_text = NoWhiteSpace(text_input)
+        const valid_subheading = NoWhiteSpace(subheading_input)
 
-        if (error) {
-            message = `Failed to Add Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Record not Added."
+        if (valid_title && valid_text && valid_subheading) {
+
+            const post = {
+                title: formData.get("title"),
+                text: formData.get("details"),
+                subheading: formData.get("subtitle"),
+                charity_id: charityId,
+                charity_member_id: uid
+            };
+
+            const { data, error } = await supabase.from('campaign_post').insert(post).select()
+
+            if (error) {
+                message = `Failed to Add Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Record not Added."
+            }
+            else {
+                message = "Record Added Successfully."
+                messageType = "SUCCESS"
+                heading = "Record Added."
+                CharityLog("CREATED POST " + data![0].title, error)
+            }
+
+            revalidatePath('/');
+
         }
         else {
-            message = "Record Added Successfully."
-            messageType = "SUCCESS"
-            heading = "Record Added."
-            CharityLog("CREATED POST " + data![0].title, error)
+            const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        revalidatePath('/');
     };
 
     const saveChanges = async (formData: FormData) => {
         'use server'
-        const postId = formData.get("id")
-        const post = {
-            title: formData.get("title"),
-            text: formData.get("details"),
-            subheading: formData.get("subtitle"),
-            charity_id: charityId,
-            charity_member_id: uid
-        };
 
-        const { data, error } = await supabase.from('campaign_post').update(post).eq("id", postId).select()
+        const title_input = String(formData.get("title"))
+        const text_input = String(formData.get("details"))
+        const subheading_input = String(formData.get("subtitle"))
 
-        if (error) {
-            message = `Failed to Update Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Record not Updated."
+        const valid_title = NoWhiteSpace(title_input)
+        const valid_text = NoWhiteSpace(text_input)
+        const valid_subheading = NoWhiteSpace(subheading_input)
+
+        if (valid_title && valid_text && valid_subheading) {
+
+            const postId = formData.get("id")
+            const post = {
+                title: formData.get("title"),
+                text: formData.get("details"),
+                subheading: formData.get("subtitle"),
+                charity_id: charityId,
+                charity_member_id: uid
+            };
+
+            const { data, error } = await supabase.from('campaign_post').update(post).eq("id", postId).select()
+
+            if (error) {
+                message = `Failed to Update Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Record not Updated."
+            }
+            else {
+                message = "Record Updated Successfully."
+                messageType = "SUCCESS"
+                heading = "Record Updated."
+                CharityLog("UPDATED POST " + data![0].title, error)
+            }
+
+            revalidatePath('/');
+
         }
         else {
-            message = "Record Updated Successfully."
-            messageType = "SUCCESS"
-            heading = "Record Updated."
-            CharityLog("UPDATED POST " + data![0].title, error)
+            const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        revalidatePath('/');
     };
 
     const deletePost = async (formData: FormData) => {
@@ -245,72 +285,72 @@ export default async function Page({ searchParams }: any) {
                         </SlideOver>
                     </TableHeaderButton>
                 ))}
-                <br/>
-                    <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
-                        <div className="flex-col">
-                            <form className='flex flex-col w-full gap-y-6' action="/dashboard/posts" method="GET">
-                                <div className="flex flex-col"> {/* Flex container for the first column */}
-                                    <label className="block text-sm font-medium text-gray-700">Sort by:</label>
-                                    <br />
-                                    <SelectField
-                                        name="column"
-                                        required
-                                    >
-                                        <option value={"id"}>id</option>
-                                        <option value={"title"}>title</option>
-                                        <option value={"date posted"}>date posted</option>
-                                    </SelectField>
-                                </div>
-                                <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
-                                    <label className="block text-sm font-medium text-gray-700">Order as:</label>
-                                    <div className="flex gap-x-4 items-center">
-                                        <div className="flex items-center">
-                                            <input
-                                                id="option1"
-                                                name="order"
-                                                type="radio"
-                                                value={true}
-                                                checked
-                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
-                                            />
-                                            <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                                                Ascending
-                                            </label>
-                                        </div>
-                                        <div className="flex items-center">
-                                            <input
-                                                id="option2"
-                                                name="order"
-                                                type="radio"
-                                                value={false}
-                                                className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
-                                            />
-                                            <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
-                                                Descending
-                                            </label>
-                                        </div>
+                <br />
+                <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
+                    <div className="flex-col">
+                        <form className='flex flex-col w-full gap-y-6' action="/dashboard/posts" method="GET">
+                            <div className="flex flex-col"> {/* Flex container for the first column */}
+                                <label className="block text-sm font-medium text-gray-700">Sort by:</label>
+                                <br />
+                                <SelectField
+                                    name="column"
+                                    required
+                                >
+                                    <option value={"id"}>id</option>
+                                    <option value={"title"}>title</option>
+                                    <option value={"date posted"}>date posted</option>
+                                </SelectField>
+                            </div>
+                            <div className="flex mt-4 gap-x-5 items-center"> {/* Flex container for the second column */}
+                                <label className="block text-sm font-medium text-gray-700">Order as:</label>
+                                <div className="flex gap-x-4 items-center">
+                                    <div className="flex items-center">
+                                        <input
+                                            id="option1"
+                                            name="order"
+                                            type="radio"
+                                            value={true}
+                                            checked
+                                            className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                        />
+                                        <label htmlFor="option1" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                            Ascending
+                                        </label>
+                                    </div>
+                                    <div className="flex items-center">
+                                        <input
+                                            id="option2"
+                                            name="order"
+                                            type="radio"
+                                            value={false}
+                                            className="h-4 w-4 border-gray-300 text-green-700 focus:ring-green-700"
+                                        />
+                                        <label htmlFor="option2" className="ml-3 block text-sm font-medium leading-6 text-gray-900">
+                                            Descending
+                                        </label>
                                     </div>
                                 </div>
-                                <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
-                                    <Button type='submit' variant='solid' color='green' className='w-64'>
-                                        <span>
-                                            Apply Changes <span aria-hidden="true">&rarr;</span>
-                                        </span>
-                                    </Button>
-                                </div>
-                            </form>
-                        </div>
-                    </SlideOver>
-                    <div className="font-bold mt-4 mb-4">
-                        {column && order ? (
-                            <>
-                                <p className="text-green-700 inline">Current Filters: </p>
-                                <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
-                            </>
-                        ) : (
-                            <p className="text-gray-600 italic">No filters currently active</p>
-                        )}
+                            </div>
+                            <div className='flex flex-col items-center mt-4'> {/* Flex container for the third column */}
+                                <Button type='submit' variant='solid' color='green' className='w-64'>
+                                    <span>
+                                        Apply Changes <span aria-hidden="true">&rarr;</span>
+                                    </span>
+                                </Button>
+                            </div>
+                        </form>
                     </div>
+                </SlideOver>
+                <div className="font-bold mt-4 mb-4">
+                    {column && order ? (
+                        <>
+                            <p className="text-green-700 inline">Current Filters: </p>
+                            <span>Sorted by: {column} <span className="text-green-700">::</span> Ordered by: {orderby}</span>
+                        </>
+                    ) : (
+                        <p className="text-gray-600 italic">No filters currently active</p>
+                    )}
+                </div>
                 <div className="bg-white py-24 sm:py-32">
                     <div className="mx-auto max-w-7xl px-6 lg:px-8">
                         <div className="mx-auto max-w-2xl lg:max-w-4xl">

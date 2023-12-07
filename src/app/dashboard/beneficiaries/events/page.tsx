@@ -11,6 +11,7 @@ import { DisplayError } from "@/app/(auth)/error-handling/function";
 import { CharityLog } from "@/app/admin/audit-log/function";
 import { getURL } from '@/app/utils/url'
 import { Message } from "@/components/Feedback";
+import { NoWhiteSpace } from "@/app/utils/input_validation";
 
 export const revalidate = 0;
 
@@ -259,96 +260,150 @@ export default async function Page({ searchParams }: any) {
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
-        const event = {
-            name: formData.get("event_name"),
-            description: formData.get("details"),
-            start_date: formData.get("start_date"),
-            end_date: formData.get("end_date"),
-            //photo: CDNURL,
-            charity_id: formData.get("charity_id"),
-            beneficiary_id: formData.get("beneficiary_id"),
-            is_ongoing: true,
-            approval_status: 'ON-HOLD'
-        };
 
-        const { data: insert_event, error: insert_error } = await supabase.from('event').insert(event);
+        const name_input = String(formData.get("event_name"))
+        const desc_input = String(formData.get("details"))
 
-        if (insert_error) {
-            const error = insert_error
-            message = `Failed to Add Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Event not Created."
+        const valid_name = NoWhiteSpace(name_input)
+        const valid_desc = NoWhiteSpace(desc_input)
+
+        if (valid_name && valid_desc) {
+
+            const event = {
+                name: formData.get("event_name"),
+                description: formData.get("details"),
+                start_date: formData.get("start_date"),
+                end_date: formData.get("end_date"),
+                //photo: CDNURL,
+                charity_id: formData.get("charity_id"),
+                beneficiary_id: formData.get("beneficiary_id"),
+                is_ongoing: true,
+                approval_status: 'ON-HOLD'
+            };
+
+            const { data: insert_event, error: insert_error } = await supabase.from('event').insert(event);
+
+            if (insert_error) {
+                const error = insert_error
+                message = `Failed to Add Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Event not Created."
+            }
+            else {
+                message = "Your new event has been added. The Admins will be reviewing it as soon as possible."
+                messageType = "SUCCESS"
+                heading = "Event Added."
+                CharityLog("ADDED NEW EVENT " + formData.get("event_name") + ".", event_error)
+            }
+
+            revalidatePath('/');
+            // DisplayError(`${getURL}dashboard/beneficiaries/events?err=${generic_error}`, insert_error)
+
         }
         else {
-            message = "Your new event has been added. The Admins will be reviewing it as soon as possible."
-            messageType = "SUCCESS"
-            heading = "Event Added."
-            CharityLog("ADDED NEW EVENT " + formData.get("event_name") + ".", event_error)
+            const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        revalidatePath('/');
-        // DisplayError(`${getURL}dashboard/beneficiaries/events?err=${generic_error}`, insert_error)
     };
 
     const saveChanges = async (formData: FormData) => {
         'use server'
-        const eventId = formData.get("id")
-        const event = {
-            name: formData.get("event_name"),
-            description: formData.get("description"),
-            start_date: formData.get("start_date"),
-            end_date: formData.get("end_date"),
-            beneficiary_id: formData.get("beneficiary_id")
-        };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+        const name_input = String(formData.get("event_name"))
+        const desc_input = String(formData.get("description"))
 
-        if (update_error) {
-            const error = update_error
-            message = `Failed to Update Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Event not Updated."
+        const valid_name = NoWhiteSpace(name_input)
+        const valid_desc = NoWhiteSpace(desc_input)
+
+        if (valid_name && valid_desc) {
+
+            const eventId = formData.get("id")
+            const event = {
+                name: formData.get("event_name"),
+                description: formData.get("description"),
+                start_date: formData.get("start_date"),
+                end_date: formData.get("end_date"),
+                beneficiary_id: formData.get("beneficiary_id")
+            };
+
+            const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+
+            if (update_error) {
+                const error = update_error
+                message = `Failed to Update Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Event not Updated."
+            }
+            else {
+                message = "Your event has been updated. The Admins will be reviewing it as soon as possible."
+                messageType = "SUCCESS"
+                heading = "Event Updated."
+                CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
+            }
+
+            revalidatePath('/');
+            // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+
         }
         else {
-            message = "Your event has been updated. The Admins will be reviewing it as soon as possible."
-            messageType = "SUCCESS"
-            heading = "Event Updated."
-            CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
+            const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        revalidatePath('/');
-        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const saveChanges2 = async (formData: FormData) => {
         'use server'
-        const eventId = formData.get("id")
-        const event = {
-            name: formData.get("event_name"),
-            description: formData.get("description"),
-            start_date: formData.get("start_date"),
-            end_date: formData.get("end_date"),
-            beneficiary_id: formData.get("beneficiary_id"),
-            approval_status: 'ON-HOLD'
-        };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+        const name_input = String(formData.get("event_name"))
+        const desc_input = String(formData.get("description"))
 
-        if (update_error) {
-            const error = update_error
-            message = `Failed to Update Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Event not Updated."
+        const valid_name = NoWhiteSpace(name_input)
+        const valid_desc = NoWhiteSpace(desc_input)
+
+        if (valid_name && valid_desc) {
+
+            const eventId = formData.get("id")
+            const event = {
+                name: formData.get("event_name"),
+                description: formData.get("description"),
+                start_date: formData.get("start_date"),
+                end_date: formData.get("end_date"),
+                beneficiary_id: formData.get("beneficiary_id"),
+                approval_status: 'ON-HOLD'
+            };
+
+            const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+
+            if (update_error) {
+                const error = update_error
+                message = `Failed to Update Event. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Event not Updated."
+            }
+            else {
+                message = "Your event has been updated. The Admins will be reviewing it as soon as possible."
+                messageType = "SUCCESS"
+                heading = "Event Updated."
+                CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
+            }
+
+            revalidatePath('/');
+            // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+
         }
         else {
-            message = "Your event has been updated. The Admins will be reviewing it as soon as possible."
-            messageType = "SUCCESS"
-            heading = "Event Updated."
-            CharityLog("UPDATED EVENT " + formData.get("event_name"), update_error)
+            const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        revalidatePath('/');
-        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     const endEvent = async (formData: FormData) => {

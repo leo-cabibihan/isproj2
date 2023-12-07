@@ -14,6 +14,7 @@ import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { ExportTest } from '@/components/SlideOverButton';
+import { NoWhiteSpace, NumberValidation } from '@/app/utils/input_validation';
 
 export const revalidate = 0;
 
@@ -26,7 +27,7 @@ async function getExpenseData(column: any, order: any, charity_id: number) {
             .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
             .eq('charity_id', charity_id)
             .order(`${column}`, { ascending: order === 'true' ? true : false }) //if order is true, then true, otherwise false.
-        if(column === 'beneficiary name'){
+        if (column === 'beneficiary name') {
             const { data: expenses, error } = await supabase
                 .from('expenses')
                 .select('*, charity ( id, name ), beneficiaries ( id, beneficiary_name ), event (id, name)')
@@ -129,60 +130,96 @@ export default async function Expenses({ searchParams }: any) {
 
     const handleSubmit = async (formData: FormData) => {
         'use server'
-        const expense = {
-            amount: formData.get("amount"),
-            reason: formData.get("reason"),
-            event_id: formData.get("event_id"),
-            beneficiary_id: formData.get("beneficiary_id"),
-            charity_id: formData.get("charity_id")
-        };
 
-        const { data, error } = await supabase.from('expenses').insert(expense).select();
+        const amount_input = Number(formData.get("amount"))
+        const desc_input = String(formData.get("reason"))
 
-        if (error) {
-            message = `Failed to Add Expense. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Expense not Added."
+        const valid_amount = NumberValidation(amount_input)
+        const valid_desc = NoWhiteSpace(desc_input)
+
+        if (valid_amount && valid_desc) {
+
+            const expense = {
+                amount: formData.get("amount"),
+                reason: formData.get("reason"),
+                event_id: formData.get("event_id"),
+                beneficiary_id: formData.get("beneficiary_id"),
+                charity_id: formData.get("charity_id")
+            };
+
+            const { data, error } = await supabase.from('expenses').insert(expense).select();
+
+            if (error) {
+                message = `Failed to Add Expense. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Expense not Added."
+            }
+            else {
+                message = "Your Expense has been added."
+                messageType = "SUCCESS"
+                heading = "Success."
+                CharityLog("ADDED EXPENSE", error)
+            }
+
+            revalidatePath('/');
+
+            // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+
         }
         else {
-            message = "Your Expense has been added."
-            messageType = "SUCCESS"
-            heading = "Success."
-            CharityLog("ADDED EXPENSE", error)
+            const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed. Numbers must be properly formatted"
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        revalidatePath('/');
-
-        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
     const saveChanges = async (formData: FormData) => {
         'use server'
-        const expenseId = formData.get("id")
-        const expense = {
-            amount: formData.get("amount"),
-            reason: formData.get("reason"),
-            event_id: formData.get("event"),
-            beneficiary_id: formData.get("beneficiary_id"),
-        };
 
-        const { data, error } = await supabase.from('expenses').update(expense).eq("id", expenseId).select()
+        const amount_input = Number(formData.get("amount"))
+        const desc_input = String(formData.get("reason"))
 
-        if (error) {
-            message = `Failed to Update Expense. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Expense not Updated."
+        const valid_amount = NumberValidation(amount_input)
+        const valid_desc = NoWhiteSpace(desc_input)
+
+        if (valid_amount && valid_desc) {
+
+            const expenseId = formData.get("id")
+            const expense = {
+                amount: formData.get("amount"),
+                reason: formData.get("reason"),
+                event_id: formData.get("event"),
+                beneficiary_id: formData.get("beneficiary_id"),
+            };
+
+            const { data, error } = await supabase.from('expenses').update(expense).eq("id", expenseId).select()
+
+            if (error) {
+                message = `Failed to Update Expense. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Expense not Updated."
+            }
+            else {
+                message = "Your Expense has been Updated."
+                messageType = "SUCCESS"
+                heading = "Success."
+                CharityLog("UPDATED EXPENSE" + expenseId + ".", error)
+            }
+
+            revalidatePath('/');
+
+            // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
+
         }
         else {
-            message = "Your Expense has been Updated."
-            messageType = "SUCCESS"
-            heading = "Success."
-            CharityLog("UPDATED EXPENSE" + expenseId + ".", error)
+            const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        revalidatePath('/');
-
-        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/expenses?err=${generic_error}`, error)
     };
 
     const deleteExpense = async (formData: FormData) => {
@@ -309,7 +346,7 @@ export default async function Expenses({ searchParams }: any) {
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
-                <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
+                    <SlideOver title="Filter & Sort Data" buttontext="Filter & Sort Data" variant="solid" color="yellow">
                         <div className="flex-col">
                             <form className='flex flex-col w-full gap-y-6' action="/dashboard/beneficiaries/expenses" method="GET">
                                 <div className="flex flex-col"> {/* Flex container for the first column */}

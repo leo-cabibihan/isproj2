@@ -15,6 +15,7 @@ import { render } from '@react-email/render'
 import { NoURLMail, ReceiptEmail } from '@/components/email-template'
 import Plunk from '@plunk/node'
 import { Message } from '@/components/Feedback'
+import { NoWhiteSpace } from '@/app/utils/input_validation'
 
 export const revalidate = 0
 
@@ -45,45 +46,61 @@ export default async function Report({ params }: any) {
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
-    const complaint = {
-      complaint: formData.get('reason'),
-      image: 1233,
-      donor_id: donorID,
-      charity_id: orgID,
-    }
 
-    const { data, error } = await supabase
-      .from('donor_complaints')
-      .insert(complaint)
-      .select()
+    const input = String(formData.get('reason'))
 
-    if (error) {
-      const error_msg = `Please see Error Details below and try again. \n${error.details} \n${error.message} \n${error.hint}`
-      message = error_msg
-      messageType = "ERROR"
-      heading = "Failed to Submit Complaint."
+    const valid_input = NoWhiteSpace(input)
+
+    if (valid_input) {
+
+      const complaint = {
+        complaint: formData.get('reason'),
+        image: 1233,
+        donor_id: donorID,
+        charity_id: orgID,
+      }
+
+      const { data, error } = await supabase
+        .from('donor_complaints')
+        .insert(complaint)
+        .select()
+
+      if (error) {
+        const error_msg = `Please see Error Details below and try again. \n${error.details} \n${error.message} \n${error.hint}`
+        message = error_msg
+        messageType = "ERROR"
+        heading = "Failed to Submit Complaint."
+      }
+      else {
+        message = "Your report has been Submitted. We'll take action as soon as possible."
+        messageType = "SUCCESS"
+        heading = "Report Submitted."
+      }
+
+      revalidatePath('/')
+      const body = render(
+        <NoURLMail
+          heading={'COMPLAINT RECEIVED'}
+          content={
+            'Thank you for filing a complaint. Rest assured that the admins will review this as soon as possible and take immediate action.'
+          }
+        />,
+      )
+
+      const success = await plunk.emails.send({
+        to: email,
+        subject: 'Complaint Received',
+        body,
+      })
+
     }
     else {
-      message = "Your report has been Submitted. We'll take action as soon as possible."
-      messageType = "SUCCESS"
-      heading = "Report Submitted."
+      const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+      message = error_msg
+      messageType = "ERROR"
+      heading = "Invalid Input."
     }
 
-    revalidatePath('/')
-    const body = render(
-      <NoURLMail
-        heading={'COMPLAINT RECEIVED'}
-        content={
-          'Thank you for filing a complaint. Rest assured that the admins will review this as soon as possible and take immediate action.'
-        }
-      />,
-    )
-
-    const success = await plunk.emails.send({
-      to: email,
-      subject: 'Complaint Received',
-      body,
-    })
   }
 
   return (

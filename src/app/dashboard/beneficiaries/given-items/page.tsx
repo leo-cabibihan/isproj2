@@ -12,6 +12,7 @@ import { redirect } from "next/navigation";
 import { CharityLog } from "@/app/admin/audit-log/function";
 import Alert from "@/components/Alert";
 import { Message } from "@/components/Feedback";
+import { NumberValidation } from "@/app/utils/input_validation";
 
 export const revalidate = 0;
 
@@ -42,7 +43,7 @@ var message = ""
 var messageType = ""
 var heading = ""
 
-export default async function beneficiaryitem({searchParams}: {searchParams: { [key: string]: string | string[] | undefined }}) {
+export default async function beneficiaryitem({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
@@ -107,40 +108,55 @@ export default async function beneficiaryitem({searchParams}: {searchParams: { [
     const handleSubmit = async (formData: FormData) => {
         'use server'
 
-        const current_item_id = formData.get("item_id")
+        const qty_input = Number(formData.get('amount'))
 
-        const { data: item_to_add, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', charity_id).eq("id", current_item_id).single()
+        const valid_qty = NumberValidation(qty_input)
 
-        const inventoryQuantity = item_to_add?.quantity as number - parseInt(formData.get("amount") as string)
+        if (valid_qty) {
 
-        const { error: idk } = await supabase.from('inventory_item').update({ quantity: inventoryQuantity }).eq("id", current_item_id)
+            const current_item_id = formData.get("item_id")
 
-        const item = {
-            item_id: current_item_id,
-            charity_id: parseInt(charity_id),
-            event_id: formData.get("event_id"),
-            quantity: formData.get('amount'),
-            description: formData.get("desc")
-        };
+            const { data: item_to_add, error: error_3 } = await supabase.from('inventory_item').select('*, items_donation_transaction!inner(*) ').eq('items_donation_transaction.charity_id', charity_id).eq("id", current_item_id).single()
 
-        const { data, error } = await supabase.from('beneficiary_items').insert(item).select();
-        const errors = [error_3, idk, error]
+            const inventoryQuantity = item_to_add?.quantity as number - parseInt(formData.get("amount") as string)
 
-        if (error) {
-            message = `Failed to Add Item. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-            messageType = "ERROR"
-            heading = "Item not Added."
+            const { error: idk } = await supabase.from('inventory_item').update({ quantity: inventoryQuantity }).eq("id", current_item_id)
+
+            const item = {
+                item_id: current_item_id,
+                charity_id: parseInt(charity_id),
+                event_id: formData.get("event_id"),
+                quantity: formData.get('amount'),
+                description: formData.get("desc")
+            };
+
+            const { data, error } = await supabase.from('beneficiary_items').insert(item).select();
+            const errors = [error_3, idk, error]
+
+            if (error) {
+                message = `Failed to Add Item. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+                messageType = "ERROR"
+                heading = "Item not Added."
+            }
+            else {
+                message = "Your Item has been added."
+                messageType = "SUCCESS"
+                heading = "Item Added."
+                CharityLog("ADDED GIVEN-ITEM " + item_to_add?.name + ".", error)
+            }
+
+            revalidatePath('/');
+
+            console.log("I am tired. ", error_3, idk, error)
+
         }
         else {
-            message = "Your Item has been added."
-            messageType = "SUCCESS"
-            heading = "Item Added."
-            CharityLog("ADDED GIVEN-ITEM " + item_to_add?.name + ".", error)
+            const error_msg = "Invalid Inputs. Only Non-Negative and Non-Scientific notation is allowed."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
 
-        revalidatePath('/');
-        
-        console.log("I am tired. ", error_3, idk, error)
 
     };
 

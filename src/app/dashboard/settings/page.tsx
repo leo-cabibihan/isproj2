@@ -12,6 +12,7 @@ function classNames(...classes: string[]) {
 
 import { CharityLog } from '@/app/admin/audit-log/function'
 import SubscribeButton from '@/app/paypal/subscribe'
+import { NoWhiteSpace } from '@/app/utils/input_validation'
 import supabase from '@/app/utils/supabase'
 import { getURL } from '@/app/utils/url'
 import { GetUID } from '@/app/utils/user_id'
@@ -61,27 +62,41 @@ export default async function Settings() {
   const handleSubmit = async (formData: FormData) => {
     'use server'
 
-    const location = {
-      address: formData.get('address'),
-      charity_id: formData.get('id'),
-    }
+    const address_input = String(formData.get('address'))
+    const valid_address = NoWhiteSpace(address_input)
 
-    const { data, error } = await supabase.from('drop_off_location').insert(location).select()
+    if (valid_address) {
 
-    if (error) {
-      message = `Failed to Add Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-      messageType = "ERROR"
-      heading = "Record not Added."
+      const location = {
+        address: formData.get('address'),
+        charity_id: formData.get('id'),
+      }
+
+      const { data, error } = await supabase.from('drop_off_location').insert(location).select()
+
+      if (error) {
+        message = `Failed to Add Record. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+        messageType = "ERROR"
+        heading = "Record not Added."
+      }
+      else {
+        message = "Record Added Successfully."
+        messageType = "SUCCESS"
+        heading = "Record Added."
+        CharityLog("ADDED ADDRESS", error)
+      }
+
+      revalidatePath('/')
+      console.log('ADDRESS ERROR ', error)
+
     }
     else {
-      message = "Record Added Successfully."
-      messageType = "SUCCESS"
-      heading = "Record Added."
-      CharityLog("ADDED ADDRESS", error)
+      const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+      message = error_msg
+      messageType = "ERROR"
+      heading = "Invalid Input."
     }
 
-    revalidatePath('/')
-    console.log('ADDRESS ERROR ', error)
   }
 
   const deleteAddress = async (formData: FormData) => {
@@ -115,17 +130,26 @@ export default async function Settings() {
 
   const saveChanges = async (formData: FormData) => {
     'use server'
-    const orgId = formData.get('id')
-    const details = {
-      name: formData.get('orgname'),
-      about: formData.get('description'),
-    }
 
-    const { data: update_org, error: update_error } = await supabase
-      .from('charity')
-      .update(details)
-      .eq('id', orgId)
-      .select()
+    const name_input = String(formData.get('orgname'))
+    const about_input = String(formData.get('description'))
+
+    const valid_name = NoWhiteSpace(name_input)
+    const valid_about = NoWhiteSpace(about_input)
+
+    if (valid_name && valid_about) {
+
+      const orgId = formData.get('id')
+      const details = {
+        name: formData.get('orgname'),
+        about: formData.get('description'),
+      }
+
+      const { data: update_org, error: update_error } = await supabase
+        .from('charity')
+        .update(details)
+        .eq('id', orgId)
+        .select()
 
       if (update_error) {
         const error = update_error
@@ -140,7 +164,16 @@ export default async function Settings() {
         CharityLog("UPDATED ORG DETAILS", error)
       }
 
-    revalidatePath('/')
+      revalidatePath('/')
+
+    }
+    else {
+      const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+      message = error_msg
+      messageType = "ERROR"
+      heading = "Invalid Input."
+    }
+
   }
 
   return (

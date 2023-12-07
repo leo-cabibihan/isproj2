@@ -8,6 +8,7 @@ import supabase from "../utils/supabase";
 import { SelectField, TextField } from "@/components/Fields";
 import { Failure, Success } from "@/components/Feedback";
 import { useRouter } from "next/navigation";
+import { NumberValidation } from "../utils/input_validation";
 
 function Message({ content, type, heading }: any) {
     if (type == 'ERROR') {
@@ -49,47 +50,61 @@ export default function TestPage({ ID, UserID }: any) {
             console.log(`ACTUAL AMOUNT: ${moneh}. TEST AMOUNT: ${test_amount}`)
             const funds = sessionStorage.getItem("amount")
             console.log("DOES SESSION STORAGE WORK? ", funds)
-            const payload = {
-                "intent": "CAPTURE",
-                "purchase_units": [
-                    {
-                        "amount": {
-                            "currency_code": "USD",
-                            "value": funds
-                        }
-                    }],
+
+            const funds_input = Number(funds)
+            const valid_funds = NumberValidation(funds_input)
+
+            if (valid_funds) {
+
+                const payload = {
+                    "intent": "CAPTURE",
+                    "purchase_units": [
+                        {
+                            "amount": {
+                                "currency_code": "USD",
+                                "value": funds
+                            }
+                        }],
+                }
+
+                console.log(payload)
+
+                const event = sessionStorage.getItem("eventID")
+                console.log(`EVENT IS ${event}`)
+                console.log(`AMOUNT BEING PASSED IN IS - USD ${moneh}`)
+
+                const response = await fetch("/paypal/orders", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // use the "body" param to optionally pass additional order information
+                    // like product ids and quantities
+                    body: JSON.stringify(payload)
+                });
+
+                const orderData = await response.json();
+
+                if (orderData.id) {
+                    return orderData.id;
+                } else {
+                    const errorDetail = orderData?.details?.[0];
+                    const errorMessage = errorDetail
+                        ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+                        : JSON.stringify(orderData);
+
+                    throw new Error(errorMessage);
+                }
+
+            }
+            else {
+
+                setMessage("Amount must be non-negative");
+                setMessageType('ERROR');
+                setHeading('Invalid Input');
+
             }
 
-            console.log(payload)
-
-            const event = sessionStorage.getItem("eventID")
-            console.log(`EVENT IS ${event}`)
-            console.log(`AMOUNT BEING PASSED IN IS - USD ${moneh}`)
-
-            const response = await fetch("/paypal/orders", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                // use the "body" param to optionally pass additional order information
-                // like product ids and quantities
-                body: JSON.stringify(payload)
-            });
-
-            const orderData = await response.json();
-
-            if (orderData.id) {
-                return orderData.id;
-            } else {
-                const errorDetail = orderData?.details?.[0];
-                const errorMessage = errorDetail
-                    ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-                    : JSON.stringify(orderData);
-
-                throw new Error(errorMessage);
-            }
-
-            
         } catch (error) {
             console.error(error);
             setMessage(`Could not initiate PayPal Checkout...${error}`);

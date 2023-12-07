@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation';
 import { revalidatePath } from "next/cache";
 import { AdminLog } from '../../audit-log/function';
 import { Message } from '@/components/Feedback';
+import { NoWhiteSpace } from '@/app/utils/input_validation';
 
 export const revalidate = 0;
 
@@ -187,27 +188,42 @@ export default async function Organization({ params }: any) {
     const rejectEvent = async (formData: FormData) => {
         'use server'
         const eventId = formData.get("id")
-        const event = {
-            approval_status: 'REJECTED',
-            rejection_reason: formData.get("reason")
-        };
 
-        const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+        const input = String(formData.get("reason"))
 
-        if (update_error) {
-            message = `Failed to Reject Event. See Details Below: \n${update_error.details} \n${update_error.hint} \n${update_error.message}.`
-            messageType = "ERROR"
-            heading = "Operation Failed."
+        const valid_input = NoWhiteSpace(input)
+
+        if (valid_input) {
+
+            const event = {
+                approval_status: 'REJECTED',
+                rejection_reason: formData.get("reason")
+            };
+
+            const { data: update_event, error: update_error } = await supabase.from('event').update(event).eq("id", eventId).select()
+
+            if (update_error) {
+                message = `Failed to Reject Event. See Details Below: \n${update_error.details} \n${update_error.hint} \n${update_error.message}.`
+                messageType = "ERROR"
+                heading = "Operation Failed."
+            }
+            else {
+                message = "Event Rejected."
+                messageType = "SUCCESS"
+                heading = "Operation Successful."
+                AdminLog("REJECTED EVENT " + formData.get("event_name"))
+            }
+
+            revalidatePath('/');
+            // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
+
         }
         else {
-            message = "Event Rejected."
-            messageType = "SUCCESS"
-            heading = "Operation Successful."
-            AdminLog("REJECTED EVENT " + formData.get("event_name"))
+            const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+            message = error_msg
+            messageType = "ERROR"
+            heading = "Invalid Input."
         }
-
-        revalidatePath('/');
-        // DisplayError(`https://isproj2.vercel.app/dashboard/beneficiaries/events?err=${generic_error}`, update_error)
     };
 
     return (

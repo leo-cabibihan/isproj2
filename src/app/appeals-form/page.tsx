@@ -17,6 +17,7 @@ import { GetUID } from "@/app/utils/user_id";
 import { CharityLog } from '../admin/audit-log/function';
 import { revalidatePath } from 'next/cache';
 import { Message } from '@/components/Feedback';
+import { NoWhiteSpace } from '../utils/input_validation';
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -45,29 +46,45 @@ export default async function Appeals({ searchParams }: { searchParams: { [key: 
 
   const handleSubmit = async (formData: FormData) => {
     'use server'
-    const appeals = {
-      charity_id: formData.get("charity_id"),
-      charity_worker_id: formData.get("worker_id"),
-      complaint_id: formData.get("complaint_id"),
-      explanation: formData.get("explanation")
-    };
 
-    const { data, error } = await supabase.from('charity_appeals').insert(appeals).select()
+    const input = String(formData.get("explanation"))
 
-    if (error) {
-      message = `Failed to File Appeal. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
-      messageType = "ERROR"
-      heading = "Appeal not Filed."
+    const valid_input = NoWhiteSpace(input)
+
+    if (valid_input) {
+
+      const appeals = {
+        charity_id: formData.get("charity_id"),
+        charity_worker_id: formData.get("worker_id"),
+        complaint_id: formData.get("complaint_id"),
+        explanation: formData.get("explanation")
+      };
+
+      const { data, error } = await supabase.from('charity_appeals').insert(appeals).select()
+
+      if (error) {
+        message = `Failed to File Appeal. See Details below: \n${error.details} \n${error.hint} \n ${error.message}.`
+        messageType = "ERROR"
+        heading = "Appeal not Filed."
+      }
+      else {
+        message = "Your Appeal has been Filed. The Admins will be reviewing it as soon as possible."
+        messageType = "SUCCESS"
+        heading = "Appeal has been Filed."
+        CharityLog("FILED APPEAL", error)
+      }
+
+      console.log("APPEALS ERROR IS: ", error)
+      revalidatePath('/');
+
     }
     else {
-      message = "Your Appeal has been Filed. The Admins will be reviewing it as soon as possible."
-      messageType = "SUCCESS"
-      heading = "Appeal has been Filed."
-      CharityLog("FILED APPEAL", error)
+      const error_msg = "Invalid Inputs. 2 or more consecutive spaces are not allowed."
+      message = error_msg
+      messageType = "ERROR"
+      heading = "Invalid Input."
     }
 
-    console.log("APPEALS ERROR IS: ", error)
-    revalidatePath('/');
   };
 
 
