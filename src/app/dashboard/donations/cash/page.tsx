@@ -162,12 +162,12 @@ export default async function ExternalTable({ searchParams }: any) {
         }
         else {
             const error_msg = "Invalid Inputs. Number must be non-negative."
-            message = error_msg
-            messageType = "ERROR"
-            heading = "Invalid Input."
+            const temp_message = error_msg
+            const temp_messageType = "ERROR"
+            const temp_heading = "Invalid Input."
             // revalidatePath('/');
             {
-                <DisplayMessage content={message} type={messageType} heading={heading} />
+                <DisplayMessage content={temp_message} type={temp_messageType} heading={temp_heading} />
             }
         }
 
