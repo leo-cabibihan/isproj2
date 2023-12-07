@@ -7,6 +7,7 @@ import { TextField, SelectField } from '@/components/Fields'
 import { getURL } from '@/app/utils/url'
 import { SetStateAction, useEffect, useState } from 'react'
 import { Switch } from '@headlessui/react'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -16,11 +17,64 @@ var message = ""
 var messageType = ""
 var heading = ""
 
+function Failure({ heading, content }: any) {
+  return (
+      <div className="rounded-md bg-red-50 p-4">
+          <div className="flex">
+              <div className="flex-shrink-0">
+                  <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
+              </div>
+              <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">{heading}</h3>
+                  <div className="mt-2 text-sm text-red-700">
+                      <p>
+                          {content}
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  )
+}
+
+function Success({ heading, content }: any) {
+  return (
+      <div className="rounded-md bg-green-50 p-4">
+          <div className="flex">
+              <div className="flex-shrink-0">
+                  <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
+              </div>
+              <div className="ml-3">
+                  <h3 className="text-sm font-medium text-green-800">{heading}</h3>
+                  <div className="mt-2 text-sm text-green-700">
+                      <p>
+                          {content}
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  )
+}
+
+
+function Message({ content, type, heading }: any) {
+  if (type == 'ERROR') {
+    return <Failure heading={heading} content={content} />
+  } else if (type == 'SUCCESS') {
+    return <Success heading={heading} content={content} />
+  }
+}
+
 export function PickupForm({ id }: { id: number }) {
   const [formFields, setFormFields] = useState<any>({})
   const [toDelete, setToDelete] = useState<number[]>([])
   const [remarks, setRemarks] = useState("")
   const [complete, setComplete] = useState(false)
+
+  const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState('')
+  const [heading, setHeading] = useState('')
 
   console.log(remarks)
 
@@ -48,22 +102,40 @@ export function PickupForm({ id }: { id: number }) {
 
   const submit = async (e: any) => {
     e.preventDefault()
-    console.log(formFields)
-    const rawResponse = await fetch(
-      `https://isproj2.vercel.app/dashboard/donations/pickups/post`,
-      {
-        method: 'PUT',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
+    try {
+
+      console.log(formFields)
+      const rawResponse = await fetch(
+        `https://isproj2.vercel.app/dashboard/donations/pickups/post`,
+        {
+          method: 'PUT',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            toDelete: toDelete,
+            transaction: formFields,
+          }),
         },
-        body: JSON.stringify({
-          toDelete: toDelete,
-          transaction: formFields,
-        }),
-      },
-    )
-    console.log("REMARKS BEING SUBMITTED: ", remarks)
+      )
+
+      console.log("REMARKS BEING SUBMITTED: ", remarks)
+
+      setMessage('Donation Successful')
+      setMessageType('SUCCESS')
+      setHeading('Donation Complete!')
+
+    }
+    catch (error) {
+      console.log('Error Donating. See Details: \n', error)
+      const temp_message = 'Error Donating. See Donation Details and try again.'
+      setMessage(temp_message)
+      setMessageType('ERROR')
+      setHeading('Donation Error!')
+      console.log(error.message)
+    }
+
   }
 
   const addFields = async () => {
@@ -393,6 +465,7 @@ export function PickupForm({ id }: { id: number }) {
             Cancel <span aria-hidden="true">&rarr;</span>
           </span>
         </Button>
+        <Message content={message} type={messageType} heading={heading} />
       </div>
     </div>
   )
