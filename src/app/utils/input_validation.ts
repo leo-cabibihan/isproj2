@@ -20,5 +20,27 @@ export function PasswordCheck(password: String, email: String) {
     else {
         return false
     }
-    
+
+}
+
+export function NoWhiteSpace(input: String) {
+
+    const pattern = new RegExp(/\s{2,}/g)
+    const value = input.toString()
+    const invalid_input = pattern.test(value)
+
+    if (invalid_input) {
+        return false
+    }
+    else {
+        return true
+    }
+}
+
+export function NumberValidation(input: Number) {
+    const pattern = new RegExp(/^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/)
+    const value = input.toString()
+    const valid = pattern.test(value)
+
+    return valid
 }
