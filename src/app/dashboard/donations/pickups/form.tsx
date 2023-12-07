@@ -122,6 +122,8 @@ export function PickupForm({ id }: { id: number }) {
 
       console.log("REMARKS BEING SUBMITTED: ", remarks)
 
+      console.log("DOES IT WORK?", formFields.remarks)
+
       setMessage('Operation Successful!')
       setMessageType('SUCCESS')
       setHeading('Success!')
