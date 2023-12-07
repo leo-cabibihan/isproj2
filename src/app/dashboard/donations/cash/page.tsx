@@ -165,7 +165,7 @@ export default async function ExternalTable({ searchParams }: any) {
             const temp_message = error_msg
             const temp_messageType = "ERROR"
             const temp_heading = "Invalid Input."
-            // revalidatePath('/');
+            revalidatePath('/');
             {
                 <DisplayMessage content={temp_message} type={temp_messageType} heading={temp_heading} />
             }
