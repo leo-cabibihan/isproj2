@@ -14,7 +14,9 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { PayPal } from '@/components/paypal/CashForm'
 import TestPage from '@/app/paypal/payment'
 import { useRouter } from 'next/navigation'
-import { Failure, Success } from '@/components/Feedback'
+import Failure from '@/components/modals/Failure'
+import Success from '@/components/modals/Success'
+
 
 function Message({ content, type, heading }: any) {
   if (type == 'ERROR') {

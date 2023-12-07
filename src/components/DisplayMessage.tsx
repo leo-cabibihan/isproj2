@@ -1,36 +1,20 @@
 
 'use client'
-import { Failure, Success } from "./Feedback";
+import Success from "./modals/Success";
+import Failure from "./modals/Failure";
 
 function Message({ content, type, heading }: any) {
 
-    const handleRefresh = () => {
-        location.reload()  
-      };
-
     if (type == 'ERROR') {
 
-        handleRefresh
-
         return (
-
-            <div className="min-h-screen flex items-end justify-center">
-                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                <Failure heading={heading} content={content} />
-            </div>
+            <Success heading={heading} content={content} />
         );
     }
     else if (type == 'SUCCESS') {
 
-        handleRefresh
-
         return (
-
-            <div className="min-h-screen flex items-end justify-center">
-                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                <Success heading={heading} content={content} />
-            </div>
-
+            <Failure heading={heading} content={content} />
         );
     }
 }

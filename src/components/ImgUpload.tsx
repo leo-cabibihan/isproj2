@@ -6,7 +6,8 @@ import { PhotoIcon } from "@heroicons/react/24/solid";
 import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Button } from "./Button";
-import { Failure, Success } from "./Feedback";
+import Failure from "./modals/Failure";
+import Success from "./modals/Success";
 
 export var imgPath = ""
 export var CDNURL = ""

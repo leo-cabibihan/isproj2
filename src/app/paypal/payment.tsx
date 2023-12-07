@@ -6,9 +6,10 @@ import React, { useEffect, useState } from "react";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import supabase from "../utils/supabase";
 import { SelectField, TextField } from "@/components/Fields";
-import { Failure, Success } from "@/components/Feedback";
 import { useRouter } from "next/navigation";
 import { NumberValidation } from "../utils/input_validation";
+import Failure from "@/components/modals/Failure";
+import Success from "@/components/modals/Success";
 
 function Message({ content, type, heading }: any) {
     if (type == 'ERROR') {
