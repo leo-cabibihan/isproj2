@@ -113,9 +113,9 @@ export function PickupForm({ id }: { id: number }) {
 
     if (complete == false) {
 
-      console.log(remarks_input.length + remarks_input !== undefined ? "VALID":"EMPTY" + remarks_input !== null ? "VALID":"EMPTY")
+      console.log("LENGTH IS: " + remarks_input.length + " IS IT A VALID INPUT? " + remarks_input !== undefined ? "VALID":"EMPTY" + " IS IT NULL? " + remarks_input !== null ? "VALID":"EMPTY")
 
-      if (remarks_input.length > 0 || remarks_input !== undefined || remarks_input !== null) {
+      if (remarks_input.length > 0) {
 
         console.log("THIS MEANS IT'S NOT EMPTY")
 
