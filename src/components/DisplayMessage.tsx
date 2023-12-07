@@ -4,7 +4,13 @@ import { Failure, Success } from "./Feedback";
 
 function Message({ content, type, heading }: any) {
 
+    const handleRefresh = () => {
+        location.reload()  
+      };
+
     if (type == 'ERROR') {
+
+        handleRefresh
 
         return (
 
@@ -12,10 +18,11 @@ function Message({ content, type, heading }: any) {
                 <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
                 <Failure heading={heading} content={content} />
             </div>
-
         );
     }
     else if (type == 'SUCCESS') {
+
+        handleRefresh
 
         return (
 
