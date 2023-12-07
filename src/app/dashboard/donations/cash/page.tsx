@@ -17,7 +17,7 @@ import { CashReceiptEmail } from '@/components/email-template';
 import Plunk from '@plunk/node';
 import { render } from '@react-email/render';
 import { revalidatePath } from 'next/cache';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
@@ -47,11 +47,18 @@ async function getCashData(column: any, order: any, charity_id: number) {
     return data
 }
 
+function RefreshPage() {
+    const router = useRouter()
+    router.refresh()
+}
+
 var message = ""
 var messageType = ""
 var heading = ""
 
 export default async function ExternalTable({ searchParams }: any) {
+
+    
 
     console.log("DO SEARCHPARAMS WORK? ", searchParams)
     console.log(`PARAMS SIZE IS ${Object.keys(searchParams).length}`)
@@ -156,7 +163,7 @@ export default async function ExternalTable({ searchParams }: any) {
             }
 
             revalidatePath('/');
-            
+            RefreshPage()
 
         }
         else {
