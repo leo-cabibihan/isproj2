@@ -172,6 +172,7 @@ export default async function Expenses({ searchParams }: any) {
             message = error_msg
             messageType = "ERROR"
             heading = "Invalid Input."
+            revalidatePath('/');
         }
 
     };
@@ -219,6 +220,7 @@ export default async function Expenses({ searchParams }: any) {
             message = error_msg
             messageType = "ERROR"
             heading = "Invalid Input."
+            revalidatePath('/');
         }
 
     };

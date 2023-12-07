@@ -142,6 +142,7 @@ export default async function Page({ searchParams }: any) {
             message = error_msg
             messageType = "ERROR"
             heading = "Invalid Input."
+            revalidatePath('/');
         }
 
     };

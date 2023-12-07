@@ -201,6 +201,7 @@ export default async function Applications({ searchParams }: any) {
       message = error_msg
       messageType = "ERROR"
       heading = "Invalid Input."
+      revalidatePath('/');
     }
   }
 

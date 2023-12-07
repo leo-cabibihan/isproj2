@@ -156,6 +156,7 @@ export default async function beneficiaryitem({ searchParams }: { searchParams: 
             message = error_msg
             messageType = "ERROR"
             heading = "Invalid Input."
+            revalidatePath('/');
         }
 
 

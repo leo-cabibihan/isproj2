@@ -224,6 +224,7 @@ export default async function Organization({ params }: any) {
             message = error_msg
             messageType = "ERROR"
             heading = "Invalid Input."
+            revalidatePath('/');
         }
     };
 

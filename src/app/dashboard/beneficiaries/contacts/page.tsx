@@ -143,6 +143,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
       message = error_msg
       messageType = "ERROR"
       heading = "Invalid Input."
+      revalidatePath('/');
     }
 
   };
@@ -191,6 +192,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
       message = error_msg
       messageType = "ERROR"
       heading = "Invalid Input."
+      revalidatePath('/');
     }
 
   };

@@ -84,6 +84,7 @@ export default async function Appeals({ searchParams }: { searchParams: { [key: 
       message = error_msg
       messageType = "ERROR"
       heading = "Invalid Input."
+      revalidatePath('/');
     }
 
   };

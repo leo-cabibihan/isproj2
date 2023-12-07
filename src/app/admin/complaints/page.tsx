@@ -126,7 +126,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
             messageType = "SUCCESS"
             heading = "Email Success."
         }
-
+        revalidatePath('/');
         console.log("SUCCESS??? ", success)
     }
 

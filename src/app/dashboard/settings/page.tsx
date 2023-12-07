@@ -96,6 +96,7 @@ export default async function Settings() {
       message = error_msg
       messageType = "ERROR"
       heading = "Invalid Input."
+      revalidatePath('/');
     }
 
   }
@@ -173,6 +174,7 @@ export default async function Settings() {
       message = error_msg
       messageType = "ERROR"
       heading = "Invalid Input."
+      revalidatePath('/');
     }
 
   }
