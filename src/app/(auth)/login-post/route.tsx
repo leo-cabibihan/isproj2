@@ -1,4 +1,4 @@
-//@ts-nocheck
+
 import { AdminLog, CharityLog } from '@/app/admin/audit-log/function'
 import { PasswordCheck } from '@/app/utils/input_validation'
 import { getURL } from '@/app/utils/url'
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
   const supabase = createRouteHandlerClient({ cookies: () => cookieStore })
 
   //PASSWORD VALIDATION
-  const valid_input = PasswordCheck(password)
+  const valid_input = PasswordCheck(password, email)
 
   console.log(`DOES THE VALIDATION WORK? ${valid_input}`)
 
