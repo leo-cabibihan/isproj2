@@ -47,11 +47,6 @@ async function getCashData(column: any, order: any, charity_id: number) {
     return data
 }
 
-function RefreshPage() {
-    const router = useRouter()
-    router.refresh()
-}
-
 var message = ""
 var messageType = ""
 var heading = ""
@@ -163,7 +158,6 @@ export default async function ExternalTable({ searchParams }: any) {
             }
 
             revalidatePath('/');
-            RefreshPage()
 
         }
         else {
