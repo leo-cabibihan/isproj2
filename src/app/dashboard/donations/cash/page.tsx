@@ -165,7 +165,10 @@ export default async function ExternalTable({ searchParams }: any) {
             message = error_msg
             messageType = "ERROR"
             heading = "Invalid Input."
-            revalidatePath('/');
+            // revalidatePath('/');
+            {
+                <DisplayMessage content={message} type={messageType} heading={heading} />
+            }
         }
 
     };
@@ -255,6 +258,7 @@ export default async function ExternalTable({ searchParams }: any) {
             subject: "THANK YOU!",
             body,
         })
+        
 
         if (!success) {
             message = `Failed to Email Cash Receipt.`
@@ -578,7 +582,7 @@ export default async function ExternalTable({ searchParams }: any) {
                                 </Tr>
                             )}
                         </Tbody>
-                        <DisplayMessage content={message} type={messageType} heading={heading} />
+                        {/* <DisplayMessage content={message} type={messageType} heading={heading} /> */}
                     </Table>
                 </TableContent>
             </TableContainer >
