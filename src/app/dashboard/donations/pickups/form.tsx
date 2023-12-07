@@ -9,6 +9,7 @@ import { SetStateAction, useEffect, useState } from 'react'
 import { Switch } from '@headlessui/react'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
 import { NoWhiteSpace } from '@/app/utils/input_validation'
+import { DisplayMessage } from '@/components/DisplayMessage'
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -542,7 +543,7 @@ export function PickupForm({ id }: { id: number }) {
             Cancel <span aria-hidden="true">&rarr;</span>
           </span>
         </Button>
-        <Message content={message} type={messageType} heading={heading} />
+        <DisplayMessage content={message} type={messageType} heading={heading} />
       </div>
     </div>
   )
