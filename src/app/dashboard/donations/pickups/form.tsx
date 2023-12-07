@@ -122,9 +122,9 @@ export function PickupForm({ id }: { id: number }) {
 
       console.log("REMARKS BEING SUBMITTED: ", remarks)
 
-      setMessage('Donation Successful')
+      setMessage('Operation Successful!')
       setMessageType('SUCCESS')
-      setHeading('Donation Complete!')
+      setHeading('Success!')
 
     }
     catch (error) {
