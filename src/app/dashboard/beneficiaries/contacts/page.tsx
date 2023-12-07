@@ -274,7 +274,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                 </Button>
               </div>
             </form>
-            <DisplayMessage content={message} type={messageType} heading={heading} />
+            {/* <DisplayMessage content={message} type={messageType} heading={heading} /> */}
           </SlideOver>
 
 
@@ -415,12 +415,13 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                           </Button>
                         </div>
                       </form>
-                      <DisplayMessage content={message} type={messageType} heading={heading} />
+
                     </SlideOver>
                   </Td>
                 </Tr>
               ))}
             </Tbody>
+            <DisplayMessage content={message} type={messageType} heading={heading} />
           </Table>
         </TableContent>
       </TableContainer>

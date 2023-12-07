@@ -604,7 +604,7 @@ export default async function Page({ searchParams }: any) {
                                 </Button>
                             </div>
                         </form>
-                        <DisplayMessage content={message} type={messageType} heading={heading} />
+                        {/* <DisplayMessage content={message} type={messageType} heading={heading} /> */}
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
@@ -721,7 +721,7 @@ export default async function Page({ searchParams }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <DisplayMessage content={message} type={messageType} heading={heading} />
+                                            {/* <DisplayMessage content={message} type={messageType} heading={heading} /> */}
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -865,7 +865,7 @@ export default async function Page({ searchParams }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <DisplayMessage content={message} type={messageType} heading={heading} />
+                                            {/* <DisplayMessage content={message} type={messageType} heading={heading} /> */}
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -1013,7 +1013,7 @@ export default async function Page({ searchParams }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <DisplayMessage content={message} type={messageType} heading={heading} />
+
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -1021,6 +1021,7 @@ export default async function Page({ searchParams }: any) {
                             ))}
 
                         </Tbody>
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </Table>
                 </TableContent>
             </TableContainer>

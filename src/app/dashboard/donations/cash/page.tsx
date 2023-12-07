@@ -339,7 +339,7 @@ export default async function ExternalTable({ searchParams }: any) {
                                 </div>
                             </div>
                         </form>
-                        <DisplayMessage content={message} type={messageType} heading={heading} />
+                        {/* <DisplayMessage content={message} type={messageType} heading={heading} /> */}
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
@@ -492,7 +492,7 @@ export default async function ExternalTable({ searchParams }: any) {
                                                             </div>
                                                         </div>
                                                     </form>
-                                                    <DisplayMessage content={message} type={messageType} heading={heading} />
+                                                    {/* <DisplayMessage content={message} type={messageType} heading={heading} /> */}
                                                 </SlideOver>
                                             ) :
                                             (
@@ -564,13 +564,14 @@ export default async function ExternalTable({ searchParams }: any) {
                                                         </div>
 
                                                     </form>
-                                                    <DisplayMessage content={message} type={messageType} heading={heading} />
+
                                                 </SlideOver>
                                             )}
                                     </Td>
                                 </Tr>
                             )}
                         </Tbody>
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </Table>
                 </TableContent>
             </TableContainer >

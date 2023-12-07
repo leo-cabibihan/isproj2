@@ -312,13 +312,14 @@ export default async function Page({ searchParams }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <DisplayMessage content={message} type={messageType} heading={heading} />
+
                                         </SlideOver>
                                     </Td>
                                 </Tr>
 
                             )}
                         </Tbody>
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </Table>
                 </TableContent>
             </TableContainer>

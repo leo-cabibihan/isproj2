@@ -245,7 +245,7 @@ export default async function beneficiaryitem({ searchParams }: { searchParams: 
 
                             </div>
                         </form>
-                        <DisplayMessage content={message} type={messageType} heading={heading} />
+
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
@@ -384,6 +384,7 @@ export default async function beneficiaryitem({ searchParams }: { searchParams: 
                                 </Tr>
                             )}
                         </Tbody>
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </Table>
                 </TableContent>
             </TableContainer>

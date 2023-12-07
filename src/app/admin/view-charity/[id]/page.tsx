@@ -351,12 +351,13 @@ export default async function Organization({ params }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <DisplayMessage content={message} type={messageType} heading={heading} />
+
                                         </SlideOver>
                                     </Td>
                                 </Tr>
                             ))}
                         </Tbody>
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </Table>
                 </TableContent>
             </TableContainer>
@@ -558,13 +559,14 @@ export default async function Organization({ params }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <DisplayMessage content={message} type={messageType} heading={heading} />
+
                                         </SlideOver>
                                     </Td>
                                 </Tr>
 
                             ))}
                         </Tbody>
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </Table>
                 </TableContent>
             </TableContainer>
@@ -716,13 +718,14 @@ export default async function Organization({ params }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <DisplayMessage content={message} type={messageType} heading={heading} />
+
                                         </SlideOver>
                                     </Td>
                                 </Tr>
 
                             ))}
                         </Tbody>
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </Table>
                 </TableContent>
             </TableContainer>
