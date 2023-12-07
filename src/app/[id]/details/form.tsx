@@ -18,10 +18,9 @@ import { Failure, Success } from '@/components/Feedback'
 
 function Message({ content, type, heading }: any) {
   if (type == 'ERROR') {
-    return <Failure heading={heading} content={content} />;
-  }
-  else if (type == 'SUCCESS') {
-    return <Success heading={heading} content={content} />;
+    return <Failure heading={heading} content={content} />
+  } else if (type == 'SUCCESS') {
+    return <Success heading={heading} content={content} />
   }
 }
 
@@ -72,10 +71,9 @@ export function FormComponent({ ID, DonorID }: any) {
 }
 
 export function GoodsForm({ ID, UserID }: any) {
-
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
-  const [heading, setHeading] = useState("");
+  const [message, setMessage] = useState('')
+  const [messageType, setMessageType] = useState('')
+  const [heading, setHeading] = useState('')
 
   const [formFields, setFormFields] = useState([
     {
@@ -131,18 +129,18 @@ export function GoodsForm({ ID, UserID }: any) {
         },
       )
 
-      setMessage("Donation Successful");
-      setMessageType('SUCCESS');
+      setMessage('Donation Successful')
+      setMessageType('SUCCESS')
       setHeading('Donation Complete!')
 
       console.log('plz redirect')
       setError(null)
       router.push('/thankyou')
     } catch (error) {
-      console.log("Error Donating. See Details: \n", error)
-      const temp_message = "Error Donating. See Donation Details and try again."
-      setMessage(temp_message);
-      setMessageType('ERROR');
+      console.log('Error Donating. See Details: \n', error)
+      const temp_message = 'Error Donating. See Donation Details and try again.'
+      setMessage(temp_message)
+      setMessageType('ERROR')
       setHeading('Donation Error!')
       console.log(error.message)
       setError(error.message)
@@ -154,7 +152,7 @@ export function GoodsForm({ ID, UserID }: any) {
       name: '',
       quantity: '',
       expiry: '',
-      perishable: '',
+      perishable: 0,
       unit_of_measurement: '',
     }
 
@@ -262,14 +260,23 @@ export function GoodsForm({ ID, UserID }: any) {
                             <option value={1}>yes</option>
                           </SelectField>
                           <br />
-                          <TextField
-                            label="Expiry Date (if perishable)"
-                            name="expiry"
-                            type="date"
-                            placeholder=""
-                            onChange={(event) => handleFormChange(event, index)}
-                            value={form.expiry}
-                          />
+                          {form.perishable === 1 && (
+                            <>
+                              <br />
+                              <TextField
+                                label="Expiry Date"
+                                name="expiry"
+                                type="date"
+                                placeholder=""
+                                onChange={(event) =>
+                                  handleFormChange(event, index)
+                                }
+                                value={form.expiry}
+                                required //THIS IS AN ISSUE, Need to set it to expiry textfield 'required' if the perishable is set to yes
+                                min={getMinExpiryDate()}
+                              />
+                            </>
+                          )}
                         </div>
 
                         <div className="col-span-full">
