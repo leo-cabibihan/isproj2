@@ -15,6 +15,7 @@ import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import { ExportTest } from '@/components/SlideOverButton';
 import { NoWhiteSpace, NumberValidation } from '@/app/utils/input_validation';
+import { DisplayMessage } from '@/components/DisplayMessage';
 
 export const revalidate = 0;
 
@@ -342,7 +343,7 @@ export default async function Expenses({ searchParams }: any) {
                                 </div>
                             </div>
                         </form>
-                        <Message content={message} type={messageType} heading={heading} />
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
@@ -519,7 +520,7 @@ export default async function Expenses({ searchParams }: any) {
                                                     </div>
                                                 </div>
                                             </form>
-                                            <Message content={message} type={messageType} heading={heading} />
+                                            <DisplayMessage content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>

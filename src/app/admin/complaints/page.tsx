@@ -12,6 +12,7 @@ import { render } from "@react-email/render";
 import { request } from "http";
 import { redirect } from "next/navigation";
 import { SelectField } from "@/components/Fields";
+import { DisplayMessage } from "@/components/DisplayMessage";
 
 export const revalidate = 0;
 
@@ -282,7 +283,7 @@ export default async function Complaints({ searchParams }: { searchParams: { [ke
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <Message content={message} type={messageType} heading={heading} />
+                                            <DisplayMessage content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>

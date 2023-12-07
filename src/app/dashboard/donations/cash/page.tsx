@@ -1,10 +1,12 @@
 //@ts-nocheck
+
 import { CharityLog } from '@/app/admin/audit-log/function';
 import { NumberValidation } from '@/app/utils/input_validation';
 import supabase from '@/app/utils/supabase';
 import { GetUID } from '@/app/utils/user_id';
 import { handleTableExport } from '@/app/utils/xlsx';
 import { Button } from '@/components/Button';
+import { DisplayMessage } from '@/components/DisplayMessage';
 import { ExportButton } from '@/components/Export';
 import { Message } from '@/components/Feedback';
 import { SelectField, TextField } from '@/components/Fields'
@@ -337,7 +339,7 @@ export default async function ExternalTable({ searchParams }: any) {
                                 </div>
                             </div>
                         </form>
-                        <Message content={message} type={messageType} heading={heading} />
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
@@ -490,7 +492,7 @@ export default async function ExternalTable({ searchParams }: any) {
                                                             </div>
                                                         </div>
                                                     </form>
-                                                    <Message content={message} type={messageType} heading={heading} />
+                                                    <DisplayMessage content={message} type={messageType} heading={heading} />
                                                 </SlideOver>
                                             ) :
                                             (
@@ -562,7 +564,7 @@ export default async function ExternalTable({ searchParams }: any) {
                                                         </div>
 
                                                     </form>
-                                                    <Message content={message} type={messageType} heading={heading} />
+                                                    <DisplayMessage content={message} type={messageType} heading={heading} />
                                                 </SlideOver>
                                             )}
                                     </Td>

@@ -13,6 +13,7 @@ import { CharityLog } from "@/app/admin/audit-log/function";
 import Alert from "@/components/Alert";
 import { Message } from "@/components/Feedback";
 import { NumberValidation } from "@/app/utils/input_validation";
+import { DisplayMessage } from "@/components/DisplayMessage";
 
 export const revalidate = 0;
 
@@ -244,7 +245,7 @@ export default async function beneficiaryitem({ searchParams }: { searchParams: 
 
                             </div>
                         </form>
-                        <Message content={message} type={messageType} heading={heading} />
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>

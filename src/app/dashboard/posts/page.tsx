@@ -20,6 +20,7 @@ import { Column } from "@react-email/components";
 import { SelectField } from "@/components/Fields";
 import { Message } from "@/components/Feedback";
 import { NoWhiteSpace } from "@/app/utils/input_validation";
+import { DisplayMessage } from "@/components/DisplayMessage";
 
 export const revalidate = 0;
 
@@ -281,7 +282,7 @@ export default async function Page({ searchParams }: any) {
                                     </Button>
                                 </div>
                             </form>
-                            <Message content={message} type={messageType} heading={heading} />
+                            <DisplayMessage content={message} type={messageType} heading={heading} />
                         </SlideOver>
                     </TableHeaderButton>
                 ))}
@@ -463,7 +464,7 @@ export default async function Page({ searchParams }: any) {
                                                                     </Button>
                                                                 </div>
                                                             </form>
-                                                            <Message content={message} type={messageType} heading={heading} />
+                                                            <DisplayMessage content={message} type={messageType} heading={heading} />
                                                         </SlideOver>
                                                     </div>
                                                 </div>

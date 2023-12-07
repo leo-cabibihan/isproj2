@@ -18,6 +18,7 @@ import { CharityLog } from '../admin/audit-log/function';
 import { revalidatePath } from 'next/cache';
 import { Message } from '@/components/Feedback';
 import { NoWhiteSpace } from '../utils/input_validation';
+import { DisplayMessage } from '@/components/DisplayMessage';
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -162,7 +163,7 @@ export default async function Appeals({ searchParams }: { searchParams: { [key: 
             </Button>
           </div>
         </form>
-        <Message content={message} type={messageType} heading={heading} />
+        <DisplayMessage content={message} type={messageType} heading={heading} />
       </SlimLayout>
 
     </>

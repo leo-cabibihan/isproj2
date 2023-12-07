@@ -11,6 +11,7 @@ import { revalidatePath } from "next/cache";
 import { AdminLog } from '../../audit-log/function';
 import { Message } from '@/components/Feedback';
 import { NoWhiteSpace } from '@/app/utils/input_validation';
+import { DisplayMessage } from '@/components/DisplayMessage';
 
 export const revalidate = 0;
 
@@ -262,7 +263,7 @@ export default async function Organization({ params }: any) {
                             </Button>
                         </div>
                     </form>
-                    <Message content={message} type={messageType} heading={heading} />
+                    <DisplayMessage content={message} type={messageType} heading={heading} />
                 </>
 
             ))}
@@ -350,7 +351,7 @@ export default async function Organization({ params }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <Message content={message} type={messageType} heading={heading} />
+                                            <DisplayMessage content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -557,7 +558,7 @@ export default async function Organization({ params }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <Message content={message} type={messageType} heading={heading} />
+                                            <DisplayMessage content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -715,7 +716,7 @@ export default async function Organization({ params }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <Message content={message} type={messageType} heading={heading} />
+                                            <DisplayMessage content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>

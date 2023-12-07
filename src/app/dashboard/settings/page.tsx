@@ -17,6 +17,7 @@ import supabase from '@/app/utils/supabase'
 import { getURL } from '@/app/utils/url'
 import { GetUID } from '@/app/utils/user_id'
 import { Button } from '@/components/Button'
+import { DisplayMessage } from '@/components/DisplayMessage'
 import { Message } from '@/components/Feedback'
 import { TextField } from '@/components/Fields'
 import { ImageUpdate, ImageUpload } from '@/components/ImgUpload'
@@ -433,7 +434,7 @@ export default async function Settings() {
                   ))}
 
                 </form>
-                <Message content={message} type={messageType} heading={heading} />
+                <DisplayMessage content={message} type={messageType} heading={heading} />
                 <br />
                 <br />
                 <br />

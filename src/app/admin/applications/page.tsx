@@ -24,6 +24,7 @@ import { NoURLMail } from '@/components/email-template'
 import { SelectField } from '@/components/Fields'
 import { Message } from '@/components/Feedback'
 import { NoWhiteSpace } from '@/app/utils/input_validation'
+import { DisplayMessage } from '@/components/DisplayMessage'
 
 export const revalidate = 0
 
@@ -426,7 +427,7 @@ export default async function Applications({ searchParams }: any) {
                           </Button>
                         </div>
                       </form>
-                      <Message content={message} type={messageType} heading={heading} />
+                      <DisplayMessage content={message} type={messageType} heading={heading} />
                     </SlideOver>
                   </Td>
                 </Tr>

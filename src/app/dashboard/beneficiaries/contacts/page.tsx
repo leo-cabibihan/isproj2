@@ -14,6 +14,7 @@ import { getURL } from '@/app/utils/url'
 import { SelectField } from "@/components/Fields"
 import { Message } from "@/components/Feedback"
 import { NoWhiteSpace, NumberValidation } from "@/app/utils/input_validation"
+import { DisplayMessage } from "@/components/DisplayMessage"
 
 export const revalidate = 0;
 
@@ -273,7 +274,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                 </Button>
               </div>
             </form>
-            <Message content={message} type={messageType} heading={heading} />
+            <DisplayMessage content={message} type={messageType} heading={heading} />
           </SlideOver>
 
 
@@ -414,7 +415,7 @@ export default async function Page({ searchParams }: { searchParams: { [key: str
                           </Button>
                         </div>
                       </form>
-                      <Message content={message} type={messageType} heading={heading} />
+                      <DisplayMessage content={message} type={messageType} heading={heading} />
                     </SlideOver>
                   </Td>
                 </Tr>

@@ -16,6 +16,7 @@ import { NoURLMail, ReceiptEmail } from '@/components/email-template'
 import Plunk from '@plunk/node'
 import { Message } from '@/components/Feedback'
 import { NoWhiteSpace } from '@/app/utils/input_validation'
+import { DisplayMessage } from '@/components/DisplayMessage'
 
 export const revalidate = 0
 
@@ -173,7 +174,7 @@ export default async function Report({ params }: any) {
                 </Button>
               </div>
             </form>
-            <Message content={message} type={messageType} heading={heading} />
+            <DisplayMessage content={message} type={messageType} heading={heading} />
           </div>
         </div>
       </div>

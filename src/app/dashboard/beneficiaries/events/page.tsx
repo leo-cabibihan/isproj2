@@ -12,6 +12,7 @@ import { CharityLog } from "@/app/admin/audit-log/function";
 import { getURL } from '@/app/utils/url'
 import { Message } from "@/components/Feedback";
 import { NoWhiteSpace } from "@/app/utils/input_validation";
+import { DisplayMessage } from "@/components/DisplayMessage";
 
 export const revalidate = 0;
 
@@ -603,7 +604,7 @@ export default async function Page({ searchParams }: any) {
                                 </Button>
                             </div>
                         </form>
-                        <Message content={message} type={messageType} heading={heading} />
+                        <DisplayMessage content={message} type={messageType} heading={heading} />
                     </SlideOver>
                 </TableHeaderButton>
                 <TableContent>
@@ -720,7 +721,7 @@ export default async function Page({ searchParams }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <Message content={message} type={messageType} heading={heading} />
+                                            <DisplayMessage content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -864,7 +865,7 @@ export default async function Page({ searchParams }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <Message content={message} type={messageType} heading={heading} />
+                                            <DisplayMessage content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>
@@ -1012,7 +1013,7 @@ export default async function Page({ searchParams }: any) {
                                                     </Button>
                                                 </div>
                                             </form>
-                                            <Message content={message} type={messageType} heading={heading} />
+                                            <DisplayMessage content={message} type={messageType} heading={heading} />
                                         </SlideOver>
                                     </Td>
                                 </Tr>
