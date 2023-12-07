@@ -49,11 +49,11 @@ async function getCharityComplaintsData(column: any, order: any, donor_id: numbe
 
 const plunk = new Plunk("sk_23f017252b1ab41fe645a52482d6925706539b7c70be37db");
 
-export default async function Complaints({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
+var message = ""
+var messageType = ""
+var heading = ""
 
-    var message = ""
-    var messageType = ""
-    var heading = ""
+export default async function Complaints({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
 
     // Function to format the timestamp as 'mm/dd/yyy'
     const formatDate = (timestamp) => {
