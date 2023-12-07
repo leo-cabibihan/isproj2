@@ -8,6 +8,7 @@ import { getURL } from '@/app/utils/url'
 import { SetStateAction, useEffect, useState } from 'react'
 import { Switch } from '@headlessui/react'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
+import { NoWhiteSpace } from '@/app/utils/input_validation'
 
 function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
@@ -19,41 +20,41 @@ var heading = ""
 
 function Failure({ heading, content }: any) {
   return (
-      <div className="rounded-md bg-red-50 p-4">
-          <div className="flex">
-              <div className="flex-shrink-0">
-                  <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
-              </div>
-              <div className="ml-3">
-                  <h3 className="text-sm font-medium text-red-800">{heading}</h3>
-                  <div className="mt-2 text-sm text-red-700">
-                      <p>
-                          {content}
-                      </p>
-                  </div>
-              </div>
+    <div className="rounded-md bg-red-50 p-4">
+      <div className="flex">
+        <div className="flex-shrink-0">
+          <XCircleIcon className="h-5 w-5 text-red-400" aria-hidden="true" />
+        </div>
+        <div className="ml-3">
+          <h3 className="text-sm font-medium text-red-800">{heading}</h3>
+          <div className="mt-2 text-sm text-red-700">
+            <p>
+              {content}
+            </p>
           </div>
+        </div>
       </div>
+    </div>
   )
 }
 
 function Success({ heading, content }: any) {
   return (
-      <div className="rounded-md bg-green-50 p-4">
-          <div className="flex">
-              <div className="flex-shrink-0">
-                  <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
-              </div>
-              <div className="ml-3">
-                  <h3 className="text-sm font-medium text-green-800">{heading}</h3>
-                  <div className="mt-2 text-sm text-green-700">
-                      <p>
-                          {content}
-                      </p>
-                  </div>
-              </div>
+    <div className="rounded-md bg-green-50 p-4">
+      <div className="flex">
+        <div className="flex-shrink-0">
+          <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
+        </div>
+        <div className="ml-3">
+          <h3 className="text-sm font-medium text-green-800">{heading}</h3>
+          <div className="mt-2 text-sm text-green-700">
+            <p>
+              {content}
+            </p>
           </div>
+        </div>
       </div>
+    </div>
   )
 }
 
@@ -102,40 +103,100 @@ export function PickupForm({ id }: { id: number }) {
 
   const submit = async (e: any) => {
     e.preventDefault()
-    try {
 
-      console.log(formFields)
-      const rawResponse = await fetch(
-        `https://isproj2.vercel.app/dashboard/donations/pickups/post`,
-        {
-          method: 'PUT',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            toDelete: toDelete,
-            transaction: formFields,
-          }),
-        },
-      )
+    const remarks_input = String(formFields.remarks)
 
-      console.log("REMARKS BEING SUBMITTED: ", remarks)
+    const valid_remarks = NoWhiteSpace(remarks_input)
 
-      console.log("DOES IT WORK?", formFields.remarks)
 
-      setMessage('Operation Successful!')
-      setMessageType('SUCCESS')
-      setHeading('Success!')
+    if (complete === false) {
+
+      if (valid_remarks) {
+
+        try {
+
+          console.log(formFields)
+          const rawResponse = await fetch(
+            `https://isproj2.vercel.app/dashboard/donations/pickups/post`,
+            {
+              method: 'PUT',
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                toDelete: toDelete,
+                transaction: formFields,
+              }),
+            },
+          )
+
+          console.log("REMARKS BEING SUBMITTED: ", remarks)
+
+          console.log("DOES IT WORK?", formFields.remarks)
+
+          setMessage('Operation Successful!')
+          setMessageType('SUCCESS')
+          setHeading('Success!')
+
+        }
+        catch (error) {
+          console.log('Error Donating. See Details: \n', error)
+          const temp_message = 'Error Donating. See Donation Details and try again.'
+          setMessage(temp_message)
+          setMessageType('ERROR')
+          setHeading('Donation Error!')
+          console.log(error.message)
+        }
+
+      }
+      else {
+
+        setMessage('Textfields must not 2 or more consecutive spaces.')
+        setMessageType('ERROR')
+        setHeading('Invalid Input!')
+
+      }
 
     }
-    catch (error) {
-      console.log('Error Donating. See Details: \n', error)
-      const temp_message = 'Error Donating. See Donation Details and try again.'
-      setMessage(temp_message)
-      setMessageType('ERROR')
-      setHeading('Donation Error!')
-      console.log(error.message)
+    else if (complete === true) {
+
+      try {
+
+        console.log(formFields)
+        const rawResponse = await fetch(
+          `https://isproj2.vercel.app/dashboard/donations/pickups/post`,
+          {
+            method: 'PUT',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              toDelete: toDelete,
+              transaction: formFields,
+            }),
+          },
+        )
+
+        console.log("REMARKS BEING SUBMITTED: ", remarks)
+
+        console.log("DOES IT WORK?", formFields.remarks)
+
+        setMessage('Operation Successful!')
+        setMessageType('SUCCESS')
+        setHeading('Success!')
+
+      }
+      catch (error) {
+        console.log('Error Donating. See Details: \n', error)
+        const temp_message = 'Error Donating. See Donation Details and try again.'
+        setMessage(temp_message)
+        setMessageType('ERROR')
+        setHeading('Donation Error!')
+        console.log(error.message)
+      }
+
     }
 
   }
