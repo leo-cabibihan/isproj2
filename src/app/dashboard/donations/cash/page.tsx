@@ -156,7 +156,7 @@ export default async function ExternalTable({ searchParams }: any) {
             }
 
             revalidatePath('/');
-            window.location.reload()
+            
 
         }
         else {
@@ -164,7 +164,7 @@ export default async function ExternalTable({ searchParams }: any) {
             message = error_msg
             messageType = "ERROR"
             heading = "Invalid Input."
-            window.location.reload()
+            
         }
 
     };
