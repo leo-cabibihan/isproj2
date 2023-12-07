@@ -53,10 +53,6 @@ var heading = ""
 
 export default async function ExternalTable({ searchParams }: any) {
 
-    message = ""
-    messageType = ""
-    heading = ""
-
     console.log("DO SEARCHPARAMS WORK? ", searchParams)
     console.log(`PARAMS SIZE IS ${Object.keys(searchParams).length}`)
 
@@ -160,7 +156,7 @@ export default async function ExternalTable({ searchParams }: any) {
             }
 
             revalidatePath('/');
-            
+            window.location.reload()
 
         }
         else {
@@ -168,7 +164,7 @@ export default async function ExternalTable({ searchParams }: any) {
             message = error_msg
             messageType = "ERROR"
             heading = "Invalid Input."
-            
+            window.location.reload()
         }
 
     };
