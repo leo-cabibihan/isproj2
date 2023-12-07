@@ -111,51 +111,58 @@ export function PickupForm({ id }: { id: number }) {
 
     if (complete === false) {
 
-      if (valid_remarks) {
+      if (remarks_input.length > 0 || remarks_input !== undefined || remarks_input !== null) {
+        if (valid_remarks) {
 
-        try {
+          try {
 
-          console.log(formFields)
-          const rawResponse = await fetch(
-            `https://isproj2.vercel.app/dashboard/donations/pickups/post`,
-            {
-              method: 'PUT',
-              headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
+            console.log(formFields)
+            const rawResponse = await fetch(
+              `https://isproj2.vercel.app/dashboard/donations/pickups/post`,
+              {
+                method: 'PUT',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  toDelete: toDelete,
+                  transaction: formFields,
+                }),
               },
-              body: JSON.stringify({
-                toDelete: toDelete,
-                transaction: formFields,
-              }),
-            },
-          )
+            )
 
-          console.log("REMARKS BEING SUBMITTED: ", remarks)
+            console.log("REMARKS BEING SUBMITTED: ", remarks)
 
-          console.log("DOES IT WORK?", formFields.remarks)
+            console.log("DOES IT WORK?", formFields.remarks)
 
-          setMessage('Operation Successful!')
-          setMessageType('SUCCESS')
-          setHeading('Success!')
+            setMessage('Operation Successful!')
+            setMessageType('SUCCESS')
+            setHeading('Success!')
+
+          }
+          catch (error) {
+            console.log('Error Donating. See Details: \n', error)
+            const temp_message = 'Error Donating. See Donation Details and try again.'
+            setMessage(temp_message)
+            setMessageType('ERROR')
+            setHeading('Donation Error!')
+            console.log(error.message)
+          }
 
         }
-        catch (error) {
-          console.log('Error Donating. See Details: \n', error)
-          const temp_message = 'Error Donating. See Donation Details and try again.'
-          setMessage(temp_message)
+        else {
+
+          setMessage('Textfields must not 2 or more consecutive spaces.')
           setMessageType('ERROR')
-          setHeading('Donation Error!')
-          console.log(error.message)
-        }
+          setHeading('Invalid Input!')
 
+        }
       }
       else {
-
-        setMessage('Textfields must not 2 or more consecutive spaces.')
+        setMessage('This field is required.')
         setMessageType('ERROR')
-        setHeading('Invalid Input!')
-
+        setHeading('Input Required!')
       }
 
     }
