@@ -108,10 +108,17 @@ export function PickupForm({ id }: { id: number }) {
 
     const valid_remarks = NoWhiteSpace(remarks_input)
 
+    console.log("COMPLETE? " + complete)
 
-    if (complete === false) {
+
+    if (complete == false) {
+
+      console.log(remarks_input.length + remarks_input !== undefined ? "VALID":"EMPTY" + remarks_input !== null ? "VALID":"EMPTY")
 
       if (remarks_input.length > 0 || remarks_input !== undefined || remarks_input !== null) {
+
+        console.log("THIS MEANS IT'S NOT EMPTY")
+
         if (valid_remarks) {
 
           try {
@@ -166,7 +173,7 @@ export function PickupForm({ id }: { id: number }) {
       }
 
     }
-    else if (complete === true) {
+    else if (complete == true) {
 
       try {
 
